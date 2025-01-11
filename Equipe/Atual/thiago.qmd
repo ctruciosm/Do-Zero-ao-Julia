@@ -1,0 +1,22 @@
+---
+title: "Thiago Paulichen"
+sortby: "Thiago"
+subtitle: "Doutorado"
+image: Thiago.jpg
+toc: false
+about:
+  id: person-profile
+  template: jolla
+  links:
+    - icon: file-earmark-text
+      text: Lattes
+      href: http://lattes.cnpq.br/4556709600358383
+---
+
+
+
+:::{#person-profile}
+:::
+
+
+Doutorando em Estatística pela UNICAMP. 

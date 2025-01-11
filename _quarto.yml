@@ -1,0 +1,28 @@
+project:
+  type: website
+  output-dir: .
+
+website:
+  title: "Do Zero ao Julia"
+  navbar:
+    right:
+      - href: oprojeto.qmd
+        text: O projeto
+      - href: equipe.qmd
+        text: Equipe
+      - href: blog.qmd
+        text: Blog
+      - href: tutoriais.qmd
+        text: Tutoriais
+      - href: meetup.qmd
+        text: Meetup
+  page-footer: "Website feito com [Quarto](https://quarto.org/). License: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)."
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: false
+
+
+

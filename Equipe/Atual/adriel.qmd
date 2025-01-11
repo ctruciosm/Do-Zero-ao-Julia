@@ -1,0 +1,22 @@
+---
+title: "Adriel Wesley Nascimento Melo"
+sortby: "Adriel"
+subtitle: "Mestrado"
+image: adriel.jpg
+toc: false
+about:
+  id: person-profile
+  template: jolla
+  links:
+    - icon: file-earmark-text
+      text: Lattes
+      href: http://lattes.cnpq.br/5759725279088743
+---
+
+
+
+:::{#person-profile}
+:::
+
+
+Mestrando em Estatística pela UNICAMP. 

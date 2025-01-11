@@ -1,0 +1,37 @@
+---
+lang: "pt"
+listing:
+  - id: equipe
+    contents: "Equipe/Atual/*.qmd"
+    type: grid
+    image-height: 225px
+    grid-columns: 3
+    fields: [image, title, subtitle]
+    grid-item-align: center
+    sort: sortby
+  - id: ex
+    contents: "Equipe/Antigos/*.qmd"
+    type: table
+    sort: "nome desc"
+    sort-ui: [title]
+    fields: [title, end]
+    field-display-names: 
+      title: "Nome"
+      end: "Categoria"
+---
+
+
+
+## Equipe atual
+
+::: {#equipe}
+:::
+
+
+
+## Antigos membros
+
+::: {#ex}
+:::
+
+

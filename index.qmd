@@ -1,0 +1,56 @@
+---
+title: "Do Zero ao Julia"
+lang: "pt"
+---
+
+
+
+![](imagens/julia.png){width=60% fig-align="center"  style="display: block; margin: 0 auto;"}
+
+<div style="margin-top: 20px;"></div>
+
+<center>
+<h4>
+Descubra e explore as vantagens da linguagem de programação `Julia`: uma poderosa ferramenta para o ensino, a implementação e o desenvolvimento de métodos estatísticos e de ciência de dados.
+</h4>
+</center>
+
+
+
+<div style="margin-top: 25px;"></div>
+::: {.grid}
+
+::: {.g-col-12 .g-col-md-4}
+<div class="card shadow-lg" style="max-width: 320px; border-radius: 10px; overflow: hidden;">
+  <div class="card-body d-flex flex-column" style="padding: 20px; background-color: #f8f9fa;">
+<center>
+      <p class="card-text" style="font-size: 18px; font-weight: 600; color: #333;">Descubra as vantagens e dicas de <code>Julia</code></p>
+      <a href="blog.qmd" class="btn btn-primary" style="text-decoration: none; border-radius: 5px;">Blog</a>
+</center>
+</div>
+</div>
+:::
+
+::: {.g-col-12 .g-col-md-4}
+<div class="card shadow-lg" style="max-width: 320px; border-radius: 10px; overflow: hidden;">
+  <div class="card-body d-flex flex-column" style="padding: 20px; background-color: #f8f9fa;">
+<center>
+      <p class="card-text" style="font-size: 18px; font-weight: 600; color: #333;">Explore diversos tópicos em <code>Julia</code></p>
+        <a href="tutoriais.qmd" class="btn btn-primary" style="text-decoration: none; border-radius: 5px;">Tutoriais</a>
+</center>
+</div>
+</div>
+:::
+
+::: {.g-col-12 .g-col-md-4}
+<div class="card shadow-lg" style="max-width: 320px; border-radius: 10px; overflow: hidden;">
+  <div class="card-body d-flex flex-column" style="padding: 20px; background-color: #f8f9fa;">
+<center>
+      <p class="card-text" style="font-size: 18px; font-weight: 600; color: #333;">Conheça casos de sucesso e amplie seu networking.</p>
+        <a href="meetup.qmd" class="btn btn-primary" style="text-decoration: none; border-radius: 5px;">Meetup</a>
+</center>
+</div>
+</div>
+:::
+
+:::

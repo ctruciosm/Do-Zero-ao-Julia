@@ -1,0 +1,23 @@
+---
+title: "Meetup"
+lang: "pt"
+---
+
+
+
+Os meetups acontecem toda terceira quinta-feira do mês, nas dependências do IMECC/UNICAMP. O ingresso é gratuito e aberto ao público (mas precisa de inscrição). Para participar, [inscreva-se aqui.](https://www.meetup.com/pt-BR/campinas-julia-language-meetup/)
+
+
+![](imagens/meetup.svg){width=55% fig-align="center"}
+
+
+::: {.callout-important title="Importante"}
+Como forma de incentivar o networking entre os participantes, após cada palestra, temos uma confraternização com alguns comes e bebes. **O projeto não conta com financiamento para o coffee break, portanto, aqueles que desejarem, fiquem à vontade para trazer algo para compartilhar**.
+:::
+
+
+<center>
+**É gratis, é sobre Julia e é no IMECC/UNICAMP!**
+</center>
+
+

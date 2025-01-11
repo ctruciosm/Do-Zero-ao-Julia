@@ -1,0 +1,121 @@
+[
+  {
+    "objectID": "blog.html",
+    "href": "blog.html",
+    "title": "Blog",
+    "section": "",
+    "text": "Post With Code\n\n\n\n\n\n\nnews\n\n\ncode\n\n\nanalysis\n\n\n\n\n\n\n\n\n\n3 de jan. de 2025\n\n\nHarlow Malloc\n\n\n\n\n\n\n\n\n\n\n\n\nWelcome To My Blog\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\n31 de dez. de 2024\n\n\nTristan O’Malley\n\n\n\n\n\n\nNenhum item correspondente"
+  },
+  {
+    "objectID": "Equipe/Atual/carlos_trucios.html",
+    "href": "Equipe/Atual/carlos_trucios.html",
+    "title": "Carlos Trucíos",
+    "section": "",
+    "text": "Website\n  \n  \n    \n     Lattes\n  \n  \n    \n     Scholar\n  \n  \n    \n     Github\n  \n  \n    \n     Linkedin\n  \n\n      \n\n    \n    \n  \n\n\nCoordenador do projeto e Professor do Departamento de Estatística do IMECC desde 2022.\n\nSala: 206 - IMECC\nE-mail: ctrucios at unicamp dot br"
+  },
+  {
+    "objectID": "Equipe/Atual/thiago.html",
+    "href": "Equipe/Atual/thiago.html",
+    "title": "Thiago Paulichen",
+    "section": "",
+    "text": "Lattes\n  \n\n\n\nDoutorando em Estatística pela UNICAMP."
+  },
+  {
+    "objectID": "Blog/welcome/index.html",
+    "href": "Blog/welcome/index.html",
+    "title": "Welcome To My Blog",
+    "section": "",
+    "text": "This is the first post in a Quarto blog. Welcome!\n\nSince this post doesn’t specify an explicit image, the first image in the post will be used in the listing page of posts."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Do Zero ao Julia",
+    "section": "",
+    "text": "Descubra e explore as vantagens da linguagem de programação Julia: uma poderosa ferramenta para o ensino, a implementação e o desenvolvimento de métodos estatísticos e de ciência de dados.\n\n\n\n\n\n\n\n\n\n\n\nDescubra as vantagens e dicas de Julia\n\nBlog\n\n\n\n\n\n\n\n\n\nExplore diversos tópicos em Julia\n\nTutoriais\n\n\n\n\n\n\n\n\n\nConheça casos de sucesso e amplie seu networking.\n\nMeetup"
+  },
+  {
+    "objectID": "meetup.html",
+    "href": "meetup.html",
+    "title": "Meetup",
+    "section": "",
+    "text": "Os meetups acontecem toda terceira quinta-feira do mês, nas dependências do IMECC/UNICAMP. O ingresso é gratuito e aberto ao público (mas precisa de inscrição). Para participar, inscreva-se aqui.\n\n\n\n\n\n\n\n\n\n\n\nImportante\n\n\n\nComo forma de incentivar o networking entre os participantes, após cada palestra, temos uma confraternização com alguns comes e bebes. O projeto não conta com financiamento para o coffee break, portanto, aqueles que desejarem, fiquem à vontade para trazer algo para compartilhar.\n\n\n\nÉ gratis, é sobre Julia e é no IMECC/UNICAMP!"
+  },
+  {
+    "objectID": "Tutoriais/post-with-code/index.html",
+    "href": "Tutoriais/post-with-code/index.html",
+    "title": "Post With Code",
+    "section": "",
+    "text": "This is a post with executable code.\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "tutoriais.html",
+    "href": "tutoriais.html",
+    "title": "Tutoriais",
+    "section": "",
+    "text": "Post With Code\n\n\n\nnews\n\n\ncode\n\n\nanalysis\n\n\n\n\n\n\n\nHarlow Malloc\n\n\n3 de jan. de 2025\n\n\n\n\n\n\n\n\n\n\n\n\nWelcome To My Blog\n\n\n\nnews\n\n\n\n\n\n\n\nTristan O’Malley\n\n\n31 de dez. de 2024\n\n\n\n\n\n\n\n\nNenhum item correspondente"
+  },
+  {
+    "objectID": "equipe.html",
+    "href": "equipe.html",
+    "title": "Do Zero ao Julia",
+    "section": "",
+    "text": "Mestrado\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCoordenador\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMestrado\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDoutorado\n\n\n\n\n\n\n\nNenhum item correspondente"
+  },
+  {
+    "objectID": "equipe.html#equipe-atual",
+    "href": "equipe.html#equipe-atual",
+    "title": "Do Zero ao Julia",
+    "section": "",
+    "text": "Mestrado\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCoordenador\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMestrado\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDoutorado\n\n\n\n\n\n\n\nNenhum item correspondente"
+  },
+  {
+    "objectID": "equipe.html#antigos-membros",
+    "href": "equipe.html#antigos-membros",
+    "title": "Do Zero ao Julia",
+    "section": "Antigos membros",
+    "text": "Antigos membros\n\n\n   \n     \n     \n       Ordenar por\n       Pré-selecionado\n         \n          Nome\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\nNome\n\n\nCategoria\n\n\n\n\n\n\n\nNenhum item correspondente"
+  },
+  {
+    "objectID": "Tutoriais/welcome/index.html",
+    "href": "Tutoriais/welcome/index.html",
+    "title": "Welcome To My Blog",
+    "section": "",
+    "text": "This is the first post in a Quarto blog. Welcome!\n\nSince this post doesn’t specify an explicit image, the first image in the post will be used in the listing page of posts."
+  },
+  {
+    "objectID": "oprojeto.html",
+    "href": "oprojeto.html",
+    "title": "Conheça mais sobre o projeto ‘Do Zero ao Julia’",
+    "section": "",
+    "text": "Julia?\n\nA linguagem de programação Julia, lançada oficialmente em 2012, tem surgido como uma alternativa a outras linguagem de programação já estabelecidas no mercado como Matlab, Python e R. Com desempenho comparável ao de C++ e facilidade de aprendizado similar a Python e R, Julia utiliza multiple dispatch, tem uma boa performance e permite utilizar símbolos matemáticos no código. Ademais, Julia também resolve o problema de duas linguagens, não sendo mais necessário fazer o protótipo em uma linguagem e colocar em produção em outra.\n\n\n\nO Projeto\n\nDo Zero ao Julia é um projeto de extensão do IMECC/UNICAMP, coordenado pelo Professor Carlos Trucíos (Departamento de Estatística), com o objetivo de promover o uso e a disseminação da linguagem de programação Julia. O projeto visa destacar Julia como uma ferramenta poderosa e eficiente, tanto para o ensino de Estatística e Ciência de Dados quanto para sua aplicação na academia e na indústria. Através de palestras, cursos online e materiais educativos, como blogs e tutoriais, as diversas potencialidades de Julia serão apresentadas ao público, estimulando a troca de conhecimentos e o engajamento entre a comunidade acadêmica e a sociedade."
+  },
+  {
+    "objectID": "Blog/post-with-code/index.html",
+    "href": "Blog/post-with-code/index.html",
+    "title": "Post With Code",
+    "section": "",
+    "text": "This is a post with executable code.\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "Equipe/Atual/pedro.html",
+    "href": "Equipe/Atual/pedro.html",
+    "title": "Pedro Henrique Galera Elias",
+    "section": "",
+    "text": "Github\n  \n  \n    \n     Linkedin\n  \n  \n    \n     Lattes\n  \n\n\n\nMestrando em Estatística pela UNICAMP."
+  },
+  {
+    "objectID": "Equipe/Atual/adriel.html",
+    "href": "Equipe/Atual/adriel.html",
+    "title": "Adriel Wesley Nascimento Melo",
+    "section": "",
+    "text": "Lattes\n  \n\n\n\nMestrando em Estatística pela UNICAMP."
+  }
+]
