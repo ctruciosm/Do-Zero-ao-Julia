@@ -1,0 +1,39 @@
+---
+title: "Carlos Trucíos"
+sortby: "Carlos Trucíos"
+subtitle: "Coordenador"
+image: foto_ctrucios.jpeg
+about:
+  id: person-profile
+  template: solana
+  image-width: 10em
+  links:
+    - icon: link
+      text: Website
+      href: https://ctruciosm.github.io/
+    - icon: file-earmark-text
+      text: Lattes
+      href: http://lattes.cnpq.br/9315014843913122
+    - icon: mortarboard
+      text: Scholar
+      href: https://scholar.google.com/citations?user=HEdXeQkAAAAJ
+    - icon: github
+      text: Github
+      href: https://github.com/ctruciosm
+    - icon: linkedin
+      text: Linkedin
+      href: https://www.linkedin.com/in/ctrucios/
+---
+
+
+
+
+:::{#person-profile}
+:::
+
+Coordenador do projeto e Professor do Departamento de Estatística do IMECC desde 2022.
+
+- **Sala:** 206 - IMECC
+- **E-mail:** ctrucios at unicamp dot br
+
+

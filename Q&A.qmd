@@ -1,0 +1,124 @@
+---
+title: "Perguntas e Respostas"
+lang: "pt"
+---
+
+
+
+## 1. Por que Julia?
+
+Julia é uma linguagem de programação cada vez mais popular em análise numérica, estatística, econometria, machine learning e ciência de dados. Suas principais vantagens incluem:
+
+   
+- **Desempenho e Velocidade:** Julia foi projetada para alto desempenho, muitas vezes igualando ou superando C e Fortran, sem perder a facilidade de uso de Python ou R.
+- **Sintaxe Simples:** A sintaxe é amigável, tornando a linguagem acessível para alunos e pesquisadores vindos de R, Python ou MATLAB.
+- **Interoperabilidade:** Julia pode chamar código em Python, R e C/Fortran, permitindo integração fácil com projetos já existentes.
+- **Computação Paralela e Distribuída:** Julia possui suporte nativo para multi-threading e computação distribuída, ideal para simulações em larga escala.
+- **Adoção Crescente:** Julia tem ganhado espaço em universidades e centros de pesquisa no mundo todo, com um ecossistema em constante expansão.
+
+
+
+<center>
+![](ecosistema.png)
+</center>
+
+
+
+## 2. Por que na UNICAMP?
+
+
+**Oportunidade de Crescimento:** Julia ainda é relativamente nova em comparação com R e Python. A UNICAMP pode se tornar um polo de referência no Brasil e na América Latina para sua adoção.
+
+<center>
+![](mapa.png)
+</center>
+
+
+
+
+
+
+
+## 3. A participação no projeto contará créditos?
+
+- Alunos da Graduação: **Sim!** No 2025-II será aberta uma disciplina chamada Tópicos de Extensão (ME881) valendo 5 créditos (equivalente a 75 horas dedicadas ao projeto).
+- Alunos da Pós-graduação: **Não!** (mas colocar no lattes uma participação em projetos de extensão não parece ser uma ideia ruim)
+
+
+## 4. Quantas horas por semana devo dedicar ao projeto?
+
+Originalmente, o projeto foi pensado para o aluno se dedicar, em média, 10 horas semanais ao projeto, totalizando, aproximadamente, 40 horas num semestre letivo.  Contudo, como a disciplina a ser aberta equivale a 75 horas dedicadas ao projeto, o aluno(a) deverá acumular, pelo menos, 75 horas de dedicação ao projeto no final do 2025-II para ser aprovado na disciplina.
+
+## 5. Se são 75 horas, como será feito isso?
+
+Existem duas formas:
+
+- O aluno(a) se matricula na disciplina no 2025-II e durante o semestre precisará se dedicar, aproximadamente, 19 horas semanais ao projeto (o que é quase impossível, exceto se estiver cursando apenas uma ou duas disciplinas)
+- O aluno(a) começa a trabalhar desde agora, vá acumulando horas e no próximo semestre se matricula normalmente na disciplina e continua trabalhando no projeto até cumprir o número de horas necessárias (opção mais viável e realista).
+
+
+## 6. Blz, mas como serão contabilizadas essas horas?
+
+Criei uma tabela de equivalência entre as atividades realizadas e o número de horas a serem computadas e tanto o aluno quanto o professor manterão um registro destas atividades. A tabela de equivalências é dada a seguir:
+
+
+|     Atividade       |       Horas a serem computadas      |
+|:-------------------:|:-----------------------------------:|
+| 1 Post no Blog      |              3 horas                |
+| 1 Tutorial          |              6 horas                |
+| 1 Minicurso         |              14 horas*              |
+| 1 Meetup organizado |              2 horas                |
+| Cuidar do Instagram |              10 horas*              |
+| Outros              |             a combinar              |
+
+
+*: para ser feito em dupla
+
+- O minicurso deverá ser de aproximadamente 5-6 horas e será no formato online.
+- O cuidado do instagram inclui a criação das artes (cartaz, fotos, etc) e as postagens na própria rede social durante todo o semestre.
+
+Assim, por exemplo:
+
+- Um aluno que no 2025-I escreve 4 posts no semestre, 2 tutoriais, 1 minicurso e organiza um meetup, lhe serão computadas $4 \times 3 + 2 \times 6 + 14 + 2 = 40$ horas
+- Um aluno que no 2025-I escreve 10 post, e organiza um meetup, lhe serão computadas $10 \times 3 +  2 = 32$ horas
+
+
+::: {.callout-tip icon=false}
+### Bonificação 
+
+- Ao iniciar o projeto, o aluno(a) deverá aprender a trabalhar com Github, Quarto e Julia. Assim, para considerar este tempo de aprendizagem, cada aluno(a) receberá uma única vez uma bonificação de 5 horas a serem computadas (desde que acumule, pelo menos, 30 hora já dedicadas ao projeto).
+- Se o Instagram receber mais de 1000 novos seguidores no semestre, todos os alunos serão bonificados com 5 horas a serem computadas.
+:::
+
+
+## 7. Quais são os temas para os posts, tutoriais, minicursos, etc?
+
+Não existe uma roteiro definido, mas todos esses assuntos serão definidos nas reuniões das sextas-feiras (que serão quinzenalmente).
+
+
+## 8. As reuniões das sextas são obrigatórias? 
+
+**Sim!** as reuniões são de alinhamento, para definir as metas para os próximos 15 dias e evitar posts/tutoriais repetidos.
+
+
+## 9. Existe algúm material específico a seguir?
+
+**Não**, mas na elaboração dos posts, tutoriais e minicursos (todos em português), os alunos utilizarão recursos como:
+
+
+- [Think Julia: How to Think Like a Computer Scientist](https://benlauwens.github.io/ThinkJulia.jl/latest/book)
+- [Julia for High Performance Scientific Computing](https://enccs.github.io/julia-for-hpc/)
+- [Practical Julia](https://lee-phillips.org/juliabook/)
+- [Using Julia for introductory Econometrics](http://upfie.net/downloads/PDF/UJfIE_web.pdf)
+- [Julia for Data Analysis](https://www.manning.com/books/julia-for-data-analysis)
+- [Julia Academy](https://juliaacademy.com/courses/category/Advanced)
+- Documentação oficial de Julia.
+
+
+## 10. Bora! Tô dentro!
+
+
+<center>
+![](ZeroJulia.png)
+</center>
+

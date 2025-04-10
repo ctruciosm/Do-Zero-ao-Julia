@@ -6,16 +6,20 @@ lang: "pt"
 
 # Julia?
 ::: {.justify}
-A linguagem de programação `Julia`, lançada oficialmente em 2012, tem surgido como uma alternativa a outras linguagem de programação já estabelecidas no mercado como `Matlab`, `Python` e `R`. Com desempenho comparável ao de `C++` e facilidade de aprendizado similar a `Python` e `R`,  `Julia` utiliza [*multiple dispatch*](https://juliahep.github.io/JuliaHEP-2023/julia-intro-multiple-dispatch.html), tem uma boa performance e permite utilizar símbolos matemáticos no código. Ademais, Julia também resolve o [**problema de duas linguagens**](https://www.youtube.com/watch?v=qGW0GT1rCvs), não sendo mais necessário fazer o protótipo em uma linguagem e colocar em produção em outra.
+A linguagem de programação `Julia`, lançada oficialmente ao público em 2012, e com foco em ciência de dados e computação científica, tem surgido como uma alternativa a outras linguagem de programação já estabelecidas no mercado como `Matlab`, `Python` e `R`. Com desempenho comparável ao de `C++` e facilidade de aprendizado similar a `Python` e `R`,  `Julia` utiliza [*multiple dispatch*](https://juliahep.github.io/JuliaHEP-2023/julia-intro-multiple-dispatch.html), tem uma boa performance e permite utilizar símbolos matemáticos diretamente no código. Ademais, Julia também resolve o [**problema de duas linguagens**](https://www.youtube.com/watch?v=qGW0GT1rCvs), não sendo mais necessário fazer o protótipo em uma linguagem e colocar em produção em outra -- uma característica especialmente vantajosa no desenvolvimento de aplicações no setor industrial e em projetos de grande escala.
 :::
 
 
 # O Projeto
 
 ::: {.justify}
-Do Zero ao Julia é um projeto de extensão do IMECC/UNICAMP, coordenado pelo Professor [Carlos Trucíos](https://ctruciosm.github.io/) (Departamento de Estatística), com o objetivo de promover o uso e a disseminação da linguagem de programação `Julia`. O projeto visa destacar `Julia` como uma ferramenta poderosa e eficiente, tanto para o ensino de Estatística e Ciência de Dados quanto para sua aplicação na academia e na indústria. Através de palestras, cursos online e materiais educativos, como blogs e tutoriais, as diversas potencialidades de `Julia` serão apresentadas ao público, estimulando a troca de conhecimentos e o engajamento entre a comunidade acadêmica e a sociedade.
+Do Zero ao Julia é um projeto de extensão do IMECC/UNICAMP, coordenado pelo Professor [Carlos Trucíos](https://ctruciosm.github.io/) (Departamento de Estatística), com o objetivo de incentivar e disseminar o uso da linguagem Julia. O projeto visa destacar `Julia` como uma ferramenta poderosa e eficiente, não apenas no ensino de Estatística e Ciência de Dados, mas também como uma ferramenta poderosa na análise de dados, desenvolvimento de projetos e implantação de modelos tanto na academia quanto na industria. Através de palestras, cursos online e materiais educativos, como blogs e tutoriais, vamos apresentar os benefícios e recursos da linguagem de programação Julia a diferentes públicos. O projeto será uma oportunidade para envolver tanto a comunidade acadêmica quanto outras pessoas interessadas, como profissionais da indústria, buscando promover a troca de conhecimentos e fortalecer a conexão entre a universidade e a sociedade.
 :::
 
 
+
+::: {.justify}
+Além disso, o projeto irá oferecer materiais comparando `Julia` com outras linguagens populares, como `Python` e `R`, mostrando suas vantagens, limitações e características específicas. Também será explorado como `Julia` pode ser integrada com outras tecnologias, com foco na implementação de modelos em produção, proporcionando uma visão abrangente de como `Julia` se posiciona no vasto ecossistema de ferramentas tecnológicas da era digital.
+:::
 
 

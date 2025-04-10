@@ -1,6 +1,6 @@
 project:
   type: website
-  output-dir: .
+  output-dir: "_site"
 
 website:
   title: "Do Zero ao Julia"
@@ -10,6 +10,8 @@ website:
         text: O projeto
       - href: equipe.qmd
         text: Equipe
+      - href: Q&A.qmd
+        text: Q&A
       - href: blog.qmd
         text: Blog
       - href: tutoriais.qmd

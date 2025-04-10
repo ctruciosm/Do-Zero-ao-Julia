@@ -11,9 +11,6 @@ Os meetups acontecem toda terceira quinta-feira do mês, nas dependências do IM
 ![](imagens/meetup.svg){width=55% fig-align="center"}
 
 
-::: {.callout-important title="Importante"}
-Como forma de incentivar o networking entre os participantes, após cada palestra, temos uma confraternização com alguns comes e bebes. **O projeto não conta com financiamento para o coffee break, portanto, aqueles que desejarem, fiquem à vontade para trazer algo para compartilhar**.
-:::
 
 
 <center>
