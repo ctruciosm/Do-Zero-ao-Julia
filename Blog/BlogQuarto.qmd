@@ -43,7 +43,7 @@ Um post no blog com Quarto é geralmente um arquivo `.qmd` que contém:
 1. Um _YAML header_ com metadados (como o que você vê no início deste post);
 2. Texto em Markdown;
 3. (Opcionalmente) Blocos de código executáveis;
-4. Recursos como imagens e gráficos.
+4. Recursos como imagens e gráficos (utilizar a pasta `imagens` dentro da pasta `Blog`.
 5. Instalar reticulate, JuliaCall
 6. julia_setup()
 
@@ -101,3 +101,10 @@ jsbjhbxjhsbd
 
 
 :::
+
+
+
+### Antes de terminar
+
+1. Peça ao chatgpt melhorar o texto o corrigir o portugies
+2. Alguém será o editor do seu texto (pós-graduando, posdoc ou eu)
