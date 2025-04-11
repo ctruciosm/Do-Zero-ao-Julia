@@ -78,9 +78,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-categories"],
+      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -200,7 +200,7 @@ window.Quarto = {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-    <h5 class="quarto-listing-category-title">Categorias</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">Tudo <span class="quarto-category-count">(0)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categorias</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">Tudo <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UXVhcnRv">Quarto <span class="quarto-category-count">(1)</span></div></div></div>
 <!-- main -->
 <main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
 
@@ -214,7 +214,39 @@ window.Quarto = {
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-
+<div class="quarto-post image-right" data-index="0" data-categories="UXVhcnRv" data-listing-date-sort="1744254000000" data-listing-file-modified-sort="1744331646187" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="131">
+<div class="thumbnail">
+<p><a href="./Blog/BlogQuarto.html" class="no-external"></a></p><a href="./Blog/BlogQuarto.html" class="no-external">
+<p><img loading="lazy" src="./Blog/imagens/Julia_A_Capivara_CD.jpeg" class="thumbnail-image"></p>
+</a><p><a href="./Blog/BlogQuarto.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./Blog/BlogQuarto.html" class="no-external">Como fazer um post no Blog com Quarto?</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./Blog/BlogQuarto.html" class="no-external"></a>
+</div>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('UXVhcnRv'); return false;">
+Quarto
+</div>
+</div>
+<div class="listing-description">
+<a href="./Blog/BlogQuarto.html" class="no-external">Breve post explicando o passo a passo para fazer posts utilizando Quarto. </a>
+</div>
+</div>
+<div class="metadata">
+<a href="./Blog/BlogQuarto.html" class="no-external">
+<div class="listing-date">
+10 de abr. de 2025
+</div>
+<div class="listing-author">
+Carlos Trucíos, Maria Silva
+</div>
+</a>
+</div>
+</div>
 </div>
 <div class="listing-no-matching d-none">
 Nenhum item correspondente
