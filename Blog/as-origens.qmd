@@ -1,0 +1,91 @@
+---
+title: "Do Zero ao Julia: As origens"
+description: |
+  Ficou curioso sobre como tudo começou? Descubra, de forma leve e descontraída, como o projeto foi idealizado, planejado e finalmente lançado ao público.
+categories:
+  - História
+author:
+  - name: Carlos Trucíos
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://ctruciosm.github.io
+    orcid: 0000-0001-8746-8877
+date: "2025-04-24"
+image: imagens/as_origens.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+draft: false
+bibliography: referencias.bib
+---
+
+## O início
+
+::: {.justify}
+A primeira vez que ouvi falar da linguagem Julia foi em 2014, quando ainda era estudante de doutorado no IMECC e buscava formas mais rápidas de executar as simulações da minha pesquisa, que já exigia computação intensiva (Bootstrap). Naquela época, pouquíssimas pessoas trabalhavam com Julia, mas as promessas de desempenho comparável ao de linguagens de baixo nível como C++ ou Fortran rapidamente chamaram minha atenção.
+
+
+Alguns meses depois, conversando com colegas da Estatística e da Matemática Aplicada, percebi que não era o único interessado. Isso me motivou a criar um [Meetup](https://www.meetup.com/campinas-julia-language-meetup/) (alias, estamos reativando ele, então inscriva-se para não perder as novidades). No entanto, com a correria do dia a dia, nunca conseguimos realizar um encontro. Por anos, o grupo ficou lá, crescendo aos poucos, mesmo sem atividades — cheguei a pensar em encerrá-lo, mas no fundo sempre mantive a esperança de um dia retomar essa ideia.
+
+:::
+
+
+## O transcurso
+
+::: {.justify}
+Após o doutorado, acabei focando em outras prioridades — publicar artigos, trabalhar na indústria, estudar para concursos, preparar aulas... Ainda assim, a vontade de usar Julia permanecia. Com o tempo, fui explorando outras particularidades da linguagem: a possibilidade de escrever símbolos matemáticos diretamente no código (o que facilita absurdamente a implementação de novos métodos propostos na literatura), a programação nativa em paralelo e distribuída, e o fato de Julia resolver o famoso [problema das duas linuagens](https://discourse.julialang.org/t/two-language-problem-what-is-it/82925).
+
+
+Motivado pelas vantagens da linguagem, quando entrei na UNICAMP como docente resolvi incluir Julia como linguagem a ser utilizada em umas das disciplinas: [Econometria](https://ctruciosm.github.io/ME715.html). Posteriormente, trabalhando num artigo com alguns colegas [@hotta2025forecasting], resolvi implementar tudo em Julia, do zero, o que acabou sendo um ótima e desafiadora experiência.
+::: 
+
+<center>
+![](imagens/computer-cat.gif)
+<center>
+
+
+## A idealização
+
+::: {.justify}
+Após a curta experiência _mão na massa_ com Julia, entender a importância da extensão e de ver a necessidade dos alunos por se envolverem em atividade de extensão, resolvi unir o útil ao agradável e foi assim que surgiu a primeira ideia do projeto. Ainda no rascunho, perguntei aos meus orientandos o que eles achavam da ideia e alguns deles toparam participar desde o início (alias, foram eles que me ajudaram a escolher o nome). Passaram-se alguns meses e agora com a ideia mais amadurecida, escrevi uma proposta e a submeti à comissão de extensão do IMECC e, após algunas sugestões da comissão, o projeto foi aprovado e lançado oficialmente na sua forma atual.
+:::
+
+<center>
+![](imagens/bob.gif){width=50%}
+<center>
+
+
+::: {.justify}
+Confesso que, inicialmente, achei que apenas meus orientandos se interessariam. Mas, para minha grata surpresa, o projeto teve uma ótima recepção. Hoje, temos mais de 20 pessoas envolvidas, colaborando com as redes sociais, escrevendo posts, tutoriais, organizando minicursos e cuidando da parte editorial, entre outras atividades que loog logo ficarão sabendo.
+:::
+
+
+## A meta
+
+::: {.justify}
+Minha esperança é que o site [www.ime.unicamp.br/julialang](www.ime.unicamp.br/julialang) se torne um ponto de referência para quem quer aprender e explorar a linguagem Julia — oferecendo desde dicas para iniciantes até tutoriais completos e atualizações sobre a linguagem. Mais do que isso, torço para que o projeto ajude os alunos a desenvolverem habilidades valiosas para o mercado e, ao mesmo tempo, inspire a comunidade acadêmica e de ciência de dados a enxergar Julia como um verdadeiro mar de possibilidades.
+
+
+Estou longe de ser um expert em Julia, mas espero que em breve tanto você quanto eu saibamos um pouco mais dessa linguagem.
+
+
+**Happy coding!**
+
+:::
+
+
+
+<center>
+![](imagens/julia.png){width=50%}
+</center>
+
+::: {.callout-note} 
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto, bem como para a geração de imagens.
+:::
+
+
+
+## Referências
+

@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt" xml:lang="pt"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.6.39">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Carlos Trucíos">
+<meta name="description" content="Ficou curioso sobre como tudo começou? Descubra, de forma leve e descontraída, como o projeto foi idealizado, planejado e finalmente lançado ao público.">
 
-<title>About – Do Zero ao Julia</title>
+<title>Do Zero ao Julia: As origens – Do Zero ao Julia</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,59 +22,45 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
 }
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
 }
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
 }
-</style>
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-6bd9cfa162949bde0a231f530c97869d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-6bd9cfa162949bde0a231f530c97869d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -87,59 +75,59 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   ],
   "show-item-context": false,
   "language": {
-    "search-no-results-text": "No results",
-    "search-matching-documents-text": "matching documents",
-    "search-copy-link-title": "Copy link to search",
-    "search-hide-matches-text": "Hide additional matches",
-    "search-more-match-text": "more match in this document",
-    "search-more-matches-text": "more matches in this document",
-    "search-clear-button-title": "Clear",
+    "search-no-results-text": "Nenhum resultado",
+    "search-matching-documents-text": "documentos correspondentes",
+    "search-copy-link-title": "Copiar link para a busca",
+    "search-hide-matches-text": "Esconder correspondências adicionais",
+    "search-more-match-text": "mais correspondência neste documento",
+    "search-more-matches-text": "mais correspondências neste documento",
+    "search-clear-button-title": "Limpar",
     "search-text-placeholder": "",
-    "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit",
-    "search-label": "Search"
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Procurar"
   }
 }</script>
 
 
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../styles.css">
 </head>
 
-<body class="nav-fixed fullcontent">
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">Do Zero ao Julia</span>
     </a>
   </div>
-            <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+            <div id="quarto-search" class="" title="Procurar"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Alternar de navegação" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./oprojeto.html"> 
+    <a class="nav-link" href="../oprojeto.html"> 
 <span class="menu-text">O projeto</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./equipe.html"> 
+    <a class="nav-link" href="../equipe.html"> 
 <span class="menu-text">Equipe</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./blog.html"> 
+    <a class="nav-link" href="../blog.html"> 
 <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./tutoriais.html"> 
+    <a class="nav-link" href="../tutoriais.html"> 
 <span class="menu-text">Tutoriais</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./meetup.html"> 
+    <a class="nav-link" href="../meetup.html"> 
 <span class="menu-text">Meetup</span></a>
   </li>  
 </ul>
@@ -153,20 +141,59 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Nesta página</h2>
+   
+  <ul>
+  <li><a href="#o-início" id="toc-o-início" class="nav-link active" data-scroll-target="#o-início">O início</a></li>
+  <li><a href="#o-transcurso" id="toc-o-transcurso" class="nav-link" data-scroll-target="#o-transcurso">O transcurso</a></li>
+  <li><a href="#a-idealização" id="toc-a-idealização" class="nav-link" data-scroll-target="#a-idealização">A idealização</a></li>
+  <li><a href="#a-meta" id="toc-a-meta" class="nav-link" data-scroll-target="#a-meta">A meta</a></li>
+  <li><a href="#referências" id="toc-referências" class="nav-link" data-scroll-target="#referências">Referências</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">About</h1>
+<h1 class="title">Do Zero ao Julia: As origens</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">História</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    <p>Ficou curioso sobre como tudo começou? Descubra, de forma leve e descontraída, como o projeto foi idealizado, planejado e finalmente lançado ao público.</p>
+  </div>
 </div>
 
-
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Autor</div>
+  <div class="quarto-title-meta-heading">Afiliação</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author"><a href="https://ctruciosm.github.io">Carlos Trucíos</a> <a href="https://orcid.org/0000-0001-8746-8877" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Universidade Estadual de Campinas
+          </p>
+      </div>
+  </div>
 
 <div class="quarto-title-meta">
 
-    
+      
+    <div>
+    <div class="quarto-title-meta-heading">Data de Publicação</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">24 de abril de 2025</p>
+    </div>
+  </div>
   
     
   </div>
@@ -176,17 +203,71 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>About this site</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 2</code></pre>
+<section id="o-início" class="level2">
+<h2 class="anchored" data-anchor-id="o-início">O início</h2>
+<div class="justify">
+<p>A primeira vez que ouvi falar da linguagem Julia foi em 2014, quando ainda era estudante de doutorado no IMECC e buscava formas mais rápidas de executar as simulações da minha pesquisa, que já exigia computação intensiva (Bootstrap). Naquela época, pouquíssimas pessoas trabalhavam com Julia, mas as promessas de desempenho comparável ao de linguagens de baixo nível como C++ ou Fortran rapidamente chamaram minha atenção.</p>
+<p>Alguns meses depois, conversando com colegas da Estatística e da Matemática Aplicada, percebi que não era o único interessado. Isso me motivou a criar um <a href="https://www.meetup.com/campinas-julia-language-meetup/">Meetup</a> (alias, estamos reativando ele, então inscriva-se para não perder as novidades). No entanto, com a correria do dia a dia, nunca conseguimos realizar um encontro. Por anos, o grupo ficou lá, crescendo aos poucos, mesmo sem atividades — cheguei a pensar em encerrá-lo, mas no fundo sempre mantive a esperança de um dia retomar essa ideia.</p>
+</div>
+</section>
+<section id="o-transcurso" class="level2">
+<h2 class="anchored" data-anchor-id="o-transcurso">O transcurso</h2>
+<div class="justify">
+<p>Após o doutorado, acabei focando em outras prioridades — publicar artigos, trabalhar na indústria, estudar para concursos, preparar aulas… Ainda assim, a vontade de usar Julia permanecia. Com o tempo, fui explorando outras particularidades da linguagem: a possibilidade de escrever símbolos matemáticos diretamente no código (o que facilita absurdamente a implementação de novos métodos propostos na literatura), a programação nativa em paralelo e distribuída, e o fato de Julia resolver o famoso <a href="https://discourse.julialang.org/t/two-language-problem-what-is-it/82925">problema das duas linuagens</a>.</p>
+<p>Motivado pelas vantagens da linguagem, quando entrei na UNICAMP como docente resolvi incluir Julia como linguagem a ser utilizada em umas das disciplinas: <a href="https://ctruciosm.github.io/ME715.html">Econometria</a>. Posteriormente, trabalhando num artigo com alguns colegas <span class="citation" data-cites="hotta2025forecasting">(<a href="#ref-hotta2025forecasting" role="doc-biblioref">Hotta et al. 2025</a>)</span>, resolvi implementar tudo em Julia, do zero, o que acabou sendo um ótima e desafiadora experiência.</p>
+</div>
+<center>
+<img src="imagens/computer-cat.gif" class="img-fluid">
+<center>
+</center></center></section>
+<section id="a-idealização" class="level2">
+<h2 class="anchored" data-anchor-id="a-idealização">A idealização</h2>
+<div class="justify">
+<p>Após a curta experiência <em>mão na massa</em> com Julia, entender a importância da extensão e de ver a necessidade dos alunos por se envolverem em atividade de extensão, resolvi unir o útil ao agradável e foi assim que surgiu a primeira ideia do projeto. Ainda no rascunho, perguntei aos meus orientandos o que eles achavam da ideia e alguns deles toparam participar desde o início (alias, foram eles que me ajudaram a escolher o nome). Passaram-se alguns meses e agora com a ideia mais amadurecida, escrevi uma proposta e a submeti à comissão de extensão do IMECC e, após algunas sugestões da comissão, o projeto foi aprovado e lançado oficialmente na sua forma atual.</p>
+</div>
+<center>
+<img src="imagens/bob.gif" class="img-fluid" style="width:50.0%">
+<center>
+<div class="justify">
+<p>Confesso que, inicialmente, achei que apenas meus orientandos se interessariam. Mas, para minha grata surpresa, o projeto teve uma ótima recepção. Hoje, temos mais de 20 pessoas envolvidas, colaborando com as redes sociais, escrevendo posts, tutoriais, organizando minicursos e cuidando da parte editorial, entre outras atividades que loog logo ficarão sabendo.</p>
+</div>
+</center></center></section>
+<section id="a-meta" class="level2">
+<h2 class="anchored" data-anchor-id="a-meta">A meta</h2>
+<div class="justify">
+<p>Minha esperança é que o site <a href="www.ime.unicamp.br/julialang">www.ime.unicamp.br/julialang</a> se torne um ponto de referência para quem quer aprender e explorar a linguagem Julia — oferecendo desde dicas para iniciantes até tutoriais completos e atualizações sobre a linguagem. Mais do que isso, torço para que o projeto ajude os alunos a desenvolverem habilidades valiosas para o mercado e, ao mesmo tempo, inspire a comunidade acadêmica e de ciência de dados a enxergar Julia como um verdadeiro mar de possibilidades.</p>
+<p>Estou longe de ser um expert em Julia, mas espero que em breve tanto você quanto eu saibamos um pouco mais dessa linguagem.</p>
+<p><strong>Happy coding!</strong></p>
+</div>
+<center>
+<img src="imagens/julia.png" class="img-fluid" style="width:50.0%">
+</center>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Nota
 </div>
 </div>
+<div class="callout-body-container callout-body">
+<p>Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto, bem como para a geração de imagens.</p>
+</div>
+</div>
+</section>
+<section id="referências" class="level2">
 
 
 
-</main> <!-- /main -->
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referências</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-hotta2025forecasting" class="csl-entry" role="listitem">
+Hotta, Luiz, Carlos Trucios, Pedro L Valls Pereira, e Mauricio Zevallos. 2025. <span>«Forecasting Bitcoin and Ethereum risk measures through MSGARCH models: Does the specification matter?»</span> <em>Brazilian Review of Finance</em> 23: e202503–3.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -230,12 +311,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // flash "checked"
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copied!");
+    button.setAttribute("title", "Copiada");
     let tooltip;
     if (window.bootstrap) {
       button.setAttribute("data-bs-toggle", "tooltip");
       button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
+      button.setAttribute("data-bs-title", "Copiada");
       tooltip = new bootstrap.Tooltip(button, 
         { trigger: "manual", 
           customClass: "code-copy-button-tooltip",
