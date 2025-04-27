@@ -1,0 +1,30 @@
+---
+title: "Caio Frare"
+sortby: "Caio Frare
+subtitle: "Aluno de Graduação em Estatística na UNICAMP"
+image: foto_ctrucios.jpeg
+about:
+  id: person-profile
+  template: solana
+  image-width: 10em
+  links:
+    - icon: github
+      text: Github
+      href: https://github.com/ctruciosm #############################
+    - icon: linkedin
+      text: Linkedin
+      href: https://www.linkedin.com/in/caiofrare/
+---
+
+
+
+
+:::{#person-profile} 
+:::
+
+Coordenador do projeto e Professor do Departamento de Estatística do IMECC desde 2022.
+
+- **Sala:** 206 - IMECC
+- **E-mail:** ctrucios at unicamp dot br
+
+
