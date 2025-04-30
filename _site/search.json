@@ -70,11 +70,11 @@
     "text": "9. Existe algúm material específico a seguir?\nNão, mas na elaboração dos posts, tutoriais e minicursos (todos em português), os alunos utilizarão recursos como:\n\nThink Julia: How to Think Like a Computer Scientist\nJulia for High Performance Scientific Computing\nPractical Julia\nUsing Julia for introductory Econometrics\nJulia for Data Analysis\nJulia Academy\nDocumentação oficial de Julia."
   },
   {
-    "objectID": "Q&A.html#bora-tô-dentro",
-    "href": "Q&A.html#bora-tô-dentro",
+    "objectID": "Q&A.html#uma-última-coisa",
+    "href": "Q&A.html#uma-última-coisa",
     "title": "Perguntas e Respostas",
-    "section": "10. Bora! Tô dentro!",
-    "text": "10. Bora! Tô dentro!"
+    "section": "10. Uma última coisa",
+    "text": "10. Uma última coisa\nEntre as atividades a serem realizadas pelos envolvidos temos:\n\nManutenção do Website e alimentação das redes sociais\nOrganização dos Meetup online\nElaboração de conteúdo para o blog\nElaboração dos tutoriais\nElaboração de minicursos (1 por semestre)\nElaboração de material para divulgação\n\n\nAs reuniões de coordenação e planejamento semanal acontecerão sextas-feiras às 9:00 da manhã.\n\n\nAlém de aprender e ensinar uma nova linguagem de programação com grande potencial na academia e na indústria, o projeto contribui para uma sociedade mais envolvida com a tecnologia, promovendo a equidade de gênero, raça e condição social nas áreas de STEM e disciplinas relacionadas. Os alunos envolvidos também terão a oportunidade de desenvolver suas habilidades de comunicação oral e escrita, soft skills essenciais para o mundo atual.\n\n\nInteressado(a) em fazer parte do projeto? Entre em contato via email com o coordenador do projeto, Prof. Carlos Trucíos."
   },
   {
     "objectID": "Equipe/Antigos/adriel.html",
@@ -98,60 +98,46 @@
     "text": "Website\n  \n  \n    \n     Lattes\n  \n  \n    \n     Scholar\n  \n  \n    \n     Github\n  \n  \n    \n     Linkedin\n  \n\n      \n\n    \n    \n  \n\n\nCoordenador do projeto e Professor do Departamento de Estatística do IMECC desde 2022.\n\nSala: 206 - IMECC\nE-mail: ctrucios at unicamp dot br"
   },
   {
-    "objectID": "Blog/BlogQuarto.html",
-    "href": "Blog/BlogQuarto.html",
-    "title": "Como fazer um post no Blog com Quarto?",
+    "objectID": "Blog/as-origens.html",
+    "href": "Blog/as-origens.html",
+    "title": "Do Zero ao Julia: As origens",
     "section": "",
-    "text": "O Quarto é uma ferramenta poderosa para a criação de documentos dinâmicos, que integra texto, código, gráficos e visualizações de forma elegante. Neste post, mostramos como criar um post de blog com Quarto de forma simples e rápida."
+    "text": "A primeira vez que ouvi falar da linguagem Julia foi em 2014, quando ainda era estudante de doutorado no IMECC e buscava formas mais rápidas de executar as simulações da minha pesquisa, que já exigia computação intensiva (Bootstrap). Naquela época, pouquíssimas pessoas trabalhavam com Julia, mas as promessas de desempenho comparável ao de linguagens de baixo nível como C++ ou Fortran rapidamente chamaram minha atenção.\nAlguns meses depois, conversando com colegas da Estatística e da Matemática Aplicada, percebi que não era o único interessado. Isso me motivou a criar um Meetup (alias, estamos reativando ele, então inscriva-se para não perder as novidades). No entanto, com a correria do dia a dia, nunca conseguimos realizar um encontro. Por anos, o grupo ficou lá, crescendo aos poucos, mesmo sem atividades — cheguei a pensar em encerrá-lo, mas no fundo sempre mantive a esperança de um dia retomar essa ideia."
   },
   {
-    "objectID": "Blog/BlogQuarto.html#introdução",
-    "href": "Blog/BlogQuarto.html#introdução",
-    "title": "Como fazer um post no Blog com Quarto?",
+    "objectID": "Blog/as-origens.html#o-início",
+    "href": "Blog/as-origens.html#o-início",
+    "title": "Do Zero ao Julia: As origens",
     "section": "",
-    "text": "O Quarto é uma ferramenta poderosa para a criação de documentos dinâmicos, que integra texto, código, gráficos e visualizações de forma elegante. Neste post, mostramos como criar um post de blog com Quarto de forma simples e rápida."
+    "text": "A primeira vez que ouvi falar da linguagem Julia foi em 2014, quando ainda era estudante de doutorado no IMECC e buscava formas mais rápidas de executar as simulações da minha pesquisa, que já exigia computação intensiva (Bootstrap). Naquela época, pouquíssimas pessoas trabalhavam com Julia, mas as promessas de desempenho comparável ao de linguagens de baixo nível como C++ ou Fortran rapidamente chamaram minha atenção.\nAlguns meses depois, conversando com colegas da Estatística e da Matemática Aplicada, percebi que não era o único interessado. Isso me motivou a criar um Meetup (alias, estamos reativando ele, então inscriva-se para não perder as novidades). No entanto, com a correria do dia a dia, nunca conseguimos realizar um encontro. Por anos, o grupo ficou lá, crescendo aos poucos, mesmo sem atividades — cheguei a pensar em encerrá-lo, mas no fundo sempre mantive a esperança de um dia retomar essa ideia."
   },
   {
-    "objectID": "Blog/BlogQuarto.html#requisitos-iniciais",
-    "href": "Blog/BlogQuarto.html#requisitos-iniciais",
-    "title": "Como fazer um post no Blog com Quarto?",
-    "section": "Requisitos iniciais",
-    "text": "Requisitos iniciais\nAntes de começar, certifique-se de ter:\n\nQuarto instalado em sua máquina;\nFamiliaridade com Markdown e, opcionalmente, R, Python ou Julia."
+    "objectID": "Blog/as-origens.html#o-transcurso",
+    "href": "Blog/as-origens.html#o-transcurso",
+    "title": "Do Zero ao Julia: As origens",
+    "section": "O transcurso",
+    "text": "O transcurso\n\nApós o doutorado, acabei focando em outras prioridades — publicar artigos, trabalhar na indústria, estudar para concursos, preparar aulas… Ainda assim, a vontade de usar Julia permanecia. Com o tempo, fui explorando outras particularidades da linguagem: a possibilidade de escrever símbolos matemáticos diretamente no código (o que facilita absurdamente a implementação de novos métodos propostos na literatura), a programação nativa em paralelo e distribuída, e o fato de Julia resolver o famoso problema das duas linuagens.\nMotivado pelas vantagens da linguagem, quando entrei na UNICAMP como docente resolvi incluir Julia como linguagem a ser utilizada em umas das disciplinas: Econometria. Posteriormente, trabalhando num artigo com alguns colegas (Hotta et al. 2025), resolvi implementar tudo em Julia, do zero, o que acabou sendo um ótima e desafiadora experiência."
   },
   {
-    "objectID": "Blog/BlogQuarto.html#estrutura-básica-de-um-post",
-    "href": "Blog/BlogQuarto.html#estrutura-básica-de-um-post",
-    "title": "Como fazer um post no Blog com Quarto?",
-    "section": "Estrutura básica de um post",
-    "text": "Estrutura básica de um post\nUm post no blog com Quarto é geralmente um arquivo .qmd que contém:\n\nUm YAML header com metadados (como o que você vê no início deste post);\nTexto em Markdown;\n(Opcionalmente) Blocos de código executáveis;\nRecursos como imagens e gráficos (utilizar a pasta imagens dentro da pasta Blog.\nInstalar reticulate, JuliaCall\njulia_setup()\n\nwhich julia where julia Sys.setenv(JULIA_HOME = “/Users/ctrucios/.juliaup/bin/julia”) library(JuliaCall) julia_setup()\n\n\n\n\nLegenda da figura\n\n\n\n\nIncluindo código\n\nrnorm(5)\n\n[1]  0.90181746  1.81534892 -1.35121613 -0.04455969 -0.14132428\n\n\n\n2+2\n\n4\n\n\n\n2*2\n\n4\n\n\n\n\nFormulas\nSeguir o formato latex:\n\\[Y_t = \\sqrt{262} \\times \\beta_1 X_t + \\epsilon_t\\]\n\n\nBlocos\n\n\n\n\n\n\nTeste\n\n\n\njsbjhbxjhsbd\n\n\n\n\nAntes de terminar\n\nPeça ao chatgpt melhorar o texto o corrigir o portugies\nAlguém será o editor do seu texto (pós-graduando, posdoc ou eu)"
+    "objectID": "Blog/as-origens.html#a-idealização",
+    "href": "Blog/as-origens.html#a-idealização",
+    "title": "Do Zero ao Julia: As origens",
+    "section": "A idealização",
+    "text": "A idealização\n\nApós a curta experiência mão na massa com Julia, entender a importância da extensão e de ver a necessidade dos alunos por se envolverem em atividade de extensão, resolvi unir o útil ao agradável e foi assim que surgiu a primeira ideia do projeto. Ainda no rascunho, perguntei aos meus orientandos o que eles achavam da ideia e alguns deles toparam participar desde o início (alias, foram eles que me ajudaram a escolher o nome). Passaram-se alguns meses e agora com a ideia mais amadurecida, escrevi uma proposta e a submeti à comissão de extensão do IMECC e, após algunas sugestões da comissão, o projeto foi aprovado e lançado oficialmente na sua forma atual.\n\n\n\n\n\nConfesso que, inicialmente, achei que apenas meus orientandos se interessariam. Mas, para minha grata surpresa, o projeto teve uma ótima recepção. Hoje, temos mais de 20 pessoas envolvidas, colaborando com as redes sociais, escrevendo posts, tutoriais, organizando minicursos e cuidando da parte editorial, entre outras atividades que loog logo ficarão sabendo."
   },
   {
-    "objectID": "oprojeto.html",
-    "href": "oprojeto.html",
-    "title": "Conheça mais sobre o projeto ‘Do Zero ao Julia’",
-    "section": "",
-    "text": "Julia?\n\nA linguagem de programação Julia, lançada oficialmente ao público em 2012, e com foco em ciência de dados e computação científica, tem surgido como uma alternativa a outras linguagem de programação já estabelecidas no mercado como Matlab, Python e R. Com desempenho comparável ao de C++ e facilidade de aprendizado similar a Python e R, Julia utiliza multiple dispatch, tem uma boa performance e permite utilizar símbolos matemáticos diretamente no código. Ademais, Julia também resolve o problema de duas linguagens, não sendo mais necessário fazer o protótipo em uma linguagem e colocar em produção em outra – uma característica especialmente vantajosa no desenvolvimento de aplicações no setor industrial e em projetos de grande escala.\n\n\n\nO Projeto\n\nDo Zero ao Julia é um projeto de extensão do IMECC/UNICAMP, coordenado pelo Professor Carlos Trucíos (Departamento de Estatística), com o objetivo de incentivar e disseminar o uso da linguagem Julia. O projeto visa destacar Julia como uma ferramenta poderosa e eficiente, não apenas no ensino de Estatística e Ciência de Dados, mas também como uma ferramenta poderosa na análise de dados, desenvolvimento de projetos e implantação de modelos tanto na academia quanto na industria. Através de palestras, cursos online e materiais educativos, como blogs e tutoriais, vamos apresentar os benefícios e recursos da linguagem de programação Julia a diferentes públicos. O projeto será uma oportunidade para envolver tanto a comunidade acadêmica quanto outras pessoas interessadas, como profissionais da indústria, buscando promover a troca de conhecimentos e fortalecer a conexão entre a universidade e a sociedade.\n\n\nAlém disso, o projeto irá oferecer materiais comparando Julia com outras linguagens populares, como Python e R, mostrando suas vantagens, limitações e características específicas. Também será explorado como Julia pode ser integrada com outras tecnologias, com foco na implementação de modelos em produção, proporcionando uma visão abrangente de como Julia se posiciona no vasto ecossistema de ferramentas tecnológicas da era digital."
+    "objectID": "Blog/as-origens.html#a-meta",
+    "href": "Blog/as-origens.html#a-meta",
+    "title": "Do Zero ao Julia: As origens",
+    "section": "A meta",
+    "text": "A meta\n\nMinha esperança é que o site www.ime.unicamp.br/julialang se torne um ponto de referência para quem quer aprender e explorar a linguagem Julia — oferecendo desde dicas para iniciantes até tutoriais completos e atualizações sobre a linguagem. Mais do que isso, torço para que o projeto ajude os alunos a desenvolverem habilidades valiosas para o mercado e, ao mesmo tempo, inspire a comunidade acadêmica e de ciência de dados a enxergar Julia como um verdadeiro mar de possibilidades.\nEstou longe de ser um expert em Julia, mas espero que em breve tanto você quanto eu saibamos um pouco mais dessa linguagem.\nHappy coding!\n\n\n\n\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto, bem como para a geração de imagens."
   },
   {
-    "objectID": "equipe.html",
-    "href": "equipe.html",
+    "objectID": "index.html",
+    "href": "index.html",
     "title": "Do Zero ao Julia",
     "section": "",
-    "text": "O projeto está desenhado para trabalharmos com 8 alunos da graduação e 5 alunos da pós-graduação e entre as atividades a serem realizadas pelos envolvidos temos:"
-  },
-  {
-    "objectID": "equipe.html#equipe",
-    "href": "equipe.html#equipe",
-    "title": "Do Zero ao Julia",
-    "section": "Equipe",
-    "text": "Equipe\n\n\n\n\n\n\n\n\n\n\nCarlos Trucíos\n\n\nCoordenador\n\n\n\n\n\n\n\nNenhum item correspondente"
-  },
-  {
-    "objectID": "tutoriais.html",
-    "href": "tutoriais.html",
-    "title": "Tutoriais",
-    "section": "",
-    "text": "Nenhum item correspondente"
+    "text": "Descubra e explore as vantagens da linguagem de programação Julia: uma poderosa ferramenta para o ensino, a implementação e o desenvolvimento de métodos estatísticos e de ciência de dados.\n\n\n\n\n\n\n\n\n\n\n\nDescubra as vantagens e dicas de Julia\n\nBlog\n\n\n\n\n\n\n\n\n\nExplore diversos tópicos em Julia\n\nTutoriais\n\n\n\n\n\n\n\n\n\nConheça casos de sucesso e amplie seu networking.\n\nMeetup"
   },
   {
     "objectID": "meetup.html",
@@ -161,11 +147,32 @@
     "text": "Os meetups acontecem toda terceira quinta-feira do mês, nas dependências do IMECC/UNICAMP. O ingresso é gratuito e aberto ao público (mas precisa de inscrição). Para participar, inscreva-se aqui.\n\n\n\n\n\n\nÉ gratis, é sobre Julia e é no IMECC/UNICAMP!"
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
+    "objectID": "tutoriais.html",
+    "href": "tutoriais.html",
+    "title": "Tutoriais",
+    "section": "",
+    "text": "Nenhum item correspondente"
+  },
+  {
+    "objectID": "equipe.html",
+    "href": "equipe.html",
     "title": "Do Zero ao Julia",
     "section": "",
-    "text": "Descubra e explore as vantagens da linguagem de programação Julia: uma poderosa ferramenta para o ensino, a implementação e o desenvolvimento de métodos estatísticos e de ciência de dados.\n\n\n\n\n\n\n\n\n\n\n\nDescubra as vantagens e dicas de Julia\n\nBlog\n\n\n\n\n\n\n\n\n\nExplore diversos tópicos em Julia\n\nTutoriais\n\n\n\n\n\n\n\n\n\nConheça casos de sucesso e amplie seu networking.\n\nMeetup"
+    "text": "Coordenador\n\n\n\n\n\n\n\nNenhum item correspondente"
+  },
+  {
+    "objectID": "equipe.html#equipe",
+    "href": "equipe.html#equipe",
+    "title": "Do Zero ao Julia",
+    "section": "",
+    "text": "Coordenador\n\n\n\n\n\n\n\nNenhum item correspondente"
+  },
+  {
+    "objectID": "oprojeto.html",
+    "href": "oprojeto.html",
+    "title": "Conheça mais sobre o projeto ‘Do Zero ao Julia’",
+    "section": "",
+    "text": "Julia?\n\nA linguagem de programação Julia, lançada oficialmente ao público em 2012, e com foco em ciência de dados e computação científica, tem surgido como uma alternativa a outras linguagem de programação já estabelecidas no mercado como Matlab, Python e R. Com desempenho comparável ao de C++ e facilidade de aprendizado similar a Python e R, Julia utiliza multiple dispatch, tem uma boa performance e permite utilizar símbolos matemáticos diretamente no código. Ademais, Julia também resolve o problema de duas linguagens, não sendo mais necessário fazer o protótipo em uma linguagem e colocar em produção em outra – uma característica especialmente vantajosa no desenvolvimento de aplicações no setor industrial e em projetos de grande escala.\n\n\n\nO Projeto\n\nDo Zero ao Julia é um projeto de extensão do IMECC/UNICAMP, coordenado pelo Professor Carlos Trucíos (Departamento de Estatística), com o objetivo de incentivar e disseminar o uso da linguagem Julia. O projeto visa destacar Julia como uma ferramenta poderosa e eficiente, não apenas no ensino de Estatística e Ciência de Dados, mas também como uma ferramenta poderosa na análise de dados, desenvolvimento de projetos e implantação de modelos tanto na academia quanto na industria. Através de palestras, cursos online e materiais educativos, como blogs e tutoriais, vamos apresentar os benefícios e recursos da linguagem de programação Julia a diferentes públicos. O projeto será uma oportunidade para envolver tanto a comunidade acadêmica quanto outras pessoas interessadas, como profissionais da indústria, buscando promover a troca de conhecimentos e fortalecer a conexão entre a universidade e a sociedade.\n\n\nAlém disso, o projeto irá oferecer materiais comparando Julia com outras linguagens populares, como Python e R, mostrando suas vantagens, limitações e características específicas. Também será explorado como Julia pode ser integrada com outras tecnologias, com foco na implementação de modelos em produção, proporcionando uma visão abrangente de como Julia se posiciona no vasto ecossistema de ferramentas tecnológicas da era digital."
   },
   {
     "objectID": "about.html",
@@ -193,6 +200,6 @@
     "href": "blog.html",
     "title": "Blog",
     "section": "",
-    "text": "Como fazer um post no Blog com Quarto?\n\n\n\n\n\n\nQuarto\n\n\n\nBreve post explicando o passo a passo para fazer posts utilizando Quarto. \n\n\n\n\n\n10 de abr. de 2025\n\n\nCarlos Trucíos, Maria Silva\n\n\n\n\n\n\nNenhum item correspondente"
+    "text": "Do Zero ao Julia: As origens\n\n\n\n\n\n\nHistória\n\n\n\nFicou curioso sobre como tudo começou? Descubra, de forma leve e descontraída, como o projeto foi idealizado, planejado e finalmente lançado ao público. \n\n\n\n\n\n24 de abr. de 2025\n\n\nCarlos Trucíos\n\n\n\n\n\n\nNenhum item correspondente"
   }
 ]

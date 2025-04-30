@@ -1,0 +1,22 @@
+---
+title: "Caio Frare"
+sortby: "Caio Frare"
+subtitle: "Graduando em Estatística"
+image: foto_caio_frare.jpeg
+about:
+  id: person-profile
+  template: solana
+  image-width: 10em
+  links:
+    - icon: github
+      text: Github
+      href: https://github.com/caiofrare
+    - icon: linkedin
+      text: Linkedin
+      href: https://www.linkedin.com/in/caiofrare/
+---
+
+::: {#person-profile}
+:::
+
+Graduando em Estatística pela UNICAMP.

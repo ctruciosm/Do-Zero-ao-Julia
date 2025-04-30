@@ -115,10 +115,31 @@ Não existe uma roteiro definido, mas todos esses assuntos serão definidos nas 
 - Documentação oficial de Julia.
 
 
-## 10. Bora! Tô dentro!
+## 10. Uma última coisa
+
+
+Entre as atividades a serem realizadas pelos envolvidos temos:
+
+-   Manutenção do Website e alimentação das redes sociais
+-   Organização dos Meetup online
+-   Elaboração de conteúdo para o blog
+-   Elaboração dos tutoriais
+-   Elaboração de minicursos (1 por semestre)
+-   Elaboração de material para divulgação
+
+> As reuniões de coordenação e planejamento semanal acontecerão sextas-feiras às 9:00 da manhã.
+
+
+::: {.justify}
+Além de aprender e ensinar uma nova linguagem de programação com grande potencial na academia e na indústria, o projeto contribui para uma sociedade mais envolvida com a tecnologia, promovendo a equidade de gênero, raça e condição social nas áreas de STEM e disciplinas relacionadas. Os alunos envolvidos também terão a oportunidade de desenvolver suas habilidades de comunicação oral e escrita, _soft skills_ essenciais para o mundo atual.
+:::
+
 
 
 <center>
-![](ZeroJulia.png)
+Interessado(a) em fazer parte do projeto? Entre em contato via email com o coordenador do projeto, Prof. Carlos Trucíos.
 </center>
+
+
+
 

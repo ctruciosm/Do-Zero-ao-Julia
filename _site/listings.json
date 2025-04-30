@@ -1,18 +1,18 @@
 [
   {
+    "listing": "/tutoriais.html",
+    "items": []
+  },
+  {
     "listing": "/equipe.html",
     "items": [
       "/Equipe/Atual/carlos_trucios.html"
     ]
   },
   {
-    "listing": "/tutoriais.html",
-    "items": []
-  },
-  {
     "listing": "/blog.html",
     "items": [
-      "/Blog/BlogQuarto.html"
+      "/Blog/as-origens.html"
     ]
   }
 ]

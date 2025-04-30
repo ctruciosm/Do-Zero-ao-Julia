@@ -1,0 +1,27 @@
+---
+title: "Vitor Ribas Perrone"
+sortby: "Vitor Ribas Perrone"
+subtitle: "Graduando em Estatística"
+image: foto_vitor_ribas.jpeg
+about:
+  id: person-profile
+  template: solana
+  image-width: 10em
+  links:
+    - icon: github
+      text: Github
+      href: https://github.com/VitorRibasP
+    - icon: linkedin
+      text: Linkedin
+      href: https://www.linkedin.com/in/vitor-ribas-perrone-99779a30a/
+---
+
+
+
+
+:::{#person-profile}
+:::
+
+Graduando em Estatística pela UNICAMP.
+
+
