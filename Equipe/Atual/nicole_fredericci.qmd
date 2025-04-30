@@ -19,6 +19,4 @@ about:
 ::: {#person-profile}
 :::
 
-Colaboradora do projeto e graduanda em estatística na UNICAMP.
-
--   **E-mail:** n204355 at dac dot unicamp dot br
+Graduanda em estatística pela UNICAMP.
