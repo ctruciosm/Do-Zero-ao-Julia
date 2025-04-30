@@ -1,0 +1,22 @@
+---
+title: "Nicole Fredericci"
+sortby: "Nicole Fredericci"
+subtitle: "Graduanda em Estatística"
+image: foto_nfredericci.jpeg
+about:
+  id: person-profile
+  template: solana
+  image-width: 10em
+  links:
+    - icon: github
+      text: Github
+      href: https://github.com/NFredericci
+    - icon: linkedin
+      text: Linkedin
+      href: https://www.linkedin.com/in/nicolefredericci/
+---
+
+::: {#person-profile}
+:::
+
+Graduanda em estatística pela UNICAMP.
