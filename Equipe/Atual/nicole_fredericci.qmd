@@ -19,4 +19,4 @@ about:
 ::: {#person-profile}
 :::
 
-Graduanda em estatística pela UNICAMP.
+Graduanda em Estatística pela UNICAMP.

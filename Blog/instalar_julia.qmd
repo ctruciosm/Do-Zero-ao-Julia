@@ -8,7 +8,11 @@ author:
   - name: Nicole Fredericci
     affiliation: "Universidade Estadual de Campinas"
     url: https://github.com/NFredericci
-date: "2025-04-29"
+  - name: Carlos Trucíos
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://ctruciosm.github.io
+    orcid: 0000-0001-8746-8877
+date: "2025-05-01"
 image: imagens/logo_app.png
 lang: pt
 format:
@@ -21,33 +25,37 @@ draft: false
 
 ## Introdução
 
-Há muitas vantagens em usar plataformas integradas para desenvolver seus projetos nas mais diversas linguagens de programação. Mas e se sua internet cair? E se você quiser continuar seu projeto de um lugar com conexão lenta? Ter Julia instalado no seu computador resolve esse problema!
+Há muitas vantagens em usar plataformas integradas para desenvolver seus projetos nas mais diversas linguagens de programação. Mas e se sua internet cair? E se você quiser continuar seu projeto de um lugar com conexão lenta? Ter `Julia` instalado no seu computador resolve esse problema!
+
+Neste post, aprenderemos algumas formas de instalar `Julia` no seu computador.
 
 ## Pelo site oficial
 
-Clicando em [Julia](https://julialang.org/downloads/#manual_downloads), você será redirecionado para o site onde poderá fazer a instalação manual da versão mais recente de Julia. É importante escolher um instalador compatível com o seu sistema!
+Clicando em [Julia](https://julialang.org/downloads/#manual_downloads), você será redirecionado para o site oficial de `Julia`, onde poderá realizar a instalação manual da versão mais recente de `Julia` apenas baixando um instalador compatível com seu sistema operacional  `(.exe, .dmg, etc)`. É importante escolher um instalador compatível com o seu sistema operacional, caso contrário não será possível a instalação.
 
-Certifique-se de ter pelo menos 0,98 GB livres para armazenar os arquivos em seu computador. Após o término do download, siga as instruções recomendadas de configuração do instalador oficial (clicando em "Próximo" em todas as abas) e aguarde enquanto Julia é instalado.
+Certifique-se de ter pelo menos **0,98 GB** livres para armazenar os arquivos em seu computador. Após o término do download, siga as instruções recomendadas de configuração do instalador oficial (clicando em "Próximo" em todas as abas, para o caso da instalação padrao) e aguarde enquanto Julia é instalado.
 
 ![Atalho no Desktop](imagens/installer_app.png){fig-align="center"}
 
-Criar um atalho na Área de Trabalho facilitará muito o acesso ao aplicativo no dia a dia, embora essa seleção seja opcional. Ao finalizar a instalação, você poderá programar diretamente no terminal de Julia, que deve se parecer com o seguinte:
+> Criar um atalho na área de trabalho facilitará muito o acesso ao aplicativo no dia a dia, embora essa seleção seja opcional. 
+
+Uma vez instalado `Julia` no seu computador, você poderá programar diretamente no terminal de Julia, que deve se parecer com a seguinte imagem:
 
 ![Terminal Julia](imagens/terminal_app.png){fig-align="center"}
 
 ## Outros caminhos
 
-Julia também está disponível para download pela [Microsoft Store](https://apps.microsoft.com/detail/9njnww8pvkmn?hl=pt-BR&gl=BR). Para os usuários de Linux e macOS, essa opção não se encontra disponível por enquanto, mas também é possível instalar e utilizar Julia diretamente do terminal do computador.
+`Julia` também está disponível para download pela [Microsoft Store](https://apps.microsoft.com/detail/9njnww8pvkmn?hl=pt-BR&gl=BR). Para os usuários de Linux e macOS, essa opção não se encontra disponível por enquanto, mas também é possível instalar e utilizar Julia diretamente do terminal do computador.
 
 No Windows, pressione as teclas Windows + R, digite `cmd` e pressione "Enter" para abrir o terminal. Em seguida, execute o comando abaixo e digite `Y` quando solicitado pelo sistema:
 
 ``` default
-winget install --name Julia --id 9NJNWW8PVKMN -e -s msstore
+winget install Julia
 ```
 
-Quando a instalação for concluída, você pode digitar `where julia` para localizar o caminho até o `.exe` de Julia, ou simplesmente digitar `julia` no terminal para obter uma interface semelhante à do aplicativo do programa.
+Quando a instalação for concluída, você pode digitar `where julia` para localizar o caminho até o `.exe` de `Julia`, ou simplesmente digitar `julia` no terminal para obter uma interface semelhante à do aplicativo do programa.
 
-No macOS, procure pelo terminal no Launchpad e no Linux, aperte Ctrl + Alt + T e procure pelo terminal no menu de aplicativos. Em seguida, rode o código abaixo e siga as instruções de instalação:
+No macOS ou Linux, abra o terminal e digite
 
 ``` default
 curl -fsSL https://install.julialang.org | sh

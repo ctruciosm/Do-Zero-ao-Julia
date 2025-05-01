@@ -51,7 +51,7 @@ Um post no blog com Quarto é geralmente um arquivo `.qmd` que contém:
 
 which julia
 where julia
-Sys.setenv(JULIA_HOME = "/Users/ctrucios/.juliaup/bin/julia")
+Sys.setenv(JULIA_HOME = "/Users/ctrucios/.juliaup/bin/")
 library(JuliaCall)
 julia_setup()
 

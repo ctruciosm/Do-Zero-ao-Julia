@@ -6,12 +6,16 @@
   {
     "listing": "/equipe.html",
     "items": [
-      "/Equipe/Atual/carlos_trucios.html"
+      "/Equipe/Atual/caio_frare.html",
+      "/Equipe/Atual/carlos_trucios.html",
+      "/Equipe/Atual/nicole_fredericci.html",
+      "/Equipe/Atual/vitor_ribas.html"
     ]
   },
   {
     "listing": "/blog.html",
     "items": [
+      "/Blog/instalar_julia.html",
       "/Blog/as-origens.html"
     ]
   }
