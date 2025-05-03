@@ -12,7 +12,7 @@ author:
     affiliation: "Universidade Estadual de Campinas"
     url: https://ctruciosm.github.io
     orcid: 0000-0001-8746-8877
-date: "2025-05-01"
+date: "2025-05-02"
 image: imagens/logo_app.png
 lang: pt
 format:

@@ -98,88 +98,18 @@
     "text": "Website\n  \n  \n    \n     Lattes\n  \n  \n    \n     Scholar\n  \n  \n    \n     Github\n  \n  \n    \n     Linkedin\n  \n\n      \n\n    \n    \n  \n\n\nCoordenador do projeto e Professor do Departamento de Estatística do IMECC desde 2022.\n\nSala: 206 - IMECC\nE-mail: ctrucios at unicamp dot br"
   },
   {
-    "objectID": "Equipe/Atual/caio_frare.html",
-    "href": "Equipe/Atual/caio_frare.html",
-    "title": "Caio Frare",
+    "objectID": "Equipe/Atual/nicole_fredericci.html",
+    "href": "Equipe/Atual/nicole_fredericci.html",
+    "title": "Nicole Fredericci",
+    "section": "",
+    "text": "Github\n  \n  \n    \n     Linkedin\n  \n\n      \n\n    \n    \n  \n\n\nGraduanda em Estatística pela UNICAMP."
+  },
+  {
+    "objectID": "Equipe/Atual/vitor_ribas.html",
+    "href": "Equipe/Atual/vitor_ribas.html",
+    "title": "Vitor Ribas Perrone",
     "section": "",
     "text": "Github\n  \n  \n    \n     Linkedin\n  \n\n      \n\n    \n    \n  \n\n\nGraduando em Estatística pela UNICAMP."
-  },
-  {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
-    "section": "",
-    "text": "About this site\n\n1 + 1\n\n[1] 2"
-  },
-  {
-    "objectID": "Blog/instalar_julia.html",
-    "href": "Blog/instalar_julia.html",
-    "title": "Como instalar Julia?",
-    "section": "",
-    "text": "Há muitas vantagens em usar plataformas integradas para desenvolver seus projetos nas mais diversas linguagens de programação. Mas e se sua internet cair? E se você quiser continuar seu projeto de um lugar com conexão lenta? Ter Julia instalado no seu computador resolve esse problema!\nNeste post, aprenderemos algumas formas de instalar Julia no seu computador."
-  },
-  {
-    "objectID": "Blog/instalar_julia.html#introdução",
-    "href": "Blog/instalar_julia.html#introdução",
-    "title": "Como instalar Julia?",
-    "section": "",
-    "text": "Há muitas vantagens em usar plataformas integradas para desenvolver seus projetos nas mais diversas linguagens de programação. Mas e se sua internet cair? E se você quiser continuar seu projeto de um lugar com conexão lenta? Ter Julia instalado no seu computador resolve esse problema!\nNeste post, aprenderemos algumas formas de instalar Julia no seu computador."
-  },
-  {
-    "objectID": "Blog/instalar_julia.html#pelo-site-oficial",
-    "href": "Blog/instalar_julia.html#pelo-site-oficial",
-    "title": "Como instalar Julia?",
-    "section": "Pelo site oficial",
-    "text": "Pelo site oficial\nClicando em Julia, você será redirecionado para o site oficial de Julia, onde poderá realizar a instalação manual da versão mais recente de Julia apenas baixando um instalador compatível com seu sistema operacional (.exe, .dmg, etc). É importante escolher um instalador compatível com o seu sistema operacional, caso contrário não será possível a instalação.\nCertifique-se de ter pelo menos 0,98 GB livres para armazenar os arquivos em seu computador. Após o término do download, siga as instruções recomendadas de configuração do instalador oficial (clicando em “Próximo” em todas as abas, para o caso da instalação padrao) e aguarde enquanto Julia é instalado.\n\n\n\nAtalho no Desktop\n\n\n\nCriar um atalho na área de trabalho facilitará muito o acesso ao aplicativo no dia a dia, embora essa seleção seja opcional.\n\nUma vez instalado Julia no seu computador, você poderá programar diretamente no terminal de Julia, que deve se parecer com a seguinte imagem:\n\n\n\nTerminal Julia"
-  },
-  {
-    "objectID": "Blog/instalar_julia.html#outros-caminhos",
-    "href": "Blog/instalar_julia.html#outros-caminhos",
-    "title": "Como instalar Julia?",
-    "section": "Outros caminhos",
-    "text": "Outros caminhos\nJulia também está disponível para download pela Microsoft Store. Para os usuários de Linux e macOS, essa opção não se encontra disponível por enquanto, mas também é possível instalar e utilizar Julia diretamente do terminal do computador.\nNo Windows, pressione as teclas Windows + R, digite cmd e pressione “Enter” para abrir o terminal. Em seguida, execute o comando abaixo e digite Y quando solicitado pelo sistema:\nwinget install Julia\nQuando a instalação for concluída, você pode digitar where julia para localizar o caminho até o .exe de Julia, ou simplesmente digitar julia no terminal para obter uma interface semelhante à do aplicativo do programa.\nNo macOS ou Linux, abra o terminal e digite\ncurl -fsSL https://install.julialang.org | sh\nQuando a instalação for concluída, você pode digitar which julia para localizar o caminho até o executável de Julia, ou simplesmente digitar julia no terminal para acessar a interface interativa do programa.\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Do Zero ao Julia",
-    "section": "",
-    "text": "Descubra e explore as vantagens da linguagem de programação Julia: uma poderosa ferramenta para o ensino, a implementação e o desenvolvimento de métodos estatísticos e de ciência de dados.\n\n\n\n\n\n\n\n\n\n\n\nDescubra as vantagens e dicas de Julia\n\nBlog\n\n\n\n\n\n\n\n\n\nExplore diversos tópicos em Julia\n\nTutoriais\n\n\n\n\n\n\n\n\n\nConheça casos de sucesso e amplie seu networking.\n\nMeetup"
-  },
-  {
-    "objectID": "meetup.html",
-    "href": "meetup.html",
-    "title": "Meetup",
-    "section": "",
-    "text": "Os meetups acontecem toda terceira quinta-feira do mês, nas dependências do IMECC/UNICAMP. O ingresso é gratuito e aberto ao público (mas precisa de inscrição). Para participar, inscreva-se aqui.\n\n\n\n\n\n\nÉ gratis, é sobre Julia e é no IMECC/UNICAMP!"
-  },
-  {
-    "objectID": "tutoriais.html",
-    "href": "tutoriais.html",
-    "title": "Tutoriais",
-    "section": "",
-    "text": "Nenhum item correspondente"
-  },
-  {
-    "objectID": "equipe.html",
-    "href": "equipe.html",
-    "title": "Do Zero ao Julia",
-    "section": "",
-    "text": "Graduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCoordenador\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\nNenhum item correspondente"
-  },
-  {
-    "objectID": "equipe.html#equipe",
-    "href": "equipe.html#equipe",
-    "title": "Do Zero ao Julia",
-    "section": "",
-    "text": "Graduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCoordenador\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\nNenhum item correspondente"
-  },
-  {
-    "objectID": "oprojeto.html",
-    "href": "oprojeto.html",
-    "title": "Conheça mais sobre o projeto ‘Do Zero ao Julia’",
-    "section": "",
-    "text": "Julia?\n\nA linguagem de programação Julia, lançada oficialmente ao público em 2012, e com foco em ciência de dados e computação científica, tem surgido como uma alternativa a outras linguagem de programação já estabelecidas no mercado como Matlab, Python e R. Com desempenho comparável ao de C++ e facilidade de aprendizado similar a Python e R, Julia utiliza multiple dispatch, tem uma boa performance e permite utilizar símbolos matemáticos diretamente no código. Ademais, Julia também resolve o problema de duas linguagens, não sendo mais necessário fazer o protótipo em uma linguagem e colocar em produção em outra – uma característica especialmente vantajosa no desenvolvimento de aplicações no setor industrial e em projetos de grande escala.\n\n\n\nO Projeto\n\nDo Zero ao Julia é um projeto de extensão do IMECC/UNICAMP, coordenado pelo Professor Carlos Trucíos (Departamento de Estatística), com o objetivo de incentivar e disseminar o uso da linguagem Julia. O projeto visa destacar Julia como uma ferramenta poderosa e eficiente, não apenas no ensino de Estatística e Ciência de Dados, mas também como uma ferramenta poderosa na análise de dados, desenvolvimento de projetos e implantação de modelos tanto na academia quanto na industria. Através de palestras, cursos online e materiais educativos, como blogs e tutoriais, vamos apresentar os benefícios e recursos da linguagem de programação Julia a diferentes públicos. O projeto será uma oportunidade para envolver tanto a comunidade acadêmica quanto outras pessoas interessadas, como profissionais da indústria, buscando promover a troca de conhecimentos e fortalecer a conexão entre a universidade e a sociedade.\n\n\nAlém disso, o projeto irá oferecer materiais comparando Julia com outras linguagens populares, como Python e R, mostrando suas vantagens, limitações e características específicas. Também será explorado como Julia pode ser integrada com outras tecnologias, com foco na implementação de modelos em produção, proporcionando uma visão abrangente de como Julia se posiciona no vasto ecossistema de ferramentas tecnológicas da era digital."
   },
   {
     "objectID": "Blog/as-origens.html",
@@ -217,18 +147,95 @@
     "text": "A meta\n\nMinha esperança é que o site www.ime.unicamp.br/julialang se torne um ponto de referência para quem quer aprender e explorar a linguagem Julia — oferecendo desde dicas para iniciantes até tutoriais completos e atualizações sobre a linguagem. Mais do que isso, torço para que o projeto ajude os alunos a desenvolverem habilidades valiosas para o mercado e, ao mesmo tempo, inspire a comunidade acadêmica e de ciência de dados a enxergar Julia como um verdadeiro mar de possibilidades.\nEstou longe de ser um expert em Julia, mas espero que em breve tanto você quanto eu saibamos um pouco mais dessa linguagem.\nHappy coding!\n\n\n\n\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto, bem como para a geração de imagens."
   },
   {
-    "objectID": "Equipe/Atual/vitor_ribas.html",
-    "href": "Equipe/Atual/vitor_ribas.html",
-    "title": "Vitor Ribas Perrone",
+    "objectID": "oprojeto.html",
+    "href": "oprojeto.html",
+    "title": "Conheça mais sobre o projeto ‘Do Zero ao Julia’",
+    "section": "",
+    "text": "Julia?\n\nA linguagem de programação Julia, lançada oficialmente ao público em 2012, e com foco em ciência de dados e computação científica, tem surgido como uma alternativa a outras linguagem de programação já estabelecidas no mercado como Matlab, Python e R. Com desempenho comparável ao de C++ e facilidade de aprendizado similar a Python e R, Julia utiliza multiple dispatch, tem uma boa performance e permite utilizar símbolos matemáticos diretamente no código. Ademais, Julia também resolve o problema de duas linguagens, não sendo mais necessário fazer o protótipo em uma linguagem e colocar em produção em outra – uma característica especialmente vantajosa no desenvolvimento de aplicações no setor industrial e em projetos de grande escala.\n\n\n\nO Projeto\n\nDo Zero ao Julia é um projeto de extensão do IMECC/UNICAMP, coordenado pelo Professor Carlos Trucíos (Departamento de Estatística), com o objetivo de incentivar e disseminar o uso da linguagem Julia. O projeto visa destacar Julia como uma ferramenta poderosa e eficiente, não apenas no ensino de Estatística e Ciência de Dados, mas também como uma ferramenta poderosa na análise de dados, desenvolvimento de projetos e implantação de modelos tanto na academia quanto na industria. Através de palestras, cursos online e materiais educativos, como blogs e tutoriais, vamos apresentar os benefícios e recursos da linguagem de programação Julia a diferentes públicos. O projeto será uma oportunidade para envolver tanto a comunidade acadêmica quanto outras pessoas interessadas, como profissionais da indústria, buscando promover a troca de conhecimentos e fortalecer a conexão entre a universidade e a sociedade.\n\n\nAlém disso, o projeto irá oferecer materiais comparando Julia com outras linguagens populares, como Python e R, mostrando suas vantagens, limitações e características específicas. Também será explorado como Julia pode ser integrada com outras tecnologias, com foco na implementação de modelos em produção, proporcionando uma visão abrangente de como Julia se posiciona no vasto ecossistema de ferramentas tecnológicas da era digital."
+  },
+  {
+    "objectID": "equipe.html",
+    "href": "equipe.html",
+    "title": "Do Zero ao Julia",
+    "section": "",
+    "text": "Graduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCoordenador\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDoutorando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\nNenhum item correspondente"
+  },
+  {
+    "objectID": "equipe.html#equipe",
+    "href": "equipe.html#equipe",
+    "title": "Do Zero ao Julia",
+    "section": "",
+    "text": "Graduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCoordenador\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDoutorando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\nNenhum item correspondente"
+  },
+  {
+    "objectID": "tutoriais.html",
+    "href": "tutoriais.html",
+    "title": "Tutoriais",
+    "section": "",
+    "text": "Nenhum item correspondente"
+  },
+  {
+    "objectID": "meetup.html",
+    "href": "meetup.html",
+    "title": "Meetup",
+    "section": "",
+    "text": "Os meetups acontecem toda terceira quinta-feira do mês, nas dependências do IMECC/UNICAMP. O ingresso é gratuito e aberto ao público (mas precisa de inscrição). Para participar, inscreva-se aqui.\n\n\n\n\n\n\nÉ gratis, é sobre Julia e é no IMECC/UNICAMP!"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Do Zero ao Julia",
+    "section": "",
+    "text": "Descubra e explore as vantagens da linguagem de programação Julia: uma poderosa ferramenta para o ensino, a implementação e o desenvolvimento de métodos estatísticos e de ciência de dados.\n\n\n\n\n\n\n\n\n\n\n\nDescubra as vantagens e dicas de Julia\n\nBlog\n\n\n\n\n\n\n\n\n\nExplore diversos tópicos em Julia\n\nTutoriais\n\n\n\n\n\n\n\n\n\nConheça casos de sucesso e amplie seu networking.\n\nMeetup"
+  },
+  {
+    "objectID": "Blog/instalar_julia.html",
+    "href": "Blog/instalar_julia.html",
+    "title": "Como instalar Julia?",
+    "section": "",
+    "text": "Há muitas vantagens em usar plataformas integradas para desenvolver seus projetos nas mais diversas linguagens de programação. Mas e se sua internet cair? E se você quiser continuar seu projeto de um lugar com conexão lenta? Ter Julia instalado no seu computador resolve esse problema!\nNeste post, aprenderemos algumas formas de instalar Julia no seu computador."
+  },
+  {
+    "objectID": "Blog/instalar_julia.html#introdução",
+    "href": "Blog/instalar_julia.html#introdução",
+    "title": "Como instalar Julia?",
+    "section": "",
+    "text": "Há muitas vantagens em usar plataformas integradas para desenvolver seus projetos nas mais diversas linguagens de programação. Mas e se sua internet cair? E se você quiser continuar seu projeto de um lugar com conexão lenta? Ter Julia instalado no seu computador resolve esse problema!\nNeste post, aprenderemos algumas formas de instalar Julia no seu computador."
+  },
+  {
+    "objectID": "Blog/instalar_julia.html#pelo-site-oficial",
+    "href": "Blog/instalar_julia.html#pelo-site-oficial",
+    "title": "Como instalar Julia?",
+    "section": "Pelo site oficial",
+    "text": "Pelo site oficial\nClicando em Julia, você será redirecionado para o site oficial de Julia, onde poderá realizar a instalação manual da versão mais recente de Julia apenas baixando um instalador compatível com seu sistema operacional (.exe, .dmg, etc). É importante escolher um instalador compatível com o seu sistema operacional, caso contrário não será possível a instalação.\nCertifique-se de ter pelo menos 0,98 GB livres para armazenar os arquivos em seu computador. Após o término do download, siga as instruções recomendadas de configuração do instalador oficial (clicando em “Próximo” em todas as abas, para o caso da instalação padrao) e aguarde enquanto Julia é instalado.\n\n\n\nAtalho no Desktop\n\n\n\nCriar um atalho na área de trabalho facilitará muito o acesso ao aplicativo no dia a dia, embora essa seleção seja opcional.\n\nUma vez instalado Julia no seu computador, você poderá programar diretamente no terminal de Julia, que deve se parecer com a seguinte imagem:\n\n\n\nTerminal Julia"
+  },
+  {
+    "objectID": "Blog/instalar_julia.html#outros-caminhos",
+    "href": "Blog/instalar_julia.html#outros-caminhos",
+    "title": "Como instalar Julia?",
+    "section": "Outros caminhos",
+    "text": "Outros caminhos\nJulia também está disponível para download pela Microsoft Store. Para os usuários de Linux e macOS, essa opção não se encontra disponível por enquanto, mas também é possível instalar e utilizar Julia diretamente do terminal do computador.\nNo Windows, pressione as teclas Windows + R, digite cmd e pressione “Enter” para abrir o terminal. Em seguida, execute o comando abaixo e digite Y quando solicitado pelo sistema:\nwinget install Julia\nQuando a instalação for concluída, você pode digitar where julia para localizar o caminho até o .exe de Julia, ou simplesmente digitar julia no terminal para obter uma interface semelhante à do aplicativo do programa.\nNo macOS ou Linux, abra o terminal e digite\ncurl -fsSL https://install.julialang.org | sh\nQuando a instalação for concluída, você pode digitar which julia para localizar o caminho até o executável de Julia, ou simplesmente digitar julia no terminal para acessar a interface interativa do programa.\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "Equipe/Atual/caio_frare.html",
+    "href": "Equipe/Atual/caio_frare.html",
+    "title": "Caio Frare",
     "section": "",
     "text": "Github\n  \n  \n    \n     Linkedin\n  \n\n      \n\n    \n    \n  \n\n\nGraduando em Estatística pela UNICAMP."
   },
   {
-    "objectID": "Equipe/Atual/nicole_fredericci.html",
-    "href": "Equipe/Atual/nicole_fredericci.html",
-    "title": "Nicole Fredericci",
+    "objectID": "Equipe/Atual/thiago_paulichen.html",
+    "href": "Equipe/Atual/thiago_paulichen.html",
+    "title": "Thiago Paulichen",
     "section": "",
-    "text": "Github\n  \n  \n    \n     Linkedin\n  \n\n      \n\n    \n    \n  \n\n\nGraduanda em Estatística pela UNICAMP."
+    "text": "Lattes\n  \n  \n    \n     Github\n  \n  \n    \n     Linkedin\n  \n\n      \n\n    \n    \n  \n\n\nEstudante de Doutorado em Estatística pela UNICAMP."
   },
   {
     "objectID": "Equipe/Antigos/thiago.html",
@@ -249,6 +256,6 @@
     "href": "blog.html",
     "title": "Blog",
     "section": "",
-    "text": "Como instalar Julia?\n\n\n\n\n\n\nInstalação\n\n\n\nPasso a passo para instalar e configurar Julia no seu computador. \n\n\n\n\n\n1 de mai. de 2025\n\n\nNicole Fredericci, Carlos Trucíos\n\n\n\n\n\n\n\n\n\n\n\n\nDo Zero ao Julia: As origens\n\n\n\n\n\n\nHistória\n\n\n\nFicou curioso sobre como tudo começou? Descubra, de forma leve e descontraída, como o projeto foi idealizado, planejado e finalmente lançado ao público. \n\n\n\n\n\n24 de abr. de 2025\n\n\nCarlos Trucíos\n\n\n\n\n\n\nNenhum item correspondente"
+    "text": "Como instalar Julia?\n\n\n\n\n\n\nInstalação\n\n\n\nPasso a passo para instalar e configurar Julia no seu computador. \n\n\n\n\n\n2 de mai. de 2025\n\n\nNicole Fredericci, Carlos Trucíos\n\n\n\n\n\n\n\n\n\n\n\n\nDo Zero ao Julia: As origens\n\n\n\n\n\n\nHistória\n\n\n\nFicou curioso sobre como tudo começou? Descubra, de forma leve e descontraída, como o projeto foi idealizado, planejado e finalmente lançado ao público. \n\n\n\n\n\n24 de abr. de 2025\n\n\nCarlos Trucíos\n\n\n\n\n\n\nNenhum item correspondente"
   }
 ]

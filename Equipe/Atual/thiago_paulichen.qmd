@@ -2,7 +2,7 @@
 title: "Thiago Paulichen"
 sortby: "Thiago Paulichen"
 subtitle: "Doutorando em Estatística"
-image: foto_tpaulichen.jpeg
+image: foto_tpaulichen.jpg
 about:
   id: person-profile
   template: solana
