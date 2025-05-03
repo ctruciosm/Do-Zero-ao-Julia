@@ -1,0 +1,29 @@
+---
+title: "Thiago Paulichen"
+sortby: "Thiago Paulichen"
+subtitle: "Doutorando em Estatística"
+image: foto_tpaulichen.jpeg
+about:
+  id: person-profile
+  template: solana
+  image-width: 10em
+  links:
+    - icon: file-earmark-text
+      text: Lattes
+      href: http://lattes.cnpq.br/4556709600358383
+    - icon: github
+      text: Github
+      href: https://github.com/PaulichenT
+    - icon: linkedin
+      text: Linkedin
+      href: https://www.linkedin.com/in/thiago-paulichen-4b9a94265/
+---
+
+
+
+
+:::{#person-profile}
+:::
+
+Estudante de Doutorado em Estatística pela UNICAMP.
+
