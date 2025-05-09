@@ -147,11 +147,25 @@
     "text": "A meta\n\nMinha esperança é que o site www.ime.unicamp.br/julialang se torne um ponto de referência para quem quer aprender e explorar a linguagem Julia — oferecendo desde dicas para iniciantes até tutoriais completos e atualizações sobre a linguagem. Mais do que isso, torço para que o projeto ajude os alunos a desenvolverem habilidades valiosas para o mercado e, ao mesmo tempo, inspire a comunidade acadêmica e de ciência de dados a enxergar Julia como um verdadeiro mar de possibilidades.\nEstou longe de ser um expert em Julia, mas espero que em breve tanto você quanto eu saibamos um pouco mais dessa linguagem.\nHappy coding!\n\n\n\n\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto, bem como para a geração de imagens."
   },
   {
-    "objectID": "oprojeto.html",
-    "href": "oprojeto.html",
-    "title": "Conheça mais sobre o projeto ‘Do Zero ao Julia’",
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Do Zero ao Julia",
     "section": "",
-    "text": "Julia?\n\nA linguagem de programação Julia, lançada oficialmente ao público em 2012, e com foco em ciência de dados e computação científica, tem surgido como uma alternativa a outras linguagem de programação já estabelecidas no mercado como Matlab, Python e R. Com desempenho comparável ao de C++ e facilidade de aprendizado similar a Python e R, Julia utiliza multiple dispatch, tem uma boa performance e permite utilizar símbolos matemáticos diretamente no código. Ademais, Julia também resolve o problema de duas linguagens, não sendo mais necessário fazer o protótipo em uma linguagem e colocar em produção em outra – uma característica especialmente vantajosa no desenvolvimento de aplicações no setor industrial e em projetos de grande escala.\n\n\n\nO Projeto\n\nDo Zero ao Julia é um projeto de extensão do IMECC/UNICAMP, coordenado pelo Professor Carlos Trucíos (Departamento de Estatística), com o objetivo de incentivar e disseminar o uso da linguagem Julia. O projeto visa destacar Julia como uma ferramenta poderosa e eficiente, não apenas no ensino de Estatística e Ciência de Dados, mas também como uma ferramenta poderosa na análise de dados, desenvolvimento de projetos e implantação de modelos tanto na academia quanto na industria. Através de palestras, cursos online e materiais educativos, como blogs e tutoriais, vamos apresentar os benefícios e recursos da linguagem de programação Julia a diferentes públicos. O projeto será uma oportunidade para envolver tanto a comunidade acadêmica quanto outras pessoas interessadas, como profissionais da indústria, buscando promover a troca de conhecimentos e fortalecer a conexão entre a universidade e a sociedade.\n\n\nAlém disso, o projeto irá oferecer materiais comparando Julia com outras linguagens populares, como Python e R, mostrando suas vantagens, limitações e características específicas. Também será explorado como Julia pode ser integrada com outras tecnologias, com foco na implementação de modelos em produção, proporcionando uma visão abrangente de como Julia se posiciona no vasto ecossistema de ferramentas tecnológicas da era digital."
+    "text": "Descubra e explore as vantagens da linguagem de programação Julia: uma poderosa ferramenta para o ensino, a implementação e o desenvolvimento de métodos estatísticos e de ciência de dados.\n\n\n\n\n\n\n\n\n\n\n\nDescubra as vantagens e dicas de Julia\n\nBlog\n\n\n\n\n\n\n\n\n\nExplore diversos tópicos em Julia\n\nTutoriais\n\n\n\n\n\n\n\n\n\nConheça casos de sucesso e amplie seu networking.\n\nMeetup"
+  },
+  {
+    "objectID": "meetup.html",
+    "href": "meetup.html",
+    "title": "Meetup",
+    "section": "",
+    "text": "Os meetups acontecem toda terceira quinta-feira do mês, nas dependências do IMECC/UNICAMP. O ingresso é gratuito e aberto ao público (mas precisa de inscrição). Para participar, inscreva-se aqui.\n\n\n\n\n\n\nÉ gratis, é sobre Julia e é no IMECC/UNICAMP!"
+  },
+  {
+    "objectID": "tutoriais.html",
+    "href": "tutoriais.html",
+    "title": "Tutoriais",
+    "section": "",
+    "text": "Nenhum item correspondente"
   },
   {
     "objectID": "equipe.html",
@@ -168,25 +182,39 @@
     "text": "Graduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCoordenador\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDoutorando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\nNenhum item correspondente"
   },
   {
-    "objectID": "tutoriais.html",
-    "href": "tutoriais.html",
-    "title": "Tutoriais",
+    "objectID": "oprojeto.html",
+    "href": "oprojeto.html",
+    "title": "Conheça mais sobre o projeto ‘Do Zero ao Julia’",
     "section": "",
-    "text": "Nenhum item correspondente"
+    "text": "Julia?\n\nA linguagem de programação Julia, lançada oficialmente ao público em 2012, e com foco em ciência de dados e computação científica, tem surgido como uma alternativa a outras linguagem de programação já estabelecidas no mercado como Matlab, Python e R. Com desempenho comparável ao de C++ e facilidade de aprendizado similar a Python e R, Julia utiliza multiple dispatch, tem uma boa performance e permite utilizar símbolos matemáticos diretamente no código. Ademais, Julia também resolve o problema de duas linguagens, não sendo mais necessário fazer o protótipo em uma linguagem e colocar em produção em outra – uma característica especialmente vantajosa no desenvolvimento de aplicações no setor industrial e em projetos de grande escala.\n\n\n\nO Projeto\n\nDo Zero ao Julia é um projeto de extensão do IMECC/UNICAMP, coordenado pelo Professor Carlos Trucíos (Departamento de Estatística), com o objetivo de incentivar e disseminar o uso da linguagem Julia. O projeto visa destacar Julia como uma ferramenta poderosa e eficiente, não apenas no ensino de Estatística e Ciência de Dados, mas também como uma ferramenta poderosa na análise de dados, desenvolvimento de projetos e implantação de modelos tanto na academia quanto na industria. Através de palestras, cursos online e materiais educativos, como blogs e tutoriais, vamos apresentar os benefícios e recursos da linguagem de programação Julia a diferentes públicos. O projeto será uma oportunidade para envolver tanto a comunidade acadêmica quanto outras pessoas interessadas, como profissionais da indústria, buscando promover a troca de conhecimentos e fortalecer a conexão entre a universidade e a sociedade.\n\n\nAlém disso, o projeto irá oferecer materiais comparando Julia com outras linguagens populares, como Python e R, mostrando suas vantagens, limitações e características específicas. Também será explorado como Julia pode ser integrada com outras tecnologias, com foco na implementação de modelos em produção, proporcionando uma visão abrangente de como Julia se posiciona no vasto ecossistema de ferramentas tecnológicas da era digital."
   },
   {
-    "objectID": "meetup.html",
-    "href": "meetup.html",
-    "title": "Meetup",
+    "objectID": "Blog/HistoriaJulia.html",
+    "href": "Blog/HistoriaJulia.html",
+    "title": "Do Zero ao Julia: Entenda a História da Linguagem que Une Simplicidade e Desempenho",
     "section": "",
-    "text": "Os meetups acontecem toda terceira quinta-feira do mês, nas dependências do IMECC/UNICAMP. O ingresso é gratuito e aberto ao público (mas precisa de inscrição). Para participar, inscreva-se aqui.\n\n\n\n\n\n\nÉ gratis, é sobre Julia e é no IMECC/UNICAMP!"
+    "text": "Durante muito tempo, programadores sofreram com o problema das duas linguagens, no qual as ideias eram testadas em linguagens mais simples, como R, Python e MATLAB e, à medida que exigiam maior desempenho, precisavam ser reescritas em linguagens mais rápidas, como Fortran ou C. Todo esse trabalho era muito propenso a erros e falhas no código final. Em razão disso, surgiu o Julia: uma proposta para unir rapidez e simplicidade em uma só linguagem de programação."
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Do Zero ao Julia",
+    "objectID": "Blog/HistoriaJulia.html#início-de-tudo",
+    "href": "Blog/HistoriaJulia.html#início-de-tudo",
+    "title": "Do Zero ao Julia: Entenda a História da Linguagem que Une Simplicidade e Desempenho",
     "section": "",
-    "text": "Descubra e explore as vantagens da linguagem de programação Julia: uma poderosa ferramenta para o ensino, a implementação e o desenvolvimento de métodos estatísticos e de ciência de dados.\n\n\n\n\n\n\n\n\n\n\n\nDescubra as vantagens e dicas de Julia\n\nBlog\n\n\n\n\n\n\n\n\n\nExplore diversos tópicos em Julia\n\nTutoriais\n\n\n\n\n\n\n\n\n\nConheça casos de sucesso e amplie seu networking.\n\nMeetup"
+    "text": "Durante muito tempo, programadores sofreram com o problema das duas linguagens, no qual as ideias eram testadas em linguagens mais simples, como R, Python e MATLAB e, à medida que exigiam maior desempenho, precisavam ser reescritas em linguagens mais rápidas, como Fortran ou C. Todo esse trabalho era muito propenso a erros e falhas no código final. Em razão disso, surgiu o Julia: uma proposta para unir rapidez e simplicidade em uma só linguagem de programação."
+  },
+  {
+    "objectID": "Blog/HistoriaJulia.html#o-desenvolvimento",
+    "href": "Blog/HistoriaJulia.html#o-desenvolvimento",
+    "title": "Do Zero ao Julia: Entenda a História da Linguagem que Une Simplicidade e Desempenho",
+    "section": "O Desenvolvimento",
+    "text": "O Desenvolvimento\nEm 2009, quatro pesquisadores do MIT (Massachusetts Institute of Technology) começaram a desenvolver uma solução para o problema das duas linguagens. Stefan Karpinski, Alan Edelman, Jeff Bezanson e Viral B. Shah tinham o objetivo de criar uma linguagem de programação moderna, extremamente rápida e, ao mesmo tempo, fácil de escrever. Ao longo de cerca de quatro anos, a linguagem foi mantida em sigilo, até que, em fevereiro de 2012, ela veio a público por meio do artigo “Why We Created Julia”, o qual apresentou ao mundo a primeira versão da linguagem, que já contava com documentação, pacotes básicos e um compilador funcional. Logo após seu lançamento, a linguagem ganhou bastante popularidade no meio científico e ampla divulgação em fóruns e comunidades. Entretanto, o marco da maturidade da linguagem aconteceu em 2018, com o lançamento da versão 1.0, que trouxe diversas inovações técnicas, como maior confiabilidade para uso em produção, estabilidade da API e consolidação do ecossistema."
+  },
+  {
+    "objectID": "Blog/HistoriaJulia.html#julia-atualmente",
+    "href": "Blog/HistoriaJulia.html#julia-atualmente",
+    "title": "Do Zero ao Julia: Entenda a História da Linguagem que Une Simplicidade e Desempenho",
+    "section": "Julia atualmente",
+    "text": "Julia atualmente\n\nAtualmente, a linguagem de programação Julia é utilizada em todo o mundo por cientistas, engenheiros e desenvolvedores que trabalham com dados. Em 2020, Julia ocupava a 47ª posição no índice TIOBE (um termômetro das linguagens mais populares) e, em 2022, já estava na 21ª posição. Isso demonstra que o alcance do Julia está crescendo constantemente ao longo do tempo. A linguagem surgiu como solução para um problema comum e foi além, tornando-se uma ponte entre o mundo das linguagens mais simples e o das mais rápidas. Seu impacto já é visível em diversas áreas da ciência e do mercado de trabalho, e seu futuro é cada vez mais promissor para quem lida com tecnologia.\n\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
   },
   {
     "objectID": "Blog/instalar_julia.html",
@@ -256,6 +284,6 @@
     "href": "blog.html",
     "title": "Blog",
     "section": "",
-    "text": "Como instalar Julia?\n\n\n\n\n\n\nInstalação\n\n\n\nPasso a passo para instalar e configurar Julia no seu computador. \n\n\n\n\n\n2 de mai. de 2025\n\n\nNicole Fredericci, Carlos Trucíos\n\n\n\n\n\n\n\n\n\n\n\n\nDo Zero ao Julia: As origens\n\n\n\n\n\n\nHistória\n\n\n\nFicou curioso sobre como tudo começou? Descubra, de forma leve e descontraída, como o projeto foi idealizado, planejado e finalmente lançado ao público. \n\n\n\n\n\n24 de abr. de 2025\n\n\nCarlos Trucíos\n\n\n\n\n\n\nNenhum item correspondente"
+    "text": "Do Zero ao Julia: Entenda a História da Linguagem que Une Simplicidade e Desempenho\n\n\n\n\n\n\nQuarto\n\n\n\nConheça a história do Julia que surgiu com a proposta de unir o desempenho e a simplicidade em uma só linguagem. \n\n\n\n\n\n9 de mai. de 2025\n\n\nEsther Cleveston\n\n\n\n\n\n\n\n\n\n\n\n\nComo instalar Julia?\n\n\n\n\n\n\nInstalação\n\n\n\nPasso a passo para instalar e configurar Julia no seu computador. \n\n\n\n\n\n2 de mai. de 2025\n\n\nNicole Fredericci, Carlos Trucíos\n\n\n\n\n\n\n\n\n\n\n\n\nDo Zero ao Julia: As origens\n\n\n\n\n\n\nHistória\n\n\n\nFicou curioso sobre como tudo começou? Descubra, de forma leve e descontraída, como o projeto foi idealizado, planejado e finalmente lançado ao público. \n\n\n\n\n\n24 de abr. de 2025\n\n\nCarlos Trucíos\n\n\n\n\n\n\nNenhum item correspondente"
   }
 ]

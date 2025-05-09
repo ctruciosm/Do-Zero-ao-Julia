@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Esther Cleveston">
+<meta name="description" content="Conheça a história do Julia que surgiu com a proposta de unir o desempenho e a simplicidade em uma só linguagem.">
 
-<title>Blog – Do Zero ao Julia</title>
+<title>Do Zero ao Julia: Entenda a História da Linguagem que Une Simplicidade e Desempenho – Do Zero ao Julia</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,24 +25,22 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-6bd9cfa162949bde0a231f530c97869d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-6bd9cfa162949bde0a231f530c97869d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -68,77 +68,19 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Procurar"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
 
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+  <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">Do Zero ao Julia</span>
     </a>
   </div>
@@ -149,23 +91,23 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./oprojeto.html"> 
+    <a class="nav-link" href="../oprojeto.html"> 
 <span class="menu-text">O projeto</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./equipe.html"> 
+    <a class="nav-link" href="../equipe.html"> 
 <span class="menu-text">Equipe</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./blog.html" aria-current="page"> 
+    <a class="nav-link" href="../blog.html"> 
 <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./tutoriais.html"> 
+    <a class="nav-link" href="../tutoriais.html"> 
 <span class="menu-text">Tutoriais</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./meetup.html"> 
+    <a class="nav-link" href="../meetup.html"> 
 <span class="menu-text">Meetup</span></a>
   </li>  
 </ul>
@@ -176,144 +118,102 @@ window.Quarto = {
     </nav>
 </header>
 <!-- content -->
-<header id="title-block-header" class="quarto-title-block default page-columns page-full">
-  <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-page-left">
-      <h1 class="title">Blog</h1>
-                      </div>
-  </div>
-    
-  
-  <div class="quarto-title-meta column-page-left">
-
-      
-    
-      
-    </div>
-    
-  
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-    <h5 class="quarto-listing-category-title">Categorias</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">Tudo <span class="quarto-category-count">(3)</span></div><div class="category" data-category="SGlzdCVDMyVCM3JpYQ==">História <span class="quarto-category-count">(1)</span></div><div class="category" data-category="SW5zdGFsYSVDMyVBNyVDMyVBM28=">Instalação <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UXVhcnRv">Quarto <span class="quarto-category-count">(1)</span></div></div></div>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Nesta página</h2>
+   
+  <ul>
+  <li><a href="#início-de-tudo" id="toc-início-de-tudo" class="nav-link active" data-scroll-target="#início-de-tudo">Início de tudo</a></li>
+  <li><a href="#o-desenvolvimento" id="toc-o-desenvolvimento" class="nav-link" data-scroll-target="#o-desenvolvimento">O Desenvolvimento</a></li>
+  <li><a href="#julia-atualmente" id="toc-julia-atualmente" class="nav-link" data-scroll-target="#julia-atualmente">Julia atualmente</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
-<main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Do Zero ao Julia: Entenda a História da Linguagem que Une Simplicidade e Desempenho</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Quarto</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    <p>Conheça a história do Julia que surgiu com a proposta de unir o desempenho e a simplicidade em uma só linguagem.</p>
+  </div>
+</div>
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Autor</div>
+  <div class="quarto-title-meta-heading">Afiliação</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Esther Cleveston <a href="https://orcid.org/0009-0008-6612-8417" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Universidade Estadual de Campinas
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Data de Publicação</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">9 de maio de 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
 
 
+</header>
 
 
+<section id="início-de-tudo" class="level2">
+<h2 class="anchored" data-anchor-id="início-de-tudo">Início de tudo</h2>
+<div class="justify">
+<p>Durante muito tempo, programadores sofreram com o problema das duas linguagens, no qual as ideias eram testadas em linguagens mais simples, como R, Python e MATLAB e, à medida que exigiam maior desempenho, precisavam ser reescritas em linguagens mais rápidas, como Fortran ou C. Todo esse trabalho era muito propenso a erros e falhas no código final. Em razão disso, surgiu o Julia: uma proposta para unir rapidez e simplicidade em uma só linguagem de programação.</p>
+</div>
+</section>
+<section id="o-desenvolvimento" class="level2">
+<h2 class="anchored" data-anchor-id="o-desenvolvimento">O Desenvolvimento</h2>
+<p>Em 2009, quatro pesquisadores do MIT (Massachusetts Institute of Technology) começaram a desenvolver uma solução para o problema das duas linguagens. Stefan Karpinski, Alan Edelman, Jeff Bezanson e Viral B. Shah tinham o objetivo de criar uma linguagem de programação moderna, extremamente rápida e, ao mesmo tempo, fácil de escrever. Ao longo de cerca de quatro anos, a linguagem foi mantida em sigilo, até que, em fevereiro de 2012, ela veio a público por meio do artigo “Why We Created Julia”, o qual apresentou ao mundo a primeira versão da linguagem, que já contava com documentação, pacotes básicos e um compilador funcional. Logo após seu lançamento, a linguagem ganhou bastante popularidade no meio científico e ampla divulgação em fóruns e comunidades. Entretanto, o marco da maturidade da linguagem aconteceu em 2018, com o lançamento da versão 1.0, que trouxe diversas inovações técnicas, como maior confiabilidade para uso em produção, estabilidade da API e consolidação do ecossistema.</p>
+</section>
+<section id="julia-atualmente" class="level2">
+<h2 class="anchored" data-anchor-id="julia-atualmente">Julia atualmente</h2>
+<div class="justify">
+<p>Atualmente, a linguagem de programação Julia é utilizada em todo o mundo por cientistas, engenheiros e desenvolvedores que trabalham com dados. Em 2020, Julia ocupava a 47ª posição no índice TIOBE (um termômetro das linguagens mais populares) e, em 2022, já estava na 21ª posição. Isso demonstra que o alcance do Julia está crescendo constantemente ao longo do tempo. A linguagem surgiu como solução para um problema comum e foi além, tornando-se uma ponte entre o mundo das linguagens mais simples e o das mais rápidas. Seu impacto já é visível em diversas áreas da ciência e do mercado de trabalho, e seu futuro é cada vez mais promissor para quem lida com tecnologia.</p>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Nota
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.</p>
+</div>
+</div>
 
 
+</section>
 
-
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="UXVhcnRv" data-listing-date-sort="1746759600000" data-listing-file-modified-sort="1746810506053" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="359">
-<div class="thumbnail">
-<p><a href="./Blog/HistoriaJulia.html" class="no-external"></a></p><a href="./Blog/HistoriaJulia.html" class="no-external">
-<p><img loading="lazy" src="./Blog/imagens/HistoriaJulia.png" class="thumbnail-image"></p>
-</a><p><a href="./Blog/HistoriaJulia.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./Blog/HistoriaJulia.html" class="no-external">Do Zero ao Julia: Entenda a História da Linguagem que Une Simplicidade e Desempenho</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./Blog/HistoriaJulia.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('UXVhcnRv'); return false;">
-Quarto
-</div>
-</div>
-<div class="listing-description">
-<a href="./Blog/HistoriaJulia.html" class="no-external">Conheça a história do Julia que surgiu com a proposta de unir o desempenho e a simplicidade em uma só linguagem. </a>
-</div>
-</div>
-<div class="metadata">
-<a href="./Blog/HistoriaJulia.html" class="no-external">
-<div class="listing-date">
-9 de mai. de 2025
-</div>
-<div class="listing-author">
-Esther Cleveston
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="SW5zdGFsYSVDMyVBNyVDMyVBM28=" data-listing-date-sort="1746154800000" data-listing-file-modified-sort="1746203949583" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="368">
-<div class="thumbnail">
-<p><a href="./Blog/instalar_julia.html" class="no-external"></a></p><a href="./Blog/instalar_julia.html" class="no-external">
-<p><img loading="lazy" src="./Blog/imagens/logo_app.png" class="thumbnail-image"></p>
-</a><p><a href="./Blog/instalar_julia.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./Blog/instalar_julia.html" class="no-external">Como instalar Julia?</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./Blog/instalar_julia.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('SW5zdGFsYSVDMyVBNyVDMyVBM28='); return false;">
-Instalação
-</div>
-</div>
-<div class="listing-description">
-<a href="./Blog/instalar_julia.html" class="no-external">Passo a passo para instalar e configurar Julia no seu computador. </a>
-</div>
-</div>
-<div class="metadata">
-<a href="./Blog/instalar_julia.html" class="no-external">
-<div class="listing-date">
-2 de mai. de 2025
-</div>
-<div class="listing-author">
-Nicole Fredericci, Carlos Trucíos
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="SGlzdCVDMyVCM3JpYQ==" data-listing-date-sort="1745463600000" data-listing-file-modified-sort="1745509838469" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="563">
-<div class="thumbnail">
-<p><a href="./Blog/as-origens.html" class="no-external"></a></p><a href="./Blog/as-origens.html" class="no-external">
-<p><img loading="lazy" src="./Blog/imagens/as_origens.png" class="thumbnail-image"></p>
-</a><p><a href="./Blog/as-origens.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./Blog/as-origens.html" class="no-external">Do Zero ao Julia: As origens</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./Blog/as-origens.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('SGlzdCVDMyVCM3JpYQ=='); return false;">
-História
-</div>
-</div>
-<div class="listing-description">
-<a href="./Blog/as-origens.html" class="no-external">Ficou curioso sobre como tudo começou? Descubra, de forma leve e descontraída, como o projeto foi idealizado, planejado e finalmente lançado ao público. </a>
-</div>
-</div>
-<div class="metadata">
-<a href="./Blog/as-origens.html" class="no-external">
-<div class="listing-date">
-24 de abr. de 2025
-</div>
-<div class="listing-author">
-Carlos Trucíos
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-Nenhum item correspondente
-</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

@@ -1,5 +1,9 @@
 [
   {
+    "listing": "/tutoriais.html",
+    "items": []
+  },
+  {
     "listing": "/equipe.html",
     "items": [
       "/Equipe/Atual/caio_frare.html",
@@ -10,12 +14,9 @@
     ]
   },
   {
-    "listing": "/tutoriais.html",
-    "items": []
-  },
-  {
     "listing": "/blog.html",
     "items": [
+      "/Blog/HistoriaJulia.html",
       "/Blog/instalar_julia.html",
       "/Blog/as-origens.html"
     ]
