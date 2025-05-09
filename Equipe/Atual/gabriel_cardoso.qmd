@@ -1,0 +1,21 @@
+---
+title: "Gabriel Vieira Cardoso"
+sortby: "Gabriel Vieira Cardoso"
+subtitle: "Graduando em Estatística"
+image: foto_gcardoso.jpg
+about:
+  id: person-profile
+  template: solana
+  image-width: 10em
+  links:
+    - icon: github
+      text: Github
+      href: https://github.com/Gabriel-VC
+    - icon: linkedin
+      text: Linkedin
+      href: https://www.linkedin.com/in/gabriel-vieira-cardosoo/
+---
+
+::: {#person-profile}
+Graduando em Estatística pela UNICAMP.
+:::
