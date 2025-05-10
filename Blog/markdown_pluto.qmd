@@ -1,0 +1,81 @@
+---
+title: "Como criar relatórios dinâmicos com Julia e Pluto"
+description: |
+  Introdução à criação de relatórios dinâmicos em Julia utilizando a biblioteca Pluto.
+categories:
+  - Markdown
+author:
+  - name: Vitor Ribas Perrone
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/VitorRibasP
+    orcid: 0009-0009-6923-7712
+date: "2025-05-09"
+image: imagens/logo_pluto.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+draft: false
+---
+
+## Introdução
+
+Ao programarmos, é muito útil manter uma boa documentação com uma visualização agradável, especialmente ao apresentar nosso trabalho para outras pessoas. Para isso, muitas linguagens oferecem compatibilidade com Markdown, uma ferramenta que permite combinar texto e código de maneira dinâmica, tornando a criação de relatórios muito mais prática.
+
+Felizmente, ao programar em Julia, é possível utilizar Markdown diretamente com o auxílio do pacote Pluto, que integra esses recursos de maneira simples e eficiente.
+
+## Instalação do Pluto
+
+Em primeiro lugar, é necessário que o [Julia](https://www.ime.unicamp.br/~juliacps/Blog/instalar_julia.html) esteja instalado. A partir disso, é necessário abrir o programa e digitar o seguinte código:
+
+```default
+using Pkg
+Pkg.add("Pluto")
+```
+
+## Conhecendo o Pluto
+
+Após a instalação do pacote, já podemos utilizar o Pluto. Para isso, abrimos o Julia e digitamos o seguinte código, que será utilizado todas as vezes que quisermos acessá-lo.
+
+```default
+using Pluto
+Pluto.run()
+```
+
+Após rodar o código, o Pluto será carregado e a seguinte tela estará aberta no seu navegador padrão:
+
+![Tela Inicial Pluto](imagens/pluto_inicial.png){fig-align="center"}
+
+Estarão destacados os últimos arquivos acessados e, caso seja a primeira vez, constarão alguns exemplos. A partir de **Open a notebook**, podemos acessar as pastas do nosso computador e escolher o arquivo que desejamos abrir. 
+
+No caso, vamos criar um arquivo do zero clicando em **Create a new notebook**. Após a criação, esta é a tela inicial que será aberta:
+
+![Aqruivo Vazio no Pluto](imagens/pluto_arquivo_vazio.png){fig-align="center"}
+
+Com isso, a partir dessa página, podemos adicionar os textos e códigos utilizando os **cell code**, os quais podemos adicionar clicando nos “mais” que aparecem ao aproximar o cursor. Para ser um código, basta programar de forma normal, mas para inserir textos, é necessário que esteja no formato **md"seu_texto"**. 
+
+Para ilustrar o básico do Pluto, vamos realizar algumas simples tarefas:
+
+1. Adicionar o título “Aprendendo Julia Markdown” (Para aumentar o tamanho do texto, utilizaremos #);
+2. Inserir o texto: “O código abaixo cria uma função que, dados dois números reais, computa a soma deles:”;
+3. Inserir o código da função;
+4. Inserir o texto: “Para testar a função, vamos utilizar como argumentos 2 e 3.”;
+4. Avaliar nossa função com os valores determinados.
+
+Portanto, agora nós temos:
+
+![Aqruivo no Pluto com Tarefas Propostas](imagens/pluto_codigos.png){fig-align="center"}
+
+É interessante ressaltar que as saídas de cada uma das células ficam logo acima delas. Além disso, podemos ocultar os códigos que não queremos a fim de deixar a visualização mais limpa apertando no olho que aparece ao aproximar o cursor de um **cell code**. Assim, obtemos por fim:
+
+![Versão Final do Código com Pluto](imagens/pluto_final.png){fig-align="center"}
+
+Portanto, utilizando o Pluto, conseguimos criar relatórios dinâmicos combinando texto e código de forma muito prática. Essa integração facilita tanto o desenvolvimento quanto a apresentação dos conteúdos, tornando o processo mais claro, organizado e interativo. Além disso, é possível explorar uma variedade de recursos adicionais, como tabelas, imagens, fórmulas matemáticas em LaTeX, gráficos, e muito mais.
+
+Com essas possibilidades, o Pluto se torna uma ferramenta extremamente útil para documentação de projetos, produção de material didático, análise de dados e compartilhamento de ideias de forma acessível e visualmente atrativa.
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::
