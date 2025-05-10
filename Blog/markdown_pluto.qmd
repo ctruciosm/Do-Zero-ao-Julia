@@ -1,7 +1,7 @@
 ---
 title: "Como criar relatórios dinâmicos com Julia e Pluto"
 description: |
-  Introdução à criação de relatórios dinâmicos em Julia utilizando a biblioteca Pluto.
+  Criação de relatórios dinâmicos em Julia com Pluto.jl: um ambiente de notebooks reativo e fácil de usar, feito sob medida para a linguagem
 categories:
   - Markdown
 author:
