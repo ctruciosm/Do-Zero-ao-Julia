@@ -1,0 +1,21 @@
+---
+title: "Esther Cleveston"
+sortby: "Esther Cleveston"
+subtitle: "Graduando em Estatística"
+image: Esther_Cleveston.png
+about:
+  id: person-profile
+  template: solana
+  image-width: 10em
+  links:
+    - icon: github
+      text: Github
+      href: https://github.com/ecleveston
+    - icon: linkedin
+      text: Linkedin
+      href: https://www.linkedin.com/in/esthercleveston/
+---
+
+::: {#person-profile}
+Graduando em Estatística pela UNICAMP.
+:::
