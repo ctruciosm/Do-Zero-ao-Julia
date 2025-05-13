@@ -22,7 +22,7 @@ draft: false
 
 ## Introdução
 
-Ao programarmos, é muito útil manter uma boa documentação com uma visualização agradável, especialmente ao apresentar nosso trabalho para outras pessoas. Para isso, muitas linguagens oferecem compatibilidade com Markdown, uma ferramenta que permite combinar texto e código de maneira dinâmica, tornando a criação de relatórios muito mais prática.
+Ao programar, é essencial manter uma documentação clara e com boa visualização, especialmente ao apresentar nosso trabalho para outras pessoas. Para isso, muitas linguagens oferecem compatibilidade com Markdown, uma ferramenta que permite combinar texto e código de maneira dinâmica, tornando a criação de relatórios muito mais prática.
 
 Felizmente, ao programar em Julia, é possível utilizar Markdown diretamente com o auxílio do pacote Pluto, que integra esses recursos de maneira simples e eficiente.
 
@@ -37,7 +37,7 @@ Pkg.add("Pluto")
 
 ## Conhecendo o Pluto
 
-Após a instalação do pacote, já podemos utilizar o Pluto. Para isso, abrimos o Julia e digitamos o seguinte código, que será utilizado todas as vezes que quisermos acessá-lo.
+Com o pacote instalado, já podemos começar a usar o Pluto. Para isso, abrimos o Julia e digitamos o seguinte código, que será utilizado todas as vezes que quisermos acessá-lo.
 
 ```default
 using Pluto
@@ -54,7 +54,7 @@ No caso, vamos criar um arquivo do zero clicando em **Create a new notebook**. A
 
 ![Aqruivo Vazio no Pluto](imagens/pluto_arquivo_vazio.png){fig-align="center"}
 
-Com isso, a partir dessa página, podemos adicionar os textos e códigos utilizando os **cell code**, os quais podemos adicionar clicando nos “mais” que aparecem ao aproximar o cursor. Para ser um código, basta programar de forma normal, mas para inserir textos, é necessário que esteja no formato **md"seu_texto"**. 
+Com isso, a partir dessa página, podemos adicionar os textos e códigos utilizando os **cell code** (célula de código), os quais podemos adicionar clicando nos “mais” que aparecem ao aproximar o cursor. Para ser um código, basta programar de forma normal, mas para inserir textos, é necessário que esteja no formato **md"seu_texto"**. 
 
 Para ilustrar o básico do Pluto, vamos realizar algumas simples tarefas:
 
@@ -68,7 +68,7 @@ Portanto, agora nós temos:
 
 ![Aqruivo no Pluto com Tarefas Propostas](imagens/pluto_codigos.png){fig-align="center"}
 
-É interessante ressaltar que as saídas de cada uma das células ficam logo acima delas. Além disso, podemos ocultar os códigos que não queremos a fim de deixar a visualização mais limpa apertando no olho que aparece ao aproximar o cursor de um **cell code**. Assim, obtemos por fim:
+Vale destacar que as saídas de cada célula aparecem logo acima dela. Além disso, podemos ocultar os códigos que não queremos, a fim de deixar a visualização mais limpa, clicando no ícone de olho que aparece ao passar o cursor em um **cell code**. Assim, obtemos por fim:
 
 ![Versão Final do Código com Pluto](imagens/pluto_final.png){fig-align="center"}
 

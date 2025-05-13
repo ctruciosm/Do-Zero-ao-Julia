@@ -1,0 +1,61 @@
+---
+title: "Como programar em Julia no Vscode"
+description: |
+     Aprenda o como utilizar o Julia no Vscode, da configuração aos primeiros passos.
+  
+categories:
+  - Quarto
+author:
+  - name: Guilherme Duarte
+    affiliation: "Universidade Estadual de Campinas"
+    
+date: "2025-05-16"
+image: imagens/logo_vscode.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+draft: true
+---
+
+## Introdução
+
+A linguagem Julia tem ganhado cada vez mais espaço entre cientistas de dados, estatísticos, engenheiros e matemáticos graças à sua velocidade e sintaxe simples. Uma das formas mais práticas de programar em Julia é através do Visual Studio Code (VS Code), um editor leve, moderno e altamente extensível.
+
+Neste post, vamos mostrar como configurar e usar o Julia no VS Code — ideal para quem está começando do zero.
+
+## Pré Requisitos
+
+-   Ter o [Julia](https://www.ime.unicamp.br/~juliacps/Blog/instalar_julia.html) instalado ;
+
+-   Ter o [VS Code](https://code.visualstudio.com/download) instalado.
+
+## Instalando o VS Code
+
+Se ainda não instalou o VSCode, clicando no link no tópico anterior você será direcionado à página de download do VS Code. Ao chegar lá, baixe o arquivo de acordo com o seu sistema operacional .
+
+Após baixar o arquivo, deixe marcado as seguintes opções durante a instalação:
+
+![Instalação do VS Code](imagens/vscode_installer.png)
+
+## Instalando a esxtensão do Julia no VS Code
+
+Com o VS Code devidamente instalado, devemos instalar a extensão oficial do Julia. Ao entrar no VS Code,
+
+-   Abra a aba de extensões (Ctrl + shift + X)
+
+-   Busque por 'Julia'
+
+-   Selecione a extensão e clique em 'Install'
+
+![Extensão do Julia](imagens/extensao_julia.png)
+
+## Programando em Julia
+
+Com a extensão do Julia instalada, chegou a hora de por a mão na massa. Para fazer seu primeiro código em Julia no VS Code, você deve criar um novo arquivo do tipo **.jl**. Para rodar determinadas linhas de código, selecione as linhas e use o atalho **Ctrl + Enter**. Se preferir, pode clicar no botão "Run", no canto superior direito, para rodar o arquivo inteiro.
+
+![Olá Mundo!](imagens/helloworld.png)
+
+Pronto, agora você já pode começar a programar e realizar seus projetos em Julia pelo VS Code!

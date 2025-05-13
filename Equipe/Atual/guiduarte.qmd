@@ -1,0 +1,21 @@
+---
+title: "Guilherme Duarte Alves Basso"
+sortby: "Guilherme Duarte Alves Basso"
+subtitle: "Graduando em Estatística"
+image: guiduarte.jpeg
+about:
+  id: person-profile
+  template: solana
+  image-width: 10em
+  
+---
+
+
+
+
+:::{#person-profile}
+:::
+
+Graduando em Estatística pela UNICAMP.
+
+
