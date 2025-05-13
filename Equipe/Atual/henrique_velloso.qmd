@@ -1,0 +1,21 @@
+---
+title: "Henrique Velloso"
+sortby: "Henrique Velloso"
+subtitle: "Graduando em Estatística"
+image: foto_henrique_v.jpg
+about:
+  id: person-profile
+  template: solana
+  image-width: 10em
+  links:
+    - icon: github
+      text: Github
+      href: https://github.com/henriqueavelloso
+    - icon: linkedin
+      text: Linkedin
+      href: https://www.linkedin.com/in/henrique-a-velloso/
+---
+
+::: {#person-profile}
+Graduando em Estatística pela UNICAMP.
+:::
