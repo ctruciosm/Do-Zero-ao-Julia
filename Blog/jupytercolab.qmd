@@ -1,7 +1,7 @@
 ---
-title: "Como instalar o Jupyter?"
+title: "Notebooks em Julia: Jupyter e Colab"
 description: |
-  Passo a passo para instalar o ambiente Jupyter no computador.
+  Aprenda passo a passo como instalar e utilizar os ambientes Jupyter e Colab integrados à linguagem Julia.
 categories:
   - Instalação
 author:
@@ -9,7 +9,11 @@ author:
     affiliation: "Universidade Estadual de Campinas"
     url: https://github.com/Gabriel-VC
     orcid: 0009-0001-0954-4579
-date: "2025-05-09"
+  - name: Carlos Trucíos
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://ctruciosm.github.io
+    orcid: 0000-0001-8746-8877
+date: "2025-05-13"
 image: imagens/gvc_jupyter_logo.png
 lang: pt
 format:
@@ -21,51 +25,72 @@ draft: false
 ---
 
 ## Introdução
+::: {.justify}
+A linguagem `Julia` foi projetada para ser ao mesmo tempo rápida e dinâmica. Quando integrada ao ambiente `Jupyter`, ela se transforma em uma poderosa ferramenta interativa, que permite combinar código, visualizações gráficas e textos em um único documento, criando um ambiente ideal para o ensino e a aprendizagem.
 
-A linguagem Julia foi projetada para ser rápida e dinâmica. Agora, quando adicionada ao ambiente do Jupyter, ela evolui a um ambiente interativo, permitindo a integração de código, visualizações de gráficos e textos em um único documento.
-
-Neste post, aprenderemos como instalar o Jupyter e adequá-lo ao ambiente da Julia.
+Neste post, aprenderemos como instalar o `Jupyter` e adequá-lo ao ambiente da Julia, bem como a utilizar Julia no queridinho `Colab`
+:::
 
 ## Instalação do Jupyter
 
-Para a baixarmos o Jupyter, temos duas alternativas. A primeira é usando o Python em conjunto com o Julia e a segunda é usando somente o Julia (neste caso pule para a seção: Instalação do Jupyter pelo IJulia).
+
+::: {.justify}
+Para a baixarmos o `Jupyter`, temos duas alternativas. A primeira é usando o `Python` em conjunto com o Julia e a segunda é usando somente o Julia (neste caso pule para a seção: Instalação do `Jupyter` pelo `IJulia`).
 
 Usando as duas linguagens em questão, devemos primeiro instalar o [Python](https://www.python.org/downloads/). Na página direcionada, você poderá instalar a versão mais nova do Python para o seu sistema operacional (no momento da criação deste post é a versão 3.13).
 
 Com o arquivo instalado, deveremos deixar habilitado “Add python.exe to PATH” (para permitir usar o comando `pip` no prompt de comando).
+:::
 
 ![Instalação Python](imagens/gvc_jupyter_imagem1.png){fig-align="center"}
 
+::: {.justify}
 Em seguida, abrindo o prompt de comando (coloque “cmd” na barra de procura do Windows), digite `pip install jupyter`.
+:::
+
 
 ![Instalando Jupyter](imagens/gvc_jupyter_imagem2.png){fig-align="center"}
 
+::: {.justify}
 Tendo o [Julia](https://www.ime.unicamp.br/~juliacps/Blog/instalar_julia.html) e o Jupyter instalados, agora nós instalamos o [IJulia](https://julialang.github.io/IJulia.jl/stable/manual/installation/). Abrindo o prompt do Julia seguimos com `using Pkg` e depois `Pkg.add(“IJulia”)`.
+:::
 
 ![Terminal Julia](imagens/gvc_jupyter_imagem3.png){fig-align="center"}
 
-Agora, finalmente, abrindo o cmd e digitamos: `jupyter notebook`. Com o Jupyter aberto, para abrir um notebook, vamos para a barra *New* e selecionamos o *Julia (o número da versão que você instalou)*. E voilá.
+::: {.justify}
+Finalmente, abrindo o cmd e digitamos: `jupyter notebook`. Com o Jupyter aberto, para abrir um notebook, vamos para a barra *New* e selecionamos o *Julia (o número da versão que você instalou)*. E *voilá*.
+:::
 
 ## Instalação do Jupyter pelo IJulia
 
+::: {.justify}
 Caso você não queira instalar o Python podemos fazer tudo pelo Julia! Terminando de instalar o IJulia, no terminal, digite `using IJulia` e em seguida `notebook()`.
 Será perguntado se você deseja instalar o Jupyter via Conda, digite `y`.
+:::
 
 ![Instalando Jupyter (Julia)](imagens/gvc_jupyter_imagem5.png){fig-align="center"}
 
+::: {.justify}
 Após esperar o tempo de instalação, temos o Jupyter em mãos!
+:::
 
 ## Julia no Colab
 
-Em 5 de março de 2025, o Google Colab, o Jupyter hospedado na nuvem da Google, adicionou outro tipo de ambiente de execução, a linguagem de programação Julia. Divulgado por Eric Johnson em seu [GitHub](https://github.com/googlecolab/colabtools/issues/5151), o mesmo fala em seu post que além de facilitar o acesso à programação na linguagem Julia, sua introdução ao Google Colab é quase uma homenagem ao Jupyter. Isso porque “Jupyter” é nomeado a partir das três linguagens originalmente suportadas: Julia ("Ju"), Python ("Pyt") e R ("R"). E agora com Julia sendo adicionado, a tríade das linguagens originais do Jupyter está completa.
+
+::: {.justify}
+Em 5 de março de 2025, o Google Colab, o Jupyter hospedado na nuvem da Google, adicionou outro tipo de ambiente de execução, a linguagem de programação `Julia`. Divulgado por Eric Johnson em seu [GitHub](https://github.com/googlecolab/colabtools/issues/5151), o mesmo fala em seu post que além de facilitar o acesso à programação na linguagem `Julia`, sua introdução ao Google Colab é quase uma homenagem ao Jupyter. Isso porque “Jupyter” é nomeado a partir das três linguagens originalmente suportadas: Julia ("Ju"), Python ("Pyt") e R ("R"). E agora com Julia sendo adicionado, a tríade das linguagens originais do Jupyter está completa.
 
 Como colocar Julia no Colab? Muito simples!
 
 Após criar um novo notebook no Colab. Na aba “Ambiente de execução”, selecione “Alterar o tipo de ambiente de execução”. Depois mude o tipo de ambiente para Julia.
+:::
 
 ![Passo a passo no Colab](imagens/gvc_jupyter_imagem4.png){fig-align="center"}
 
+
 O ambiente no Colab está pronto para ser usado.
+
+
 
 ::: callout-note
 Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.

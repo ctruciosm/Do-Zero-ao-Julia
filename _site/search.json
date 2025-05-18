@@ -98,11 +98,18 @@
     "text": "Website\n  \n  \n    \n     Lattes\n  \n  \n    \n     Scholar\n  \n  \n    \n     Github\n  \n  \n    \n     Linkedin\n  \n\n      \n\n    \n    \n  \n\n\nCoordenador do projeto e Professor do Departamento de Estatística do IMECC desde 2022.\n\nSala: 206 - IMECC\nE-mail: ctrucios at unicamp dot br"
   },
   {
-    "objectID": "Equipe/Atual/nicole_fredericci.html",
-    "href": "Equipe/Atual/nicole_fredericci.html",
-    "title": "Nicole Fredericci",
+    "objectID": "Equipe/Atual/thiago_paulichen.html",
+    "href": "Equipe/Atual/thiago_paulichen.html",
+    "title": "Thiago Paulichen",
     "section": "",
-    "text": "Github\n  \n  \n    \n     Linkedin\n  \n\n      \n\n    \n    \n  \n\n\nGraduanda em Estatística pela UNICAMP."
+    "text": "Lattes\n  \n  \n    \n     Github\n  \n  \n    \n     Linkedin\n  \n\n      \n\n    \n    \n  \n\n\nEstudante de Doutorado em Estatística pela UNICAMP."
+  },
+  {
+    "objectID": "Equipe/Atual/gabriel_cardoso.html",
+    "href": "Equipe/Atual/gabriel_cardoso.html",
+    "title": "Gabriel Vieira Cardoso",
+    "section": "",
+    "text": "Github\n  \n  \n    \n     Linkedin\n  \n\n      \nGraduando em Estatística pela UNICAMP."
   },
   {
     "objectID": "Equipe/Atual/vitor_ribas.html",
@@ -147,76 +154,6 @@
     "text": "A meta\n\nMinha esperança é que o site www.ime.unicamp.br/julialang se torne um ponto de referência para quem quer aprender e explorar a linguagem Julia — oferecendo desde dicas para iniciantes até tutoriais completos e atualizações sobre a linguagem. Mais do que isso, torço para que o projeto ajude os alunos a desenvolverem habilidades valiosas para o mercado e, ao mesmo tempo, inspire a comunidade acadêmica e de ciência de dados a enxergar Julia como um verdadeiro mar de possibilidades.\nEstou longe de ser um expert em Julia, mas espero que em breve tanto você quanto eu saibamos um pouco mais dessa linguagem.\nHappy coding!\n\n\n\n\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto, bem como para a geração de imagens."
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Do Zero ao Julia",
-    "section": "",
-    "text": "Descubra e explore as vantagens da linguagem de programação Julia: uma poderosa ferramenta para o ensino, a implementação e o desenvolvimento de métodos estatísticos e de ciência de dados.\n\n\n\n\n\n\n\n\n\n\n\nDescubra as vantagens e dicas de Julia\n\nBlog\n\n\n\n\n\n\n\n\n\nExplore diversos tópicos em Julia\n\nTutoriais\n\n\n\n\n\n\n\n\n\nConheça casos de sucesso e amplie seu networking.\n\nMeetup"
-  },
-  {
-    "objectID": "meetup.html",
-    "href": "meetup.html",
-    "title": "Meetup",
-    "section": "",
-    "text": "Os meetups acontecem toda terceira quinta-feira do mês, nas dependências do IMECC/UNICAMP. O ingresso é gratuito e aberto ao público (mas precisa de inscrição). Para participar, inscreva-se aqui.\n\n\n\n\n\n\nÉ gratis, é sobre Julia e é no IMECC/UNICAMP!"
-  },
-  {
-    "objectID": "tutoriais.html",
-    "href": "tutoriais.html",
-    "title": "Tutoriais",
-    "section": "",
-    "text": "Nenhum item correspondente"
-  },
-  {
-    "objectID": "equipe.html",
-    "href": "equipe.html",
-    "title": "Do Zero ao Julia",
-    "section": "",
-    "text": "Graduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCoordenador\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDoutorando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\nNenhum item correspondente"
-  },
-  {
-    "objectID": "equipe.html#equipe",
-    "href": "equipe.html#equipe",
-    "title": "Do Zero ao Julia",
-    "section": "",
-    "text": "Graduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCoordenador\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDoutorando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\nNenhum item correspondente"
-  },
-  {
-    "objectID": "oprojeto.html",
-    "href": "oprojeto.html",
-    "title": "Conheça mais sobre o projeto ‘Do Zero ao Julia’",
-    "section": "",
-    "text": "Julia?\n\nA linguagem de programação Julia, lançada oficialmente ao público em 2012, e com foco em ciência de dados e computação científica, tem surgido como uma alternativa a outras linguagem de programação já estabelecidas no mercado como Matlab, Python e R. Com desempenho comparável ao de C++ e facilidade de aprendizado similar a Python e R, Julia utiliza multiple dispatch, tem uma boa performance e permite utilizar símbolos matemáticos diretamente no código. Ademais, Julia também resolve o problema de duas linguagens, não sendo mais necessário fazer o protótipo em uma linguagem e colocar em produção em outra – uma característica especialmente vantajosa no desenvolvimento de aplicações no setor industrial e em projetos de grande escala.\n\n\n\nO Projeto\n\nDo Zero ao Julia é um projeto de extensão do IMECC/UNICAMP, coordenado pelo Professor Carlos Trucíos (Departamento de Estatística), com o objetivo de incentivar e disseminar o uso da linguagem Julia. O projeto visa destacar Julia como uma ferramenta poderosa e eficiente, não apenas no ensino de Estatística e Ciência de Dados, mas também como uma ferramenta poderosa na análise de dados, desenvolvimento de projetos e implantação de modelos tanto na academia quanto na industria. Através de palestras, cursos online e materiais educativos, como blogs e tutoriais, vamos apresentar os benefícios e recursos da linguagem de programação Julia a diferentes públicos. O projeto será uma oportunidade para envolver tanto a comunidade acadêmica quanto outras pessoas interessadas, como profissionais da indústria, buscando promover a troca de conhecimentos e fortalecer a conexão entre a universidade e a sociedade.\n\n\nAlém disso, o projeto irá oferecer materiais comparando Julia com outras linguagens populares, como Python e R, mostrando suas vantagens, limitações e características específicas. Também será explorado como Julia pode ser integrada com outras tecnologias, com foco na implementação de modelos em produção, proporcionando uma visão abrangente de como Julia se posiciona no vasto ecossistema de ferramentas tecnológicas da era digital."
-  },
-  {
-    "objectID": "Blog/HistoriaJulia.html",
-    "href": "Blog/HistoriaJulia.html",
-    "title": "Do Zero ao Julia: Entenda a História da Linguagem que Une Simplicidade e Desempenho",
-    "section": "",
-    "text": "Durante muito tempo, programadores sofreram com o problema das duas linguagens, no qual as ideias eram testadas em linguagens mais simples, como R, Python e MATLAB e, à medida que exigiam maior desempenho, precisavam ser reescritas em linguagens mais rápidas, como Fortran ou C. Todo esse trabalho era muito propenso a erros e falhas no código final. Em razão disso, surgiu o Julia: uma proposta para unir rapidez e simplicidade em uma só linguagem de programação."
-  },
-  {
-    "objectID": "Blog/HistoriaJulia.html#início-de-tudo",
-    "href": "Blog/HistoriaJulia.html#início-de-tudo",
-    "title": "Do Zero ao Julia: Entenda a História da Linguagem que Une Simplicidade e Desempenho",
-    "section": "",
-    "text": "Durante muito tempo, programadores sofreram com o problema das duas linguagens, no qual as ideias eram testadas em linguagens mais simples, como R, Python e MATLAB e, à medida que exigiam maior desempenho, precisavam ser reescritas em linguagens mais rápidas, como Fortran ou C. Todo esse trabalho era muito propenso a erros e falhas no código final. Em razão disso, surgiu o Julia: uma proposta para unir rapidez e simplicidade em uma só linguagem de programação."
-  },
-  {
-    "objectID": "Blog/HistoriaJulia.html#o-desenvolvimento",
-    "href": "Blog/HistoriaJulia.html#o-desenvolvimento",
-    "title": "Do Zero ao Julia: Entenda a História da Linguagem que Une Simplicidade e Desempenho",
-    "section": "O Desenvolvimento",
-    "text": "O Desenvolvimento\nEm 2009, quatro pesquisadores do MIT (Massachusetts Institute of Technology) começaram a desenvolver uma solução para o problema das duas linguagens. Stefan Karpinski, Alan Edelman, Jeff Bezanson e Viral B. Shah tinham o objetivo de criar uma linguagem de programação moderna, extremamente rápida e, ao mesmo tempo, fácil de escrever. Ao longo de cerca de quatro anos, a linguagem foi mantida em sigilo, até que, em fevereiro de 2012, ela veio a público por meio do artigo “Why We Created Julia”, o qual apresentou ao mundo a primeira versão da linguagem, que já contava com documentação, pacotes básicos e um compilador funcional. Logo após seu lançamento, a linguagem ganhou bastante popularidade no meio científico e ampla divulgação em fóruns e comunidades. Entretanto, o marco da maturidade da linguagem aconteceu em 2018, com o lançamento da versão 1.0, que trouxe diversas inovações técnicas, como maior confiabilidade para uso em produção, estabilidade da API e consolidação do ecossistema."
-  },
-  {
-    "objectID": "Blog/HistoriaJulia.html#julia-atualmente",
-    "href": "Blog/HistoriaJulia.html#julia-atualmente",
-    "title": "Do Zero ao Julia: Entenda a História da Linguagem que Une Simplicidade e Desempenho",
-    "section": "Julia atualmente",
-    "text": "Julia atualmente\n\nAtualmente, a linguagem de programação Julia é utilizada em todo o mundo por cientistas, engenheiros e desenvolvedores que trabalham com dados. Em 2020, Julia ocupava a 47ª posição no índice TIOBE (um termômetro das linguagens mais populares) e, em 2022, já estava na 21ª posição. Isso demonstra que o alcance do Julia está crescendo constantemente ao longo do tempo. A linguagem surgiu como solução para um problema comum e foi além, tornando-se uma ponte entre o mundo das linguagens mais simples e o das mais rápidas. Seu impacto já é visível em diversas áreas da ciência e do mercado de trabalho, e seu futuro é cada vez mais promissor para quem lida com tecnologia.\n\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
-  },
-  {
     "objectID": "Blog/instalar_julia.html",
     "href": "Blog/instalar_julia.html",
     "title": "Como instalar Julia?",
@@ -245,6 +182,83 @@
     "text": "Outros caminhos\nJulia também está disponível para download pela Microsoft Store. Para os usuários de Linux e macOS, essa opção não se encontra disponível por enquanto, mas também é possível instalar e utilizar Julia diretamente do terminal do computador.\nNo Windows, pressione as teclas Windows + R, digite cmd e pressione “Enter” para abrir o terminal. Em seguida, execute o comando abaixo e digite Y quando solicitado pelo sistema:\nwinget install Julia\nQuando a instalação for concluída, você pode digitar where julia para localizar o caminho até o .exe de Julia, ou simplesmente digitar julia no terminal para obter uma interface semelhante à do aplicativo do programa.\nNo macOS ou Linux, abra o terminal e digite\ncurl -fsSL https://install.julialang.org | sh\nQuando a instalação for concluída, você pode digitar which julia para localizar o caminho até o executável de Julia, ou simplesmente digitar julia no terminal para acessar a interface interativa do programa.\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
   },
   {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Do Zero ao Julia",
+    "section": "",
+    "text": "Descubra e explore as vantagens da linguagem de programação Julia: uma poderosa ferramenta para o ensino, a implementação e o desenvolvimento de métodos estatísticos e de ciência de dados.\n\n\n\n\n\n\n\n\n\n\n\nDescubra as vantagens e dicas de Julia\n\nBlog\n\n\n\n\n\n\n\n\n\nExplore diversos tópicos em Julia\n\nTutoriais\n\n\n\n\n\n\n\n\n\nConheça casos de sucesso e amplie seu networking.\n\nMeetup"
+  },
+  {
+    "objectID": "meetup.html",
+    "href": "meetup.html",
+    "title": "Meetup",
+    "section": "",
+    "text": "Os meetups acontecem toda terceira quinta-feira do mês, nas dependências do IMECC/UNICAMP. O ingresso é gratuito e aberto ao público (mas precisa de inscrição). Para participar, inscreva-se aqui.\n\n\n\n\n\n\nÉ gratis, é sobre Julia e é no IMECC/UNICAMP!"
+  },
+  {
+    "objectID": "tutoriais.html",
+    "href": "tutoriais.html",
+    "title": "Tutoriais",
+    "section": "",
+    "text": "Nenhum item correspondente"
+  },
+  {
+    "objectID": "equipe.html",
+    "href": "equipe.html",
+    "title": "Do Zero ao Julia",
+    "section": "",
+    "text": "Graduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCoordenador\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDoutorando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\nNenhum item correspondente"
+  },
+  {
+    "objectID": "equipe.html#equipe",
+    "href": "equipe.html#equipe",
+    "title": "Do Zero ao Julia",
+    "section": "",
+    "text": "Graduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCoordenador\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDoutorando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\nNenhum item correspondente"
+  },
+  {
+    "objectID": "oprojeto.html",
+    "href": "oprojeto.html",
+    "title": "Conheça mais sobre o projeto ‘Do Zero ao Julia’",
+    "section": "",
+    "text": "Julia?\n\nA linguagem de programação Julia, lançada oficialmente ao público em 2012, e com foco em ciência de dados e computação científica, tem surgido como uma alternativa a outras linguagem de programação já estabelecidas no mercado como Matlab, Python e R. Com desempenho comparável ao de C++ e facilidade de aprendizado similar a Python e R, Julia utiliza multiple dispatch, tem uma boa performance e permite utilizar símbolos matemáticos diretamente no código. Ademais, Julia também resolve o problema de duas linguagens, não sendo mais necessário fazer o protótipo em uma linguagem e colocar em produção em outra – uma característica especialmente vantajosa no desenvolvimento de aplicações no setor industrial e em projetos de grande escala.\n\n\n\nO Projeto\n\nDo Zero ao Julia é um projeto de extensão do IMECC/UNICAMP, coordenado pelo Professor Carlos Trucíos (Departamento de Estatística), com o objetivo de incentivar e disseminar o uso da linguagem Julia. O projeto visa destacar Julia como uma ferramenta poderosa e eficiente, não apenas no ensino de Estatística e Ciência de Dados, mas também como uma ferramenta poderosa na análise de dados, desenvolvimento de projetos e implantação de modelos tanto na academia quanto na industria. Através de palestras, cursos online e materiais educativos, como blogs e tutoriais, vamos apresentar os benefícios e recursos da linguagem de programação Julia a diferentes públicos. O projeto será uma oportunidade para envolver tanto a comunidade acadêmica quanto outras pessoas interessadas, como profissionais da indústria, buscando promover a troca de conhecimentos e fortalecer a conexão entre a universidade e a sociedade.\n\n\nAlém disso, o projeto irá oferecer materiais comparando Julia com outras linguagens populares, como Python e R, mostrando suas vantagens, limitações e características específicas. Também será explorado como Julia pode ser integrada com outras tecnologias, com foco na implementação de modelos em produção, proporcionando uma visão abrangente de como Julia se posiciona no vasto ecossistema de ferramentas tecnológicas da era digital."
+  },
+  {
+    "objectID": "Blog/jupytercolab.html",
+    "href": "Blog/jupytercolab.html",
+    "title": "Notebooks em Julia: Jupyter e Colab",
+    "section": "",
+    "text": "A linguagem Julia foi projetada para ser ao mesmo tempo rápida e dinâmica. Quando integrada ao ambiente Jupyter, ela se transforma em uma poderosa ferramenta interativa, que permite combinar código, visualizações gráficas e textos em um único documento, criando um ambiente ideal para o ensino e a aprendizagem.\nNeste post, aprenderemos como instalar o Jupyter e adequá-lo ao ambiente da Julia, bem como a utilizar Julia no queridinho Colab"
+  },
+  {
+    "objectID": "Blog/jupytercolab.html#introdução",
+    "href": "Blog/jupytercolab.html#introdução",
+    "title": "Notebooks em Julia: Jupyter e Colab",
+    "section": "",
+    "text": "A linguagem Julia foi projetada para ser ao mesmo tempo rápida e dinâmica. Quando integrada ao ambiente Jupyter, ela se transforma em uma poderosa ferramenta interativa, que permite combinar código, visualizações gráficas e textos em um único documento, criando um ambiente ideal para o ensino e a aprendizagem.\nNeste post, aprenderemos como instalar o Jupyter e adequá-lo ao ambiente da Julia, bem como a utilizar Julia no queridinho Colab"
+  },
+  {
+    "objectID": "Blog/jupytercolab.html#instalação-do-jupyter",
+    "href": "Blog/jupytercolab.html#instalação-do-jupyter",
+    "title": "Notebooks em Julia: Jupyter e Colab",
+    "section": "Instalação do Jupyter",
+    "text": "Instalação do Jupyter\n\nPara a baixarmos o Jupyter, temos duas alternativas. A primeira é usando o Python em conjunto com o Julia e a segunda é usando somente o Julia (neste caso pule para a seção: Instalação do Jupyter pelo IJulia).\nUsando as duas linguagens em questão, devemos primeiro instalar o Python. Na página direcionada, você poderá instalar a versão mais nova do Python para o seu sistema operacional (no momento da criação deste post é a versão 3.13).\nCom o arquivo instalado, deveremos deixar habilitado “Add python.exe to PATH” (para permitir usar o comando pip no prompt de comando).\n\n\n\n\nInstalação Python\n\n\n\nEm seguida, abrindo o prompt de comando (coloque “cmd” na barra de procura do Windows), digite pip install jupyter.\n\n\n\n\nInstalando Jupyter\n\n\n\nTendo o Julia e o Jupyter instalados, agora nós instalamos o IJulia. Abrindo o prompt do Julia seguimos com using Pkg e depois Pkg.add(“IJulia”).\n\n\n\n\nTerminal Julia\n\n\n\nFinalmente, abrindo o cmd e digitamos: jupyter notebook. Com o Jupyter aberto, para abrir um notebook, vamos para a barra New e selecionamos o Julia (o número da versão que você instalou). E voilá."
+  },
+  {
+    "objectID": "Blog/jupytercolab.html#instalação-do-jupyter-pelo-ijulia",
+    "href": "Blog/jupytercolab.html#instalação-do-jupyter-pelo-ijulia",
+    "title": "Notebooks em Julia: Jupyter e Colab",
+    "section": "Instalação do Jupyter pelo IJulia",
+    "text": "Instalação do Jupyter pelo IJulia\n\nCaso você não queira instalar o Python podemos fazer tudo pelo Julia! Terminando de instalar o IJulia, no terminal, digite using IJulia e em seguida notebook(). Será perguntado se você deseja instalar o Jupyter via Conda, digite y.\n\n\n\n\nInstalando Jupyter (Julia)\n\n\n\nApós esperar o tempo de instalação, temos o Jupyter em mãos!"
+  },
+  {
+    "objectID": "Blog/jupytercolab.html#julia-no-colab",
+    "href": "Blog/jupytercolab.html#julia-no-colab",
+    "title": "Notebooks em Julia: Jupyter e Colab",
+    "section": "Julia no Colab",
+    "text": "Julia no Colab\n\nEm 5 de março de 2025, o Google Colab, o Jupyter hospedado na nuvem da Google, adicionou outro tipo de ambiente de execução, a linguagem de programação Julia. Divulgado por Eric Johnson em seu GitHub, o mesmo fala em seu post que além de facilitar o acesso à programação na linguagem Julia, sua introdução ao Google Colab é quase uma homenagem ao Jupyter. Isso porque “Jupyter” é nomeado a partir das três linguagens originalmente suportadas: Julia (“Ju”), Python (“Pyt”) e R (“R”). E agora com Julia sendo adicionado, a tríade das linguagens originais do Jupyter está completa.\nComo colocar Julia no Colab? Muito simples!\nApós criar um novo notebook no Colab. Na aba “Ambiente de execução”, selecione “Alterar o tipo de ambiente de execução”. Depois mude o tipo de ambiente para Julia.\n\n\n\n\nPasso a passo no Colab\n\n\nO ambiente no Colab está pronto para ser usado.\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
+  },
+  {
     "objectID": "about.html",
     "href": "about.html",
     "title": "About",
@@ -259,11 +273,18 @@
     "text": "Github\n  \n  \n    \n     Linkedin\n  \n\n      \n\n    \n    \n  \n\n\nGraduando em Estatística pela UNICAMP."
   },
   {
-    "objectID": "Equipe/Atual/thiago_paulichen.html",
-    "href": "Equipe/Atual/thiago_paulichen.html",
-    "title": "Thiago Paulichen",
+    "objectID": "Equipe/Atual/nicole_fredericci.html",
+    "href": "Equipe/Atual/nicole_fredericci.html",
+    "title": "Nicole Fredericci",
     "section": "",
-    "text": "Lattes\n  \n  \n    \n     Github\n  \n  \n    \n     Linkedin\n  \n\n      \n\n    \n    \n  \n\n\nEstudante de Doutorado em Estatística pela UNICAMP."
+    "text": "Github\n  \n  \n    \n     Linkedin\n  \n\n      \n\n    \n    \n  \n\n\nGraduanda em Estatística pela UNICAMP."
+  },
+  {
+    "objectID": "Equipe/Atual/esther_cleveston.html",
+    "href": "Equipe/Atual/esther_cleveston.html",
+    "title": "Esther Cleveston",
+    "section": "",
+    "text": "Github\n  \n  \n    \n     Linkedin\n  \n\n      \nGraduando em Estatística pela UNICAMP."
   },
   {
     "objectID": "Equipe/Antigos/thiago.html",
@@ -284,6 +305,6 @@
     "href": "blog.html",
     "title": "Blog",
     "section": "",
-    "text": "Do Zero ao Julia: Entenda a História da Linguagem que Une Simplicidade e Desempenho\n\n\n\n\n\n\nQuarto\n\n\n\nConheça a história do Julia que surgiu com a proposta de unir o desempenho e a simplicidade em uma só linguagem. \n\n\n\n\n\n9 de mai. de 2025\n\n\nEsther Cleveston\n\n\n\n\n\n\n\n\n\n\n\n\nComo instalar Julia?\n\n\n\n\n\n\nInstalação\n\n\n\nPasso a passo para instalar e configurar Julia no seu computador. \n\n\n\n\n\n2 de mai. de 2025\n\n\nNicole Fredericci, Carlos Trucíos\n\n\n\n\n\n\n\n\n\n\n\n\nDo Zero ao Julia: As origens\n\n\n\n\n\n\nHistória\n\n\n\nFicou curioso sobre como tudo começou? Descubra, de forma leve e descontraída, como o projeto foi idealizado, planejado e finalmente lançado ao público. \n\n\n\n\n\n24 de abr. de 2025\n\n\nCarlos Trucíos\n\n\n\n\n\n\nNenhum item correspondente"
+    "text": "Notebooks em Julia: Jupyter e Colab\n\n\n\n\n\n\nInstalação\n\n\n\nAprenda passo a passo como instalar e utilizar os ambientes Jupyter e Colab integrados à linguagem Julia. \n\n\n\n\n\n13 de mai. de 2025\n\n\nGabriel Cardoso, Carlos Trucíos\n\n\n\n\n\n\n\n\n\n\n\n\nComo instalar Julia?\n\n\n\n\n\n\nInstalação\n\n\n\nPasso a passo para instalar e configurar Julia no seu computador. \n\n\n\n\n\n2 de mai. de 2025\n\n\nNicole Fredericci, Carlos Trucíos\n\n\n\n\n\n\n\n\n\n\n\n\nDo Zero ao Julia: As origens\n\n\n\n\n\n\nHistória\n\n\n\nFicou curioso sobre como tudo começou? Descubra, de forma leve e descontraída, como o projeto foi idealizado, planejado e finalmente lançado ao público. \n\n\n\n\n\n24 de abr. de 2025\n\n\nCarlos Trucíos\n\n\n\n\n\n\nNenhum item correspondente"
   }
 ]
