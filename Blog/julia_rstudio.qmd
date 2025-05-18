@@ -1,0 +1,72 @@
+---
+title: "Como utilizar Julia no RStudio no Windows"
+description: "Passo a passo para programar em Julia por meio do RStudio"
+categories:
+  - Instalação
+  - Markdown
+author:
+  - name: Vitor Ribas Perrone
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/VitorRibasP
+    orcid: 0009-0009-6923-7712
+date: "2025-05-17"
+image: imagens/rstudio_logo.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+draft: false
+---
+
+## Introdução
+
+Ao trabalhar com Estatística, uma linguagem de programação muito utilizada é o R, desenvolvido justamente para esse propósito. Além disso, o maior aliado na hora de programar em R é o RStudio, uma interface que facilita bastante a realização das tarefas e ainda permite integração com outras linguagens, como Python e Julia.
+
+Sendo assim, neste post vamos aprender a utilizar o Julia no RStudio, com o objetivo de aproveitar uma nova linguagem dentro de um ambiente já familiar.
+
+
+## Pré Requisitos
+
+
+- Ter [Julia](https://www.ime.unicamp.br/~juliacps/Blog/instalar_julia.html) instalado;
+- Ter [R](https://cran.r-project.org/bin/windows/base/) e [Rstudio](https://posit.co/downloads/) instalados.
+
+## Configurações do RStudio
+
+Para integrar o Julia ao RStudio, vamos utilizar o pacote `JuliaCall`. Para isso, precisamos instalá-lo e carregá-lo:
+
+```default
+install.packages("JuliaCall")
+library(JuliaCall)
+```
+Com o pacote devidamente carregado, é necessário informar ao RStudio onde está instalado o Julia no seu computador. Para isso, buscamos pelo arquivo `julia.exe` no gerenciador de arquivos, como mostrado na imagem abaixo:
+
+![Pesquisando o caminho do Julia no computador](imagens/rstudiojulia.png){fig-align="center"}
+
+No caso, estamos interessados no segundo julia.exe, aquele que foi criado no processo de instalação do Julia. Voltando ao R, utilizamos as funções `Sys.setenv()` e `julia_setup()` para configurar o caminho do arquivo. No meu caso, ficou assim:
+
+```default
+Sys.setenv(JULIA_HOME = "C:/Users/vitor/AppData/Local/Programs/Julia-1.10.2/bin"
+julia_setup()
+```
+Pronto, agora já é possível utilizar o Julia no Rstudio! 
+
+
+## Como utilizar
+
+Com tudo configurado, podemos começar a usar o Julia no RStudio. Para isso, criamos um arquivo R Markdown e utilizamos a seguinte sintaxe nos chunks de código:
+
+````default
+```{julia}
+# Seu código Julia aqui
+```
+````
+Sendo assim, todos os códigos inseridos em chunks com o título `{julia}` serão executados em Julia.
+Agora é só colocar a mão na massa e começar a programar em Julia diretamente no RStudio, uma interface que você já conhece bem!
+
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::

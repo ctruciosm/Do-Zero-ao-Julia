@@ -1,0 +1,30 @@
+---
+title: "Heitor Brotto Gomes e Silva"
+sortby: "Heitor Brotto Gomes e Silva"
+subtitle: "Graduando em Estatística"
+image: foto_heitor_bgs.jpg
+about:
+  id: person-profile
+  template: jolla
+  image-width: 10em
+  image-shape: rectangle
+  links:
+    - icon: github
+      text: Github
+      href: https://github.com/brotto-go
+    - icon: linkedin
+      text: Linkedin
+      href: www.linkedin.com/in/heitor-brotto-go
+    - icon: share
+      text: Site
+      href: https://www.ime.unicamp.br/~ra260181/
+---
+
+
+
+
+:::{#person-profile}
+:::
+
+Graduando em Estatística pela UNICAMP.
+

@@ -1,0 +1,25 @@
+---
+  title: "sarah_silva"
+sortby: "Sarah Pereira Teixeira Silva"
+subtitle: "Graduanda em Matemática Aplicada e Computacional"
+image: sarah_silva.jpeg
+about:
+  id: person-profile
+template: solana
+image-width: 10em
+links:
+  - icon: github
+text: Github
+href: https://github.com/astrogenun
+- icon: linkedin
+text: Linkedin
+href: https://www.linkedin.com/in/sarah-pereira-b938b520a/
+  ---
+  
+  
+  
+  
+  :::{#person-profile}
+    :::
+      
+      Graduanda em Matemática Aplicada e Computacional. Pesquisadora Colaboradora em Iniciação Científica em Centro Nacional de Pesquisa em Energia e Materiais (CNPEM).
