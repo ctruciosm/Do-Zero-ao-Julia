@@ -10,7 +10,11 @@
       "/Equipe/Atual/carlos_trucios.html",
       "/Equipe/Atual/esther_cleveston.html",
       "/Equipe/Atual/gabriel_cardoso.html",
+      "/Equipe/Atual/guiduarte.html",
+      "/Equipe/Atual/heitor_bgs.html",
+      "/Equipe/Atual/henrique_velloso.html",
       "/Equipe/Atual/nicole_fredericci.html",
+      "/Equipe/Atual/sarah_silva.html",
       "/Equipe/Atual/thiago_paulichen.html",
       "/Equipe/Atual/vitor_ribas.html"
     ]
@@ -18,6 +22,7 @@
   {
     "listing": "/blog.html",
     "items": [
+      "/Blog/julia_rstudio.html",
       "/Blog/jupytercolab.html",
       "/Blog/instalar_julia.html",
       "/Blog/as-origens.html"

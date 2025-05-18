@@ -207,14 +207,14 @@
     "href": "equipe.html",
     "title": "Do Zero ao Julia",
     "section": "",
-    "text": "Graduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCoordenador\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDoutorando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\nNenhum item correspondente"
+    "text": "Graduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCoordenador\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Matemática Aplicada e Computacional\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDoutorando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\nNenhum item correspondente"
   },
   {
     "objectID": "equipe.html#equipe",
     "href": "equipe.html#equipe",
     "title": "Do Zero ao Julia",
     "section": "",
-    "text": "Graduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCoordenador\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDoutorando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\nNenhum item correspondente"
+    "text": "Graduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCoordenador\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Matemática Aplicada e Computacional\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDoutorando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\nNenhum item correspondente"
   },
   {
     "objectID": "oprojeto.html",
@@ -305,6 +305,55 @@
     "href": "blog.html",
     "title": "Blog",
     "section": "",
-    "text": "Notebooks em Julia: Jupyter e Colab\n\n\n\n\n\n\nInstalação\n\n\n\nAprenda passo a passo como instalar e utilizar os ambientes Jupyter e Colab integrados à linguagem Julia. \n\n\n\n\n\n13 de mai. de 2025\n\n\nGabriel Cardoso, Carlos Trucíos\n\n\n\n\n\n\n\n\n\n\n\n\nComo instalar Julia?\n\n\n\n\n\n\nInstalação\n\n\n\nPasso a passo para instalar e configurar Julia no seu computador. \n\n\n\n\n\n2 de mai. de 2025\n\n\nNicole Fredericci, Carlos Trucíos\n\n\n\n\n\n\n\n\n\n\n\n\nDo Zero ao Julia: As origens\n\n\n\n\n\n\nHistória\n\n\n\nFicou curioso sobre como tudo começou? Descubra, de forma leve e descontraída, como o projeto foi idealizado, planejado e finalmente lançado ao público. \n\n\n\n\n\n24 de abr. de 2025\n\n\nCarlos Trucíos\n\n\n\n\n\n\nNenhum item correspondente"
+    "text": "Como utilizar Julia no RStudio no Windows\n\n\n\n\n\n\nInstalação\n\n\nMarkdown\n\n\n\nPasso a passo para configurar Julia no Rstudio\n\n\n\n\n\n18 de mai. de 2025\n\n\nVitor Ribas Perrone, Carlos Trucíos\n\n\n\n\n\n\n\n\n\n\n\n\nNotebooks em Julia: Jupyter e Colab\n\n\n\n\n\n\nInstalação\n\n\n\nAprenda passo a passo como instalar e utilizar os ambientes Jupyter e Colab integrados à linguagem Julia. \n\n\n\n\n\n13 de mai. de 2025\n\n\nGabriel Cardoso, Carlos Trucíos\n\n\n\n\n\n\n\n\n\n\n\n\nComo instalar Julia?\n\n\n\n\n\n\nInstalação\n\n\n\nPasso a passo para instalar e configurar Julia no seu computador. \n\n\n\n\n\n2 de mai. de 2025\n\n\nNicole Fredericci, Carlos Trucíos\n\n\n\n\n\n\n\n\n\n\n\n\nDo Zero ao Julia: As origens\n\n\n\n\n\n\nHistória\n\n\n\nFicou curioso sobre como tudo começou? Descubra, de forma leve e descontraída, como o projeto foi idealizado, planejado e finalmente lançado ao público. \n\n\n\n\n\n24 de abr. de 2025\n\n\nCarlos Trucíos\n\n\n\n\n\n\nNenhum item correspondente"
+  },
+  {
+    "objectID": "Blog/julia_rstudio.html",
+    "href": "Blog/julia_rstudio.html",
+    "title": "Como utilizar Julia no RStudio no Windows",
+    "section": "",
+    "text": "Ao trabalhar com Estatística, uma das linguagens de programação mais utilizadas é o R, criado especificamente para esse propósito. Para facilitar seu uso, o RStudio se destaca como a principal interface, oferecendo um ambiente amigável e com recursos que otimizam a programação. Além disso, o RStudio permite integração com outras linguagens, como Python e Julia.\nNeste post, vamos aprender como utilizar Julia no RStudio, aproveitando os recursos de uma linguagem poderosa dentro de um ambiente já conhecido por muitos usuários de R."
+  },
+  {
+    "objectID": "Blog/julia_rstudio.html#introdução",
+    "href": "Blog/julia_rstudio.html#introdução",
+    "title": "Como utilizar Julia no RStudio no Windows",
+    "section": "",
+    "text": "Ao trabalhar com Estatística, uma das linguagens de programação mais utilizadas é o R, criado especificamente para esse propósito. Para facilitar seu uso, o RStudio se destaca como a principal interface, oferecendo um ambiente amigável e com recursos que otimizam a programação. Além disso, o RStudio permite integração com outras linguagens, como Python e Julia.\nNeste post, vamos aprender como utilizar Julia no RStudio, aproveitando os recursos de uma linguagem poderosa dentro de um ambiente já conhecido por muitos usuários de R."
+  },
+  {
+    "objectID": "Blog/julia_rstudio.html#pré-requisitos",
+    "href": "Blog/julia_rstudio.html#pré-requisitos",
+    "title": "Como utilizar Julia no RStudio no Windows",
+    "section": "Pré Requisitos",
+    "text": "Pré Requisitos\n\nTer Julia instalado;\nTer R e Rstudio instalados."
+  },
+  {
+    "objectID": "Blog/julia_rstudio.html#configurações-do-rstudio",
+    "href": "Blog/julia_rstudio.html#configurações-do-rstudio",
+    "title": "Como utilizar Julia no RStudio no Windows",
+    "section": "Configurações do RStudio",
+    "text": "Configurações do RStudio\nPara integrar o Julia ao RStudio, vamos utilizar o pacote JuliaCall. Para isso, precisamos instalá-lo e carregá-lo:\n\ninstall.packages(\"JuliaCall\")\nlibrary(JuliaCall)\n\nCom o pacote devidamente carregado, é necessário informar ao RStudio onde está instalado o Julia no seu computador. Para isso, buscamos pelo arquivo julia.exe no gerenciador de arquivos, como mostrado na imagem abaixo:\n\n\n\nPesquisando o caminho do Julia no computador\n\n\nNo caso, estamos interessados no segundo julia.exe, aquele que foi criado no processo de instalação do Julia. Voltando ao R, utilizamos as funções Sys.setenv() e julia_setup() para configurar o caminho do arquivo. No meu caso, ficou assim:\n\nSys.setenv(JULIA_HOME = \"C:/Users/vitor/AppData/Local/Programs/Julia-1.10.2/bin\"\njulia_setup()\n\nPronto, agora já é possível utilizar o Julia no Rstudio!\n\n\n\n\n\n\nObservação\n\n\n\nUma forma alternativa é escrever no terminal\n\nwhich julia\n\nou\n\nwhere julia\n\ndependendo se é usuário de Linux/Unix ou de Windows."
+  },
+  {
+    "objectID": "Blog/julia_rstudio.html#como-utilizar",
+    "href": "Blog/julia_rstudio.html#como-utilizar",
+    "title": "Como utilizar Julia no RStudio no Windows",
+    "section": "Como utilizar",
+    "text": "Como utilizar\nCom tudo configurado, podemos começar a usar o Julia no RStudio. Para isso, criamos um arquivo R Markdown e escrevemos o código em Julia dentro do chunck Julia:\n\n\n\nChunk Julia\n\n\nAgora é só colocar a mão na massa e começar a programar em Julia diretamente no RStudio, uma interface que você já conhece bem!\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
+  },
+  {
+    "objectID": "Equipe/Atual/sarah_silva.html",
+    "href": "Equipe/Atual/sarah_silva.html",
+    "title": "Sarah Silva",
+    "section": "",
+    "text": ":::{#person-profile} :::\n  Graduanda em Matemática Aplicada e Computacional. Pesquisadora Colaboradora em Iniciação Científica em Centro Nacional de Pesquisa em Energia e Materiais (CNPEM)."
+  },
+  {
+    "objectID": "Equipe/Atual/henrique_velloso.html",
+    "href": "Equipe/Atual/henrique_velloso.html",
+    "title": "Henrique Velloso",
+    "section": "",
+    "text": "Github\n  \n  \n    \n     Linkedin\n  \n\n      \nGraduando em Estatística pela UNICAMP."
   }
 ]

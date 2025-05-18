@@ -1,0 +1,15 @@
+{
+  "hash": "b2ab77033fec3169a4404f2b73243b03",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Como fazer um post no Blog com Quarto?\"\ndescription: |\n  Breve post explicando o passo a passo para fazer posts utilizando Quarto.\ncategories:\n  - Quarto\nauthor:\n  - name: Carlos Trucíos\n    affiliation: \"Universidade Estadual de Campinas\"\n    url: https://ctruciosm.github.io\n    orcid: 0000-0001-8746-8877\n  - name: Maria Silva\n    affiliation: \"Universidade Federal de São Paulo\"\n    url: https://mariasilva.example.com\n    orcid: 0000-0002-3456-7890\ndate: \"2025-04-10\"\nimage: imagens/Julia_A_Capivara_CD.jpeg\nlang: pt\nformat:\n  html:\n    toc: true\n    toc-depth: 3\n    self-contained: false\ndraft: true\n---\n\n\n\n## Introdução\n\nO [Quarto](https://quarto.org) é uma ferramenta poderosa para a criação de documentos dinâmicos, que integra texto, código, gráficos e visualizações de forma elegante. Neste post, mostramos como criar um post de blog com Quarto de forma simples e rápida.\n\n## Requisitos iniciais\n\nAntes de começar, certifique-se de ter:\n\n- [Quarto](https://quarto.org/docs/get-started/) instalado em sua máquina;\n- Familiaridade com Markdown e, opcionalmente, R, Python ou Julia.\n\n\n## Estrutura básica de um post\n\nUm post no blog com Quarto é geralmente um arquivo `.qmd` que contém:\n\n1. Um _YAML header_ com metadados (como o que você vê no início deste post);\n2. Texto em Markdown;\n3. (Opcionalmente) Blocos de código executáveis;\n4. Recursos como imagens e gráficos (utilizar a pasta `imagens` dentro da pasta `Blog`.\n5. Instalar reticulate, JuliaCall\n6. julia_setup()\n\n\n\nwhich julia\nwhere julia\nSys.setenv(JULIA_HOME = \"/Users/ctrucios/.juliaup/bin/\")\nlibrary(JuliaCall)\njulia_setup()\n\n\n::: center\n![Legenda da figura](imagens/Capi_2.jpeg){width=80%}\n:::\n\n\n\n\n### Incluindo código\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\nrnorm(5)\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n[1]  0.4070208 -1.2841144 -1.8987076 -1.0935841 -0.7268896\n```\n\n\n:::\n:::\n\n::: {.cell}\n\n```{.python .cell-code}\n2+2\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n4\n```\n\n\n:::\n:::\n\n::: {.cell}\n\n```{.julia .cell-code}\n2*2\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n4\n```\n\n\n:::\n:::\n\n\n\n\n\n### Formulas\n\nSeguir o formato latex:\n\n$$Y_t = \\sqrt{262} \\times \\beta_1 X_t + \\epsilon_t$$\n\n\n### Blocos\n\n\n\n::: {.callout-note icon=false}\n### Teste\n\njsbjhbxjhsbd\n\n\n:::\n\n\n\n### Antes de terminar\n\n1. Peça ao chatgpt melhorar o texto o corrigir o portugies\n2. Alguém será o editor do seu texto (pós-graduando, posdoc ou eu)",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
