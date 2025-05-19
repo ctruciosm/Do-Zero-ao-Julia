@@ -7,7 +7,6 @@ about:
   id: person-profile
   template: jolla
   image-width: 10em
-  image-shape: rectangle
   links:
     - icon: github
       text: Github
@@ -18,9 +17,6 @@ about:
 ---
   
   
-  
-  
-  :::{#person-profile}
-    :::
-      
-      Graduanda em Matemática Aplicada e Computacional. Pesquisadora Colaboradora em Iniciação Científica em Centro Nacional de Pesquisa em Energia e Materiais (CNPEM).
+::: {#person-profile}
+Graduanda em Matemática Aplicada e Computacional. Pesquisadora Colaboradora em Iniciação Científica em Centro Nacional de Pesquisa em Energia e Materiais (CNPEM).
+:::

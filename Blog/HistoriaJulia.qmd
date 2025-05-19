@@ -1,5 +1,5 @@
 ---
-title: "Do Zero ao Julia: Entenda a História da Linguagem que Une Simplicidade e Desempenho"
+title: "Entenda a História da Linguagem que une Simplicidade e Desempenho"
 description: |
   Conheça a história do Julia, que surgiu com a proposta de unir o desempenho e a simplicidade em uma só linguagem.
 categories:
@@ -12,7 +12,7 @@ author:
     affiliation: "Universidade Estadual de Campinas"
     url: https://github.com/phgelias
     orcid: 0009-0003-8992-9827
-date: "2025-05-09"
+date: "2025-05-19"
 image: imagens/HistoriaJulia.png
 lang: pt
 format:
@@ -26,19 +26,28 @@ draft: true
 ## Início de tudo
 
 ::: {.justify}
-Durante muito tempo, programadores sofreram com o problema das duas linguagens, no qual as ideias eram testadas em linguagens mais simples, como R, Python e MATLAB e, à medida que exigiam maior desempenho, precisavam ser reescritas em linguagens mais rápidas, como Fortran ou C.
+Durante muito tempo, programadores sofreram com o problema das duas linguagens, no qual as ideias eram testadas em linguagens mais simples, como R, Python e MATLAB e, à medida que exigiam maior desempenho, precisavam ser reescritas em linguagens mais rápidas, de baixo nível, como Fortran ou C++.
 
-Todo esse trabalho era muito propenso a erros e falhas no código final. Em razão disso, surgiu a linguagem Julia: uma proposta para unir rapidez e simplicidade em uma só linguagem de programação.
+Esse processo, além de trabalhoso, era altamente suscetível a erros e inconsistências no código final. Foi justamente para resolver esse impasse que surgiu a linguagem de programação `Julia`, com o objetivo de unir desempenho e simplicidade em uma única solução.
 :::
 
 ## O Desenvolvimento
+
+::: {.justify}
 Em 2009, quatro pesquisadores do MIT (Massachusetts Institute of Technology) começaram a desenvolver uma solução para o problema das duas linguagens. Stefan Karpinski, Alan Edelman, Jeff Bezanson e Viral B. Shah tinham o objetivo de criar uma linguagem de programação moderna, extremamente rápida e, ao mesmo tempo, fácil de escrever.
 
-Ao longo de cerca de quatro anos, o projeto foi mantido em sigilo, até que, em fevereiro de 2012, veio a público por meio do artigo “Why We Created Julia”, o qual apresentou ao mundo a primeira versão da linguagem, que já contava com documentação, pacotes básicos e um compilador funcional.
+Ao longo de cerca de quatro anos, o projeto foi mantido em sigilo, até que, em fevereiro de 2012, veio a público por meio do artigo [“Why We Created Julia”](https://julialang.org/blog/2012/02/why-we-created-julia/), o qual apresentou ao mundo a primeira versão da linguagem, que já contava com documentação, pacotes básicos e um compilador funcional.
 
 Logo após seu lançamento, Julia ganhou bastante popularidade no meio científico e ampla divulgação em fóruns e comunidades. Entretanto, o marco da maturidade da ferramenta aconteceu em 2018, com o lançamento da versão 1.0, que trouxe diversas inovações técnicas, como maior confiabilidade para uso em produção, estabilidade da API e consolidação do ecossistema.
+:::
+
 
 ## Julia atualmente
+
+
+![](imagens/Capi_2.jpeg){fig-align="center" width="50%"}
+
+
 
 ::: {.justify}
 Atualmente, Julia é utilizado em todo o mundo por cientistas, engenheiros e desenvolvedores que trabalham com dados. Em 2020, ocupava a 47ª posição no índice TIOBE (um termômetro das linguagens mais populares) e, em 2022, já estava na 21ª posição. Isso demonstra que o alcance dessa tecnologia está crescendo constantemente ao longo do tempo.
@@ -47,7 +56,7 @@ Julia surgiu como solução para um problema comum e foi além, tornando-se uma 
 :::
 
 ::: {.callout-note} 
-Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+Ferramentas de IA foram utilizadas para correção ortográfic, aprimoramento do texto e criação de imagens.
 :::
 
-## Referências
+

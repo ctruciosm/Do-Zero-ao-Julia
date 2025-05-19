@@ -98,11 +98,25 @@
     "text": "Website\n  \n  \n    \n     Lattes\n  \n  \n    \n     Scholar\n  \n  \n    \n     Github\n  \n  \n    \n     Linkedin\n  \n\n      \n\n    \n    \n  \n\n\nCoordenador do projeto e Professor do Departamento de Estatística do IMECC desde 2022.\n\nSala: 206 - IMECC\nE-mail: ctrucios at unicamp dot br"
   },
   {
-    "objectID": "Equipe/Atual/thiago_paulichen.html",
-    "href": "Equipe/Atual/thiago_paulichen.html",
-    "title": "Thiago Paulichen",
+    "objectID": "Equipe/Atual/esther_cleveston.html",
+    "href": "Equipe/Atual/esther_cleveston.html",
+    "title": "Esther Cleveston",
     "section": "",
-    "text": "Lattes\n  \n  \n    \n     Github\n  \n  \n    \n     Linkedin\n  \n\n      \n\n    \n    \n  \n\n\nEstudante de Doutorado em Estatística pela UNICAMP."
+    "text": "Github\n  \n  \n    \n     Linkedin\n  \n\n      \nGraduando em Estatística pela UNICAMP."
+  },
+  {
+    "objectID": "Equipe/Atual/guiduarte.html",
+    "href": "Equipe/Atual/guiduarte.html",
+    "title": "Guilherme Duarte Alves Basso",
+    "section": "",
+    "text": "Graduando em Estatística pela UNICAMP."
+  },
+  {
+    "objectID": "Equipe/Atual/nicole_fredericci.html",
+    "href": "Equipe/Atual/nicole_fredericci.html",
+    "title": "Nicole Fredericci",
+    "section": "",
+    "text": "Github\n  \n  \n    \n     Linkedin\n  \n\n      \n\n    \n    \n  \n\n\nGraduanda em Estatística pela UNICAMP."
   },
   {
     "objectID": "Equipe/Atual/gabriel_cardoso.html",
@@ -119,67 +133,74 @@
     "text": "Github\n  \n  \n    \n     Linkedin\n  \n\n      \n\n    \n    \n  \n\n\nGraduando em Estatística pela UNICAMP."
   },
   {
-    "objectID": "Blog/as-origens.html",
-    "href": "Blog/as-origens.html",
-    "title": "Do Zero ao Julia: As origens",
+    "objectID": "Blog/julia_rstudio.html",
+    "href": "Blog/julia_rstudio.html",
+    "title": "Como utilizar Julia no RStudio no Windows",
     "section": "",
-    "text": "A primeira vez que ouvi falar da linguagem Julia foi em 2014, quando ainda era estudante de doutorado no IMECC e buscava formas mais rápidas de executar as simulações da minha pesquisa, que já exigia computação intensiva (Bootstrap). Naquela época, pouquíssimas pessoas trabalhavam com Julia, mas as promessas de desempenho comparável ao de linguagens de baixo nível como C++ ou Fortran rapidamente chamaram minha atenção.\nAlguns meses depois, conversando com colegas da Estatística e da Matemática Aplicada, percebi que não era o único interessado. Isso me motivou a criar um Meetup (alias, estamos reativando ele, então inscriva-se para não perder as novidades). No entanto, com a correria do dia a dia, nunca conseguimos realizar um encontro. Por anos, o grupo ficou lá, crescendo aos poucos, mesmo sem atividades — cheguei a pensar em encerrá-lo, mas no fundo sempre mantive a esperança de um dia retomar essa ideia."
+    "text": "Ao trabalhar com Estatística, uma das linguagens de programação mais utilizadas é o R, criado especificamente para esse propósito. Para facilitar seu uso, o RStudio se destaca como a principal interface, oferecendo um ambiente amigável e com recursos que otimizam a programação. Além disso, o RStudio permite integração com outras linguagens, como Python e Julia.\nNeste post, vamos aprender como utilizar Julia no RStudio, aproveitando os recursos de uma linguagem poderosa dentro de um ambiente já conhecido por muitos usuários de R."
   },
   {
-    "objectID": "Blog/as-origens.html#o-início",
-    "href": "Blog/as-origens.html#o-início",
-    "title": "Do Zero ao Julia: As origens",
+    "objectID": "Blog/julia_rstudio.html#introdução",
+    "href": "Blog/julia_rstudio.html#introdução",
+    "title": "Como utilizar Julia no RStudio no Windows",
     "section": "",
-    "text": "A primeira vez que ouvi falar da linguagem Julia foi em 2014, quando ainda era estudante de doutorado no IMECC e buscava formas mais rápidas de executar as simulações da minha pesquisa, que já exigia computação intensiva (Bootstrap). Naquela época, pouquíssimas pessoas trabalhavam com Julia, mas as promessas de desempenho comparável ao de linguagens de baixo nível como C++ ou Fortran rapidamente chamaram minha atenção.\nAlguns meses depois, conversando com colegas da Estatística e da Matemática Aplicada, percebi que não era o único interessado. Isso me motivou a criar um Meetup (alias, estamos reativando ele, então inscriva-se para não perder as novidades). No entanto, com a correria do dia a dia, nunca conseguimos realizar um encontro. Por anos, o grupo ficou lá, crescendo aos poucos, mesmo sem atividades — cheguei a pensar em encerrá-lo, mas no fundo sempre mantive a esperança de um dia retomar essa ideia."
+    "text": "Ao trabalhar com Estatística, uma das linguagens de programação mais utilizadas é o R, criado especificamente para esse propósito. Para facilitar seu uso, o RStudio se destaca como a principal interface, oferecendo um ambiente amigável e com recursos que otimizam a programação. Além disso, o RStudio permite integração com outras linguagens, como Python e Julia.\nNeste post, vamos aprender como utilizar Julia no RStudio, aproveitando os recursos de uma linguagem poderosa dentro de um ambiente já conhecido por muitos usuários de R."
   },
   {
-    "objectID": "Blog/as-origens.html#o-transcurso",
-    "href": "Blog/as-origens.html#o-transcurso",
-    "title": "Do Zero ao Julia: As origens",
-    "section": "O transcurso",
-    "text": "O transcurso\n\nApós o doutorado, acabei focando em outras prioridades — publicar artigos, trabalhar na indústria, estudar para concursos, preparar aulas… Ainda assim, a vontade de usar Julia permanecia. Com o tempo, fui explorando outras particularidades da linguagem: a possibilidade de escrever símbolos matemáticos diretamente no código (o que facilita absurdamente a implementação de novos métodos propostos na literatura), a programação nativa em paralelo e distribuída, e o fato de Julia resolver o famoso problema das duas linuagens.\nMotivado pelas vantagens da linguagem, quando entrei na UNICAMP como docente resolvi incluir Julia como linguagem a ser utilizada em umas das disciplinas: Econometria. Posteriormente, trabalhando num artigo com alguns colegas (Hotta et al. 2025), resolvi implementar tudo em Julia, do zero, o que acabou sendo um ótima e desafiadora experiência."
+    "objectID": "Blog/julia_rstudio.html#pré-requisitos",
+    "href": "Blog/julia_rstudio.html#pré-requisitos",
+    "title": "Como utilizar Julia no RStudio no Windows",
+    "section": "Pré Requisitos",
+    "text": "Pré Requisitos\n\nTer Julia instalado;\nTer R e Rstudio instalados."
   },
   {
-    "objectID": "Blog/as-origens.html#a-idealização",
-    "href": "Blog/as-origens.html#a-idealização",
-    "title": "Do Zero ao Julia: As origens",
-    "section": "A idealização",
-    "text": "A idealização\n\nApós a curta experiência mão na massa com Julia, entender a importância da extensão e de ver a necessidade dos alunos por se envolverem em atividade de extensão, resolvi unir o útil ao agradável e foi assim que surgiu a primeira ideia do projeto. Ainda no rascunho, perguntei aos meus orientandos o que eles achavam da ideia e alguns deles toparam participar desde o início (alias, foram eles que me ajudaram a escolher o nome). Passaram-se alguns meses e agora com a ideia mais amadurecida, escrevi uma proposta e a submeti à comissão de extensão do IMECC e, após algunas sugestões da comissão, o projeto foi aprovado e lançado oficialmente na sua forma atual.\n\n\n\n\n\nConfesso que, inicialmente, achei que apenas meus orientandos se interessariam. Mas, para minha grata surpresa, o projeto teve uma ótima recepção. Hoje, temos mais de 20 pessoas envolvidas, colaborando com as redes sociais, escrevendo posts, tutoriais, organizando minicursos e cuidando da parte editorial, entre outras atividades que loog logo ficarão sabendo."
+    "objectID": "Blog/julia_rstudio.html#configurações-do-rstudio",
+    "href": "Blog/julia_rstudio.html#configurações-do-rstudio",
+    "title": "Como utilizar Julia no RStudio no Windows",
+    "section": "Configurações do RStudio",
+    "text": "Configurações do RStudio\nPara integrar o Julia ao RStudio, vamos utilizar o pacote JuliaCall. Para isso, precisamos instalá-lo e carregá-lo:\n\ninstall.packages(\"JuliaCall\")\nlibrary(JuliaCall)\n\nCom o pacote devidamente carregado, é necessário informar ao RStudio onde está instalado o Julia no seu computador. Para isso, buscamos pelo arquivo julia.exe no gerenciador de arquivos, como mostrado na imagem abaixo:\n\n\n\nPesquisando o caminho do Julia no computador\n\n\nNo caso, estamos interessados no segundo julia.exe, aquele que foi criado no processo de instalação do Julia. Voltando ao R, utilizamos as funções Sys.setenv() e julia_setup() para configurar o caminho do arquivo. No meu caso, ficou assim:\n\nSys.setenv(JULIA_HOME = \"C:/Users/vitor/AppData/Local/Programs/Julia-1.10.2/bin\"\njulia_setup()\n\nPronto, agora já é possível utilizar o Julia no Rstudio!\n\n\n\n\n\n\nObservação\n\n\n\nUma forma alternativa é escrever no terminal\n\nwhich julia\n\nou\n\nwhere julia\n\ndependendo se é usuário de Linux/Unix ou de Windows."
   },
   {
-    "objectID": "Blog/as-origens.html#a-meta",
-    "href": "Blog/as-origens.html#a-meta",
-    "title": "Do Zero ao Julia: As origens",
-    "section": "A meta",
-    "text": "A meta\n\nMinha esperança é que o site www.ime.unicamp.br/julialang se torne um ponto de referência para quem quer aprender e explorar a linguagem Julia — oferecendo desde dicas para iniciantes até tutoriais completos e atualizações sobre a linguagem. Mais do que isso, torço para que o projeto ajude os alunos a desenvolverem habilidades valiosas para o mercado e, ao mesmo tempo, inspire a comunidade acadêmica e de ciência de dados a enxergar Julia como um verdadeiro mar de possibilidades.\nEstou longe de ser um expert em Julia, mas espero que em breve tanto você quanto eu saibamos um pouco mais dessa linguagem.\nHappy coding!\n\n\n\n\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto, bem como para a geração de imagens."
+    "objectID": "Blog/julia_rstudio.html#como-utilizar",
+    "href": "Blog/julia_rstudio.html#como-utilizar",
+    "title": "Como utilizar Julia no RStudio no Windows",
+    "section": "Como utilizar",
+    "text": "Como utilizar\nCom tudo configurado, podemos começar a usar o Julia no RStudio. Para isso, criamos um arquivo R Markdown e escrevemos o código em Julia dentro do chunck Julia:\n\n\n\nChunk Julia\n\n\nAgora é só colocar a mão na massa e começar a programar em Julia diretamente no RStudio, uma interface que você já conhece bem!\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
   },
   {
-    "objectID": "Blog/instalar_julia.html",
-    "href": "Blog/instalar_julia.html",
-    "title": "Como instalar Julia?",
+    "objectID": "Blog/jupytercolab.html",
+    "href": "Blog/jupytercolab.html",
+    "title": "Notebooks em Julia: Jupyter e Colab",
     "section": "",
-    "text": "Há muitas vantagens em usar plataformas integradas para desenvolver seus projetos nas mais diversas linguagens de programação. Mas e se sua internet cair? E se você quiser continuar seu projeto de um lugar com conexão lenta? Ter Julia instalado no seu computador resolve esse problema!\nNeste post, aprenderemos algumas formas de instalar Julia no seu computador."
+    "text": "A linguagem Julia foi projetada para ser ao mesmo tempo rápida e dinâmica. Quando integrada ao ambiente Jupyter, ela se transforma em uma poderosa ferramenta interativa, que permite combinar código, visualizações gráficas e textos em um único documento, criando um ambiente ideal para o ensino e a aprendizagem.\nNeste post, aprenderemos como instalar o Jupyter e adequá-lo ao ambiente da Julia, bem como a utilizar Julia no queridinho Colab"
   },
   {
-    "objectID": "Blog/instalar_julia.html#introdução",
-    "href": "Blog/instalar_julia.html#introdução",
-    "title": "Como instalar Julia?",
+    "objectID": "Blog/jupytercolab.html#introdução",
+    "href": "Blog/jupytercolab.html#introdução",
+    "title": "Notebooks em Julia: Jupyter e Colab",
     "section": "",
-    "text": "Há muitas vantagens em usar plataformas integradas para desenvolver seus projetos nas mais diversas linguagens de programação. Mas e se sua internet cair? E se você quiser continuar seu projeto de um lugar com conexão lenta? Ter Julia instalado no seu computador resolve esse problema!\nNeste post, aprenderemos algumas formas de instalar Julia no seu computador."
+    "text": "A linguagem Julia foi projetada para ser ao mesmo tempo rápida e dinâmica. Quando integrada ao ambiente Jupyter, ela se transforma em uma poderosa ferramenta interativa, que permite combinar código, visualizações gráficas e textos em um único documento, criando um ambiente ideal para o ensino e a aprendizagem.\nNeste post, aprenderemos como instalar o Jupyter e adequá-lo ao ambiente da Julia, bem como a utilizar Julia no queridinho Colab"
   },
   {
-    "objectID": "Blog/instalar_julia.html#pelo-site-oficial",
-    "href": "Blog/instalar_julia.html#pelo-site-oficial",
-    "title": "Como instalar Julia?",
-    "section": "Pelo site oficial",
-    "text": "Pelo site oficial\nClicando em Julia, você será redirecionado para o site oficial de Julia, onde poderá realizar a instalação manual da versão mais recente de Julia apenas baixando um instalador compatível com seu sistema operacional (.exe, .dmg, etc). É importante escolher um instalador compatível com o seu sistema operacional, caso contrário não será possível a instalação.\nCertifique-se de ter pelo menos 0,98 GB livres para armazenar os arquivos em seu computador. Após o término do download, siga as instruções recomendadas de configuração do instalador oficial (clicando em “Próximo” em todas as abas, para o caso da instalação padrao) e aguarde enquanto Julia é instalado.\n\n\n\nAtalho no Desktop\n\n\n\nCriar um atalho na área de trabalho facilitará muito o acesso ao aplicativo no dia a dia, embora essa seleção seja opcional.\n\nUma vez instalado Julia no seu computador, você poderá programar diretamente no terminal de Julia, que deve se parecer com a seguinte imagem:\n\n\n\nTerminal Julia"
+    "objectID": "Blog/jupytercolab.html#instalação-do-jupyter",
+    "href": "Blog/jupytercolab.html#instalação-do-jupyter",
+    "title": "Notebooks em Julia: Jupyter e Colab",
+    "section": "Instalação do Jupyter",
+    "text": "Instalação do Jupyter\n\nPara a baixarmos o Jupyter, temos duas alternativas. A primeira é usando o Python em conjunto com o Julia e a segunda é usando somente o Julia (neste caso pule para a seção: Instalação do Jupyter pelo IJulia).\nUsando as duas linguagens em questão, devemos primeiro instalar o Python. Na página direcionada, você poderá instalar a versão mais nova do Python para o seu sistema operacional (no momento da criação deste post é a versão 3.13).\nCom o arquivo instalado, deveremos deixar habilitado “Add python.exe to PATH” (para permitir usar o comando pip no prompt de comando).\n\n\n\n\nInstalação Python\n\n\n\nEm seguida, abrindo o prompt de comando (coloque “cmd” na barra de procura do Windows), digite pip install jupyter.\n\n\n\n\nInstalando Jupyter\n\n\n\nTendo o Julia e o Jupyter instalados, agora nós instalamos o IJulia. Abrindo o prompt do Julia seguimos com using Pkg e depois Pkg.add(“IJulia”).\n\n\n\n\nTerminal Julia\n\n\n\nFinalmente, abrindo o cmd e digitamos: jupyter notebook. Com o Jupyter aberto, para abrir um notebook, vamos para a barra New e selecionamos o Julia (o número da versão que você instalou). E voilá."
   },
   {
-    "objectID": "Blog/instalar_julia.html#outros-caminhos",
-    "href": "Blog/instalar_julia.html#outros-caminhos",
-    "title": "Como instalar Julia?",
-    "section": "Outros caminhos",
-    "text": "Outros caminhos\nJulia também está disponível para download pela Microsoft Store. Para os usuários de Linux e macOS, essa opção não se encontra disponível por enquanto, mas também é possível instalar e utilizar Julia diretamente do terminal do computador.\nNo Windows, pressione as teclas Windows + R, digite cmd e pressione “Enter” para abrir o terminal. Em seguida, execute o comando abaixo e digite Y quando solicitado pelo sistema:\nwinget install Julia\nQuando a instalação for concluída, você pode digitar where julia para localizar o caminho até o .exe de Julia, ou simplesmente digitar julia no terminal para obter uma interface semelhante à do aplicativo do programa.\nNo macOS ou Linux, abra o terminal e digite\ncurl -fsSL https://install.julialang.org | sh\nQuando a instalação for concluída, você pode digitar which julia para localizar o caminho até o executável de Julia, ou simplesmente digitar julia no terminal para acessar a interface interativa do programa.\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
+    "objectID": "Blog/jupytercolab.html#instalação-do-jupyter-pelo-ijulia",
+    "href": "Blog/jupytercolab.html#instalação-do-jupyter-pelo-ijulia",
+    "title": "Notebooks em Julia: Jupyter e Colab",
+    "section": "Instalação do Jupyter pelo IJulia",
+    "text": "Instalação do Jupyter pelo IJulia\n\nCaso você não queira instalar o Python podemos fazer tudo pelo Julia! Terminando de instalar o IJulia, no terminal, digite using IJulia e em seguida notebook(). Será perguntado se você deseja instalar o Jupyter via Conda, digite y.\n\n\n\n\nInstalando Jupyter (Julia)\n\n\n\nApós esperar o tempo de instalação, temos o Jupyter em mãos!"
+  },
+  {
+    "objectID": "Blog/jupytercolab.html#julia-no-colab",
+    "href": "Blog/jupytercolab.html#julia-no-colab",
+    "title": "Notebooks em Julia: Jupyter e Colab",
+    "section": "Julia no Colab",
+    "text": "Julia no Colab\n\nEm 5 de março de 2025, o Google Colab, o Jupyter hospedado na nuvem da Google, adicionou outro tipo de ambiente de execução, a linguagem de programação Julia. Divulgado por Eric Johnson em seu GitHub, o mesmo fala em seu post que além de facilitar o acesso à programação na linguagem Julia, sua introdução ao Google Colab é quase uma homenagem ao Jupyter. Isso porque “Jupyter” é nomeado a partir das três linguagens originalmente suportadas: Julia (“Ju”), Python (“Pyt”) e R (“R”). E agora com Julia sendo adicionado, a tríade das linguagens originais do Jupyter está completa.\nComo colocar Julia no Colab? Muito simples!\nApós criar um novo notebook no Colab. Na aba “Ambiente de execução”, selecione “Alterar o tipo de ambiente de execução”. Depois mude o tipo de ambiente para Julia.\n\n\n\n\nPasso a passo no Colab\n\n\nO ambiente no Colab está pronto para ser usado.\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
   },
   {
     "objectID": "index.html",
@@ -224,39 +245,95 @@
     "text": "Julia?\n\nA linguagem de programação Julia, lançada oficialmente ao público em 2012, e com foco em ciência de dados e computação científica, tem surgido como uma alternativa a outras linguagem de programação já estabelecidas no mercado como Matlab, Python e R. Com desempenho comparável ao de C++ e facilidade de aprendizado similar a Python e R, Julia utiliza multiple dispatch, tem uma boa performance e permite utilizar símbolos matemáticos diretamente no código. Ademais, Julia também resolve o problema de duas linguagens, não sendo mais necessário fazer o protótipo em uma linguagem e colocar em produção em outra – uma característica especialmente vantajosa no desenvolvimento de aplicações no setor industrial e em projetos de grande escala.\n\n\n\nO Projeto\n\nDo Zero ao Julia é um projeto de extensão do IMECC/UNICAMP, coordenado pelo Professor Carlos Trucíos (Departamento de Estatística), com o objetivo de incentivar e disseminar o uso da linguagem Julia. O projeto visa destacar Julia como uma ferramenta poderosa e eficiente, não apenas no ensino de Estatística e Ciência de Dados, mas também como uma ferramenta poderosa na análise de dados, desenvolvimento de projetos e implantação de modelos tanto na academia quanto na industria. Através de palestras, cursos online e materiais educativos, como blogs e tutoriais, vamos apresentar os benefícios e recursos da linguagem de programação Julia a diferentes públicos. O projeto será uma oportunidade para envolver tanto a comunidade acadêmica quanto outras pessoas interessadas, como profissionais da indústria, buscando promover a troca de conhecimentos e fortalecer a conexão entre a universidade e a sociedade.\n\n\nAlém disso, o projeto irá oferecer materiais comparando Julia com outras linguagens populares, como Python e R, mostrando suas vantagens, limitações e características específicas. Também será explorado como Julia pode ser integrada com outras tecnologias, com foco na implementação de modelos em produção, proporcionando uma visão abrangente de como Julia se posiciona no vasto ecossistema de ferramentas tecnológicas da era digital."
   },
   {
-    "objectID": "Blog/jupytercolab.html",
-    "href": "Blog/jupytercolab.html",
-    "title": "Notebooks em Julia: Jupyter e Colab",
+    "objectID": "Blog/HistoriaJulia.html",
+    "href": "Blog/HistoriaJulia.html",
+    "title": "Entenda a História da Linguagem que une Simplicidade e Desempenho",
     "section": "",
-    "text": "A linguagem Julia foi projetada para ser ao mesmo tempo rápida e dinâmica. Quando integrada ao ambiente Jupyter, ela se transforma em uma poderosa ferramenta interativa, que permite combinar código, visualizações gráficas e textos em um único documento, criando um ambiente ideal para o ensino e a aprendizagem.\nNeste post, aprenderemos como instalar o Jupyter e adequá-lo ao ambiente da Julia, bem como a utilizar Julia no queridinho Colab"
+    "text": "Durante muito tempo, programadores sofreram com o problema das duas linguagens, no qual as ideias eram testadas em linguagens mais simples, como R, Python e MATLAB e, à medida que exigiam maior desempenho, precisavam ser reescritas em linguagens mais rápidas, de baixo nível, como Fortran ou C++.\nEsse processo, além de trabalhoso, era altamente suscetível a erros e inconsistências no código final. Foi justamente para resolver esse impasse que surgiu a linguagem de programação Julia, com o objetivo de unir desempenho e simplicidade em uma única solução."
   },
   {
-    "objectID": "Blog/jupytercolab.html#introdução",
-    "href": "Blog/jupytercolab.html#introdução",
-    "title": "Notebooks em Julia: Jupyter e Colab",
+    "objectID": "Blog/HistoriaJulia.html#início-de-tudo",
+    "href": "Blog/HistoriaJulia.html#início-de-tudo",
+    "title": "Entenda a História da Linguagem que une Simplicidade e Desempenho",
     "section": "",
-    "text": "A linguagem Julia foi projetada para ser ao mesmo tempo rápida e dinâmica. Quando integrada ao ambiente Jupyter, ela se transforma em uma poderosa ferramenta interativa, que permite combinar código, visualizações gráficas e textos em um único documento, criando um ambiente ideal para o ensino e a aprendizagem.\nNeste post, aprenderemos como instalar o Jupyter e adequá-lo ao ambiente da Julia, bem como a utilizar Julia no queridinho Colab"
+    "text": "Durante muito tempo, programadores sofreram com o problema das duas linguagens, no qual as ideias eram testadas em linguagens mais simples, como R, Python e MATLAB e, à medida que exigiam maior desempenho, precisavam ser reescritas em linguagens mais rápidas, de baixo nível, como Fortran ou C++.\nEsse processo, além de trabalhoso, era altamente suscetível a erros e inconsistências no código final. Foi justamente para resolver esse impasse que surgiu a linguagem de programação Julia, com o objetivo de unir desempenho e simplicidade em uma única solução."
   },
   {
-    "objectID": "Blog/jupytercolab.html#instalação-do-jupyter",
-    "href": "Blog/jupytercolab.html#instalação-do-jupyter",
-    "title": "Notebooks em Julia: Jupyter e Colab",
-    "section": "Instalação do Jupyter",
-    "text": "Instalação do Jupyter\n\nPara a baixarmos o Jupyter, temos duas alternativas. A primeira é usando o Python em conjunto com o Julia e a segunda é usando somente o Julia (neste caso pule para a seção: Instalação do Jupyter pelo IJulia).\nUsando as duas linguagens em questão, devemos primeiro instalar o Python. Na página direcionada, você poderá instalar a versão mais nova do Python para o seu sistema operacional (no momento da criação deste post é a versão 3.13).\nCom o arquivo instalado, deveremos deixar habilitado “Add python.exe to PATH” (para permitir usar o comando pip no prompt de comando).\n\n\n\n\nInstalação Python\n\n\n\nEm seguida, abrindo o prompt de comando (coloque “cmd” na barra de procura do Windows), digite pip install jupyter.\n\n\n\n\nInstalando Jupyter\n\n\n\nTendo o Julia e o Jupyter instalados, agora nós instalamos o IJulia. Abrindo o prompt do Julia seguimos com using Pkg e depois Pkg.add(“IJulia”).\n\n\n\n\nTerminal Julia\n\n\n\nFinalmente, abrindo o cmd e digitamos: jupyter notebook. Com o Jupyter aberto, para abrir um notebook, vamos para a barra New e selecionamos o Julia (o número da versão que você instalou). E voilá."
+    "objectID": "Blog/HistoriaJulia.html#o-desenvolvimento",
+    "href": "Blog/HistoriaJulia.html#o-desenvolvimento",
+    "title": "Entenda a História da Linguagem que une Simplicidade e Desempenho",
+    "section": "O Desenvolvimento",
+    "text": "O Desenvolvimento\n\nEm 2009, quatro pesquisadores do MIT (Massachusetts Institute of Technology) começaram a desenvolver uma solução para o problema das duas linguagens. Stefan Karpinski, Alan Edelman, Jeff Bezanson e Viral B. Shah tinham o objetivo de criar uma linguagem de programação moderna, extremamente rápida e, ao mesmo tempo, fácil de escrever.\nAo longo de cerca de quatro anos, o projeto foi mantido em sigilo, até que, em fevereiro de 2012, veio a público por meio do artigo “Why We Created Julia”, o qual apresentou ao mundo a primeira versão da linguagem, que já contava com documentação, pacotes básicos e um compilador funcional.\nLogo após seu lançamento, Julia ganhou bastante popularidade no meio científico e ampla divulgação em fóruns e comunidades. Entretanto, o marco da maturidade da ferramenta aconteceu em 2018, com o lançamento da versão 1.0, que trouxe diversas inovações técnicas, como maior confiabilidade para uso em produção, estabilidade da API e consolidação do ecossistema."
   },
   {
-    "objectID": "Blog/jupytercolab.html#instalação-do-jupyter-pelo-ijulia",
-    "href": "Blog/jupytercolab.html#instalação-do-jupyter-pelo-ijulia",
-    "title": "Notebooks em Julia: Jupyter e Colab",
-    "section": "Instalação do Jupyter pelo IJulia",
-    "text": "Instalação do Jupyter pelo IJulia\n\nCaso você não queira instalar o Python podemos fazer tudo pelo Julia! Terminando de instalar o IJulia, no terminal, digite using IJulia e em seguida notebook(). Será perguntado se você deseja instalar o Jupyter via Conda, digite y.\n\n\n\n\nInstalando Jupyter (Julia)\n\n\n\nApós esperar o tempo de instalação, temos o Jupyter em mãos!"
+    "objectID": "Blog/HistoriaJulia.html#julia-atualmente",
+    "href": "Blog/HistoriaJulia.html#julia-atualmente",
+    "title": "Entenda a História da Linguagem que une Simplicidade e Desempenho",
+    "section": "Julia atualmente",
+    "text": "Julia atualmente\n\n\n\n\n\n\nAtualmente, Julia é utilizado em todo o mundo por cientistas, engenheiros e desenvolvedores que trabalham com dados. Em 2020, ocupava a 47ª posição no índice TIOBE (um termômetro das linguagens mais populares) e, em 2022, já estava na 21ª posição. Isso demonstra que o alcance dessa tecnologia está crescendo constantemente ao longo do tempo.\nJulia surgiu como solução para um problema comum e foi além, tornando-se uma ponte entre o mundo das linguagens mais simples e o das mais rápidas. Seu impacto já é visível em diversas áreas da ciência e do mercado de trabalho, e seu futuro é cada vez mais promissor para quem lida com tecnologia.\n\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfic, aprimoramento do texto e criação de imagens."
   },
   {
-    "objectID": "Blog/jupytercolab.html#julia-no-colab",
-    "href": "Blog/jupytercolab.html#julia-no-colab",
-    "title": "Notebooks em Julia: Jupyter e Colab",
-    "section": "Julia no Colab",
-    "text": "Julia no Colab\n\nEm 5 de março de 2025, o Google Colab, o Jupyter hospedado na nuvem da Google, adicionou outro tipo de ambiente de execução, a linguagem de programação Julia. Divulgado por Eric Johnson em seu GitHub, o mesmo fala em seu post que além de facilitar o acesso à programação na linguagem Julia, sua introdução ao Google Colab é quase uma homenagem ao Jupyter. Isso porque “Jupyter” é nomeado a partir das três linguagens originalmente suportadas: Julia (“Ju”), Python (“Pyt”) e R (“R”). E agora com Julia sendo adicionado, a tríade das linguagens originais do Jupyter está completa.\nComo colocar Julia no Colab? Muito simples!\nApós criar um novo notebook no Colab. Na aba “Ambiente de execução”, selecione “Alterar o tipo de ambiente de execução”. Depois mude o tipo de ambiente para Julia.\n\n\n\n\nPasso a passo no Colab\n\n\nO ambiente no Colab está pronto para ser usado.\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
+    "objectID": "Blog/instalar_julia.html",
+    "href": "Blog/instalar_julia.html",
+    "title": "Como instalar Julia?",
+    "section": "",
+    "text": "Há muitas vantagens em usar plataformas integradas para desenvolver seus projetos nas mais diversas linguagens de programação. Mas e se sua internet cair? E se você quiser continuar seu projeto de um lugar com conexão lenta? Ter Julia instalado no seu computador resolve esse problema!\nNeste post, aprenderemos algumas formas de instalar Julia no seu computador."
+  },
+  {
+    "objectID": "Blog/instalar_julia.html#introdução",
+    "href": "Blog/instalar_julia.html#introdução",
+    "title": "Como instalar Julia?",
+    "section": "",
+    "text": "Há muitas vantagens em usar plataformas integradas para desenvolver seus projetos nas mais diversas linguagens de programação. Mas e se sua internet cair? E se você quiser continuar seu projeto de um lugar com conexão lenta? Ter Julia instalado no seu computador resolve esse problema!\nNeste post, aprenderemos algumas formas de instalar Julia no seu computador."
+  },
+  {
+    "objectID": "Blog/instalar_julia.html#pelo-site-oficial",
+    "href": "Blog/instalar_julia.html#pelo-site-oficial",
+    "title": "Como instalar Julia?",
+    "section": "Pelo site oficial",
+    "text": "Pelo site oficial\nClicando em Julia, você será redirecionado para o site oficial de Julia, onde poderá realizar a instalação manual da versão mais recente de Julia apenas baixando um instalador compatível com seu sistema operacional (.exe, .dmg, etc). É importante escolher um instalador compatível com o seu sistema operacional, caso contrário não será possível a instalação.\nCertifique-se de ter pelo menos 0,98 GB livres para armazenar os arquivos em seu computador. Após o término do download, siga as instruções recomendadas de configuração do instalador oficial (clicando em “Próximo” em todas as abas, para o caso da instalação padrao) e aguarde enquanto Julia é instalado.\n\n\n\nAtalho no Desktop\n\n\n\nCriar um atalho na área de trabalho facilitará muito o acesso ao aplicativo no dia a dia, embora essa seleção seja opcional.\n\nUma vez instalado Julia no seu computador, você poderá programar diretamente no terminal de Julia, que deve se parecer com a seguinte imagem:\n\n\n\nTerminal Julia"
+  },
+  {
+    "objectID": "Blog/instalar_julia.html#outros-caminhos",
+    "href": "Blog/instalar_julia.html#outros-caminhos",
+    "title": "Como instalar Julia?",
+    "section": "Outros caminhos",
+    "text": "Outros caminhos\nJulia também está disponível para download pela Microsoft Store. Para os usuários de Linux e macOS, essa opção não se encontra disponível por enquanto, mas também é possível instalar e utilizar Julia diretamente do terminal do computador.\nNo Windows, pressione as teclas Windows + R, digite cmd e pressione “Enter” para abrir o terminal. Em seguida, execute o comando abaixo e digite Y quando solicitado pelo sistema:\nwinget install Julia\nQuando a instalação for concluída, você pode digitar where julia para localizar o caminho até o .exe de Julia, ou simplesmente digitar julia no terminal para obter uma interface semelhante à do aplicativo do programa.\nNo macOS ou Linux, abra o terminal e digite\ncurl -fsSL https://install.julialang.org | sh\nQuando a instalação for concluída, você pode digitar which julia para localizar o caminho até o executável de Julia, ou simplesmente digitar julia no terminal para acessar a interface interativa do programa.\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
+  },
+  {
+    "objectID": "Blog/as-origens.html",
+    "href": "Blog/as-origens.html",
+    "title": "Do Zero ao Julia: As origens",
+    "section": "",
+    "text": "A primeira vez que ouvi falar da linguagem Julia foi em 2014, quando ainda era estudante de doutorado no IMECC e buscava formas mais rápidas de executar as simulações da minha pesquisa, que já exigia computação intensiva (Bootstrap). Naquela época, pouquíssimas pessoas trabalhavam com Julia, mas as promessas de desempenho comparável ao de linguagens de baixo nível como C++ ou Fortran rapidamente chamaram minha atenção.\nAlguns meses depois, conversando com colegas da Estatística e da Matemática Aplicada, percebi que não era o único interessado. Isso me motivou a criar um Meetup (alias, estamos reativando ele, então inscriva-se para não perder as novidades). No entanto, com a correria do dia a dia, nunca conseguimos realizar um encontro. Por anos, o grupo ficou lá, crescendo aos poucos, mesmo sem atividades — cheguei a pensar em encerrá-lo, mas no fundo sempre mantive a esperança de um dia retomar essa ideia."
+  },
+  {
+    "objectID": "Blog/as-origens.html#o-início",
+    "href": "Blog/as-origens.html#o-início",
+    "title": "Do Zero ao Julia: As origens",
+    "section": "",
+    "text": "A primeira vez que ouvi falar da linguagem Julia foi em 2014, quando ainda era estudante de doutorado no IMECC e buscava formas mais rápidas de executar as simulações da minha pesquisa, que já exigia computação intensiva (Bootstrap). Naquela época, pouquíssimas pessoas trabalhavam com Julia, mas as promessas de desempenho comparável ao de linguagens de baixo nível como C++ ou Fortran rapidamente chamaram minha atenção.\nAlguns meses depois, conversando com colegas da Estatística e da Matemática Aplicada, percebi que não era o único interessado. Isso me motivou a criar um Meetup (alias, estamos reativando ele, então inscriva-se para não perder as novidades). No entanto, com a correria do dia a dia, nunca conseguimos realizar um encontro. Por anos, o grupo ficou lá, crescendo aos poucos, mesmo sem atividades — cheguei a pensar em encerrá-lo, mas no fundo sempre mantive a esperança de um dia retomar essa ideia."
+  },
+  {
+    "objectID": "Blog/as-origens.html#o-transcurso",
+    "href": "Blog/as-origens.html#o-transcurso",
+    "title": "Do Zero ao Julia: As origens",
+    "section": "O transcurso",
+    "text": "O transcurso\n\nApós o doutorado, acabei focando em outras prioridades — publicar artigos, trabalhar na indústria, estudar para concursos, preparar aulas… Ainda assim, a vontade de usar Julia permanecia. Com o tempo, fui explorando outras particularidades da linguagem: a possibilidade de escrever símbolos matemáticos diretamente no código (o que facilita absurdamente a implementação de novos métodos propostos na literatura), a programação nativa em paralelo e distribuída, e o fato de Julia resolver o famoso problema das duas linuagens.\nMotivado pelas vantagens da linguagem, quando entrei na UNICAMP como docente resolvi incluir Julia como linguagem a ser utilizada em umas das disciplinas: Econometria. Posteriormente, trabalhando num artigo com alguns colegas (Hotta et al. 2025), resolvi implementar tudo em Julia, do zero, o que acabou sendo um ótima e desafiadora experiência."
+  },
+  {
+    "objectID": "Blog/as-origens.html#a-idealização",
+    "href": "Blog/as-origens.html#a-idealização",
+    "title": "Do Zero ao Julia: As origens",
+    "section": "A idealização",
+    "text": "A idealização\n\nApós a curta experiência mão na massa com Julia, entender a importância da extensão e de ver a necessidade dos alunos por se envolverem em atividade de extensão, resolvi unir o útil ao agradável e foi assim que surgiu a primeira ideia do projeto. Ainda no rascunho, perguntei aos meus orientandos o que eles achavam da ideia e alguns deles toparam participar desde o início (alias, foram eles que me ajudaram a escolher o nome). Passaram-se alguns meses e agora com a ideia mais amadurecida, escrevi uma proposta e a submeti à comissão de extensão do IMECC e, após algunas sugestões da comissão, o projeto foi aprovado e lançado oficialmente na sua forma atual.\n\n\n\n\n\nConfesso que, inicialmente, achei que apenas meus orientandos se interessariam. Mas, para minha grata surpresa, o projeto teve uma ótima recepção. Hoje, temos mais de 20 pessoas envolvidas, colaborando com as redes sociais, escrevendo posts, tutoriais, organizando minicursos e cuidando da parte editorial, entre outras atividades que loog logo ficarão sabendo."
+  },
+  {
+    "objectID": "Blog/as-origens.html#a-meta",
+    "href": "Blog/as-origens.html#a-meta",
+    "title": "Do Zero ao Julia: As origens",
+    "section": "A meta",
+    "text": "A meta\n\nMinha esperança é que o site www.ime.unicamp.br/julialang se torne um ponto de referência para quem quer aprender e explorar a linguagem Julia — oferecendo desde dicas para iniciantes até tutoriais completos e atualizações sobre a linguagem. Mais do que isso, torço para que o projeto ajude os alunos a desenvolverem habilidades valiosas para o mercado e, ao mesmo tempo, inspire a comunidade acadêmica e de ciência de dados a enxergar Julia como um verdadeiro mar de possibilidades.\nEstou longe de ser um expert em Julia, mas espero que em breve tanto você quanto eu saibamos um pouco mais dessa linguagem.\nHappy coding!\n\n\n\n\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto, bem como para a geração de imagens."
   },
   {
     "objectID": "about.html",
@@ -273,16 +350,30 @@
     "text": "Github\n  \n  \n    \n     Linkedin\n  \n\n      \n\n    \n    \n  \n\n\nGraduando em Estatística pela UNICAMP."
   },
   {
-    "objectID": "Equipe/Atual/nicole_fredericci.html",
-    "href": "Equipe/Atual/nicole_fredericci.html",
-    "title": "Nicole Fredericci",
+    "objectID": "Equipe/Atual/heitor_bgs.html",
+    "href": "Equipe/Atual/heitor_bgs.html",
+    "title": "Heitor Brotto Gomes e Silva",
     "section": "",
-    "text": "Github\n  \n  \n    \n     Linkedin\n  \n\n      \n\n    \n    \n  \n\n\nGraduanda em Estatística pela UNICAMP."
+    "text": "Github\n  \n  \n    \n     Linkedin\n  \n  \n    \n     Site\n  \n\n\n\nGraduando em Estatística pela UNICAMP."
   },
   {
-    "objectID": "Equipe/Atual/esther_cleveston.html",
-    "href": "Equipe/Atual/esther_cleveston.html",
-    "title": "Esther Cleveston",
+    "objectID": "Equipe/Atual/thiago_paulichen.html",
+    "href": "Equipe/Atual/thiago_paulichen.html",
+    "title": "Thiago Paulichen",
+    "section": "",
+    "text": "Lattes\n  \n  \n    \n     Github\n  \n  \n    \n     Linkedin\n  \n\n      \n\n    \n    \n  \n\n\nEstudante de Doutorado em Estatística pela UNICAMP."
+  },
+  {
+    "objectID": "Equipe/Atual/sarah_silva.html",
+    "href": "Equipe/Atual/sarah_silva.html",
+    "title": "Sarah Silva",
+    "section": "",
+    "text": "Graduanda em Matemática Aplicada e Computacional. Pesquisadora Colaboradora em Iniciação Científica em Centro Nacional de Pesquisa em Energia e Materiais (CNPEM).\n \n  \n   \n  \n    \n     Github\n  \n  \n    \n     Linkedin"
+  },
+  {
+    "objectID": "Equipe/Atual/henrique_velloso.html",
+    "href": "Equipe/Atual/henrique_velloso.html",
+    "title": "Henrique Velloso",
     "section": "",
     "text": "Github\n  \n  \n    \n     Linkedin\n  \n\n      \nGraduando em Estatística pela UNICAMP."
   },
@@ -305,55 +396,6 @@
     "href": "blog.html",
     "title": "Blog",
     "section": "",
-    "text": "Como utilizar Julia no RStudio no Windows\n\n\n\n\n\n\nInstalação\n\n\nMarkdown\n\n\n\nPasso a passo para configurar Julia no Rstudio\n\n\n\n\n\n18 de mai. de 2025\n\n\nVitor Ribas Perrone, Carlos Trucíos\n\n\n\n\n\n\n\n\n\n\n\n\nNotebooks em Julia: Jupyter e Colab\n\n\n\n\n\n\nInstalação\n\n\n\nAprenda passo a passo como instalar e utilizar os ambientes Jupyter e Colab integrados à linguagem Julia. \n\n\n\n\n\n13 de mai. de 2025\n\n\nGabriel Cardoso, Carlos Trucíos\n\n\n\n\n\n\n\n\n\n\n\n\nComo instalar Julia?\n\n\n\n\n\n\nInstalação\n\n\n\nPasso a passo para instalar e configurar Julia no seu computador. \n\n\n\n\n\n2 de mai. de 2025\n\n\nNicole Fredericci, Carlos Trucíos\n\n\n\n\n\n\n\n\n\n\n\n\nDo Zero ao Julia: As origens\n\n\n\n\n\n\nHistória\n\n\n\nFicou curioso sobre como tudo começou? Descubra, de forma leve e descontraída, como o projeto foi idealizado, planejado e finalmente lançado ao público. \n\n\n\n\n\n24 de abr. de 2025\n\n\nCarlos Trucíos\n\n\n\n\n\n\nNenhum item correspondente"
-  },
-  {
-    "objectID": "Blog/julia_rstudio.html",
-    "href": "Blog/julia_rstudio.html",
-    "title": "Como utilizar Julia no RStudio no Windows",
-    "section": "",
-    "text": "Ao trabalhar com Estatística, uma das linguagens de programação mais utilizadas é o R, criado especificamente para esse propósito. Para facilitar seu uso, o RStudio se destaca como a principal interface, oferecendo um ambiente amigável e com recursos que otimizam a programação. Além disso, o RStudio permite integração com outras linguagens, como Python e Julia.\nNeste post, vamos aprender como utilizar Julia no RStudio, aproveitando os recursos de uma linguagem poderosa dentro de um ambiente já conhecido por muitos usuários de R."
-  },
-  {
-    "objectID": "Blog/julia_rstudio.html#introdução",
-    "href": "Blog/julia_rstudio.html#introdução",
-    "title": "Como utilizar Julia no RStudio no Windows",
-    "section": "",
-    "text": "Ao trabalhar com Estatística, uma das linguagens de programação mais utilizadas é o R, criado especificamente para esse propósito. Para facilitar seu uso, o RStudio se destaca como a principal interface, oferecendo um ambiente amigável e com recursos que otimizam a programação. Além disso, o RStudio permite integração com outras linguagens, como Python e Julia.\nNeste post, vamos aprender como utilizar Julia no RStudio, aproveitando os recursos de uma linguagem poderosa dentro de um ambiente já conhecido por muitos usuários de R."
-  },
-  {
-    "objectID": "Blog/julia_rstudio.html#pré-requisitos",
-    "href": "Blog/julia_rstudio.html#pré-requisitos",
-    "title": "Como utilizar Julia no RStudio no Windows",
-    "section": "Pré Requisitos",
-    "text": "Pré Requisitos\n\nTer Julia instalado;\nTer R e Rstudio instalados."
-  },
-  {
-    "objectID": "Blog/julia_rstudio.html#configurações-do-rstudio",
-    "href": "Blog/julia_rstudio.html#configurações-do-rstudio",
-    "title": "Como utilizar Julia no RStudio no Windows",
-    "section": "Configurações do RStudio",
-    "text": "Configurações do RStudio\nPara integrar o Julia ao RStudio, vamos utilizar o pacote JuliaCall. Para isso, precisamos instalá-lo e carregá-lo:\n\ninstall.packages(\"JuliaCall\")\nlibrary(JuliaCall)\n\nCom o pacote devidamente carregado, é necessário informar ao RStudio onde está instalado o Julia no seu computador. Para isso, buscamos pelo arquivo julia.exe no gerenciador de arquivos, como mostrado na imagem abaixo:\n\n\n\nPesquisando o caminho do Julia no computador\n\n\nNo caso, estamos interessados no segundo julia.exe, aquele que foi criado no processo de instalação do Julia. Voltando ao R, utilizamos as funções Sys.setenv() e julia_setup() para configurar o caminho do arquivo. No meu caso, ficou assim:\n\nSys.setenv(JULIA_HOME = \"C:/Users/vitor/AppData/Local/Programs/Julia-1.10.2/bin\"\njulia_setup()\n\nPronto, agora já é possível utilizar o Julia no Rstudio!\n\n\n\n\n\n\nObservação\n\n\n\nUma forma alternativa é escrever no terminal\n\nwhich julia\n\nou\n\nwhere julia\n\ndependendo se é usuário de Linux/Unix ou de Windows."
-  },
-  {
-    "objectID": "Blog/julia_rstudio.html#como-utilizar",
-    "href": "Blog/julia_rstudio.html#como-utilizar",
-    "title": "Como utilizar Julia no RStudio no Windows",
-    "section": "Como utilizar",
-    "text": "Como utilizar\nCom tudo configurado, podemos começar a usar o Julia no RStudio. Para isso, criamos um arquivo R Markdown e escrevemos o código em Julia dentro do chunck Julia:\n\n\n\nChunk Julia\n\n\nAgora é só colocar a mão na massa e começar a programar em Julia diretamente no RStudio, uma interface que você já conhece bem!\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
-  },
-  {
-    "objectID": "Equipe/Atual/sarah_silva.html",
-    "href": "Equipe/Atual/sarah_silva.html",
-    "title": "Sarah Silva",
-    "section": "",
-    "text": ":::{#person-profile} :::\n  Graduanda em Matemática Aplicada e Computacional. Pesquisadora Colaboradora em Iniciação Científica em Centro Nacional de Pesquisa em Energia e Materiais (CNPEM)."
-  },
-  {
-    "objectID": "Equipe/Atual/henrique_velloso.html",
-    "href": "Equipe/Atual/henrique_velloso.html",
-    "title": "Henrique Velloso",
-    "section": "",
-    "text": "Github\n  \n  \n    \n     Linkedin\n  \n\n      \nGraduando em Estatística pela UNICAMP."
+    "text": "Entenda a História da Linguagem que une Simplicidade e Desempenho\n\n\n\n\n\n\nHistória\n\n\n\nConheça a história do Julia, que surgiu com a proposta de unir o desempenho e a simplicidade em uma só linguagem. \n\n\n\n\n\n19 de mai. de 2025\n\n\nEsther Cleveston, Pedro H. G. Elias\n\n\n\n\n\n\n\n\n\n\n\n\nComo utilizar Julia no RStudio no Windows\n\n\n\n\n\n\nInstalação\n\n\nMarkdown\n\n\n\nPasso a passo para configurar Julia no Rstudio\n\n\n\n\n\n18 de mai. de 2025\n\n\nVitor Ribas Perrone, Carlos Trucíos\n\n\n\n\n\n\n\n\n\n\n\n\nNotebooks em Julia: Jupyter e Colab\n\n\n\n\n\n\nInstalação\n\n\n\nAprenda passo a passo como instalar e utilizar os ambientes Jupyter e Colab integrados à linguagem Julia. \n\n\n\n\n\n13 de mai. de 2025\n\n\nGabriel Cardoso, Carlos Trucíos\n\n\n\n\n\n\n\n\n\n\n\n\nComo instalar Julia?\n\n\n\n\n\n\nInstalação\n\n\n\nPasso a passo para instalar e configurar Julia no seu computador. \n\n\n\n\n\n2 de mai. de 2025\n\n\nNicole Fredericci, Carlos Trucíos\n\n\n\n\n\n\n\n\n\n\n\n\nDo Zero ao Julia: As origens\n\n\n\n\n\n\nHistória\n\n\n\nFicou curioso sobre como tudo começou? Descubra, de forma leve e descontraída, como o projeto foi idealizado, planejado e finalmente lançado ao público. \n\n\n\n\n\n24 de abr. de 2025\n\n\nCarlos Trucíos\n\n\n\n\n\n\nNenhum item correspondente"
   }
 ]
