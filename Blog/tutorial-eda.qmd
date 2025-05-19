@@ -1,0 +1,361 @@
+---
+title: "Introdução à Análise Exploratória de Dados (EDA) em Julia"
+description: |
+  Um guia completo e prático sobre como realizar Análise Exploratória de Dados (EDA) em Julia. Explore desde estatísticas descritivas, manipulação de dados, visualizações com Plots.jl, detecção de outliers e mais, com códigos prontos para aplicar nos seus projetos!
+categories:
+  - Aplicação
+  - Visualização de Dados
+author:
+  - name: Arthur Dionizio
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/Arthur-Dionizio
+  - name: Henrique Velloso
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/henriqueavelloso
+date: "2025-11-05"
+image: imagens/eda-em-julia.png
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+draft: true
+---
+
+# Introdução
+
+A **Análise Exploratória de Dados (EDA)** é uma etapa fundamental na Ciência de Dados. Seu objetivo é entender a estrutura dos dados, identificar padrões, encontrar anomalias e formular hipóteses. Com a linguagem **julia**, voltada para alto desempenho e cálculo científico, a EDA pode ser feita de forma rápida e eficiente.
+
+## Benefícios de usar Julia para EDA
+
+- Desempenho comparável ao C
+- Sintaxe limpa e legível
+- Grande suporte para operações matemáticas e estatísticas
+- Ecossistema em crescimento com diversas bibliotecas voltadas para dados
+- Integração com outras linguagens como Python, R e C/C++
+
+# Preparando o Ambiente
+
+## Instalação de Pacotes Essenciais
+
+```{julia}
+import Pkg
+
+# Suprime mensagens e warnings durante a instalação dos pacotes
+redirect_stdout(devnull) do
+    redirect_stderr(devnull) do
+        Pkg.add("RDatasets")     # Datasets clássicos;
+        Pkg.add("StatsBase")     # Estatísticas descritivas;
+        Pkg.add("StatsPlots")    # Visualizações estatísticas;
+        Pkg.add("Distributions") # Distribuições estatísticas;
+        Pkg.add("Random")        # Geração de números aleatórios;
+        Pkg.add("DataFrames")    # Estrutura tipo planilha;
+        Pkg.add("Plots")         # Biblioteca de gráficos;
+        Pkg.add("Statistics")    # Funções como mean, median, etc;
+        Pkg.add("Dates")         # Manipulação de datas.
+        Pkg.add("Measures")      # Formatação
+    end
+end
+
+# Obs.: Apenas precisamos carregar o pacote uma vez por ambiente.
+```
+
+> **Dica:** Use `Pkg.instantiate()` para garantir que todas as dependências do seu projeto estejam resolvidas.
+
+## Carregando um Conjunto de Dados
+
+```{julia}
+using RDatasets
+
+iris = dataset("datasets", "iris")
+
+first(iris, 5) # Visualização inicial das 5 primeiras linhas do dataset.
+```
+
+O conjunto de dados **Iris** é um clássico da estatística e aprendizado de máquina. Ele contém medidas de sépalas e pétalas de três espécies de flores: Setosa, Versicolor e Virginica.
+
+# Estatísticas Descritivas
+
+Vejamos como calcular estatísticas sumárias em julia usando os pacotes _StatsBase_ e _Statistics_.
+
+```{julia}
+using StatsBase, Statistics
+
+summarystats(iris.SepalWidth)
+
+# A função describe() também faz a mesma coisa.
+
+# Obs.: julia também possui funções padrão como mean(), median(), std(), var(), ..., etc.
+```
+
+As principais medidas descritivas que podemos extrair incluem:
+
+- **Média e Mediana**: Tendência central
+
+- **Desvio-padrão e Variância**: Dispersão dos dados
+
+- **Intervalo Interquartil (IQR)**: Identifica outliers
+
+## Correlação entre variáveis
+
+```{julia}
+# Calculando a correlação de Pearson entre duas variáveis numéricas, e depois descrevendo uma das colunas
+
+correlacao = cor(iris.SepalWidth, iris.SepalLength)
+println("Correlação entre SepalWidth e SepalLength: ", correlacao)
+```
+
+Aqui, vemos a **correlação de Pearson** para as variáveis _SepalWidth_ e _SepalLength_ usando a função `cor()`.
+
+# Manipulação de Dados
+
+Manipular o dataset é essencial para criar subconjuntos, transformar colunas e preparar os dados para análise. Usaremos os pacotes *Distributions*, *Random* e, mais importante, *DataFrames*.
+
+## Criando novas colunas
+
+```{julia}
+using Distributions, Random, DataFrames
+
+# Agora vamos adicionar uma nova coluna ao nosso dataset
+
+Random.seed!(123) # Tornando os resultados reprodutíveis
+
+iris.soma_col = iris.SepalWidth + iris.PetalWidth
+iris.normal_padrao = randn(150)
+iris.normal_modificada = rand(Normal(2, 0.5), 150)
+
+# Perceba que conseguimos criar uma normal padrão usando a função randn(), e modificar nossa média e desvio-padrão da distribuição usando a função Normal()
+
+first(iris, 5)
+```
+
+Caso queira adicionar uma nova coluna ao seu dataset, por exemplo, comparar a soma - largura da sépala com a largura da pétala - para cada flor, apenas nomeie a sua nova coluna no formato `dados.nova_coluna = nova_coluna`. É importante ressaltar que `len(nova_coluna) = len(dados.coluna_qualquer)`, ou seja, o tamanho **n** da coluna (150 observações, no nosso exemplo) tem que ser igual no dataset inteiro. 
+
+## Filtragem de dados
+
+```{julia}
+# Agora vejamos como filtrar valores no nosso dataset
+
+flores_grandes = filter(row -> row.SepalLength > 7, iris) # Filtrando apenas as flores cuja sépala mede mais do que 7cm
+
+# flores_grandes1 = iris[iris.SepalLength .> 7, :] Outra forma de filtrar
+
+first(flores_grandes, 5)
+```
+
+Para filtrar nossos dados, podemos usar a função `filter()`, no formato `filter(row ou col -> condição, dados)` e assim criamos uma condição para filtrar as linhas do dataset. Uma alternativa seria usar o formato `dados[condição, :]`.
+
+## Agrupamento e seleção
+
+```{julia}
+# Como selecionar e agrupar colunas
+
+selecao = select(iris, :SepalLength, :PetalWidth) # Selecionando colunas
+
+first(selecao, 5)
+```
+
+Selecionando as colunas _SepalLength_ e _PetalWidth_ para análise.
+
+```{julia}
+
+grupo = groupby(iris, :Species) # Agrupando por categorias de uma colunas, nesse caso por espécie (virginica, setosa e versicolor)
+
+for df in grupo
+    display(first(df, 5))
+end
+```
+
+Dataframes agrupados por _Species_.
+
+## Aplicação de funções e ordenação
+
+```{julia}
+first(map(x -> log(x), iris.SepalLength), 10)
+```
+
+Aplicando a função `y = log(x)` para a coluna _SepalLength_, retornando o vetor de valores _y_.
+
+```{julia}
+first(sort(iris, :PetalLength), 10)
+```
+
+Ordenando o dataset com base no tamanho da pétala (PetalLength), em ordem crescente.
+
+> É importante lembrar que muitas dessas funções possuem muita importância durante o tratamento dos dados no início de uma análise, mas também durante a criação de gráficos e tabelas.
+
+# Visualização de Dados
+
+Agora vejamos como visualizar os nossos dados e variáveis de interesse através de gráficos!
+
+## Histogramas e Scatterplots
+
+```{julia}
+using Plots
+using Measures
+
+plot(
+    histogram(iris.SepalWidth, title="Distribuição da Largura da Sépala", xlabel="Largura", ylabel="Frequência", margin=5mm, label=""),
+    scatter(iris.PetalWidth, iris.PetalLength, title="Largura x Comprimento da Pétala", xlabel="Largura", ylabel="Comprimento", margin=5mm, label=""),
+    layout=(1, 2),
+    size=(900, 400)
+)
+
+# Criando histogramas e scatterplots para visualizar a distribuição dos dados
+```
+
+**Gráficos de dispersão** (*scatterplots*) são úteis para visualizar a relação entre duas variáveis contínuas, enquanto **histogramas** ajudam a entender a distribuição de uma única variável. Vamos agora aprender filtrar e selecionar os dados que queremos visualizar. 
+
+```{julia}	
+using StatsPlots
+
+# Filtrando apenas as linhas com Species == "virginica"
+virginica = filter(row -> row.Species == "virginica", iris)
+
+# Selecionando apenas as colunas de interesse, nesse caso SepalWidth e PetalLength
+
+dados_virg = select(virginica, :SepalWidth, :PetalLength)
+
+# Scatterplot
+scatter(dados_virg.SepalWidth, dados_virg.PetalLength,
+        xlabel = "SepalWidth",
+        ylabel = "PetalLength",
+        title = "Virginica: SepalWidth vs PetalLength",
+        legend = false)
+```
+
+## Boxplots e Gráficos de Barras
+
+```{julia}
+using DataFrames, StatsPlots
+
+# Criando boxplots e gráficos de barras para visualizar a distribuição dos dados
+
+box = boxplot(iris.Species, iris.SepalLength, xlabel="Espécie", ylabel="Comprimento da Sépala", title="Boxplot do SepalLength por Espécie", label="")
+
+# Agrupando por espécie e calculando a média do comprimento da pétala
+resumo = combine(groupby(iris, :Species), :SepalWidth => mean => :MediaSepalWidth)
+
+# Gráfico de barras
+barras = bar(resumo.Species, resumo.MediaSepalWidth,
+    xlabel = "Espécie",
+    ylabel = "Média do SepalWidth",
+    title = "Média da SepalWidth por Espécie",
+    legend = false)
+
+plot(box, barras, layout=(1, 2), size=(800, 400))
+```
+
+```{julia}	
+using DataFrames, StatsPlots
+
+# Agrupando por espécie e calculando a média do comprimento da pétala
+resumo = combine(groupby(iris, :Species), :SepalLength => mean => :MediaSepalLength)
+
+# Gráfico de barras
+bar(resumo.Species, resumo.MediaSepalLength,
+    xlabel = "Espécie",
+    ylabel = "Média do SepalLength",
+    title = "Média do Comprimento da Sépala por Espécie",
+    legend = false)
+```
+
+**Boxplots** são ótimos para visualizar a **dispersão** e identificar *outliers*, enquanto **gráficos de barras** ajudam a entender a **frequência** de categorias. Vamos agora agrupar os dados e visualizar mais de uma variável.
+
+```{julia}
+using DataFrames, StatsPlots, Statistics
+
+# Agrupando os dados e calculando suas medianas
+
+df_bar = combine(groupby(iris, :Species),
+    :PetalWidth => median,
+    :PetalLength => median
+)
+
+# Organizando os dados
+
+y = Matrix(select(df_bar, Not(:Species))) 
+x = df_bar.Species                             
+
+groupedbar(
+    x,
+    y,
+    bar_position = :dodge,
+    xlabel = "Espécie",
+    ylabel = "Mediana",
+    title = "Mediana de PetalWidth e PetalLength por Espécie",
+    label = ["PetalWidth" "PetalLength"],
+    bar_width = 0.6,
+    lw = 0,
+    framestyle = :box
+)
+
+```
+
+Aqui, separamos a mediana do comprimento e largura da pétala (*PetalLength* e *PetalWidth*) para cada espécie, assim conseguindo visualizar conjuntamente a medida dessas variáveis em diferentes grupos.
+
+## Matriz de Correlação (Heatmap)
+
+```{julia}
+using StatsPlots
+
+# Criando uma matriz de correlação e visualizando com um heatmap
+
+dados_num = Matrix(iris[:, 1:4])
+cor_matriz = cor(dados_num)
+var_nomes = names(iris)[1:4]
+
+# Plotando a matriz de correlação
+
+heatmap(
+    cor_matriz,
+    xticks=(1:4, var_nomes),
+    yticks=(1:4, var_nomes),
+    title="Matriz de Correlação",
+    color=:blues,
+    size=(600, 500)
+)
+```
+
+A **matriz de correlação** é uma ferramenta poderosa para entender a **relação** entre variáveis. O *heatmap* ajuda a visualizar essas correlações de forma intuitiva.
+
+## Q-Q Plot (Normalidade)
+
+```{julia}
+using Distributions, StatsPlots
+
+# Usando o pacote StatsPlots para criar um Q-Q plot
+
+qqplot(Normal(), iris.PetalLength,
+       xlabel="Quantis Teóricos",
+       ylabel="Quantis Amostrais",
+       title="Q-Q Plot de PetalLength")
+```
+
+**Q-Q plots** são úteis para verificar a **normalidade** dos dados. Se os pontos seguirem a linha reta, os dados possivelmente seguem uma distribuição normal. Nesse caso, vemos que a variável _PetalLength_ muito provavelmente não segue uma distribuição Normal.
+
+## Série Temporal (Sintética)
+
+```{julia}
+using Dates
+
+# Gerando uma série temporal sintética
+
+datas = Date(2024,1,1):Day(1):Date(2024,12,31)
+valores = cumsum(randn(length(datas))) .+ 100
+
+# Plotando a série temporal
+
+plot(datas, valores,
+     xlabel="Data", ylabel="Valor",
+     title="Série Temporal Sintética",
+     linewidth=2, label="")
+```
+
+Por último, criamos uma **série temporal** sintética para ilustrar como visualizar dados ao longo do tempo. A função `cumsum()` é usada para criar uma série acumulada, e o gráfico mostra a evolução dos valores ao longo do ano.
+
+# Considerações Finais
+
+A **Análise Exploratória de Dados** (EDA) é uma etapa crucial para entender os dados e preparar o caminho para análises mais profundas. A linguagem **julia**, com sua sintaxe clara e desempenho elevado, é uma excelente escolha para essa tarefa.
+
+> **Explore mais:** experimente outros pacotes como `CSV.jl` para ler arquivos externos, `GLM.jl` para regressão, e `Gadfly.jl` para visualizações mais elaboradas.
