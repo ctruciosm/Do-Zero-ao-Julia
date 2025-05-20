@@ -1,0 +1,250 @@
+---
+title: "Gráficos básicos em Julia"
+description: |
+  Este post abrange a criação de gráficos básicos em Julia com a utilização do pacote Plots e suas extensões.
+categories:
+  - Gráficos
+author:
+  - name: Nicole Fredericci
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/NFredericci
+date: "2025-04-29"
+image: imagens/graf_basico.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+draft: false
+engine: knitr
+---
+
+## Introdução
+
+Lidar com diferentes linguagens de programação faz parte da rotina dos trabalhadores e pesquisadores nas áreas de Ciência, Tecnologia, Engenharia e Matemática (STEM), No entanto, tão importante quanto escrever o código é saber comunicar os resultados de forma clara e acessível para o público-alvo. E que melhor forma de fazer isso do que com visualizações didáticas e informativas?
+
+Neste post, você aprenderá a criar gráficos básicos em `Julia` com o pacote `Plots.jl` e outras bibliotecas auxiliares.
+
+## Como criar os gráficos?
+
+Para instalar o pacote principal e carregar seus comandos no ambiente, execute as seguintes linhas de código:
+
+```{julia, eval = FALSE}
+Pkg.add("Plots")
+using Plots
+```
+
+Também utilizaremos os pacotes `Distributions.jl` e `StatsPlots.jl` para permitir a criação de gráficos com dados gerados a partir de distribuições canônicas. Para instalá-los e carregá-los, use:
+
+```{julia, eval = FALSE}
+Pkg.add("Distributions")
+using Distributions
+
+Pkg.add("StatsPlots")
+using StatsPlots
+```
+
+### Gráfico de Linhas  
+
+Um dos gráficos mais básicos (e úteis) para visualização de dados é o gráfico de linhas. Vamos gerar uma variável y com valores amostrados de uma distribuição Normal com média 0 e variância 1. Para isso, execute:
+
+```{julia, eval = FALSE}
+plot(Normal(0,1), title = "Distribuição Normal")
+```
+
+::: center
+![](imagens/normal.png){width=80%}
+:::
+
+Outras distribuições contidas no pacote:
+
+- Bernoulli(p)
+- Beta($\alpha$, $\beta$)
+- Binomial(n, p)
+- Cauchy($\mu$, $\sigma$)
+- Exponential($\theta$)
+- Gamma($\alpha$, $\gamma$)
+- Poisson($\lambda$)
+- Uniform(a, b)
+
+Você pode conferir a [documentação](https://juliastats.org/Distributions.jl/stable/univariate/) completa das funções no site oficial de `Julia`.
+
+
+### Gráfico de Dispersão
+
+Também é possível fazer um gráfico de dispersão (gráfico de pontos) com o código abaixo. Neste exemplo, geramos valores em `x` de 0 a 10 com um espaçamento de 0,5 entre eles e calculamos `y` como o logaritmo de cada valor de `x`. Além de personalizar o título e o nome dos eixos, é possível controlar a exibição da legenda — o padrão é mostrar `legend = auto`, mas você pode ocultá-la com `legend = false`.
+
+```{julia, eval = FALSE}
+x = 0:0.5:10
+y = log.(x)
+scatter(x, y, title = "Gráfico de Dispersão", xlabel = "x", ylabel = "log(x)", legend = false)
+```
+
+::: center
+![](imagens/scatter.png){width=80%}
+:::
+
+### Histograma
+
+Outro recurso valioso na visualização de dados é o histograma,  ideal para representar a distribuição de uma variável. Vamos construí-lo a partir da criação de uma variável x equivalente a 100 números aleatórios, executando o seguinte bloco:
+
+```{julia, eval = FALSE}
+x = rand(100)
+histogram(x, title = "Histograma", bins = 10, color = :purple)
+```
+
+::: center
+![](imagens/histograma.png){width=80%}
+:::
+
+Note que é possível customizar o número de intervalos (`bins`) do seu histograma e modificar sua cor base. No exemplo abaixo, a cor é definida por nome (:purple), mas você também pode usar códigos hexadecimais — por exemplo, `color = "#800080"` produz o mesmo tom de roxo.
+
+### Boxplot
+
+Para os estatísticos e cientistas de dados, o pacote `Plots.jl` oferece suporte ao conhecido boxplot, uma ferramenta eficaz para resumir distribuições e identificar outliers. Ao executar o código abaixo, estaremos gerando dois vetores de 50 variáveis aleatórias cada que, multiplicadas por 5, vão compor o conjunto de dados `y`.
+
+
+```{julia, eval = FALSE}
+y = 5*rand(50, 2)
+boxplot(y, title = "Boxplot", color = [:darkorchid :darkorange])
+```
+
+::: center
+![](imagens/boxplot.png){width=80%}
+:::
+
+Nesse caso, não poderíamos escolher uma paleta pronta de cores porque as duas colunas de dados foram geradas em conjunto. Para combinar cores manualmente, basta listar os nomes sem vírgula entre eles, tal qual no bloco acima. Esse detalhe é importante quando seus dados estão organizados em colunas no mesmo array.
+
+### Gráfico de Pizza
+
+Mas tudo bem se você preferir os gráficos de pizza! O seguinte bloco gera um com as cores da paleta `tab10`, já disponível por padrão no pacote `Plots.jl`. 
+
+```{julia, eval = FALSE}
+z = ["IMECC", "IG", "IFGW", "IFCH"]
+w = [700, 600, 500, 470]
+pie(z, w, title = "Quantidade de alunos por instituto", palette = :tab10)
+```
+
+::: center
+![](imagens/pizza.png){width=80%}
+:::
+
+Para escolher manualmente as cores de cada fatia do gráfico de pizza, você pode usar uma lista de cores assim como no boxplot. Mas cuidado! Aqui os dados não foram gerados em conjunto, mas sim em dois vetores separados. Assim, para substituir o argumento `palette`, a vígula entre os nomes é necessária.
+
+```{julia, eval = FALSE}
+color = [:darkorchid, :darkorange, :purple, :blue]
+```
+
+Lembre-se de definir uma cor para cada categoria presente no seu conjunto de dados, para evitar que as cores se repitam no gráfico.
+
+### Gráfico de Barras
+
+Para comparar valores entre diferentes grupos e categorias, podemos construir um gráfico de barras de estrutura semelhante ao seguinte:  
+
+```{julia, eval = FALSE}
+num = ["A", "B", "C", "D", "E"]
+qnt = [100;70;100;80;60]
+
+bar(num, qnt, color = :seagreen)
+```
+
+::: center
+![](imagens/barras.png){width=80%}
+:::
+
+## Grids e Combinações 
+
+Uma ferramenta bastante utilizada na visualização de dados é a junção de gráficos distintos na mesma imagem para facilitar a comparação, ou sobrepor múltiplas curvas em um único gráfico para contrastá-las no mesmo plano. Se você deseja criar o famoso `grid` (também chamado de malha gráfica), `Julia` oferece soluções práticas.
+
+```{julia, eval = FALSE}
+h = range(0, 10, length = 100)
+k = @. log(h)
+j = @. exp(h)
+
+plot(h, [k j], layout = (2, 1), legend = false, color = :green)
+```
+
+::: center
+![](imagens/grid.png){width=80%}
+:::
+
+Na figura acima criamos um vetor `h` com 100 valores uniformemente espaçados entre 0 e 10, um vetor `k` correspondente ao logaritmo dos elementos de `h`, e `j` ao exponencial dos mesmos elementos. O argumento `layout` define a disposição dos gráficos na figura, no qual o primeiro número indica o número de linhas e o segundo o número de colunas do grid. Agora, vamos combinar essas mesmas informações em um único gráfico, ajustando `j` para que sua escala fique mais próxima à de `k`.
+
+```{julia, eval = FALSE}
+j2 = @. exp(h)/5000
+
+plot(h, k, label = "log", color = :green)
+plot!(h, j2, label = "exp/5000", color = :steelblue, ls = :dash)
+```
+
+::: center
+![](imagens/comb.png){width=80%}
+:::
+
+Note que além de ocultar ou exibir a legenda, é possível personalizar os rótulos (`labels`) do seu gráfico e escolher diferentes estilos para as linhas das curvas.
+
+## Personalização de atributos
+
+Caso nenhuma das customizações mostradas até agora  seja suficiente para ilustrar seus dados de forma adequada, segue-se uma gama de opções adicionais para ajustar os atributos visuais do gráfico.
+
+### Cores e Paletas
+
+Para explorar as cores nomeadas disponíveis na base do Julia e seus códigos RGB (uma tripla que representa a composição de vermelho, verde e azul), você pode acessar a lista oficial clicando em [cores](https://juliagraphics.github.io/Colors.jl/latest/namedcolors/). Se você quiser diversificar as opções de paletas disponíveis, o pacote `ColorSchemes` pode ser adicionado à sua biblioteca:
+
+```{julia, eval = FALSE}
+Pkg.add("ColorSchemes")
+using ColorSchemes
+```
+
+> O pacote conta com opções de paletas para usuários com Deficiência de Visão de Cores!
+
+### Estilo da linha
+
+Os seguintes estilos podem ser determinados no argumento `ls` (_line style_) para customizar as curvas do gráfico:
+
+```{julia, eval = FALSE}
+:solid      #linha sólida
+:dash       #tracejado
+:dot        #pontos
+:dashdot    #tracejado seguido de um ponto
+:dashdotdot #tracejado seguido de dois pontos
+```
+
+
+## Como salvar o gráfico?
+
+Por fim, você pode salvar o gráfico no diretório do seu projeto utilizando o seguinte comando:
+
+```{julia, eval = FALSE}
+p = plot(x, y)
+savefig(p,"nome.png")
+```
+
+Caso você não tenha atribuído o gráfico a um objeto `p`, é possível salvar a figura imediatamente após a criação do gráfico, omitindo o objeto.
+
+```{julia, eval = FALSE}
+plot(x, y)
+savefig("meu_gráfico.png")
+```
+
+Se fizer alterações no gráfico e quiser atualizar a imagem salva, basta executar novamente o comando `savefig` com o mesmo nome. A figura anterior será substituída pela versão atualizada no seu diretório.
+
+::: {.callout-note} 
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
