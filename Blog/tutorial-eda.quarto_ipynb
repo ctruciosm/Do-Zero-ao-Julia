@@ -45,7 +45,7 @@
         "\n",
         "## Instalação de Pacotes Essenciais\n"
       ],
-      "id": "a0b98e6a"
+      "id": "ce3cf906"
     },
     {
       "cell_type": "code",
@@ -71,7 +71,7 @@
         "\n",
         "# Obs.: Apenas precisamos carregar o pacote uma vez por ambiente."
       ],
-      "id": "64343b65",
+      "id": "4631c0d2",
       "execution_count": null,
       "outputs": []
     },
@@ -83,7 +83,7 @@
         "\n",
         "## Carregando um Conjunto de Dados\n"
       ],
-      "id": "33440b9b"
+      "id": "9247c1c9"
     },
     {
       "cell_type": "code",
@@ -95,7 +95,7 @@
         "\n",
         "first(iris, 5) # Visualização inicial das 5 primeiras linhas do dataset."
       ],
-      "id": "e167303d",
+      "id": "57b9c834",
       "execution_count": null,
       "outputs": []
     },
@@ -109,7 +109,7 @@
         "\n",
         "Vejamos como calcular estatísticas sumárias em julia usando os pacotes _StatsBase_ e _Statistics_.\n"
       ],
-      "id": "d9178c3c"
+      "id": "3bbbe149"
     },
     {
       "cell_type": "code",
@@ -123,7 +123,7 @@
         "\n",
         "# Obs.: julia também possui funções padrão como mean(), median(), std(), var(), ..., etc."
       ],
-      "id": "47c1550c",
+      "id": "c4209852",
       "execution_count": null,
       "outputs": []
     },
@@ -141,7 +141,7 @@
         "\n",
         "## Correlação entre variáveis\n"
       ],
-      "id": "8d087409"
+      "id": "47a16bc8"
     },
     {
       "cell_type": "code",
@@ -152,7 +152,7 @@
         "correlacao = cor(iris.SepalWidth, iris.SepalLength)\n",
         "println(\"Correlação entre SepalWidth e SepalLength: \", correlacao)"
       ],
-      "id": "5bde70d3",
+      "id": "255b0048",
       "execution_count": null,
       "outputs": []
     },
@@ -168,7 +168,7 @@
         "\n",
         "## Criando novas colunas\n"
       ],
-      "id": "75fd361b"
+      "id": "3cf704bb"
     },
     {
       "cell_type": "code",
@@ -188,7 +188,7 @@
         "\n",
         "first(iris, 5)"
       ],
-      "id": "f954d42f",
+      "id": "9386062d",
       "execution_count": null,
       "outputs": []
     },
@@ -200,7 +200,7 @@
         "\n",
         "## Filtragem de dados\n"
       ],
-      "id": "e7369549"
+      "id": "0b301be6"
     },
     {
       "cell_type": "code",
@@ -214,7 +214,7 @@
         "\n",
         "first(flores_grandes, 5)"
       ],
-      "id": "a6617c5b",
+      "id": "fec87268",
       "execution_count": null,
       "outputs": []
     },
@@ -226,7 +226,7 @@
         "\n",
         "## Agrupamento e seleção\n"
       ],
-      "id": "147dddbe"
+      "id": "a05e1cf5"
     },
     {
       "cell_type": "code",
@@ -238,7 +238,7 @@
         "\n",
         "first(selecao, 5)"
       ],
-      "id": "f8a451ce",
+      "id": "6e367b11",
       "execution_count": null,
       "outputs": []
     },
@@ -248,7 +248,7 @@
       "source": [
         "Selecionando as colunas _SepalLength_ e _PetalWidth_ para análise.\n"
       ],
-      "id": "c391b4f2"
+      "id": "6ce652b6"
     },
     {
       "cell_type": "code",
@@ -260,7 +260,7 @@
         "    display(first(df, 5))\n",
         "end"
       ],
-      "id": "fb818e7f",
+      "id": "35cfc476",
       "execution_count": null,
       "outputs": []
     },
@@ -272,7 +272,7 @@
         "\n",
         "## Aplicação de funções e ordenação\n"
       ],
-      "id": "9f1c99c0"
+      "id": "ba56cd3e"
     },
     {
       "cell_type": "code",
@@ -280,7 +280,7 @@
       "source": [
         "first(map(x -> log(x), iris.SepalLength), 10)"
       ],
-      "id": "f0bee27c",
+      "id": "5388f682",
       "execution_count": null,
       "outputs": []
     },
@@ -290,7 +290,7 @@
       "source": [
         "Aplicando a função `y = log(x)` para a coluna _SepalLength_, retornando o vetor de valores _y_.\n"
       ],
-      "id": "238fc6df"
+      "id": "45fc7443"
     },
     {
       "cell_type": "code",
@@ -298,7 +298,7 @@
       "source": [
         "first(sort(iris, :PetalLength), 10)"
       ],
-      "id": "da7dbe17",
+      "id": "27df02a0",
       "execution_count": null,
       "outputs": []
     },
@@ -316,7 +316,7 @@
         "\n",
         "## Histogramas e Scatterplots\n"
       ],
-      "id": "eb4343b5"
+      "id": "ab9ccb71"
     },
     {
       "cell_type": "code",
@@ -334,7 +334,7 @@
         "\n",
         "# Criando histogramas e scatterplots para visualizar a distribuição dos dados"
       ],
-      "id": "8885c996",
+      "id": "a84fbd71",
       "execution_count": null,
       "outputs": []
     },
@@ -344,7 +344,7 @@
       "source": [
         "**Gráficos de dispersão** (*scatterplots*) são úteis para visualizar a relação entre duas variáveis contínuas, enquanto **histogramas** ajudam a entender a distribuição de uma única variável. Vamos agora aprender filtrar e selecionar os dados que queremos visualizar. \n"
       ],
-      "id": "69890b2a"
+      "id": "4a1c5037"
     },
     {
       "cell_type": "code",
@@ -366,7 +366,7 @@
         "        title = \"Virginica: SepalWidth vs PetalLength\",\n",
         "        legend = false)"
       ],
-      "id": "f195df3e",
+      "id": "aa481a1b",
       "execution_count": null,
       "outputs": []
     },
@@ -376,7 +376,7 @@
       "source": [
         "## Boxplots e Gráficos de Barras\n"
       ],
-      "id": "5b5e53ad"
+      "id": "7271d56e"
     },
     {
       "cell_type": "code",
@@ -400,7 +400,7 @@
         "\n",
         "plot(box, barras, layout=(1, 2), size=(800, 400))"
       ],
-      "id": "445a0b0a",
+      "id": "ee924548",
       "execution_count": null,
       "outputs": []
     },
@@ -420,7 +420,7 @@
         "    title = \"Média do Comprimento da Sépala por Espécie\",\n",
         "    legend = false)"
       ],
-      "id": "9657f828",
+      "id": "64f0511c",
       "execution_count": null,
       "outputs": []
     },
@@ -430,7 +430,7 @@
       "source": [
         "**Boxplots** são ótimos para visualizar a **dispersão** e identificar *outliers*, enquanto **gráficos de barras** ajudam a entender a **frequência** de categorias. Vamos agora agrupar os dados e visualizar mais de uma variável.\n"
       ],
-      "id": "518c45b8"
+      "id": "51b68042"
     },
     {
       "cell_type": "code",
@@ -463,7 +463,7 @@
         "    framestyle = :box\n",
         ")"
       ],
-      "id": "34676fe0",
+      "id": "1acb72d3",
       "execution_count": null,
       "outputs": []
     },
@@ -475,7 +475,7 @@
         "\n",
         "## Matriz de Correlação (Heatmap)\n"
       ],
-      "id": "2f50aa53"
+      "id": "08247a20"
     },
     {
       "cell_type": "code",
@@ -500,7 +500,7 @@
         "    size=(600, 500)\n",
         ")"
       ],
-      "id": "412d659a",
+      "id": "dfa1f1fb",
       "execution_count": null,
       "outputs": []
     },
@@ -512,7 +512,7 @@
         "\n",
         "## Q-Q Plot (Normalidade)\n"
       ],
-      "id": "959f686c"
+      "id": "e2eb69ce"
     },
     {
       "cell_type": "code",
@@ -527,7 +527,7 @@
         "       ylabel=\"Quantis Amostrais\",\n",
         "       title=\"Q-Q Plot de PetalLength\")"
       ],
-      "id": "9c9a3ad2",
+      "id": "1d772e05",
       "execution_count": null,
       "outputs": []
     },
@@ -539,7 +539,7 @@
         "\n",
         "## Série Temporal (Sintética)\n"
       ],
-      "id": "cae6c2d4"
+      "id": "d0b15011"
     },
     {
       "cell_type": "code",
@@ -559,7 +559,7 @@
         "     title=\"Série Temporal Sintética\",\n",
         "     linewidth=2, label=\"\")"
       ],
-      "id": "39968eff",
+      "id": "2a63991d",
       "execution_count": null,
       "outputs": []
     },
@@ -575,7 +575,7 @@
         "\n",
         "> **Explore mais:** experimente outros pacotes como `CSV.jl` para ler arquivos externos, `GLM.jl` para regressão, e `Gadfly.jl` para visualizações mais elaboradas."
       ],
-      "id": "af8122d4"
+      "id": "8d535296"
     }
   ],
   "metadata": {
