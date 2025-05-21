@@ -1,9 +1,5 @@
 [
   {
-    "listing": "/tutoriais.html",
-    "items": []
-  },
-  {
     "listing": "/equipe.html",
     "items": [
       "/Equipe/Atual/caio_frare.html",
@@ -20,8 +16,15 @@
     ]
   },
   {
+    "listing": "/tutoriais.html",
+    "items": [
+      "/Tutoriais/graf_basico.html"
+    ]
+  },
+  {
     "listing": "/blog.html",
     "items": [
+      "/Blog/graf_basico.html",
       "/Blog/julia_rstudio.html",
       "/Blog/jupytercolab.html",
       "/Blog/instalar_julia.html",

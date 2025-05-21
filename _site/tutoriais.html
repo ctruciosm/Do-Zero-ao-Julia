@@ -78,9 +78,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-title','listing-author','listing-date','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-categories"],
+      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description","listing-categories"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -196,7 +196,7 @@ window.Quarto = {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-    <h5 class="quarto-listing-category-title">Categorias</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">Tudo <span class="quarto-category-count">(0)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categorias</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">Tudo <span class="quarto-category-count">(1)</span></div><div class="category" data-category="R3IlQzMlQTFmaWNvcw==">Gráficos <span class="quarto-category-count">(1)</span></div></div></div>
 <!-- main -->
 <main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
 
@@ -210,7 +210,36 @@ window.Quarto = {
 
 <div class="quarto-listing quarto-listing-container-grid" id="listing-listing">
 <div class="list grid quarto-listing-cols-3">
-
+<div class="g-col-1" data-index="0" data-categories="R3IlQzMlQTFmaWNvcw==" data-listing-date-sort="1747796400000" data-listing-file-modified-sort="1747838887110" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1391">
+<a href="./Tutoriais/graf_basico.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./Tutoriais/imagens/graf_basico.png" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Gráficos em Julia: primeiros passos
+</h5>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('R3IlQzMlQTFmaWNvcw=='); return false;">
+Gráficos
+</div>
+</div>
+<div class="card-text listing-description">
+Tão importante quanto desenvolver, implementar e aplicar modelos/metodologías é saber comunicar os resultados de forma clara e acessível para o público-alvo. E que melhor…
+</div>
+<div class="card-attribution card-text-small justify">
+<div class="listing-author">
+Nicole Fredericci, Carlos Trucíos
+</div>
+<div class="listing-date">
+21 de mai. de 2025
+</div>
+</div>
+</div>
+</div>
+</a>
+</div>
 </div>
 <div class="listing-no-matching d-none">
 Nenhum item correspondente
