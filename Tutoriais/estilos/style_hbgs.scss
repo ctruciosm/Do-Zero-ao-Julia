@@ -1,0 +1,107 @@
+/*-- scss:defaults --*/
+// Base document colors
+
+$link-color: darkorange;
+
+// Inline Code
+//$code-bg: #202327;
+//$code-color: #b95820;
+
+// kbd
+$kbd-padding-y: .1875rem;
+$kbd-padding-x: .375rem;
+
+kbd,
+.kbd {
+  color: #b95820 !important;
+  background-color: #202327 !important;
+  border: 1px solid gray !important;
+}
+
+.justify_p {
+  text-align: justify !important;
+}
+
+.centered_p {
+  text-align: center !important;
+}
+
+.border {
+  margin-bottom: 1em;
+}
+
+.border p {
+  margin-bottom: 0em;
+  padding-bottom: 0em !important;
+}
+
+.border pre {
+  padding-left: 0.4em;
+}
+
+.node text {
+  fill: black !important;
+}
+
+.quarto-figure {
+  margin-left: 0.8em;
+  margin-right: 0.8em;
+  margin-top: 0.5em;
+}
+
+.callout-body {
+  padding-bottom: 2em;
+}
+
+.callout-body {
+  padding-left: 0.8em !important; 
+  padding-right: 1.5em !important; 
+}
+
+#porém-não-tão-importantes .anchored{
+  padding-top: 1.5em;
+  font-size: 1.3em;
+}
+
+// arrows and commits
+.arrow0 {
+  stroke: rgb(90, 90, 90) !important; 
+}
+.arrow1 {
+  stroke: gray !important; 
+}
+.arrow2 {
+  stroke: darkgray !important; 
+}
+.commit0 {
+  stroke: darkorange !important; 
+  fill: #202327 !important; 
+}
+.commit1 {
+  stroke: darkcyan !important; 
+  fill: #202327 !important; 
+}
+.commit2 {
+  stroke: darkorchid !important; 
+  fill: #202327 !important; 
+}
+.commit-merge {
+  fill: #202327 !important; 
+  stroke: gray !important; 
+}
+
+// branches e tags
+.branchLabelBkg {
+  fill: #961e02 !important; 
+}
+text {
+  fill: white !important; 
+}
+.commit-label-bkg {
+  fill: #202327 !important; 
+  opacity: 0.5 !important; 
+}
+.tag-label-bkg {
+  fill: burlywood !important; 
+  stroke: darkgoldenrod !important; 
+}
