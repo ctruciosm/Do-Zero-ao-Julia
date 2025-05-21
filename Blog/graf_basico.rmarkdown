@@ -24,6 +24,8 @@ draft: false
 engine: knitr
 ---
 
+
+
 ## Introdução
 
 ::: {.justify}
@@ -40,10 +42,14 @@ Neste tutorial, você aprenderá a criar visualizações básicas em `Julia` uti
 
 Para instalar o pacote principal e carregar seus comandos no ambiente, execute as seguintes linhas de código:
 
+
+
 ```{julia, eval = FALSE}
 Pkg.add("Plots")
 using Plots
 ```
+
+
 
 ::: tip
 Lembre-se que precisamos apenas instalar o pacote uma única vez, mas chamá-lo em cada sessão que formos utilizá-lo.
@@ -55,6 +61,8 @@ Lembre-se que precisamos apenas instalar o pacote uma única vez, mas chamá-lo 
 Também utilizaremos os pacotes `Distributions.jl` e `StatsPlots.jl` para permitir a criação de gráficos com dados simulados e utilizar algumas distribuições de probabilidade. Para instalá-los e carregá-los, use:
 :::
 
+
+
 ```{julia, eval = FALSE}
 Pkg.add("Distributions")
 using Distributions
@@ -65,13 +73,19 @@ using StatsPlots
 
 
 
+
+
 > **Observação:** [Uma boa prática em `Julia`](https://github.com/JuliaDiff/BlueStyle) é carregar os pacotes um por um, logo no início do script, seguindo a ordem alfabética. Isso torna o código mais organizado, facilita a leitura e a identificação de dependências. Por exemplo:
+
+
 
 ```{julia, eval = TRUE}
 using Distributions
 using Plots
 using StatsPlots
 ```
+
+
 
 
 
@@ -84,9 +98,13 @@ Um dos gráficos mais básicos (e úteis) para visualização de dados é o grá
 :::
 
 <center>
+
+
 ```{julia}
 plot(Normal(0,1), title = "Distribuição Normal")
 ```
+
+
 </center>
 
 
@@ -111,9 +129,13 @@ A função `plot()` também pode ser utilizada para criar gráficos de linha ou 
 
 
 <center>
+
+
 ```{julia}
 plot(randn(10), title = "Gráfico de linha ou de sequência")
 ```
+
+
 </center>
 
 
@@ -127,11 +149,15 @@ Também é possível fazer um gráfico de dispersão (_scatterplot_) com o códi
 
 
 ::: center
+
+
 ```{julia}
 x = 0:0.5:10
 y = log.(x);
 scatter(x, y, title = "Gráfico de Dispersão", xlabel = "x", ylabel = "log(x)", legend = false)
 ```
+
+
 :::
 
 
@@ -144,10 +170,14 @@ scatter(x, y, title = "Gráfico de Dispersão", xlabel = "x", ylabel = "log(x)",
 Outro recurso valioso na visualização de dados é o histograma,  ideal para visualizar a distribuição de uma variável. Vamos construí-lo a partir da criação de uma variável x equivalente a 1000 números aleatórios de uma distribuição Normal(0, 1), executando o seguinte bloco:
 
 ::: center
+
+
 ```{julia}
 x = randn(1000);
 histogram(x, title = "Histograma", color = :purple)
 ```
+
+
 :::
 
 
@@ -156,9 +186,13 @@ Note que é possível customizar o número de intervalos (`bins = 100`, por exem
 
 
 ::: center
+
+
 ```{julia}
 histogram(x, title = "Histograma", bins = 10, color = "#111080")
 ```
+
+
 :::
 
 
@@ -170,11 +204,15 @@ Para os estatísticos e cientistas de dados, o pacote `Plots.jl` oferece suporte
 
 
 ::: center
+
+
 ```{julia}
 y = 5 * rand(50, 2);
 size(y)
 boxplot(y, title = "Boxplot", color = [:darkorchid :darkorange])
 ```
+
+
 :::
 
 
@@ -194,19 +232,27 @@ Vamos supor que os institutos IMECC, IG, IFGW e IFCH tenham, respectivamente, 70
 
 
 ::: center
+
+
 ```{julia}
 z = ["IMECC", "IG", "IFGW", "IFCH"]
 alunos = [700, 600, 500, 470];
 w = 100 .* alunos ./ sum(alunos)
 pie(z, w, title = "Quantidade de alunos por instituto", palette = :tab10)
 ```
+
+
 :::
 
 Para escolher manualmente as cores de cada fatia do gráfico de pizza, você pode usar uma lista de cores assim como no boxplot. Mas cuidado! Aqui os dados não foram gerados em conjunto, mas sim em dois vetores separados. Assim, para substituir o argumento `palette`, a vígula entre os nomes é necessária.
 
+
+
 ```{julia, eval = FALSE}
 color = [:darkorchid, :darkorange, :purple, :blue]
 ```
+
+
 
 > Lembre-se de definir uma cor para cada categoria presente no seu conjunto de dados, para evitar que as cores se repitam no gráfico.
 
@@ -216,11 +262,15 @@ color = [:darkorchid, :darkorange, :purple, :blue]
 Para comparar valores entre diferentes grupos e categorias, podemos construir um gráfico de barras de estrutura semelhante ao seguinte:  
 
 ::: center
+
+
 ```{julia}
 num = ["A", "B", "C", "D", "E"]
 qnt = [100; 70; 100; 80; 60]
 bar(num, qnt, color = :seagreen)
 ```
+
+
 :::
 
 
@@ -232,12 +282,16 @@ Uma ferramenta bastante utilizada na visualização de dados é a junção de gr
 
 
 ::: center
+
+
 ```{julia}
 h = range(0, 10, length = 100)
 k = @. log(h)
 j = @. exp(h)
 plot(h, [k j], layout = (2, 1), legend = false, color = :green)
 ```
+
+
 :::
 
 
@@ -246,12 +300,16 @@ Na figura acima criamos um vetor `h` com 100 valores uniformemente espaçados en
 :::
 
 ::: center
+
+
 ```{julia}
 j2 = @. exp(h)/5000
 
 plot(h, k, label = "log", color = :green)
 plot!(h, j2, label = "exp/5000", color = :steelblue, ls = :dash)
 ```
+
+
 :::
 
 
@@ -271,16 +329,22 @@ Caso nenhuma das customizações mostradas até agora seja suficiente para ilust
 Para explorar as cores nomeadas disponíveis na base do Julia e seus códigos RGB (uma tripla que representa a composição de vermelho, verde e azul), você pode acessar a lista oficial clicando em [cores](https://juliagraphics.github.io/Colors.jl/latest/namedcolors/). Se você quiser diversificar as opções de paletas disponíveis, o pacote `ColorSchemes` pode ser adicionado à sua biblioteca:
 :::
 
+
+
 ```{julia, eval = FALSE}
 Pkg.add("ColorSchemes")
 using ColorSchemes
 ```
+
+
 
 > O pacote conta com opções de paletas para usuários com Deficiência de Visão de Cores!
 
 ### Estilo da linha
 
 Os seguintes estilos podem ser determinados no argumento `ls` (_line style_) para customizar as curvas do gráfico:
+
+
 
 ```{julia, eval = FALSE}
 :solid      #linha sólida
@@ -291,27 +355,38 @@ Os seguintes estilos podem ser determinados no argumento `ls` (_line style_) par
 ```
 
 
+
+
 ## Como salvar o gráfico?
 
 Por fim, você pode salvar o gráfico no diretório do seu projeto utilizando o seguinte comando:
+
+
 
 ```{julia, eval = FALSE}
 p = plot(x, y)
 savefig(p,"nome.png")
 ```
 
+
+
 Caso você não tenha atribuído o gráfico a um objeto `p`, é possível salvar a figura imediatamente após a criação do gráfico, omitindo o objeto.
+
+
 
 ```{julia, eval = FALSE}
 plot(x, y)
 savefig("meu_gráfico.png")
 ```
 
+
+
 Se fizer alterações no gráfico e quiser atualizar a imagem salva, basta executar novamente o comando `savefig` com o mesmo nome. A figura anterior será substituída pela versão atualizada no seu diretório.
 
 ::: {.callout-note} 
 Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
 :::
+
 
 
 
