@@ -13,7 +13,7 @@ author:
     url: https://ctruciosm.github.io
     orcid: 0000-0001-8746-8877
 date: "2025-05-21"
-image: imagens/graf_basico.png
+image: imagens/graf_tutorial.png
 lang: pt
 format:
   html:
