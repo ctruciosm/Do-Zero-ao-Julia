@@ -10,6 +10,7 @@
       "/Equipe/Atual/heitor_bgs.html",
       "/Equipe/Atual/henrique_velloso.html",
       "/Equipe/Atual/nicole_fredericci.html",
+      "/Equipe/Atual/pedro_galera.html",
       "/Equipe/Atual/sarah_silva.html",
       "/Equipe/Atual/thiago_paulichen.html",
       "/Equipe/Atual/vitor_ribas.html"
@@ -18,13 +19,13 @@
   {
     "listing": "/tutoriais.html",
     "items": [
+      "/Tutoriais/tutorial-eda.html",
       "/Tutoriais/graf_basico.html"
     ]
   },
   {
     "listing": "/blog.html",
     "items": [
-      "/Blog/graf_basico.html",
       "/Blog/julia_rstudio.html",
       "/Blog/jupytercolab.html",
       "/Blog/instalar_julia.html",

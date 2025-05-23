@@ -12,7 +12,7 @@ author:
     affiliation: "Universidade Estadual de Campinas"
     url: https://ctruciosm.github.io
     orcid: 0000-0001-8746-8877
-date: "2025-05-21"
+date: "2025-05-23"
 image: imagens/graf_tutorial.png
 lang: pt
 format:
@@ -82,11 +82,11 @@ using StatsPlots
 Um dos gráficos mais básicos (e úteis) para visualização de dados é o gráfico de densidades. Vamos gerando um gráfico de densidade da distribuição Normal com média 0 e variância 1. Para isso, execute:
 :::
 
-<center>
+
 ```{julia}
 plot(Normal(0,1), title = "Distribuição Normal", size = (800, 500))
 ```
-</center>
+
 
 
 Outras distribuições contidas no pacote:
@@ -109,11 +109,11 @@ A função `plot()` também pode ser utilizada para criar gráficos de linha ou 
 :::
 
 
-<center>
+
 ```{julia}
 plot(randn(10), title = "Gráfico de linha ou de sequência", size = (800, 500))
 ```
-</center>
+
 
 
 
@@ -125,13 +125,13 @@ Também é possível fazer um gráfico de dispersão (_scatterplot_) com o códi
 :::
 
 
-<center>
+
 ```{julia}
 x = 0:0.5:10
 y = log.(x);
 scatter(x, y, title = "Gráfico de Dispersão", xlabel = "x", ylabel = "log(x)", legend = false)
 ```
-</center>
+
 
 
 > **Observação:** o operador $\cdot$ (_dot_), aplica a função $\log()$ a cada elemento do vetor `x`. O ";" evita que a variável `y` seja impressa (como aconteceu com a variável `x`).
@@ -154,11 +154,11 @@ Note que é possível customizar o número de intervalos (`bins = 100`, por exem
 :::
 
 
-<center>
+
 ```{julia}
 histogram(x, title = "Histograma", bins = 10, color = "#111080")
 ```
-</center>
+
 
 
 ### Boxplot
@@ -168,13 +168,13 @@ Para os estatísticos e cientistas de dados, o pacote `Plots.jl` oferece suporte
 :::
 
 
-<center>
+
 ```{julia}
 y = 5 * rand(50, 2);
 size(y)
 boxplot(y, title = "Boxplot", color = [:darkorchid :darkorange])
 ```
-</center>
+
 
 
 ::: {.justify}
@@ -192,14 +192,14 @@ Vamos supor que os institutos IMECC, IG, IFGW e IFCH tenham, respectivamente, 70
 :::
 
 
-<center>
+
 ```{julia}
 z = ["IMECC", "IG", "IFGW", "IFCH"]
 alunos = [700, 600, 500, 470];
 w = 100 .* alunos ./ sum(alunos)
 pie(z, w, title = "Quantidade de alunos por instituto", palette = :tab10)
 ```
-</center>
+
 
 Para escolher manualmente as cores de cada fatia do gráfico de pizza, você pode usar uma lista de cores assim como no boxplot. Mas cuidado! Aqui os dados não foram gerados em conjunto, mas sim em dois vetores separados. Assim, para substituir o argumento `palette`, a vígula entre os nomes é necessária.
 
@@ -214,13 +214,13 @@ color = [:darkorchid, :darkorange, :purple, :blue]
 
 Para comparar valores entre diferentes grupos e categorias, podemos construir um gráfico de barras de estrutura semelhante ao seguinte:  
 
-<center>
+
 ```{julia}
 num = ["A", "B", "C", "D", "E"]
 qnt = [100; 70; 100; 80; 60]
 bar(num, qnt, color = :seagreen)
 ```
-</center>
+
 
 
 ## Grids e Combinações 
@@ -230,28 +230,28 @@ Uma ferramenta bastante utilizada na visualização de dados é a junção de gr
 :::
 
 
-<center>
+
 ```{julia}
-h = range(0, 10, length = 100)
-k = @. log(h)
-j = @. exp(h)
+h = range(0, 10, length = 100);
+k = @. log(h);
+j = @. exp(h);
 plot(h, [k j], layout = (2, 1), legend = false, color = :green)
 ```
-</center>
+
 
 
 ::: {.justify}
 Na figura acima criamos um vetor `h` com 100 valores uniformemente espaçados entre 0 e 10, um vetor `k` correspondente ao logaritmo dos elementos de `h`, e `j` ao exponencial dos mesmos elementos. O argumento `layout` define a disposição dos gráficos na figura, no qual o primeiro número indica o número de linhas e o segundo o número de colunas do grid. Agora, vamos combinar essas mesmas informações em um único gráfico, ajustando `j` para que sua escala fique mais próxima à de `k`.
 :::
 
-<center>
+
 ```{julia}
-j2 = @. exp(h)/5000
+j2 = @. exp(h)/5000;
 
 plot(h, k, label = "log", color = :green)
 plot!(h, j2, label = "exp/5000", color = :steelblue, ls = :dash)
 ```
-</center>
+
 
 
 > Note que além de ocultar ou exibir a legenda, é possível personalizar os rótulos (`labels`) do seu gráfico e escolher diferentes estilos para as linhas das curvas.

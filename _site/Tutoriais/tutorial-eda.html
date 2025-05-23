@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt" xml:lang="pt"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.39">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Arthur Dionizio">
+<meta name="author" content="Henrique Velloso">
+<meta name="description" content="Um guia completo e prático sobre como realizar Análise Exploratória de Dados (EDA) em Julia. Explore desde estatísticas descritivas, manipulação de dados, visualizações com Plots.jl e mais. Tudo com códigos prontos para aplicar nos seus projetos!">
+
+<title>Introdução à Análise Exploratória de Dados (EDA) em Julia – Do Zero ao Julia</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-6bd9cfa162949bde0a231f530c97869d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Nenhum resultado",
+    "search-matching-documents-text": "documentos correspondentes",
+    "search-copy-link-title": "Copiar link para a busca",
+    "search-hide-matches-text": "Esconder correspondências adicionais",
+    "search-more-match-text": "mais correspondência neste documento",
+    "search-more-matches-text": "mais correspondências neste documento",
+    "search-clear-button-title": "Limpar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Procurar"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Do Zero ao Julia</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Procurar"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Alternar de navegação" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../oprojeto.html"> 
+<span class="menu-text">O projeto</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../equipe.html"> 
+<span class="menu-text">Equipe</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../blog.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../tutoriais.html"> 
+<span class="menu-text">Tutoriais</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../meetup.html"> 
+<span class="menu-text">Meetup</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Nesta página</h2>
+   
+  <ul>
+  <li><a href="#introdução" id="toc-introdução" class="nav-link active" data-scroll-target="#introdução">Introdução</a>
+  <ul class="collapse">
+  <li><a href="#benefícios-de-usar-julia-para-eda" id="toc-benefícios-de-usar-julia-para-eda" class="nav-link" data-scroll-target="#benefícios-de-usar-julia-para-eda">Benefícios de usar Julia para EDA</a></li>
+  </ul></li>
+  <li><a href="#preparando-o-ambiente" id="toc-preparando-o-ambiente" class="nav-link" data-scroll-target="#preparando-o-ambiente">Preparando o Ambiente</a>
+  <ul class="collapse">
+  <li><a href="#instalação-de-pacotes-essenciais" id="toc-instalação-de-pacotes-essenciais" class="nav-link" data-scroll-target="#instalação-de-pacotes-essenciais">Instalação de Pacotes Essenciais</a></li>
+  <li><a href="#carregando-um-conjunto-de-dados" id="toc-carregando-um-conjunto-de-dados" class="nav-link" data-scroll-target="#carregando-um-conjunto-de-dados">Carregando um Conjunto de Dados</a></li>
+  </ul></li>
+  <li><a href="#estatísticas-descritivas" id="toc-estatísticas-descritivas" class="nav-link" data-scroll-target="#estatísticas-descritivas">Estatísticas Descritivas</a>
+  <ul class="collapse">
+  <li><a href="#correlação-entre-variáveis" id="toc-correlação-entre-variáveis" class="nav-link" data-scroll-target="#correlação-entre-variáveis">Correlação entre variáveis</a></li>
+  </ul></li>
+  <li><a href="#manipulação-de-dados" id="toc-manipulação-de-dados" class="nav-link" data-scroll-target="#manipulação-de-dados">Manipulação de Dados</a>
+  <ul class="collapse">
+  <li><a href="#criando-novas-colunas" id="toc-criando-novas-colunas" class="nav-link" data-scroll-target="#criando-novas-colunas">Criando novas colunas</a></li>
+  <li><a href="#filtragem-de-dados" id="toc-filtragem-de-dados" class="nav-link" data-scroll-target="#filtragem-de-dados">Filtragem de dados</a></li>
+  <li><a href="#agrupamento-e-seleção" id="toc-agrupamento-e-seleção" class="nav-link" data-scroll-target="#agrupamento-e-seleção">Agrupamento e seleção</a></li>
+  <li><a href="#aplicação-de-funções-e-ordenação" id="toc-aplicação-de-funções-e-ordenação" class="nav-link" data-scroll-target="#aplicação-de-funções-e-ordenação">Aplicação de funções e ordenação</a></li>
+  </ul></li>
+  <li><a href="#visualização-de-dados" id="toc-visualização-de-dados" class="nav-link" data-scroll-target="#visualização-de-dados">Visualização de Dados</a>
+  <ul class="collapse">
+  <li><a href="#histogramas-e-scatterplots" id="toc-histogramas-e-scatterplots" class="nav-link" data-scroll-target="#histogramas-e-scatterplots">Histogramas e Scatterplots</a></li>
+  <li><a href="#boxplots-e-gráficos-de-barras" id="toc-boxplots-e-gráficos-de-barras" class="nav-link" data-scroll-target="#boxplots-e-gráficos-de-barras">Boxplots e Gráficos de Barras</a></li>
+  <li><a href="#matriz-de-correlação-heatmap" id="toc-matriz-de-correlação-heatmap" class="nav-link" data-scroll-target="#matriz-de-correlação-heatmap">Matriz de Correlação (Heatmap)</a></li>
+  <li><a href="#q-q-plot-normalidade" id="toc-q-q-plot-normalidade" class="nav-link" data-scroll-target="#q-q-plot-normalidade">Q-Q Plot (Normalidade)</a></li>
+  <li><a href="#série-temporal" id="toc-série-temporal" class="nav-link" data-scroll-target="#série-temporal">Série Temporal</a></li>
+  </ul></li>
+  <li><a href="#considerações-finais" id="toc-considerações-finais" class="nav-link" data-scroll-target="#considerações-finais">Considerações Finais</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Introdução à Análise Exploratória de Dados (EDA) em Julia</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Aplicação</div>
+    <div class="quarto-category">Visualização de Dados</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    <p>Um guia completo e prático sobre como realizar Análise Exploratória de Dados (EDA) em Julia. Explore desde estatísticas descritivas, manipulação de dados, visualizações com Plots.jl e mais. Tudo com códigos prontos para aplicar nos seus projetos!</p>
+  </div>
+</div>
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Autores</div>
+  <div class="quarto-title-meta-heading">Afiliação</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author"><a href="https://github.com/Arthur-Dionizio">Arthur Dionizio</a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Universidade Estadual de Campinas
+          </p>
+      </div>
+    <div class="quarto-title-meta-contents">
+    <p class="author"><a href="https://github.com/henriqueavelloso">Henrique Velloso</a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Universidade Estadual de Campinas
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Data de Publicação</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">23 de maio de 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introdução" class="level1">
+<h1>Introdução</h1>
+<div class="justify">
+<p>A <strong>Análise Exploratória de Dados (EDA)</strong> é uma etapa fundamental na Ciência de Dados. Seu objetivo é entender a estrutura dos dados, identificar padrões, encontrar anomalias e formular hipóteses. Com a linguagem <strong>julia</strong>, voltada para alto desempenho e cálculo científico, a EDA pode ser feita de forma rápida e eficiente.</p>
+</div>
+<section id="benefícios-de-usar-julia-para-eda" class="level2">
+<h2 class="anchored" data-anchor-id="benefícios-de-usar-julia-para-eda">Benefícios de usar Julia para EDA</h2>
+<ul>
+<li>Desempenho comparável ao C</li>
+<li>Sintaxe limpa e legível</li>
+<li>Grande suporte para operações matemáticas e estatísticas</li>
+<li>Ecossistema em crescimento com diversas bibliotecas voltadas para dados</li>
+<li>Integração com outras linguagens como Python, R e C/C++</li>
+</ul>
+</section>
+</section>
+<section id="preparando-o-ambiente" class="level1">
+<h1>Preparando o Ambiente</h1>
+<section id="instalação-de-pacotes-essenciais" class="level2">
+<h2 class="anchored" data-anchor-id="instalação-de-pacotes-essenciais">Instalação de Pacotes Essenciais</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="bu">Pkg</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Suprime mensagens e warnings durante a instalação dos pacotes</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">redirect_stdout</span>(<span class="cn">devnull</span>) <span class="cf">do</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">redirect_stderr</span>(<span class="cn">devnull</span>) <span class="cf">do</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="bu">Pkg</span>.<span class="fu">add</span>(<span class="st">"RDatasets"</span>)     <span class="co"># Datasets clássicos;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        <span class="bu">Pkg</span>.<span class="fu">add</span>(<span class="st">"StatsBase"</span>)     <span class="co"># Estatísticas descritivas;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="bu">Pkg</span>.<span class="fu">add</span>(<span class="st">"StatsPlots"</span>)    <span class="co"># Visualizações estatísticas;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        <span class="bu">Pkg</span>.<span class="fu">add</span>(<span class="st">"Distributions"</span>) <span class="co"># Distribuições estatísticas;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        <span class="bu">Pkg</span>.<span class="fu">add</span>(<span class="st">"Random"</span>)        <span class="co"># Geração de números aleatórios;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        <span class="bu">Pkg</span>.<span class="fu">add</span>(<span class="st">"DataFrames"</span>)    <span class="co"># Estrutura tipo planilha;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="bu">Pkg</span>.<span class="fu">add</span>(<span class="st">"Plots"</span>)         <span class="co"># Biblioteca de gráficos;</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        <span class="bu">Pkg</span>.<span class="fu">add</span>(<span class="st">"Statistics"</span>)    <span class="co"># Funções como mean, median, etc;</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        <span class="bu">Pkg</span>.<span class="fu">add</span>(<span class="st">"Dates"</span>)         <span class="co"># Manipulação de datas.</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        <span class="bu">Pkg</span>.<span class="fu">add</span>(<span class="st">"Measures"</span>)      <span class="co"># Formatação</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Obs.: Apenas precisamos carregar o pacote uma vez por ambiente.</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<blockquote class="blockquote">
+<p><strong>Dica:</strong> Use <code>Pkg.instantiate()</code> para garantir que todas as dependências do seu projeto estejam resolvidas.</p>
+</blockquote>
+</section>
+<section id="carregando-um-conjunto-de-dados" class="level2">
+<h2 class="anchored" data-anchor-id="carregando-um-conjunto-de-dados">Carregando um Conjunto de Dados</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">RDatasets</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>iris <span class="op">=</span> <span class="fu">dataset</span>(<span class="st">"datasets"</span>, <span class="st">"iris"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>150×5 DataFrame
+ Row │ SepalLength  SepalWidth  PetalLength  PetalWidth  Species
+     │ Float64      Float64     Float64      Float64     Cat…
+─────┼─────────────────────────────────────────────────────────────
+   1 │         5.1         3.5          1.4         0.2  setosa
+   2 │         4.9         3.0          1.4         0.2  setosa
+   3 │         4.7         3.2          1.3         0.2  setosa
+   4 │         4.6         3.1          1.5         0.2  setosa
+   5 │         5.0         3.6          1.4         0.2  setosa
+   6 │         5.4         3.9          1.7         0.4  setosa
+   7 │         4.6         3.4          1.4         0.3  setosa
+   8 │         5.0         3.4          1.5         0.2  setosa
+  ⋮  │      ⋮           ⋮            ⋮           ⋮           ⋮
+ 144 │         6.8         3.2          5.9         2.3  virginica
+ 145 │         6.7         3.3          5.7         2.5  virginica
+ 146 │         6.7         3.0          5.2         2.3  virginica
+ 147 │         6.3         2.5          5.0         1.9  virginica
+ 148 │         6.5         3.0          5.2         2.0  virginica
+ 149 │         6.2         3.4          5.4         2.3  virginica
+ 150 │         5.9         3.0          5.1         1.8  virginica
+                                                   135 rows omitted</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">first</span>(iris, <span class="fl">5</span>) <span class="co"># Visualização inicial das 5 primeiras linhas do dataset.</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>5×5 DataFrame
+ Row │ SepalLength  SepalWidth  PetalLength  PetalWidth  Species
+     │ Float64      Float64     Float64      Float64     Cat…
+─────┼───────────────────────────────────────────────────────────
+   1 │         5.1         3.5          1.4         0.2  setosa
+   2 │         4.9         3.0          1.4         0.2  setosa
+   3 │         4.7         3.2          1.3         0.2  setosa
+   4 │         4.6         3.1          1.5         0.2  setosa
+   5 │         5.0         3.6          1.4         0.2  setosa</code></pre>
+</div>
+</div>
+<p>O conjunto de dados <strong>Iris</strong> é um clássico da estatística e aprendizado de máquina. Ele contém medidas de sépalas e pétalas de três espécies de flores: Setosa, Versicolor e Virginica.</p>
+</section>
+</section>
+<section id="estatísticas-descritivas" class="level1">
+<h1>Estatísticas Descritivas</h1>
+<p>Vejamos como calcular estatísticas sumárias em julia usando os pacotes <em>StatsBase</em> e <em>Statistics</em>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">StatsBase</span>, <span class="bu">Statistics</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summarystats</span>(iris.SepalWidth)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Summary Stats:
+Length:         150
+Missing Count:  0
+Mean:           3.057333
+Std. Deviation: 0.435866
+Minimum:        2.000000
+1st Quartile:   2.800000
+Median:         3.000000
+3rd Quartile:   3.300000
+Maximum:        4.400000</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A função describe() também faz a mesma coisa.</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Obs.: julia também possui funções padrão como mean(), median(), std(), var(), ..., etc.</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>As principais medidas descritivas que podemos extrair incluem:</p>
+<ul>
+<li><p><strong>Média e Mediana</strong>: Medidas de tendência central</p></li>
+<li><p><strong>Desvio-padrão, Variância e Intervalo Interquartil (IQR)</strong>: Medidas de dispersão</p></li>
+</ul>
+<section id="correlação-entre-variáveis" class="level2">
+<h2 class="anchored" data-anchor-id="correlação-entre-variáveis">Correlação entre variáveis</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculando a correlação de Pearson entre duas variáveis numéricas, e depois descrevendo uma das colunas</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>correlacao <span class="op">=</span> <span class="fu">cor</span>(iris.SepalWidth, iris.SepalLength)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>-0.11756978413300205</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Correlação entre SepalWidth e SepalLength: "</span>, correlacao)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Correlação entre SepalWidth e SepalLength: -0.11756978413300205</code></pre>
+</div>
+</div>
+<p>Aqui, vemos a <strong>correlação de Pearson</strong> para as variáveis <em>SepalWidth</em> e <em>SepalLength</em> usando a função <code>cor()</code>.</p>
+</section>
+</section>
+<section id="manipulação-de-dados" class="level1">
+<h1>Manipulação de Dados</h1>
+<p>Manipular o dataset é essencial para criar subconjuntos, transformar colunas e preparar os dados para análise. Usaremos os pacotes <em>Distributions</em>, <em>Random</em> e, mais importante, <em>DataFrames</em>.</p>
+<section id="criando-novas-colunas" class="level2">
+<h2 class="anchored" data-anchor-id="criando-novas-colunas">Criando novas colunas</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Distributions</span>, <span class="bu">Random</span>, <span class="bu">DataFrames</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Agora vamos adicionar uma nova coluna ao nosso dataset</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="bu">Random</span>.<span class="fu">seed!</span>(<span class="fl">123</span>) <span class="co"># Tornando os resultados reprodutíveis</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>TaskLocalRNG()</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>iris.soma_col <span class="op">=</span> iris.SepalWidth <span class="op">+</span> iris.PetalWidth</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>150-element Vector{Float64}:
+ 3.7
+ 3.2
+ 3.4000000000000004
+ 3.3000000000000003
+ 3.8000000000000003
+ 4.3
+ 3.6999999999999997
+ 3.6
+ 3.1
+ 3.2
+ ⋮
+ 5.4
+ 4.6
+ 5.5
+ 5.8
+ 5.3
+ 4.4
+ 5.0
+ 5.699999999999999
+ 4.8</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>iris.normal_padrao <span class="op">=</span> <span class="fu">randn</span>(<span class="fl">150</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>150-element Vector{Float64}:
+  0.8082879284649668
+ -1.1220725081141734
+ -1.1046361023292959
+ -0.4169926351649334
+  0.28758798062385577
+  0.2298186980518676
+ -0.4217686643996927
+ -1.355590621101197
+  0.0694591410918936
+ -0.11732280453081337
+  ⋮
+ -0.5245917996070839
+  1.2770297791112688
+ -1.0890471538422415
+ -1.088218513936287
+  0.7037583257923017
+  0.14332589323751366
+  0.14837536667608195
+  1.0096134137351438
+  0.028766636052271793</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>iris.normal <span class="op">=</span> <span class="fu">rand</span>(<span class="fu">Normal</span>(<span class="fl">2</span>, <span class="fl">0.5</span>), <span class="fl">150</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>150-element Vector{Float64}:
+ 1.8549928474436481
+ 2.062061985303628
+ 2.016057255141819
+ 2.1161454686338543
+ 1.3673429647209598
+ 1.4120172154505015
+ 1.9308005375653
+ 1.6049470900443568
+ 3.5293684931000344
+ 1.0763261317866746
+ ⋮
+ 2.326721880967805
+ 1.949391560407876
+ 1.9438071314340073
+ 2.728684959145093
+ 2.259371762456528
+ 1.7372020985648153
+ 2.5003474504889027
+ 1.377130936042281
+ 2.3064311304205996</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Perceba que conseguimos criar uma normal padrão usando a função randn(). Já para uma normal com outros parêmtros de locação e escala utilizamos a função Normal()</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">first</span>(iris, <span class="fl">5</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>5×8 DataFrame
+ Row │ SepalLength  SepalWidth  PetalLength  PetalWidth  Species  soma_col  no ⋯
+     │ Float64      Float64     Float64      Float64     Cat…     Float64   Fl ⋯
+─────┼──────────────────────────────────────────────────────────────────────────
+   1 │         5.1         3.5          1.4         0.2  setosa        3.7     ⋯
+   2 │         4.9         3.0          1.4         0.2  setosa        3.2
+   3 │         4.7         3.2          1.3         0.2  setosa        3.4
+   4 │         4.6         3.1          1.5         0.2  setosa        3.3
+   5 │         5.0         3.6          1.4         0.2  setosa        3.8     ⋯
+                                                               2 columns omitted</code></pre>
+</div>
+</div>
+<p>Caso queira adicionar uma nova coluna ao seu dataset, por exemplo, comparar a soma - largura da sépala com a largura da pétala - para cada flor, apenas nomeie a sua nova coluna no formato <code>dados.nova_coluna = nova_coluna</code>. É importante ressaltar que <code>len(nova_coluna) = len(dados.coluna_qualquer)</code>, ou seja, o tamanho <strong>n</strong> da coluna (150 observações, no nosso exemplo) tem que ser igual no dataset inteiro.</p>
+</section>
+<section id="filtragem-de-dados" class="level2">
+<h2 class="anchored" data-anchor-id="filtragem-de-dados">Filtragem de dados</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Agora vejamos como filtrar valores no nosso dataset</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>flores_grandes <span class="op">=</span> <span class="fu">filter</span>(row <span class="op">-&gt;</span> row.SepalLength <span class="op">&gt;</span> <span class="fl">7</span>, iris) <span class="co"># Filtrando apenas as flores cuja sépala mede mais do que 7cm</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>12×8 DataFrame
+ Row │ SepalLength  SepalWidth  PetalLength  PetalWidth  Species    soma_col   ⋯
+     │ Float64      Float64     Float64      Float64     Cat…       Float64    ⋯
+─────┼──────────────────────────────────────────────────────────────────────────
+   1 │         7.1         3.0          5.9         2.1  virginica       5.1   ⋯
+   2 │         7.6         3.0          6.6         2.1  virginica       5.1
+   3 │         7.3         2.9          6.3         1.8  virginica       4.7
+   4 │         7.2         3.6          6.1         2.5  virginica       6.1
+   5 │         7.7         3.8          6.7         2.2  virginica       6.0   ⋯
+   6 │         7.7         2.6          6.9         2.3  virginica       4.9
+   7 │         7.7         2.8          6.7         2.0  virginica       4.8
+   8 │         7.2         3.2          6.0         1.8  virginica       5.0
+   9 │         7.2         3.0          5.8         1.6  virginica       4.6   ⋯
+  10 │         7.4         2.8          6.1         1.9  virginica       4.7
+  11 │         7.9         3.8          6.4         2.0  virginica       5.8
+  12 │         7.7         3.0          6.1         2.3  virginica       5.3
+                                                               2 columns omitted</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># flores_grandes1 = iris[iris.SepalLength .&gt; 7, :] Outra forma de filtrar</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">first</span>(flores_grandes, <span class="fl">5</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>5×8 DataFrame
+ Row │ SepalLength  SepalWidth  PetalLength  PetalWidth  Species    soma_col   ⋯
+     │ Float64      Float64     Float64      Float64     Cat…       Float64    ⋯
+─────┼──────────────────────────────────────────────────────────────────────────
+   1 │         7.1         3.0          5.9         2.1  virginica       5.1   ⋯
+   2 │         7.6         3.0          6.6         2.1  virginica       5.1
+   3 │         7.3         2.9          6.3         1.8  virginica       4.7
+   4 │         7.2         3.6          6.1         2.5  virginica       6.1
+   5 │         7.7         3.8          6.7         2.2  virginica       6.0   ⋯
+                                                               2 columns omitted</code></pre>
+</div>
+</div>
+<p>Para filtrar nossos dados, podemos usar a função <code>filter()</code>, no formato <code>filter(row ou col -&gt; condição, dados)</code> e assim criamos uma condição para filtrar as linhas do dataset. Uma alternativa seria usar o formato <code>dados[condição, :]</code>.</p>
+</section>
+<section id="agrupamento-e-seleção" class="level2">
+<h2 class="anchored" data-anchor-id="agrupamento-e-seleção">Agrupamento e seleção</h2>
+<p>Selecionando as colunas <em>SepalLength</em> e <em>PetalWidth</em> para análise.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Como selecionar e agrupar colunas</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>selecao <span class="op">=</span> <span class="fu">select</span>(iris, <span class="op">:</span>SepalLength, <span class="op">:</span>PetalWidth) <span class="co"># Selecionando colunas</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>150×2 DataFrame
+ Row │ SepalLength  PetalWidth
+     │ Float64      Float64
+─────┼─────────────────────────
+   1 │         5.1         0.2
+   2 │         4.9         0.2
+   3 │         4.7         0.2
+   4 │         4.6         0.2
+   5 │         5.0         0.2
+   6 │         5.4         0.4
+   7 │         4.6         0.3
+   8 │         5.0         0.2
+  ⋮  │      ⋮           ⋮
+ 144 │         6.8         2.3
+ 145 │         6.7         2.5
+ 146 │         6.7         2.3
+ 147 │         6.3         1.9
+ 148 │         6.5         2.0
+ 149 │         6.2         2.3
+ 150 │         5.9         1.8
+               135 rows omitted</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">first</span>(selecao, <span class="fl">5</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>5×2 DataFrame
+ Row │ SepalLength  PetalWidth
+     │ Float64      Float64
+─────┼─────────────────────────
+   1 │         5.1         0.2
+   2 │         4.9         0.2
+   3 │         4.7         0.2
+   4 │         4.6         0.2
+   5 │         5.0         0.2</code></pre>
+</div>
+</div>
+<p>Dataframes agrupados por <em>Species</em>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>grupo <span class="op">=</span> <span class="fu">groupby</span>(iris, <span class="op">:</span>Species) <span class="co"># Agrupando por categorias de uma colunas, nesse caso por espécie (virginica, setosa e versicolor)</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>GroupedDataFrame with 3 groups based on key: Species
+First Group (50 rows): Species = CategoricalArrays.CategoricalValue{String, UInt8} "setosa"
+ Row │ SepalLength  SepalWidth  PetalLength  PetalWidth  Species  soma_col  no ⋯
+     │ Float64      Float64     Float64      Float64     Cat…     Float64   Fl ⋯
+─────┼──────────────────────────────────────────────────────────────────────────
+   1 │         5.1         3.5          1.4         0.2  setosa        3.7     ⋯
+   2 │         4.9         3.0          1.4         0.2  setosa        3.2
+  ⋮  │      ⋮           ⋮            ⋮           ⋮          ⋮        ⋮         ⋱
+  49 │         5.3         3.7          1.5         0.2  setosa        3.9
+  50 │         5.0         3.3          1.4         0.2  setosa        3.5
+                                                   2 columns and 46 rows omitted
+⋮
+Last Group (50 rows): Species = CategoricalArrays.CategoricalValue{String, UInt8} "virginica"
+ Row │ SepalLength  SepalWidth  PetalLength  PetalWidth  Species    soma_col   ⋯
+     │ Float64      Float64     Float64      Float64     Cat…       Float64    ⋯
+─────┼──────────────────────────────────────────────────────────────────────────
+   1 │         6.3         3.3          6.0         2.5  virginica       5.8   ⋯
+   2 │         5.8         2.7          5.1         1.9  virginica       4.6
+  ⋮  │      ⋮           ⋮            ⋮           ⋮           ⋮         ⋮       ⋱
+  50 │         5.9         3.0          5.1         1.8  virginica       4.8
+                                                   2 columns and 47 rows omitted</code></pre>
+</div>
+</div>
+</section>
+<section id="aplicação-de-funções-e-ordenação" class="level2">
+<h2 class="anchored" data-anchor-id="aplicação-de-funções-e-ordenação">Aplicação de funções e ordenação</h2>
+<p>Aplicando a função <code>y = log(x)</code> para a coluna <em>SepalLength</em>, retornando o vetor de valores <em>y</em>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">first</span>(<span class="fu">map</span>(x <span class="op">-&gt;</span> <span class="fu">log</span>(x), iris.SepalLength), <span class="fl">10</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>10-element Vector{Float64}:
+ 1.62924053973028
+ 1.589235205116581
+ 1.547562508716013
+ 1.5260563034950492
+ 1.6094379124341003
+ 1.6863989535702288
+ 1.5260563034950492
+ 1.6094379124341003
+ 1.4816045409242156
+ 1.589235205116581</code></pre>
+</div>
+</div>
+<p>Ordenando o dataset com base no tamanho da pétala (PetalLength), em ordem crescente.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">first</span>(<span class="fu">sort</span>(iris, <span class="op">:</span>PetalLength), <span class="fl">10</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>10×8 DataFrame
+ Row │ SepalLength  SepalWidth  PetalLength  PetalWidth  Species  soma_col  no ⋯
+     │ Float64      Float64     Float64      Float64     Cat…     Float64   Fl ⋯
+─────┼──────────────────────────────────────────────────────────────────────────
+   1 │         4.6         3.6          1.0         0.2  setosa        3.8     ⋯
+   2 │         4.3         3.0          1.1         0.1  setosa        3.1
+   3 │         5.8         4.0          1.2         0.2  setosa        4.2
+   4 │         5.0         3.2          1.2         0.2  setosa        3.4
+   5 │         4.7         3.2          1.3         0.2  setosa        3.4     ⋯
+   6 │         5.4         3.9          1.3         0.4  setosa        4.3
+   7 │         5.5         3.5          1.3         0.2  setosa        3.7
+   8 │         4.4         3.0          1.3         0.2  setosa        3.2
+   9 │         5.0         3.5          1.3         0.3  setosa        3.8     ⋯
+  10 │         4.5         2.3          1.3         0.3  setosa        2.6
+                                                               2 columns omitted</code></pre>
+</div>
+</div>
+<blockquote class="blockquote">
+<p>É importante lembrar que muitas dessas funções possuem muita importância durante o tratamento dos dados no início de uma análise, mas também durante a criação de gráficos e tabelas.</p>
+</blockquote>
+</section>
+</section>
+<section id="visualização-de-dados" class="level1">
+<h1>Visualização de Dados</h1>
+<p>Agora vejamos como visualizar os nossos dados e variáveis de interesse através de gráficos! (<a href="https://ime.unicamp.br/julialang/Tutoriais/graf_basico.html">aqui</a> temos um tutorial para gráficos!).</p>
+<section id="histogramas-e-scatterplots" class="level2">
+<h2 class="anchored" data-anchor-id="histogramas-e-scatterplots">Histogramas e Scatterplots</h2>
+<p>Criando histogramas e scatterplots para visualizar a distribuição dos dados</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Plots</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Measures</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">histogram</span>(iris.SepalWidth, title<span class="op">=</span><span class="st">"Distribuição da Largura da Sépala"</span>, xlabel<span class="op">=</span><span class="st">"Largura"</span>, ylabel<span class="op">=</span><span class="st">"Frequência"</span>, margin<span class="op">=</span><span class="fl">5</span>mm, label<span class="op">=</span><span class="st">""</span>),</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scatter</span>(iris.PetalWidth, iris.PetalLength, title<span class="op">=</span><span class="st">"Largura x Comprimento da Pétala"</span>, xlabel<span class="op">=</span><span class="st">"Largura"</span>, ylabel<span class="op">=</span><span class="st">"Comprimento"</span>, margin<span class="op">=</span><span class="fl">5</span>mm, label<span class="op">=</span><span class="st">""</span>),</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>    layout<span class="op">=</span>(<span class="fl">1</span>, <span class="fl">2</span>),</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>    size<span class="op">=</span>(<span class="fl">900</span>, <span class="fl">400</span>)</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tutorial-eda_files/figure-html/unnamed-chunk-11-J1.png" class="img-fluid figure-img" width="450"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Gráficos de dispersão</strong> (<em>scatterplots</em>) são úteis para visualizar a relação entre duas variáveis contínuas, enquanto <strong>histogramas</strong> ajudam a entender a distribuição de uma única variável. Vamos agora aprender filtrar e selecionar os dados que queremos visualizar.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">StatsPlots</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Filtrando apenas as linhas com Species == "virginica"</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>virginica <span class="op">=</span> <span class="fu">filter</span>(row <span class="op">-&gt;</span> row.Species <span class="op">==</span> <span class="st">"virginica"</span>, iris)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>50×8 DataFrame
+ Row │ SepalLength  SepalWidth  PetalLength  PetalWidth  Species    soma_col   ⋯
+     │ Float64      Float64     Float64      Float64     Cat…       Float64    ⋯
+─────┼──────────────────────────────────────────────────────────────────────────
+   1 │         6.3         3.3          6.0         2.5  virginica       5.8   ⋯
+   2 │         5.8         2.7          5.1         1.9  virginica       4.6
+   3 │         7.1         3.0          5.9         2.1  virginica       5.1
+   4 │         6.3         2.9          5.6         1.8  virginica       4.7
+   5 │         6.5         3.0          5.8         2.2  virginica       5.2   ⋯
+   6 │         7.6         3.0          6.6         2.1  virginica       5.1
+   7 │         4.9         2.5          4.5         1.7  virginica       4.2
+   8 │         7.3         2.9          6.3         1.8  virginica       4.7
+  ⋮  │      ⋮           ⋮            ⋮           ⋮           ⋮         ⋮       ⋱
+  44 │         6.8         3.2          5.9         2.3  virginica       5.5   ⋯
+  45 │         6.7         3.3          5.7         2.5  virginica       5.8
+  46 │         6.7         3.0          5.2         2.3  virginica       5.3
+  47 │         6.3         2.5          5.0         1.9  virginica       4.4
+  48 │         6.5         3.0          5.2         2.0  virginica       5.0   ⋯
+  49 │         6.2         3.4          5.4         2.3  virginica       5.7
+  50 │         5.9         3.0          5.1         1.8  virginica       4.8
+                                                   2 columns and 35 rows omitted</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Selecionando apenas as colunas de interesse, nesse caso SepalWidth e PetalLength</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>dados_virg <span class="op">=</span> <span class="fu">select</span>(virginica, <span class="op">:</span>SepalWidth, <span class="op">:</span>PetalLength)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>50×2 DataFrame
+ Row │ SepalWidth  PetalLength
+     │ Float64     Float64
+─────┼─────────────────────────
+   1 │        3.3          6.0
+   2 │        2.7          5.1
+   3 │        3.0          5.9
+   4 │        2.9          5.6
+   5 │        3.0          5.8
+   6 │        3.0          6.6
+   7 │        2.5          4.5
+   8 │        2.9          6.3
+  ⋮  │     ⋮            ⋮
+  44 │        3.2          5.9
+  45 │        3.3          5.7
+  46 │        3.0          5.2
+  47 │        2.5          5.0
+  48 │        3.0          5.2
+  49 │        3.4          5.4
+  50 │        3.0          5.1
+                35 rows omitted</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Scatterplot</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="fu">scatter</span>(dados_virg.SepalWidth, dados_virg.PetalLength,</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>        xlabel <span class="op">=</span> <span class="st">"SepalWidth"</span>,</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>        ylabel <span class="op">=</span> <span class="st">"PetalLength"</span>,</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>        title <span class="op">=</span> <span class="st">"Virginica: SepalWidth vs PetalLength"</span>,</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>        legend <span class="op">=</span> <span class="cn">false</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tutorial-eda_files/figure-html/unnamed-chunk-12-J1.png" class="img-fluid figure-img" width="300"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="boxplots-e-gráficos-de-barras" class="level2">
+<h2 class="anchored" data-anchor-id="boxplots-e-gráficos-de-barras">Boxplots e Gráficos de Barras</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">DataFrames</span>, <span class="bu">StatsPlots</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Criando boxplots e gráficos de barras para visualizar a distribuição dos dados</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>box <span class="op">=</span> <span class="fu">boxplot</span>(iris.Species, iris.SepalLength, xlabel<span class="op">=</span><span class="st">"Espécie"</span>, ylabel<span class="op">=</span><span class="st">"Comprimento da Sépala"</span>, title<span class="op">=</span><span class="st">"Boxplot do SepalLength por Espécie"</span>, label<span class="op">=</span><span class="st">""</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tutorial-eda_files/figure-html/unnamed-chunk-13-J1.png" class="img-fluid figure-img" width="300"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Agrupando por espécie e calculando a média do comprimento da pétala</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>resumo <span class="op">=</span> <span class="fu">combine</span>(<span class="fu">groupby</span>(iris, <span class="op">:</span>Species), <span class="op">:</span>SepalWidth <span class="op">=&gt;</span> mean <span class="op">=&gt;</span> <span class="op">:</span>MediaSepalWidth)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>3×2 DataFrame
+ Row │ Species     MediaSepalWidth
+     │ Cat…        Float64
+─────┼─────────────────────────────
+   1 │ setosa                3.428
+   2 │ versicolor            2.77
+   3 │ virginica             2.974</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico de barras</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>barras <span class="op">=</span> <span class="fu">bar</span>(resumo.Species, resumo.MediaSepalWidth,</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>    xlabel <span class="op">=</span> <span class="st">"Espécie"</span>,</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>    ylabel <span class="op">=</span> <span class="st">"Média do SepalWidth"</span>,</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>    title <span class="op">=</span> <span class="st">"Média da SepalWidth por Espécie"</span>,</span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>    legend <span class="op">=</span> <span class="cn">false</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tutorial-eda_files/figure-html/unnamed-chunk-13-J2.png" class="img-fluid figure-img" width="300"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(box, barras, layout<span class="op">=</span>(<span class="fl">1</span>, <span class="fl">2</span>), size<span class="op">=</span>(<span class="fl">800</span>, <span class="fl">400</span>))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tutorial-eda_files/figure-html/unnamed-chunk-13-J3.png" class="img-fluid figure-img" width="400"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">DataFrames</span>, <span class="bu">StatsPlots</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Agrupando por espécie e calculando a média do comprimento da pétala</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>resumo <span class="op">=</span> <span class="fu">combine</span>(<span class="fu">groupby</span>(iris, <span class="op">:</span>Species), <span class="op">:</span>SepalLength <span class="op">=&gt;</span> mean <span class="op">=&gt;</span> <span class="op">:</span>MediaSepalLength)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>3×2 DataFrame
+ Row │ Species     MediaSepalLength
+     │ Cat…        Float64
+─────┼──────────────────────────────
+   1 │ setosa                 5.006
+   2 │ versicolor             5.936
+   3 │ virginica              6.588</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico de barras</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="fu">bar</span>(resumo.Species, resumo.MediaSepalLength,</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>    xlabel <span class="op">=</span> <span class="st">"Espécie"</span>,</span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>    ylabel <span class="op">=</span> <span class="st">"Média do SepalLength"</span>,</span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>    title <span class="op">=</span> <span class="st">"Média do Comprimento da Sépala por Espécie"</span>,</span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>    legend <span class="op">=</span> <span class="cn">false</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tutorial-eda_files/figure-html/unnamed-chunk-14-J1.png" class="img-fluid figure-img" width="300"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Boxplots</strong> são ótimos para visualizar a <strong>dispersão</strong> e identificar <em>outliers</em>, enquanto <strong>gráficos de barras</strong> ajudam a entender a <strong>frequência</strong> de categorias. Vamos agora agrupar os dados e visualizar mais de uma variável.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">DataFrames</span>, <span class="bu">StatsPlots</span>, <span class="bu">Statistics</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Agrupando os dados e calculando suas medianas</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>df_bar <span class="op">=</span> <span class="fu">combine</span>(<span class="fu">groupby</span>(iris, <span class="op">:</span>Species),</span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">:</span>PetalWidth <span class="op">=&gt;</span> median,</span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">:</span>PetalLength <span class="op">=&gt;</span> median</span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>3×3 DataFrame
+ Row │ Species     PetalWidth_median  PetalLength_median
+     │ Cat…        Float64            Float64
+─────┼───────────────────────────────────────────────────
+   1 │ setosa                    0.2                1.5
+   2 │ versicolor                1.3                4.35
+   3 │ virginica                 2.0                5.55</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Organizando os dados</span></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="fu">Matrix</span>(<span class="fu">select</span>(df_bar, <span class="fu">Not</span>(<span class="op">:</span>Species))) </span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>3×2 Matrix{Float64}:
+ 0.2  1.5
+ 1.3  4.35
+ 2.0  5.55</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> df_bar.Species                             </span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>3-element CategoricalArrays.CategoricalArray{String,1,UInt8}:
+ "setosa"
+ "versicolor"
+ "virginica"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="fu">groupedbar</span>(</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>    x,</span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>    y,</span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>    bar_position <span class="op">=</span> <span class="op">:</span>dodge,</span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>    xlabel <span class="op">=</span> <span class="st">"Espécie"</span>,</span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>    ylabel <span class="op">=</span> <span class="st">"Mediana"</span>,</span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a>    title <span class="op">=</span> <span class="st">"Mediana de PetalWidth e PetalLength por Espécie"</span>,</span>
+<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a>    label <span class="op">=</span> [<span class="st">"PetalWidth"</span> <span class="st">"PetalLength"</span>],</span>
+<span id="cb57-10"><a href="#cb57-10" aria-hidden="true" tabindex="-1"></a>    bar_width <span class="op">=</span> <span class="fl">0.6</span>,</span>
+<span id="cb57-11"><a href="#cb57-11" aria-hidden="true" tabindex="-1"></a>    lw <span class="op">=</span> <span class="fl">0</span>,</span>
+<span id="cb57-12"><a href="#cb57-12" aria-hidden="true" tabindex="-1"></a>    framestyle <span class="op">=</span> <span class="op">:</span>box</span>
+<span id="cb57-13"><a href="#cb57-13" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tutorial-eda_files/figure-html/unnamed-chunk-15-J1.png" class="img-fluid figure-img" width="300"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Aqui, separamos a mediana do comprimento e largura da pétala (<em>PetalLength</em> e <em>PetalWidth</em>) para cada espécie, assim conseguindo visualizar conjuntamente a medida dessas variáveis em diferentes grupos.</p>
+</section>
+<section id="matriz-de-correlação-heatmap" class="level2">
+<h2 class="anchored" data-anchor-id="matriz-de-correlação-heatmap">Matriz de Correlação (Heatmap)</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">StatsPlots</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Criando uma matriz de correlação e visualizando com um heatmap</span></span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>dados_num <span class="op">=</span> <span class="fu">Matrix</span>(iris[<span class="op">:</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>])</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>150×4 Matrix{Float64}:
+ 5.1  3.5  1.4  0.2
+ 4.9  3.0  1.4  0.2
+ 4.7  3.2  1.3  0.2
+ 4.6  3.1  1.5  0.2
+ 5.0  3.6  1.4  0.2
+ 5.4  3.9  1.7  0.4
+ 4.6  3.4  1.4  0.3
+ 5.0  3.4  1.5  0.2
+ 4.4  2.9  1.4  0.2
+ 4.9  3.1  1.5  0.1
+ ⋮              
+ 6.9  3.1  5.1  2.3
+ 5.8  2.7  5.1  1.9
+ 6.8  3.2  5.9  2.3
+ 6.7  3.3  5.7  2.5
+ 6.7  3.0  5.2  2.3
+ 6.3  2.5  5.0  1.9
+ 6.5  3.0  5.2  2.0
+ 6.2  3.4  5.4  2.3
+ 5.9  3.0  5.1  1.8</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>cor_matriz <span class="op">=</span> <span class="fu">cor</span>(dados_num)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>4×4 Matrix{Float64}:
+  1.0       -0.11757    0.871754   0.817941
+ -0.11757    1.0       -0.42844   -0.366126
+  0.871754  -0.42844    1.0        0.962865
+  0.817941  -0.366126   0.962865   1.0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>var_nomes <span class="op">=</span> <span class="fu">names</span>(iris)[<span class="fl">1</span><span class="op">:</span><span class="fl">4</span>]</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>4-element Vector{String}:
+ "SepalLength"
+ "SepalWidth"
+ "PetalLength"
+ "PetalWidth"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotando a matriz de correlação</span></span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a><span class="fu">heatmap</span>(</span>
+<span id="cb64-5"><a href="#cb64-5" aria-hidden="true" tabindex="-1"></a>    cor_matriz,</span>
+<span id="cb64-6"><a href="#cb64-6" aria-hidden="true" tabindex="-1"></a>    xticks<span class="op">=</span>(<span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, var_nomes),</span>
+<span id="cb64-7"><a href="#cb64-7" aria-hidden="true" tabindex="-1"></a>    yticks<span class="op">=</span>(<span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, var_nomes),</span>
+<span id="cb64-8"><a href="#cb64-8" aria-hidden="true" tabindex="-1"></a>    title<span class="op">=</span><span class="st">"Matriz de Correlação"</span>,</span>
+<span id="cb64-9"><a href="#cb64-9" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=:</span>blues,</span>
+<span id="cb64-10"><a href="#cb64-10" aria-hidden="true" tabindex="-1"></a>    size<span class="op">=</span>(<span class="fl">600</span>, <span class="fl">500</span>)</span>
+<span id="cb64-11"><a href="#cb64-11" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tutorial-eda_files/figure-html/unnamed-chunk-16-J1.png" class="img-fluid figure-img" width="300"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>A <strong>matriz de correlação</strong> é uma ferramenta poderosa para entender a <strong>relação</strong> entre variáveis. O <em>heatmap</em> ajuda a visualizar essas correlações de forma intuitiva.</p>
+</section>
+<section id="q-q-plot-normalidade" class="level2">
+<h2 class="anchored" data-anchor-id="q-q-plot-normalidade">Q-Q Plot (Normalidade)</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Distributions</span>, <span class="bu">StatsPlots</span></span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Usando o pacote StatsPlots para criar um Q-Q plot</span></span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a><span class="fu">qqplot</span>(<span class="fu">Normal</span>(), iris.PetalLength,</span>
+<span id="cb65-6"><a href="#cb65-6" aria-hidden="true" tabindex="-1"></a>       xlabel<span class="op">=</span><span class="st">"Quantis Teóricos"</span>,</span>
+<span id="cb65-7"><a href="#cb65-7" aria-hidden="true" tabindex="-1"></a>       ylabel<span class="op">=</span><span class="st">"Quantis Amostrais"</span>,</span>
+<span id="cb65-8"><a href="#cb65-8" aria-hidden="true" tabindex="-1"></a>       title<span class="op">=</span><span class="st">"Q-Q Plot de PetalLength"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tutorial-eda_files/figure-html/unnamed-chunk-17-J1.png" class="img-fluid figure-img" width="300"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Q-Q plots</strong> são úteis para verificar a <strong>normalidade</strong> dos dados. Se os pontos seguirem a linha reta, os dados possivelmente seguem uma distribuição normal. Nesse caso, vemos que a variável <em>PetalLength</em> não segue uma distribuição Normal.</p>
+</section>
+<section id="série-temporal" class="level2">
+<h2 class="anchored" data-anchor-id="série-temporal">Série Temporal</h2>
+<p>Por último, criamos uma <strong>série temporal</strong> simulada para ilustrar como visualizar dados ao longo do tempo. A função <code>cumsum()</code> é usada para calcular a soma acumulada (no nosso caso, acumular número aleatório de uma distribuição Normal padrão), e o gráfico mostra a evolução dos valores ao longo do ano.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Dates</span></span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Gerando uma série temporal simulada</span></span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a>datas <span class="op">=</span> <span class="fu">Date</span>(<span class="fl">2024</span>,<span class="fl">1</span>,<span class="fl">1</span>)<span class="op">:</span><span class="fu">Day</span>(<span class="fl">1</span>)<span class="op">:</span><span class="fu">Date</span>(<span class="fl">2024</span>,<span class="fl">12</span>,<span class="fl">31</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Date("2024-01-01"):Day(1):Date("2024-12-31")</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>valores <span class="op">=</span> <span class="fu">cumsum</span>(<span class="fu">randn</span>(<span class="fu">length</span>(datas))) <span class="op">.+</span> <span class="fl">100</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>366-element Vector{Float64}:
+  99.93356752809319
+ 100.68920283747816
+ 101.60107790420861
+ 100.80867532750842
+ 100.22443383684116
+  98.5038393366958
+  98.73218906091287
+  99.46750522556687
+  97.83974470691781
+  96.0199549308198
+   ⋮
+ 101.50097700552809
+ 100.33548507315055
+ 100.31383058790584
+ 101.02944569713357
+ 101.40802609294452
+ 100.68350893826006
+  99.82193264955082
+  97.79657769045133
+  97.80224894941702</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotando a série temporal</span></span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(datas, valores,</span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a>     xlabel<span class="op">=</span><span class="st">"Data"</span>, ylabel<span class="op">=</span><span class="st">"Valor"</span>,</span>
+<span id="cb70-6"><a href="#cb70-6" aria-hidden="true" tabindex="-1"></a>     title<span class="op">=</span><span class="st">"Série Temporal Simulada"</span>,</span>
+<span id="cb70-7"><a href="#cb70-7" aria-hidden="true" tabindex="-1"></a>     linewidth<span class="op">=</span><span class="fl">2</span>, label<span class="op">=</span><span class="st">""</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tutorial-eda_files/figure-html/unnamed-chunk-18-J1.png" class="img-fluid figure-img" width="300"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="considerações-finais" class="level1">
+<h1>Considerações Finais</h1>
+<p>A <strong>Análise Exploratória de Dados</strong> (EDA) é uma etapa crucial para entender os dados e preparar o caminho para análises mais profundas. A linguagem <strong>julia</strong>, com sua sintaxe clara e desempenho elevado, é uma excelente escolha para essa tarefa.</p>
+<blockquote class="blockquote">
+<p><strong>Explore mais:</strong> experimente outros pacotes como <code>CSV.jl</code> para ler arquivos externos, <code>GLM.jl</code> para regressão, e <code>Gadfly.jl</code> para visualizações mais elaboradas.</p>
+</blockquote>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Nota
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.</p>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copiada");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copiada");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Website feito com <a href="https://quarto.org/">Quarto</a>. License: <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
