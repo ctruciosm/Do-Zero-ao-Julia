@@ -282,9 +282,9 @@ window.Quarto = {
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Pkg</span>.<span class="fu">add</span>(<span class="st">"Plots"</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Plots</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="tip">
+<blockquote class="blockquote">
 <p>Lembre-se que precisamos apenas instalar o pacote uma única vez, mas chamá-lo em cada sessão que formos utilizá-lo.</p>
-</div>
+</blockquote>
 <div class="justify">
 <p>Também utilizaremos os pacotes <code>Distributions.jl</code> e <code>StatsPlots.jl</code> para permitir a criação de gráficos com dados simulados e utilizar algumas distribuições de probabilidade. Para instalá-los e carregá-los, use:</p>
 </div>
@@ -310,11 +310,11 @@ window.Quarto = {
 </div>
 <center>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">Normal</span>(<span class="fl">0</span>,<span class="fl">1</span>), title <span class="op">=</span> <span class="st">"Distribuição Normal"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">Normal</span>(<span class="fl">0</span>,<span class="fl">1</span>), title <span class="op">=</span> <span class="st">"Distribuição Normal"</span>, size <span class="op">=</span> (<span class="fl">800</span>, <span class="fl">500</span>))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="graf_basico_files/figure-html/unnamed-chunk-4-J1.png" class="img-fluid figure-img" width="300"></p>
+<p><img src="graf_basico_files/figure-html/unnamed-chunk-4-J1.png" class="img-fluid figure-img" width="400"></p>
 </figure>
 </div>
 </div>
@@ -338,11 +338,11 @@ window.Quarto = {
 </div>
 <center>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">randn</span>(<span class="fl">10</span>), title <span class="op">=</span> <span class="st">"Gráfico de linha ou de sequência"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">randn</span>(<span class="fl">10</span>), title <span class="op">=</span> <span class="st">"Gráfico de linha ou de sequência"</span>, size <span class="op">=</span> (<span class="fl">800</span>, <span class="fl">500</span>))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="graf_basico_files/figure-html/unnamed-chunk-5-J1.png" class="img-fluid figure-img" width="300"></p>
+<p><img src="graf_basico_files/figure-html/unnamed-chunk-5-J1.png" class="img-fluid figure-img" width="400"></p>
 </figure>
 </div>
 </div>
@@ -354,7 +354,7 @@ window.Quarto = {
 <div class="justify">
 <p>Também é possível fazer um gráfico de dispersão (<em>scatterplot</em>) com o código abaixo. Neste exemplo, geramos valores em <code>x</code> de 0 a 10 com um espaçamento de 0,5 entre eles e calculamos <code>y</code> como o logaritmo de cada valor de <code>x</code>. Além de personalizar o título e o nome dos eixos, é possível controlar a exibição da legenda — o padrão é mostrar <code>legend = auto</code>, mas você pode ocultá-la com <code>legend = false</code>.</p>
 </div>
-<div class="center">
+<center>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">0.5</span><span class="op">:</span><span class="fl">10</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -370,7 +370,7 @@ window.Quarto = {
 </div>
 </div>
 </div>
-</div>
+</center>
 <blockquote class="blockquote">
 <p><strong>Observação:</strong> o operador <span class="math inline">\(\cdot\)</span> (<em>dot</em>), aplica a função <span class="math inline">\(\log()\)</span> a cada elemento do vetor <code>x</code>. O “;” evita que a variável <code>y</code> seja imprimida (como aconteceu com a variávél <code>x</code>).</p>
 </blockquote>
@@ -379,7 +379,7 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="histograma">Histograma</h3>
 <div class="justify">
 <p>Outro recurso valioso na visualização de dados é o histograma, ideal para visualizar a distribuição de uma variável. Vamos construí-lo a partir da criação de uma variável x equivalente a 1000 números aleatórios de uma distribuição Normal(0, 1), executando o seguinte bloco:</p>
-<div class="center">
+<center>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="fu">randn</span>(<span class="fl">1000</span>);</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">histogram</span>(x, title <span class="op">=</span> <span class="st">"Histograma"</span>, color <span class="op">=</span> <span class="op">:</span>purple)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -391,10 +391,10 @@ window.Quarto = {
 </div>
 </div>
 </div>
-</div>
+</center>
 <p>Note que é possível customizar o número de intervalos (<code>bins = 100</code>, por exemplo) do seu histograma e modificar sua cor base. No exemplo abaixo, a cor é definida por nome (:purple), mas você também pode usar códigos hexadecimais — por exemplo, <code>color = "#800080"</code> produz o mesmo tom de roxo.</p>
 </div>
-<div class="center">
+<center>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">histogram</span>(x, title <span class="op">=</span> <span class="st">"Histograma"</span>, bins <span class="op">=</span> <span class="fl">10</span>, color <span class="op">=</span> <span class="st">"#111080"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -405,14 +405,14 @@ window.Quarto = {
 </div>
 </div>
 </div>
-</div>
+</center>
 </section>
 <section id="boxplot" class="level3">
 <h3 class="anchored" data-anchor-id="boxplot">Boxplot</h3>
 <div class="justify">
 <p>Para os estatísticos e cientistas de dados, o pacote <code>Plots.jl</code> oferece suporte ao conhecido boxplot, uma ferramenta eficaz para resumir estatísticas, ver assimetrias e identificar outliers. Ao executar o código abaixo, estaremos gerando dois vetores de 50 números aleatórios cada que, multiplicadas por 5, vão compor o conjunto de dados <code>y</code>.</p>
 </div>
-<div class="center">
+<center>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="fl">5</span> <span class="op">*</span> <span class="fu">rand</span>(<span class="fl">50</span>, <span class="fl">2</span>);</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">size</span>(y)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -428,7 +428,7 @@ window.Quarto = {
 </div>
 </div>
 </div>
-</div>
+</center>
 <div class="justify">
 <p>Note que para especificar cores manualmente, basta listar os nomes <strong>sem vírgula entre eles</strong>, tal qual no bloco acima. Esse detalhe é importante quando seus dados estão organizados em colunas no mesmo array. Abaixo veremos quando devemos incluir a vírgula.</p>
 </div>
@@ -436,10 +436,10 @@ window.Quarto = {
 <section id="gráfico-de-pizza" class="level3">
 <h3 class="anchored" data-anchor-id="gráfico-de-pizza">Gráfico de Pizza</h3>
 <div class="justify">
-<p>Tudo bem se você preferir os gráficos de pizza, eles ainda têm seu charme! 🥳 O bloco a seguir cria um gráfico de pizza utilizando a paleta de cores :tab10, que já vem disponível por padrão no pacote Plots.jl.</p>
+<p>Tudo bem se você preferir os gráficos de pizza, eles ainda têm seu charme! 🎉 O bloco a seguir cria um gráfico de pizza utilizando a paleta de cores :tab10, que já vem disponível por padrão no pacote Plots.jl.</p>
 <p>Vamos supor que os institutos IMECC, IG, IFGW e IFCH tenham, respectivamente, 700, 600, 500 e 470 alunos. Nosso objetivo é representar essas quantidades como porcentagens em um gráfico de pizza, considerando o total de alunos dos quatro institutos como 100%.</p>
 </div>
-<div class="center">
+<center>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> [<span class="st">"IMECC"</span>, <span class="st">"IG"</span>, <span class="st">"IFGW"</span>, <span class="st">"IFCH"</span>]</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -467,7 +467,7 @@ window.Quarto = {
 </div>
 </div>
 </div>
-</div>
+</center>
 <p>Para escolher manualmente as cores de cada fatia do gráfico de pizza, você pode usar uma lista de cores assim como no boxplot. Mas cuidado! Aqui os dados não foram gerados em conjunto, mas sim em dois vetores separados. Assim, para substituir o argumento <code>palette</code>, a vígula entre os nomes é necessária.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>color <span class="op">=</span> [<span class="op">:</span>darkorchid, <span class="op">:</span>darkorange, <span class="op">:</span>purple, <span class="op">:</span>blue]</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -479,7 +479,7 @@ window.Quarto = {
 <section id="gráfico-de-barras" class="level3">
 <h3 class="anchored" data-anchor-id="gráfico-de-barras">Gráfico de Barras</h3>
 <p>Para comparar valores entre diferentes grupos e categorias, podemos construir um gráfico de barras de estrutura semelhante ao seguinte:</p>
-<div class="center">
+<center>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>num <span class="op">=</span> [<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>, <span class="st">"E"</span>]</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -508,7 +508,7 @@ window.Quarto = {
 </div>
 </div>
 </div>
-</div>
+</center>
 </section>
 </section>
 <section id="grids-e-combinações" class="level2">
@@ -516,7 +516,7 @@ window.Quarto = {
 <div class="justify">
 <p>Uma ferramenta bastante utilizada na visualização de dados é a junção de gráficos distintos na mesma imagem para facilitar a comparação, ou sobrepor múltiplas curvas em um único gráfico para contrastá-las no mesmo plano. Se você deseja criar o famoso <code>grid</code> (também chamado de malha gráfica), <code>Julia</code> oferece soluções práticas.</p>
 </div>
-<div class="center">
+<center>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>h <span class="op">=</span> <span class="fu">range</span>(<span class="fl">0</span>, <span class="fl">10</span>, length <span class="op">=</span> <span class="fl">100</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -579,11 +579,11 @@ window.Quarto = {
 </div>
 </div>
 </div>
-</div>
+</center>
 <div class="justify">
 <p>Na figura acima criamos um vetor <code>h</code> com 100 valores uniformemente espaçados entre 0 e 10, um vetor <code>k</code> correspondente ao logaritmo dos elementos de <code>h</code>, e <code>j</code> ao exponencial dos mesmos elementos. O argumento <code>layout</code> define a disposição dos gráficos na figura, no qual o primeiro número indica o número de linhas e o segundo o número de colunas do grid. Agora, vamos combinar essas mesmas informações em um único gráfico, ajustando <code>j</code> para que sua escala fique mais próxima à de <code>k</code>.</p>
 </div>
-<div class="center">
+<center>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>j2 <span class="op">=</span> @. <span class="fu">exp</span>(h)<span class="op">/</span><span class="fl">5000</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -627,7 +627,7 @@ window.Quarto = {
 </div>
 </div>
 </div>
-</div>
+</center>
 <blockquote class="blockquote">
 <p>Note que além de ocultar ou exibir a legenda, é possível personalizar os rótulos (<code>labels</code>) do seu gráfico e escolher diferentes estilos para as linhas das curvas.</p>
 </blockquote>
