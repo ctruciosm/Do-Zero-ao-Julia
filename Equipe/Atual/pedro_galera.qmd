@@ -1,0 +1,29 @@
+---
+title: "Pedro H. G. Elias"
+sortby: "Pedro Henrique Galera Elias"
+subtitle: "Doutorando em Estatística"
+image: foto_phgelias.jpg
+about:
+  id: person-profile
+  template: solana
+  image-width: 10em
+  links:
+    - icon: file-earmark-text
+      text: Lattes
+      href: http://lattes.cnpq.br/8745944531594510
+    - icon: github
+      text: Github
+      href: https://github.com/phgelias
+    - icon: linkedin
+      text: Linkedin
+      href: https://www.linkedin.com/in/pedro-galera/
+---
+
+
+
+
+:::{#person-profile}
+:::
+
+Doutorando em Estatística pela UNICAMP.
+

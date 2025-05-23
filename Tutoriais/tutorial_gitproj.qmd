@@ -1,0 +1,950 @@
+---
+title: "Introdução ao Git e projetos colaborativos"
+description: "Nesse tutorial estão presentes conceitos e exemplos em abundância. Vem dar uma olhada! Aproveite pra ficar sabendo sobre dicas e boas práticas colaborativas."
+categories:
+  - "DEV"
+author:
+  - name: Heitor Brotto
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/brotto-go
+    orcid: 0009-0008-2081-0357
+date: "2025-05-21"
+image: imagens/git-animation.gif
+lang: pt-br
+format:
+  html:
+    theme: [cosmo, estilos\style_hbgs.scss]
+    toc: true
+    toc-depth: 3
+    self-contained: false
+draft: true
+---
+
+
+<!-- 
+Nota: O público alvo desse tutorial são os próprios desenvolvedores do 
+      projeto.
+
+      As principais motivações por trás da produção desse tutorial são:
+      
+      (1): Oferecer um material introdutório ao Git para os membros atuais 
+      e futuros. 
+      
+      A ideia é facilitar o aprendizado de quem se interessar em entender
+      como funcionam os processos que permitem a colaboração acontecer por 
+      meio do Git;
+      
+      (2): Introduzir um guia de boas práticas, o "Conventional Commit";
+      
+      (3): E formar um conjunto de vários exemplos de formatação, exibindo
+      uma amostra extensa do que é possível se fazer com o Quarto.
+-->
+
+## Introdução
+
+`git` é uma ferramenta essencial para desenvolvedores, mas muitos iniciantes acham seu funcionamento misterioso. Neste tutorial, vamos mostrar como o `git` pode ser seu aliado no controle de versão de projetos. Se você já se perguntou "Por que meu código parou de funcionar depois dessa mudança?", o Git é a resposta!
+
+## Git & GitHub
+
+### Qual a diferença?
+
+O `git` é um sistema de controle de versão e seu principal serviço são os repositórios `git` --- instalado em um computador, ele cria e atualiza um histórico sobre os arquivos de um repositório de interesse, permitindo revisitar uma mesma parte desses arquivos em diferentes momentos no tempo.
+
+O [GitHub](https://github.com) é uma plataforma que conecta repositórios `git` e os hospeda dentro de seus servidores.[^1]
+
+[^1]: Existem outros sites que propõem o mesmo tipo de serviço (*eg.* GitLab e Bitbucket)
+
+<br>
+
+### Git
+
+Sendo mais específico, o `git` é um software livre, distribuído sob os termos da versão 2 da GNU General Public License e criado em 2005 por Linus Torvalds para o desenvolvimento do `Linux`.
+
+Seus repositórios oferecem ferramentas de controle e administração completa de arquivos digitais, isso inclui funcionalidades como histórico, registro de auditoria, interface de revisão e conta com operabilidade independende de acesso a uma rede *internet*.
+
+Inicialização de uma instância do git:
+```bash
+git init
+```
+
+### Hub
+
+Já o GitHub é uma plataforma de hospedagem de arquivos e projetos, em especial códigos-fonte, com ferramentas de controle de versão integradas usando o `git`; para além disso, ele conta com *features* colaborativas (como *pull requests* e *issues*).
+
+De certa forma ela se parece com uma rede social para códigos e programadores, nela é possível:
+
+* Criar repositórios/projetos online, de caráter público ou mesmo privado
+* Interagir com outros colaboradores por meio de [*pull requests*](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests) (PR)
+* Acompanhar [*issues*](https://docs.github.com/en/issues/tracking-your-work-with-issues/about-issues) ao discutir ideias, propor melhorias, reportar bugs e afins
+
+<br>
+
+## Instalação
+
+Essa seção assume que o procedimento de instalação deva ser carregado pelo leitor do post; o processo de instalação deve levar o sistema operacional da máquina em consideração.
+
+Endereço *web*:
+
+* [Git](https://git-scm.com/downloads)
+
+## Ambiente
+
+Uma vez instalado é possível abrir o terminal `bash`[^2] na maioria dos diretórios da sua máquina!
+
+[^2]: "GNU Bash ou simplesmente Bash é um interpretador de comandos, um entre os diversos tradutores entre o usuário e o sistema operacional conhecidos como shell." -- [pt.wikipedia.org](https://pt.wikipedia.org/wiki/Bash)
+
+![Imagem do terminal *Git bash* aberto na área de trabalho do Windows](imagens\terminal_gitbash1.gif){style="float:right;" fig-alt="(X) Falha no carregamento da imagem" width="25em"}
+
+Escolha o diretório que preferir e experimente criar uma pasta; vamos testar as funcionalidades a seguir.
+
+Supondo que o nome da sua pasta seja `<pasta>`
+
+1. Abra a `<pasta>`
+2. Aperte {{< kbd MOUSE2 >}} [^3] sobre o espaço vazio da pasta
+3. Selecione a opção "Open Git Bash here"
+
+[^3]: Botão direito do mouse
+
+Ou alternativamente, abra a `<pasta>` e {{< kbd Shift+F10 >}} + {{< kbd S >}} + {{< kbd ENTER >}}
+
+## Principais Comandos
+
+### Ciclo básico
+
+<br>
+
+### `git init`
+
+Partindo desse comando podemos inicializar uma nova instância do git dentro do diretório `<pasta>`, de modo a transformá-lo num repositório `git`. Se esse comando for executado em uma pasta que já é um repositório, então a instância do git será reinicializada.
+
+Ao digitar a seguinte linha de código e pressionar {{< kbd ENTER >}}, o comando é executado pelo terminal `bash`.
+
+```bash
+git init
+```
+
+::: {.border}
+```
+Initialized empty Git repository in C:/Users/User/Desktop/teste/.git/
+```
+:::
+
+::: {.callout-caution collapse="true"}
+## *Did you know?*
+
+Um detalhe interessante é que podemos visualizar essa instância dentro do repositório; se você estiver acompanhando os exemplos é provável que note que a `<pasta>` está aparentemente vazia --- no entanto agora existe um objeto oculto dentro dela.
+
+Supondo que o sistema operacional do leitor seja Windows
+
+1. No Windows Explorer, na `<pasta>`, clique na aba "Exibir"
+2. No grupo Mostrar/ocultar marque a *checkbox* "Itens ocultos"
+
+O resultado desse procedimento deve se parecer com a seguinte imagem:
+
+![*Git bash* e um novo item `.git` na `<pasta>`](imagens\terminal_gitbash2.gif){style="float:left;" fig-alt="(X) Falha no carregamento da imagem" width="25em"}
+
+::: {.justify_p}
+`.git` é o objeto que vigia tudo o que acontece dentro da `<pasta>` e organiza todas as operações internas de controle. Se ele for apagado da lixeira, as informações que ele coletou são perdidas.
+:::
+
+::: {.justify_p}
+Vale ressaltar que junto a inicialização do repositório, o `git` também criou uma primeira *branch* (tópico mais avançado) chamada `master` (ela costuma se chamar `main` ou `master` a depender do que o `git` escolher).
+:::
+
+:::
+
+<br>
+
+### `git status`
+
+No dia a dia, se `<pasta>` é um diretório frequentemente utilizado numa máquina, então é natural esperar que regularmente sejam criados/alterados/movidos arquivos para dentro da `<pasta>`; num caso como esse, um controlador[^4] pode se perguntar:
+
+[^4]: Usuário de `git` que esteja trabalhando num repositório local.
+
+> Como estão os arquivos do meu repositório, quais alterei, quais excluí?
+
+Num caso como esse, o estado mais recente do repositório com respeito aos seus arquivos pode ser informado pelo comando `git status`.
+
+```bash
+git status
+```
+
+::: {.border}
+```
+On branch master
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        script.js
+        index.html
+
+nothing added to commit but untracked files present (use "git add" to track)
+```
+:::
+
+O relatório entregue pelo `git status` informa o estado de cada arquivo dentro do repositório na *branch* ativa (nesse caso a `master`) até o presente momento.
+
+Todo arquivo não adicionado a fila de espera pelo controlador é rotulado como "não rastreado" --- uma vez adicionado a fila, ele passa a ser rotulado como "rastreado".
+
+::: {.callout-caution collapse="true"}
+## Exemplos de manipulação de arquivos
+
+Os dois arquivos `script.js` e `index.html` informados pela saída do terminal anterior são objetos que podem ser obtidos a partir dos exemplos a seguir, e de fato, o são.
+
+Vale ressaltar que num repositório frequentemente utilizado, os arquivos criados/alterados/movidos não precisam ser manupilados da mesma maneira que nos exemplos apresentados a seguir.
+
+Nada nos impediria de, por exemplo, criar blocos de notas[^longnote] vazios na `<pasta>` e então alterar seus nomes e suas extensões para `script.js` e `index.html`. Isso teria o mesmo efeito que o resultado final dos exemplos a seguir.
+
+[^longnote]: ![](imagens\notepad_logo.PNG){width="2em"} -- Bloco de notas Windows
+
+    É um arquivo do tipo `.txt`, mas qualquer tipo de arquivo serviria para o propósito do exemplo.
+
+#### Alguns comandos do `bash`:
+
+#### `touch` e `ls`
+
+No próprio terminal `bash` envie as linhas do primeiro bloco de código 
+
+```bash
+touch index.html
+ls
+```
+
+::: {.border}
+```
+index.html
+```
+:::
+
+`touch` e `ls` são dois comandos `bash`; o primeiro cria um arquivo `.html` vazio e o segundo inspeciona o conteúdo da `<pasta>` (exceto arquivos ocultos). O segundo bloco corresponde a saída esperada.
+
+#### `mkdir` e `mv`
+
+Também é possível criar pastas e mover arquivos usando os comandos `mkdir` e `mv`, seguem exemplos:
+
+```bash
+mkdir foo
+mv index.html foo
+ls
+```
+
+::: {.border}
+```
+foo/
+```
+:::
+
+#### `cd`
+
+Também é possível acessar pastas dentro (ou fora) da `<pasta>` usando `cd` para navegar entre os diretórios. A tag `..` indica que `cd` deve acessar a pasta pai do diretório atual.
+
+Um detalhe um pouco estranho do `mv` é que também podemos renomear arquivos com ele; se movermos um arquivo n.°1 "para dentro" de um arquivo n.°2 que não existe no diretório atual, então o n.°1 tem o nome e extensão (mas não o conteúdo) substituídos pelo n.°2.
+
+Isso também vale para arquivos n.°2 que já existam no diretório atual mas cuidado, isso sobrescreve os conteúdos do arquivo n.°2.
+
+```bash
+cd foo
+touch script.html
+cd ..
+mv ~/Desktop/teste/foo/* ~/Desktop/teste/
+mv script.html script.js
+ls
+```
+
+::: {.border}
+```
+script.js
+foo/
+index.html
+```
+:::
+
+Note que esses são os arquivos reportados pelo `git status` (pastas não são consideradas como arquivos).
+:::
+
+<br>
+
+### `git add` e `git restore` `(git rm)`
+
+A respeito da adição de arquivos a fila de espera temos o comando `git add` como principal forma de rastrear arquivos e preparalos para commit (gravar o estado da `<pasta>`).
+
+É possível adicionar cada arquivo individualmente:
+
+```bash
+git add index.html
+```
+
+Ou utilizar a tag `.` para indicar que todos os arquivos não rastreados devem ser rastreados.
+
+```bash
+git add .
+git status
+```
+
+::: {.border}
+```
+On branch master
+
+No commits yet
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+        new file:   script.js
+        new file:   index.html
+```
+:::
+
+Caso uma ação de rastreamento precise ser desfeita: é possível retirar um arquivo da fila de espera (restaurá-lo) por meio do comando `git restore --staged`
+
+```bash
+git restore --staged script.js
+```
+
+::: {.border}
+```
+fatal: could not resolve HEAD
+```
+:::
+
+Porém no caso em que não haja nenhum commit salvo dentro do repositório, não há nenhum ponto pro qual o `git` possa restaurar seu arquivo via `git restore`; nesse caso o próprio `git` indica o uso do comando `git rm` como alternativa, por meio da *tag* `--cached`.
+
+```bash
+git rm --cached script.js
+```
+
+::: {.border}
+```
+rm 'script.js'
+```
+:::
+
+::: {.callout-note collapse="true"}
+## Mais sobre o `git restore`
+
+Um pequeno detalhe sobre o `git restore` é que quando nenhuma *tag* é informada, dizemos ao terminal `bash` que queremos reverter um arquivo de volta à versão do último commit, vulgo a versão desse mesmo arquivo que está salva no commit mais recente.
+
+A *tag* `--staged` indica que o `git restore` deve "reverter" um arquivo da fila de espera de volta à versão fora da fila, mas isso não altera o conteúdo do arquivo, como faz o `git restore` sem nenhuma *tag*.
+:::
+
+<br>
+
+### `git commit`
+
+A peça final do ciclo básico consiste do `git commit`, ele é responsável por arquivar todas as informações rastreadas num envelope e as lacrar com um número de identificação, informações do controlador responsável, data e hora do disparo, etc.
+
+Mas sua importância não se limita só ao controle visto até aqui; o controle *offline* de pastas para o uso pessoal de um controlador já é uma ferramenta de grande ajuda mas, como se bem sabe, sites como o GitHub podem reunir colaboradores para trabalharem juntos no desenvolvimento de um mesmo repositório.
+
+Isso torna o `git commmit` uma ferramenta de grande responsabilidade.
+
+Principalmente porque ao trabalhar em equipe, comunicação clara e procedimentos padronizados melhoram a eficiência dos resultados; e o `git commit` é a principal forma de registrar com precisão cada avanço do projeto como um todo, se qualquer problema vir a acontecer e precisar ser resolvido rápido, então colocar informações descritivas e eficientes nos seus commits irá poupar muito tempo e trabalho desnecessários.
+
+Porém para falarmos de `git commit`, precisamos nos identificar primeiro, por meio de 
+
+<hr>
+
+#### `git config`
+
+Se tentássemos criar um `commit` sem nos identificar (sem identificar o controlador), iríamos nos deparar com o seguinte tipo de erro:
+
+::: {.border}
+```
+Author identity unknown
+
+*** Please tell me who you are.
+
+Run
+
+  git config --global user.email "you@example.com"
+  git config --global user.name "Your Name"
+
+to set your account's default identity.
+Omit --global to set the identity only in this repository.
+
+fatal: unable to auto-detect user name
+fatal: unable to auto-detect email address 
+```
+:::
+
+Seguindo as própias instruções no erro, podemos configurar um usuário e email para esse (ou todos os futuros) repositório(s) usando a *tag* `--global`, mas se quisermos nos identificar somente no repositório atual basta não digitar essa *tag* e seguir o exemplo oferecido pelo erro reportado.
+
+```bash
+git config user.email "<email>"
+git config user.name "<usuário>"
+```
+
+<hr><br>
+
+Na sequência seguem exemplos do uso de `git commit`. A *tag* `-m` indica que a *string* digitada logo em seguida do comando deve ser usada como título do `commit`.
+
+```bash
+git commit -m "chore(site): init"
+```
+::: {.border}
+```
+[master (root-commit) d84f2f1] chore(site): init
+ 1 file changed, 1 insertion(+)
+ create mode 100644 index.html
+```
+:::
+
+Agora, caso seja preciso prover informações detalhadas que extrapolem o tamanho oferecido pela *tag* `-m` (72 caractéres), então podemos usar a *tag* `-F` que ao invés de uma mensagem, ela indica para o `git commit` que a *string* digitada na sequência será o nome de um arquivo de tipo textual e cujo conteúdo deverá ser usado para formar uma descrição com título (dado pela primeira linha do arquivo e ainda limita a 72 caractéres) e paragrafos (todo o restante do conteúdo textual).
+
+Logo abaixo temos um exemplo de arquivo do tipo `.txt` (tipos textuais incluem `.txt`, `.md` e similares)
+
+::: {.border}
+![](imagens\notepad_logo.PNG){style="padding-left: 0.7em;" fig-alt="(X)" width="1.6em"} f.txt - Bloco de Notas
+:::
+
+::: {.border}
+```
+feat: ferramenta de busca interna
+
+Introduz uma barra de pesquisa na barra de navegação
+
+A ferramenta procura por qualquer palavra em todas as páginas do site.
+```
+:::
+
+Utilizando a *tag* `-F` e o arquivo `f.txt` criado na `<pasta>`, podemos:
+
+```bash
+git add script.js
+git commit -F f.txt
+```
+::: {.border}
+```
+[master 8428d85] feat: ferramenta de busca interna
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 script.js
+```
+:::
+
+:::{.callout-tip appearance="minimal"}
+## Considerações Finais
+
+<br>
+
+Note que todo ferramental desenvolvido até então permite o controle de arquivos de maneira totalmente *offline*!! A única etapa que normalmente precisa de uma rede *internet* é a instalação do git; de resto, tudo que fizemos até então poderia ter sido feito com uma máquina fora de uma rede.
+:::
+
+::: {.callout-caution collapse="true"}
+## Estrutura de uma rede de colaboradores
+
+```{dot}
+digraph repositório {
+  layout=neato
+  node[shape=circle, fixedsize=true, width=0.8]; A; B; C; D; E; F; 
+  node[shape=circle, fixedsize=true, style="filled", fillcolor="purple:pink", width=0.8]; G; 
+  node[shape=circle, fixedsize=true, style="", label="",width=0.8]; H;
+  A->G
+  B->G
+  C->G
+  D->G
+  E->G
+  F->G
+}
+```
+
+::: {.centered_p}
+Representação de um projeto colaborativo entre repositórios A-F e um repositório não identificado
+:::
+
+## Estrutura
+
+Logo acima está um grafo orientado que pode ajudar na compreensão da estrutura de uma rede de colaboradores, por exemplo, hospedada na plataforma GitHub.
+
+* Os nódulos representam repositórios `git`
+* As setas representam comunicação concedida entre repositórios
+
+Podemos distinguir os repositórios em dois tipos relevantes:
+
+1. Os que permitem outros repositórios comunicarem consigo
+2. E os que não permitem. 
+
+O repositório `G`, destacado entre os demais repositórios, é um exemplo do caso n.° 1. Todos os outros são exemplos do caso n.° 2.
+
+::: {.justify_p}
+O que faz `G` ser diferente dos outros repositórios é que ele está em um servidor e possui uma arquitetura desenvolvida para permitir que outros repositórios se comuniquem com ele, ao invés de estar em uma máquina usual como os outros repositórios. 
+:::
+
+::: {.justify_p}
+* Entende-se que todo repositório pode se comunicar com outro (desde que se identifique e cumpra os requisitos para estabelecer conexão), mas nem todo repositório permite que outros comuniquem consigo (porque não tem estrutura pra isso ou não concederam permissão).
+:::
+
+### Moral da história?
+
+::: {.justify_p}
+Por causa das características levantas, se uma plataforma hospeda um repositório `G`, então qualquer repositório com acesso a rede e permissão pode copiar todos os arquivos de `G`, fazer alterações numa *branch* local, e atualizar os arquivos de `G` por uma nova versão desenvolvida.
+:::
+
+::: {.justify_p}
+O detalhe está no fato que todos os repositórios são objetos diferentes (isso inclui `G` e todos os dos colaboradores), no entanto como cada repositório pode obter uma cópia exata dos arquivos de um mesmo repostório `G`; se supormos que existe uma forma de atualizar os arquivos de `G` sem que haja conflito entre os binários, então isso significa que todos os colaboradores podem virtualmente trabalhar ao mesmo tempo num mesmo projeto.
+:::
+:::
+
+<br>
+
+### Ciclo não básico
+
+Serão introduzidos nessa seção alguns comandos `git` mais sofisticados e que saltam para o controle *online* de arquivos; dando início a discussão sobre trabalho colaborativo. 
+
+Se o leitor quiser acompanhar os exemplos que usam repositórios hospedados mais adiante, por exemplo por meio do GitHub, fique a vontade; mas uma nota: para utilizar os comandos `git pull` e `git push` é preciso validar uma *token* de segurança. O processo não é muito complicado mas GitHub não é o foco desse *post*.
+
+<br>
+
+### `git log`
+
+A começar pelo `git log`: Embora o comando `git log` não seja excepcionalmente avançado, o contexto em que você o usa normalmente é; isso porque quando é preciso usar `git log`, significa que existem coisas que provavelmente pararam de funcionar ou estão quebradas..
+
+De modo que seja natural esperar que o controlador já tenha feito diversos `commit`'s e já tenha uma experiência salvando o progresso de seus repositórios.  
+
+```bash
+git log
+```
+::: {.border}
+```
+commit 8428d85fd052e83b2ce6cb5af41a1af1acadb60a (HEAD -> master)
+Author: <usuário> <email>
+Date:   Mon May 12 05:24:34 2025 -0300
+
+    feat: ferramenta de busca interna
+
+    Introduz uma barra de pesquisa na barra de navegação
+
+    A ferramenta procura por qualquer palavra em todas as páginas do site.
+
+commit d84f2f1ebf82772361a1315d8472047ae3fffe16
+Author: <usuário> <email>
+Date:   Mon May 12 04:21:31 2025 -0300
+
+    chore: init
+```
+:::
+
+[^9]
+
+[^9]: `HEAD` é um ponteiro utilizado pelo `git` para indicar/falar da *branch* ativa (no caso de `(HEAD -> master)`, a palavra `HEAD` literalmente aponta para a *branch* ativa).
+
+Uma alternativa ao `git log` consiste em usar a *tag* `--oneline`, essa versão oferece um relatório mínimo que apresenta o título de cada `commit` e o início do código *hash*[^6].
+
+[^6]:O *hash* é um identificador único para cada `commit` em um repositório `git`
+
+```bash
+git log --oneline
+```
+::: {.border}
+```
+8428d85 (HEAD -> master) feat: ferramenta de busca interna
+d84f2f1 chore: init
+```
+:::
+
+:::{.callout-note collapse="true"}
+## Detalhes
+
+Vale ressaltar que esse comando tem diversas opções de personalização para o relatório gerado, de modo que seja possível escolher com extrema precisão quais informações dos `commit`'s devem aparecer no relatório. Nem o próprio `git log` exibe absolutamente todas as informações a respeito de cada `commit`.
+:::
+
+<br>
+
+### `git remote`
+
+Podemos fazer uma analogia entre o `git remote` e uma agenda de contatos, para introduzirmos um repositório nessa agenda podemos usar o comando `git remote add`; esse comando indica ao terminal que as próximas duas *strings* digitadas serão respectivamente o nome/apelido de um repositório e o endereço *web* desse mesmo repositório.
+
+```bash
+git remote add <apelido-pro-repositório> <endereço-web-do-repositório>
+```
+
+Seguindo essa analogia, o comando `git remote` irá exibir um relatório com todos os "contatos" adicionados pelo `git remote add`.
+
+```bash
+git remote
+```
+::: {.border}
+```
+<apelido-pro-repositório>
+```
+:::
+
+A partir de agora, `<remote>` se refere ao apelido de um repositório hospedado genérico.
+
+<br>
+
+### `git pull`
+
+Esse e o próximo comando são os principais vetores de troca/envio de arquivos entre repositórios local e hospedado.
+
+Uma vez que o endereço *web* de um repositório esteja na lista de repositórios remotos (`git remote`), é possível pedir ao hospedado pela cópia dos seus arquivos utilizando o comando `git pull`:
+
+```bash
+git pull
+```
+
+Executar esse comando num repositório que já possui arquivos terá o mesmo efeito[^7]; os arquivos que já estavam no repositório permanecem intocados (salvo substituições, causada por arquivos com nomes iguais aos do repositório hospedado) e os arquivos copiados são simplesmente adicionados.
+
+[^7]: Isso é bem mais complicado do que parece.
+
+:::{.callout-caution collapse="true"}
+## Detalhes
+
+## Bem importantes
+
+A partir de agora é preciso falar sobre *branches*. Caso tenha acompanhado os exemplos até aqui, você deve ter notado que frequentemente a palavra `master` aparecia por aí nas saídas dos terminais; acontece que isso é o nome da *branch* em que estamos trabalhando, se você tiver reparado logo no início dos exemplos, a *branch* `master` tinha sido criada no instante que o repositório foi inicializado.
+
+Isso porque sempre que trabalhamos num repositório `git` nós na verdade estamos trabalhando em uma área de trabalho do repositório `git`, chamada de ramificação.
+
+> Tá mas o que raios isso significa?
+
+Pois bem, uma ramificação é uma espécie de área de trabalho virtual criada dentro dos repositório git. Quando um repositório é inicializado, uma dessas áreas é automaticamente criada e costumamente se chama `master` ou `main`; elas agora serão chamadas genericamente de `<branch>`.
+
+É possível criar e manipular `<branch>`'s mas vamos nos ater as explicações sobre o `git pull`.
+
+A forma completa do comando é `git pull <remote> <branch>`, isso porque o `git` precisa saber de qual `<branch>` do repositório hospedado (`<remote>`) você quer copiar os dados; note que como o repositório hospedado na verdade também é um repositório git, então ele mesmo pode ter várias `<branch>`'s (🧠) e por isso é necessário dizer explicitamente quem você quer copiar de dentro do repositório hospedado.
+
+### Moral da história
+
+Caso você execute o comando `git pull` sem cosiderar esses detalhes, é possível que ele exiba um erro questionando qual `<branch>` você quer copiar.
+
+Mas se no repositório hospedado houver apenas uma `<branch>`, então o comando deve executar de forma bem sucedida, copiando os arquivos para a `<branch>` ativa no seu repositório.
+
+<br>
+
+## Ainda Mais
+
+:::{.callout-warning collapse="true" icon=false}
+## Detalhes
+
+## Porém não tão importantes
+
+Na verdade o comando `git pull` é de certa forma a execução em sequência de outros dois comandos, sendo eles os comandos `git fetch` e `git rebase` (ou `git merge`). Ele é um comando inteligente que avalia os parâmetros juntos a sua execução e determina qual a sequência de comandos deve ser executada.
+
+Então o `git pull` de fato não é algo tão simples assim; fundamentalmente ele é composto por comandos bem sofisticados.
+
+Tanto é que o caso descrito pelo último parágrafo antes de <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cone-striped" viewBox="0 0 16 16"><path d="m9.97 4.88.953 3.811C10.159 8.878 9.14 9 8 9s-2.158-.122-2.923-.309L6.03 4.88C6.635 4.957 7.3 5 8 5s1.365-.043 1.97-.12m-.245-.978L8.97.88C8.718-.13 7.282-.13 7.03.88L6.275 3.9C6.8 3.965 7.382 4 8 4s1.2-.036 1.725-.098m4.396 8.613a.5.5 0 0 1 .037.96l-6 2a.5.5 0 0 1-.316 0l-6-2a.5.5 0 0 1 .037-.96l2.391-.598.565-2.257c.862.212 1.964.339 3.165.339s2.303-.127 3.165-.339l.565 2.257z"/></svg> **Detalhes** só é possível graças a essa sofisticação: o problema é tratado por meio do `git merge`; que é necessário para copiar os arquivos de uma `<branch>` de um `<remote>` para a `<branch-ativa>` de um repositório local, sem excluir os arquivos que já estavam presentes na `<branch-ativa>` antes da execução do `git pull`.
+:::
+:::
+
+Seguem exemplos:
+
+Se tivermos um repositório vazio ou recém criado, então ao adicionar um `<remote>` via `git remote add` e executar `git pull`; os parâmetros `<remote>` e`<branch>` do `git pull` serão exigidos. 
+
+Para um `<remote>` chamado `origin` e uma `<branch>` chamada `master`, teríamos:
+
+```bash
+git remote add origin <endereço-web-do-repositório>
+git pull origin master
+```
+
+Caso nosso repositório local já contenha arquivos, como o diretório `<pasta>` desenvolvido nos exemplos anteriores, executar o comando `git pull` exigirá os seus parâmetros e possivelmente a *tag* `--allow-unrelated-histories`[^8].
+
+[^8]: A execução do `git pull` no caso onde não existe histórico em comum entre as duas `<branch>`'s (não possuem um `commit` ancestral em comum) é barrada por padrão.
+
+Normalmente o `git pull` é executado na situação em que os conteúdos das `<branch>`'s já foram iguais em algum ponto no tempo mas eventualmente divergiram em projetos separados ou em projeto principal e uma *feature* em desenvolvimento.
+
+A seguir temos o resultado do `git pull` entre a `<branch-ativa>` do repositório local `<pasta>` e a `<branch>` `master` de um `<remote>` `origin`.
+
+```bash
+git remote add origin <endereço-web-do-repositório>
+git pull --allow-unrelated-histories origin master
+git log --oneline
+```
+
+::: {.border}
+```
+9fd1243 (HEAD -> master) Merge branch 'master' of <endereço-web-do-repositório>
+8428d85 feat: ferramenta de busca interna
+d84f2f1 chore: init
+67e90d6 (origin/master, origin/HEAD)
+f259d48 Update README.md
+84521e2 Update README.md
+
+           .
+           .
+           .
+
+d0c682a Update README.md
+39eb2a8 Update README.md
+072d50a Initial commit
+```
+:::
+
+:::{.callout-note appearance="minimal"}
+A `master` do `<remote>` no exemplo anterior consiste de vários `commit`'s sobre um mesmo arquivo `README.md`, representando atualizações.
+:::
+
+<br>
+
+### `git push`
+
+Ao executar o comando 
+
+```bash
+git push -u <remote> <branch>
+```
+
+Várias coisas acontecem, mas o principal:
+
+* O estado da `<sua-branch>` ativa (onde você executou o comando `git push`) é copiado para a `<branch>` do `<remote>`; isso inclui (1): o `commit` mais recente da `<sua-branch>`, que equivale ao estado atual dos arquivos da `<sua-branch>` no seu repositório local e (2): as informações de todos os `commit`'s passados da `<sua-branch>`.
+
+* E (3): a informação de rastreamento para controle automatizado; esse último é bem mais sutil e a *tag* `-u` é a responsável por capturar essa informação e a enviar com a execução do `git push`.
+
+As informações em (1) e (2) são enviadas invariavelmente mas a informação em (3) não, então por que a enviamos?
+
+A "informação de rastreamento para controle automatizado" é um jargão pra falar sobre a captura do nome da `<branch>` que o comando `git push` está copiando.
+
+Essa informação é útil ao `git` (e a nós) se quisermos automatizar o processo de dizer ao `git pull` qual `<branch>` do `<remote>` queremos copiar; sem essa informação teríamos que dizer essas informações manualmente e em todas as vezes que o executássemos. Isso é especialmente útil para um colaborador que sempre copia e altera uma mesma `<branch>` do `<remote>`.
+
+A própia *tag* `-u` é uma abreviação para `--set-upstream`, que numa tradução livre se traduz para "configurar durante o envio".
+
+Na prática isso quer dizer que, dado uma `<branch>` chamada `master` e o apelido `origin` para um repositório hospedado, podemos substituir o processo:
+
+```bash
+git pull origin master
+```
+
+```bash
+git push origin master
+```
+
+Por
+
+```bash
+git pull
+```
+
+```bash
+git push -u origin master
+```
+
+:::{.callout-warning collapse="true"}
+## Complicações
+
+Convido o leitor a imaginar o seguinte cenário: Num projeto `git` simples (`<remote>` possui uma única `<branch>`) com colaboradores `A`,`B` e `C`, dado que num instante $t_0$ o estado do repositório local de cada colaborador é igual ao estado do `<remote>` (e portanto iguais entre si):
+
+* Se `A` faz um `push` dum `commit` `C1` num instante $t_1$;
+* `B` e `C` fazem um `pull` num instante $t_2$;
+* `B` faz um `push` dum `commit` `C2` num instante $t_3$;
+* `C` faz um `push` dum `commit` `C3` num instante $t_4$;
+
+E sabendo que $t_0\leq t_1\leq t_2\leq t_3\leq t_4$.
+
+Qual o estado dos arquivos do `<remote>`? Essa sequência de ações sequer acontece corretamente?
+
+:::{.callout-note collapse="true" appearance="minimal"}
+## Pense um pouco antes
+
+## Resultados
+
+Assumindo que o comando `git push` simplesmente copia o estado dos arquivos duma `<branch>` local para `<branch>` dum `<remote>`; então seria razoável esperar que as mudanças feitas pelo colaborador `B` foram apagadas (ou sobrescritas) pelo `commit` `C3` do colaborador `C`.
+
+Mas esse não é o caso! O `git push` é um comando inteligente que identifica se estado da `<branch>` do `<remote>` não coincide com `C1` (mudou para `C2`) e aborta a execução do comando. Para resolver esse problema é preciso que o colaborador `C` execute um `pull` antes do `push`; dessa forma ao invés de apagar as mudanças de `B`, as mundanças feitas por `C` são adicionadas as mudanças de `B`.
+
+Uma última complicação acontece caso os `commit`'s `C2` e `C3` mudarem um mesmo arquivo; ou seja, os `commit`'s `C2` e `C3` são dois conjuntos não disjuntos de mudanças no repositório.
+
+Se esse for o caso, quando o colaborador `C` executar o segundo `pull`, duas situações podem acontecer:
+
+1. O `git` vai reconhecer quais arquivos compartilham mudanças e tentará performar um `merge` automático no conteúdo alterado nas duas versões
+2. Se o `git` encontrar uma mesma parte de um mesmo arquivo escrita de forma diferente em cada versão o `git` irá lhe questionar qual das duas partes deve ser mantida, ie se deve ser mantida a versão proposta em `C2` ou `C3` (ou mesmo).
+
+### Exemplos
+
+Exemplo da situação n.° 1: 
+
+```bash
+git pull origin master
+```
+
+::: {.border}
+```
+(...)
+
+Auto-merging index.html
+[KMerge made by the 'ort' strategy.
+ index.html | 2 [32m++[m
+ 1 file changed, 2 insertions(+)
+```
+:::
+
+```bash
+git push origin master
+```
+
+<br>
+
+Exemplo da situação n.° 2: 
+
+```bash
+git pull origin master
+```
+
+::: {.border}
+```
+(...)
+
+Auto-merging index.html
+CONFLICT (content): Merge conflict in index.html
+Automatic merge failed; fix conflicts and then commit the result.
+```
+:::
+
+O conteúdo do arquivo `index.html` foi alterado na área de conflito (pelo `git`) de forma a indicar quais são as mudanças  e de onde cada uma vem, observe:
+
+::: {.border}
+![](imagens\notepad_logo.PNG){width="1.6em" style="padding-left: 0.7em"} index.html - Bloco de Notas
+:::
+
+::: {.border}
+```
+<<<<<<< HEAD
+<h2> Sample Subheader </h2>
+=======
+<p> Sample Text </p>
+>>>>>>> fb509f553318697e0c4b67344194b30eb50a7fc4
+```
+:::
+
+Esse texto estranho serve pra distinguir a versão proposta localmente pelo seu `commit` `C3`, indicado por `HEAD`; e a versão proposta pelo `commit` `C2`, indicado pelo `hash` de `C2`. Substituir toda a estrutura criada por uma, ou outra versão, ou até uma outra completamente diferente, irá dizer ao `git` que o colaborador `C` estudou o problema e decidiu que essa versão é a mais apropriada dado o que ele fez e o que já foi feito.
+
+Exemplo de resolução de conflito:
+
+::: {.border}
+![](imagens/notepad_logo.PNG){width="1.6em" style="padding-left: 0.7em"} index.html - Bloco de Notas
+:::
+
+::: {.border}
+```
+<h1> Sample Header </h1>
+
+<p> Sample Text </p>
+
+<a href="http://www.ime.unicamp.br/~juliacps/">Conheça o projeto!</a>
+```
+:::
+
+Depois é preciso adicionar o novo arquivo via `add` e então salvá-lo via `git commit`. Detalhe importante: esse `commit` não pode conter nenhum parâmetro! A forma correta para indicar fim da correção do conflito é simplesmente `git commit`.
+
+```bash
+git add index.html
+```
+
+```bash
+git commit
+```
+
+::: {.border}
+```
+(...)
+
+[K[master 973b71e] Merge branch 'master' of <endereço-web-do-repositório>
+```
+:::
+
+Por fim
+
+```bash
+git push origin master
+```
+
+:::
+
+:::
+
+:::{.callout-tip appearance="minimal"}
+
+## Considerações Finais
+
+<br>
+
+Pode ser um pouco frustrante absorver os últimos conceitos/exemplos mas isso é normal: por trás dos comandos `git pull` e `git push` estão outros comandos mais complicados que acontecem o tempo todo; sem ter uma mínima ideia do que significa fazer um `merge` ou o que é uma `<branch>`, é esperado que haja uma certa dificuldade.
+
+Mas introduzir até os mínimos detalhes sobre os comandos [`git branch`](https://git-scm.com/docs/git-branch) ou [`git merge`](https://git-scm.com/docs/git-merge) não é algo necessário. Eles são complicados e exigem ainda mais esforço pra se entender; fora o fato que ao trabalhar em um projeto simples (com uma única `<branch>` no `<remote>`), os comandos `git pull` e `git push` bastam. Eles são comandos inteligentes que guiam o controlador até o desfecho desejado. 
+
+E para além disso: existem ferramentas, como os projetos de controle de versão do Rstudio, que automatizam até mesmo os `pull`'s antes da execução dos `push`'s; e caso exista entre os colaboradores de um projeto simples um acordo para que todos os `commit` sejam disjuntos, então nunca haverá problema de conflinto entre `push`'s! (dado que `git pull` seja executado ao ínicio de toda nova sessão de trabalho)
+
+Ao fim desse tutorial introdutório ao `git` estão tópicos adicionais com mais detalhes a respeito da ferramenta oferecida pelo Rstudio e outras curiosidades.
+
+:::
+
+<br>
+
+## Tópicos Adicionais
+
+### `.Rproj`
+
+Sabia que não é preciso aprender sobre `git merge` e `git branch` pra necessariamente trabalhar em equipe utilizando o GitHub? O software Rstudio permite essa colaboração por meio da sua interface que integra o ambiente de desenvolvimento convencional do Rstudio ao `git`!
+
+Uma explicação detalhada sobre os projetos de Controle de Versão no Rstudio se encontra [nesse endereço *web*](https://docs.posit.co/ide/user/ide/guide/tools/version-control.html)
+
+A interface combina as principais ferramentas do `git` e as funcionalidades do Rstudio; nela você pode trabalhar nos arquivos do repositório hospedado como se estivesse num projeto usual do Rstudio.
+
+É preciso ter o `git` instalado e com as credênciais válidas caso o projeto esteja hospedado no GitHub (ou GitLab).
+
+Certifique-se de dar `pull` dos arquivos do repositório hospedado sempre que começar sua nova sessão de treabalho! Clique no botão *Pull* para fazer isso.
+
+As operações do `git` são as mesmas: ao alterar/criar algum arquivo, essas mudanças são registradas na aba "histórico" e então quando seus trabalhos estiverem prontos, basta clicar em `commit`, marcar as *checkbox*'s para adicionar as mudanças a fila de espera, e disparar o `commit` confirmando a opção novamente.
+
+É possível enviar os `commit`'s ao repositório hospedado clicando no botão *Push* da interface.
+
+<br>
+
+### *Conventional Commits*
+
+As descrições dos `commit`'s em um projeto são muito valiosas aos colaboradores se forem eficientes em transmitir as informações relevantes
+sobre as mudanças presentes nos mesmos. *Conventional Commits* é nome dado a um conjunto de boas práticas e regras simples para a escrita dessas descrições.
+
+Algumas de suas finalidades são tornar o histórico do `git` mais legível e estipular um padrão de escrita com o propósito de automatizar a tarefa de gerar *changelogs*/versionar arquivos.
+
+Estrutura básica de um `C.C.`:
+
+::: {.border}
+```
+<tipo>(<escopo opcional>): <descrição breve>
+
+<corpo opcional>
+
+<rodapé opcional>
+```
+:::
+
+Os `<tipo>`'s de `C.C.`
+
+* `feat`: Adicionam ou removem um novo recurso à API ou UI
+* `fix`: Corrigem um bug de API ou UI de um commit de feat anterior
+* `refactor`: Reescrevem/reestruturam seu código, mas não alteram o comportamento da API ou UI
+* `perf`: Commits de refatoração especiais, que melhoram o desempenho
+* `style`: Não afetam o significado (espaços em branco, formatação, ponto e vírgula ausentes, etc.)
+* `test`: Adicionam testes ausentes ou corrigem testes existentes
+* `docs`: Afetam apenas a documentação
+* `build`: Afetam componentes de build, como ferramentas de build, dependências, versão do projeto, pipelines de CI, ...
+* `ops`: Afetam componentes operacionais como infraestrutura, implantação, backup, recuperação, ...
+* `chore`: Diversos, não classificados, por exemplo, modificar .gitignore
+
+`<descrição>`
+
+* Frase curta no imperativo (eg. "`add`" em vez de "`added`"), sem ponto final.
+
+`<escopo opcional>`
+
+* Indica o módulo/área afetada (eg. `feat(login):` ou `fix(api):`).
+
+`<corpo opcional>`
+
+* Detalhes sobre as mudanças, justificativas ou impactos.
+
+`<rodapé opcional>`
+
+* Usado para indicar *breaking changes* (eg. `BREAKING CHANGE: altera formato da resposta da API`) ou referências (eg. `Closes #123`).
+
+Referências e mais detalhes podem ser encontrados nesses endereços *web*:
+
+* [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
+* [conventional-commits-cheatsheet.md](https://gist.github.com/qoomon/5dfcdf8eec66a051ecd85625518cfd13#scopes)
+
+<br>
+
+::: {.callout-note} 
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::
+

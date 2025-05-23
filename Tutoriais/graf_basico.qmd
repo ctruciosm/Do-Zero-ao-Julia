@@ -1,7 +1,7 @@
 ---
 title: "Gráficos em Julia: primeiros passos"
 description: |
-  Tão importante quanto desenvolver, implementar e aplicar modelos/metodologías é saber comunicar os resultados de forma clara e acessível para o público-alvo. E que melhor forma de fazer isso do que com visualizações didáticas e informativas?. Neste tutorial, você aprenderá a criar gráficos básicos em `Julia` com o pacote `Plots.jl` e outras bibliotecas auxiliares.
+  Tão importante quanto desenvolver, implementar e aplicar modelos/metodologías é saber comunicar os resultados de forma clara e acessível para o público-alvo. E que melhor forma de fazer isso do que com visualizações didáticas e informativas? Neste tutorial, você aprenderá a criar gráficos básicos em `Julia` com o pacote `Plots.jl` e outras bibliotecas auxiliares.
 categories:
   - Gráficos
 author:
@@ -13,7 +13,7 @@ author:
     url: https://ctruciosm.github.io
     orcid: 0000-0001-8746-8877
 date: "2025-05-21"
-image: imagens/graf_basico.png
+image: imagens/graf_tutorial.png
 lang: pt
 format:
   html:
@@ -134,7 +134,7 @@ scatter(x, y, title = "Gráfico de Dispersão", xlabel = "x", ylabel = "log(x)",
 </center>
 
 
-> **Observação:** o operador $\cdot$ (_dot_), aplica a função $\log()$ a cada elemento do vetor `x`. O ";" evita que a variável `y` seja imprimida (como aconteceu com a variávél `x`).
+> **Observação:** o operador $\cdot$ (_dot_), aplica a função $\log()$ a cada elemento do vetor `x`. O ";" evita que a variável `y` seja impressa (como aconteceu com a variável `x`).
 
 
 ### Histograma
