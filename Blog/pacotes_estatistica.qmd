@@ -1,0 +1,75 @@
+---
+title: "Pacotes Essenciais para Trabalhar com Estatística em Julia"
+description: "Principais pacotes para realizar as mais diversas análises estatísticas em Julia."
+categories:
+  - Pacotes
+  - Primeiros Passos
+author:
+  - name: Vitor Ribas Perrone
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/VitorRibasP
+    orcid: 0009-0009-6923-7712
+date: "2025-05-29"
+image: imagens/pacotes_estatistica.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+draft: false
+---
+
+## Introdução
+
+Ao falar de Estatística, a primeira linguagem de programação que costuma vir à mente é o R, desenvolvido justamente para isso, com uma vasta gama de ferramentas estatísticas já disponíveis por padrão, além de milhares de pacotes criados para as mais diversas finalidades. Para nossa sorte, embora o Julia não tenha sido pensado exclusivamente para Estatística, já conta com grande parte das ferramentas essenciais, graças a um ecossistema de pacotes que cresce rapidamente e atende a várias áreas.
+
+Vamos, então, conhecer os principais pacotes para fazer Estatística em Julia separados por área de aplicação, desde tarefas básicas até análises inferenciais sofisticadas.
+
+## Manipulação de Dados e Estatísticas Sumárias
+
+ - [StatsBase](https://github.com/JuliaStats/StatsBase.jl): Ferramentas básicas de estatística descritiva;
+ - [FreqTables](https://github.com/nalimilan/FreqTables.jl): Construção de tabelas de frequências para análise exploratória;
+ - [DataFrames](https://github.com/JuliaData/DataFrames.jl): Importação e manipulação de bases de dados tabulares.
+
+## Variáveis Aleatórias
+
+ - [Distributions](https://github.com/JuliaStats/Distributions.jl): Definição, manipulação e amostragem de distribuições de probabilidade;
+ - [Random](https://docs.julialang.org/en/v1/stdlib/Random/): Geração de números aleatórios e utilização de sementes, a fim de replicabilidade.
+
+## Visualização de Dados
+
+ - [Plots](https://github.com/JuliaPlots/Plots.jl): Construção de uma grande variedade de gráficos;
+ - [Gadfly](https://github.com/GiovineItalia/Gadfly.jl): Criação de gráficos com sintaxe semelhante ao ggplot, do R.
+
+## Modelagem e Testes de Hipótese
+
+ - [HypotesisTests](https://github.com/JuliaStats/HypothesisTests.jl): Realização de clássicos testes de hipótese paramétricos e não paramétricos;
+ - [GLM](https://github.com/JuliaStats/GLM.jl): Modelagens de regressões lineares e regressões lineares generalizadas;
+ - [MixedModels](https://github.com/JuliaStats/MixedModels.jl): Ajuste de modelos lineares e generalizados com efeitos mistos;
+ - [Optim](https://github.com/JuliaNLSolvers/Optim.jl): Otimização de funções, essencial para maximizar verossimilhanças;
+ - [MultivariateStats](https://github.com/JuliaStats/MultivariateStats.jl): Principais ferramentas de análise multivariada, como PCA e LDA;
+ - [TimeSeries](https://github.com/JuliaStats/TimeSeries.jl): Manipulação, visualização e modelagem de séries temporais.
+
+## Inferência Bayesiana
+
+ - [Turing](https://github.com/TuringLang/Turing.jl): Modelagem estatística bayesiana baseada em amostragem;
+ - [MCMCChains](https://github.com/TuringLang/MCMCChains.jl): Ferramentas para diagnóstico, resumo e visualização de cadeias de Markov geradas por MCMC.
+
+## Aprendizado de Máquina
+
+ - [DecisionTree](https://github.com/JuliaAI/DecisionTree.jl): Algoritmos de árvores de decisão, árvores de regressão e florestas aleatórias;
+ - [Clustering](https://github.com/JuliaStats/Clustering.jl): Algoritmos de clusterização, para aprendizado de máquina não supervisionado;
+ - [ScikitLearn](https://github.com/cstjean/ScikitLearn.jl): Diversos algoritmos de Machine Learning com sintaxe semelhante ao Python;
+ - [MLBase](https://github.com/JuliaStats/MLBase.jl): Ferramentas para auxiliar a aplicação de modelos de Machine Learning.
+
+
+## Conclusão
+
+Com esse conjunto de pacotes, o Julia se consolida como uma linguagem extremamente capaz para análise estatística. Embora seu uso ainda esteja em crescimento, já é possível realizar praticamente qualquer tarefa estatística, desde análises descritivas simples até modelagens complexas, sejam frequentistas, bayesianas ou de aprendizado de máquina.
+
+Além dos pacotes citados, existem muitos outros e, para explorar mais, acesse o site [Julia Packages](https://juliapackages.com/) e descubra todo o potencial que a linguagem oferece.
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::
