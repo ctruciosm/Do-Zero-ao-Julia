@@ -1,0 +1,22 @@
+---
+title: "Leonardo dos Santos"
+sortby: "Leonardo dos Santos"
+subtitle: "Graduando em Estatística"
+image: Leonardo_dos_Santos.png
+about:
+  id: person-profile
+  template: solana
+  image-width: 10em
+  links:
+    - icon: github
+      text: Github
+      href: https://github.com/LeonardoSantos47
+    - icon: linkedin
+      text: Linkedin
+      href: https://www.linkedin.com/in/leonardo-dos-santoos
+---
+
+::: {#person-profile}
+Graduando em Estatística pela UNICAMP.
+:::
+---
