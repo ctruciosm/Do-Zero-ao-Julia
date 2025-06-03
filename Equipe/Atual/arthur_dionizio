@@ -1,0 +1,21 @@
+---
+title: "Arthur Dionizio"
+sortby: "Arthur Dionizio"
+subtitle: "Graduando em Matemática Aplicada e Computacional"
+image: foto_arthur_d.jpg
+about:
+  id: person-profile
+  template: solana
+  image-width: 10em
+  links:
+    - icon: github
+      text: Github
+      href: https://github.com/Arthur-Dionizio
+    - icon: linkedin
+      text: Linkedin
+      href: https://www.linkedin.com/in/arthurdionizio
+---
+
+::: {#person-profile}
+Graduando em Matemática Aplicada e Computacional pela UNICAMP.
+:::
