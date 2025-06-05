@@ -12,7 +12,7 @@ author:
     affiliation: "Universidade Estadual de Campinas"
     url: https://github.com/phgelias
     orcid: 0009-0003-8992-9827
-date: "2025-05-19"
+date: "2025-06-05"
 image: imagens/HistoriaJulia.png
 lang: pt
 format:
@@ -36,6 +36,8 @@ Esse processo, além de trabalhoso, era altamente suscetível a erros e inconsis
 ::: {.justify}
 Em 2009, quatro pesquisadores do MIT (Massachusetts Institute of Technology) começaram a desenvolver uma solução para o problema das duas linguagens. Stefan Karpinski, Alan Edelman, Jeff Bezanson e Viral B. Shah tinham o objetivo de criar uma linguagem de programação moderna, extremamente rápida e, ao mesmo tempo, fácil de escrever.
 
+![Fonte da imagem: [https://news.mit.edu/2018/julia-language-co-creators-win-james-wilkinson-prize-numerical-software-1226](https://news.mit.edu/2018/julia-language-co-creators-win-james-wilkinson-prize-numerical-software-1226)](imagens/criadores.png){fig-align="center" width="50%"}
+
 Ao longo de cerca de quatro anos, o projeto foi mantido em sigilo, até que, em fevereiro de 2012, veio a público por meio do artigo [“Why We Created Julia”](https://julialang.org/blog/2012/02/why-we-created-julia/), o qual apresentou ao mundo a primeira versão da linguagem, que já contava com documentação, pacotes básicos e um compilador funcional.
 
 Logo após seu lançamento, Julia ganhou bastante popularidade no meio científico e ampla divulgação em fóruns e comunidades. Entretanto, o marco da maturidade da ferramenta aconteceu em 2018, com o lançamento da versão 1.0, que trouxe diversas inovações técnicas, como maior confiabilidade para uso em produção, estabilidade da API e consolidação do ecossistema.
@@ -56,7 +58,15 @@ Julia surgiu como solução para um problema comum e foi além, tornando-se uma 
 :::
 
 ::: {.callout-note} 
-Ferramentas de IA foram utilizadas para correção ortográfic, aprimoramento do texto e criação de imagens.
+Ferramentas de IA foram utilizadas para correção ortográfica, aprimoramento do texto e criação de imagens.
 :::
 
 
+## Referências
+
+::: {.justify}
+* O que é Julia?, [https://coodesh.com/blog/dicionario/o-que-e-julia/#:~:text=Julia%20%C3%A9%20uma%20linguagem%20de%20programa%C3%A7%C3%A3o%20criada%20pelos%20pesquisadores%20Jeff,Shah%20e%20Alan%20Edelman](https://coodesh.com/blog/dicionario/o-que-e-julia/#:~:text=Julia%20%C3%A9%20uma%20linguagem%20de%20programa%C3%A7%C3%A3o%20criada%20pelos%20pesquisadores%20Jeff,Shah%20e%20Alan%20Edelman), acessado em: 2025-05-20.
+* Julia (linguagem de programação), [https://pt.wikipedia.org/wiki/Julia_(linguagem_de_programa%C3%A7%C3%A3o)](https://pt.wikipedia.org/wiki/Julia_(linguagem_de_programa%C3%A7%C3%A3o)), acessado em: 2025-05-20.
+* The Julia Programming Language: The History and Uses, [https://leftronic.com/blog/julia-programming-language](https://leftronic.com/blog/julia-programming-language), acessado em: 2025-05-20.
+* Julia Data Science, [https://juliadatascience.io/pt/julia_accomplish#:~:text=O%20%E2%80%9CProblema%20das%20Duas%20Linguagens%E2%80%9D%20%C3%A9%20bastante%20comum%20na%20computa%C3%A7%C3%A3o,(como%20Python%20ou%20R)](https://juliadatascience.io/pt/julia_accomplish#:~:text=O%20%E2%80%9CProblema%20das%20Duas%20Linguagens%E2%80%9D%20%C3%A9%20bastante%20comum%20na%20computa%C3%A7%C3%A3o,(como%20Python%20ou%20R)), acessado em: 2025-05-20.
+:::
