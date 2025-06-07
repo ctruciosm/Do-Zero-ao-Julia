@@ -1,0 +1,64 @@
+---
+title: "Perspectivas de Julia para o Futuro"
+description: |
+  Saiba mais sobre o aumento da popularidade dessa linguagem de programação, as áreas de atuação e o potencial de crescimento.
+categories:
+  - Quarto
+author:
+  - name: Esther Cleveston
+    affiliation: "Universidade Estadual de Campinas"
+    orcid: 0009-0008-6612-8417
+date: "2025-05-08"
+image: imagens/Perspectivas.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+draft: true
+---
+
+## O Julia
+
+
+::: {.justify}
+A linguagem de programação Julia surgiu como uma proposta de unir a simplicidade de linguagens como R e Python com o desempenho de linguagens mais rápidas, como Fortran e C. Desde o lançamento de sua versão mais estável, Julia vem subindo cada vez mais nos rankings de popularidade, atingindo, em 2022, a 21ª posição. Mas qual será o alcance dessa linguagem nos próximos anos? Quais são as perspectivas de uso de Julia para o futuro?
+
+:::
+
+
+## Crescimento expressivo
+
+
+::: {.justify}
+O crescimento da linguagem Julia vem sendo constante ao longo dos anos, com a criação de cada vez mais pacotes e bibliotecas, além do aumento de fóruns e comunidades. Atualmente, Julia já foi baixada mais de 40 milhões de vezes, ocupando, em 2022, respectivamente, as posições 25ª e 21ª nos índices PYPL e TIOBE. Além disso, a linguagem tem se tornado cada vez mais popular em pesquisas científicas, principalmente nas áreas de engenharia e ciências exatas — tudo isso combinado com a criação de cerca de 8.000 pacotes para a linguagem.
+:::
+
+
+## Desafios enfrentados
+
+
+::: {.justify}
+Apesar disso, como toda linguagem, Julia ainda enfrenta alguns desafios. Entre eles, está a dificuldade de adoção no mercado tradicional, em razão da consolidação de outras linguagens. Uma barreira importante a ser superada está relacionada ao tempo de compilação, existindo um atraso na compilação do código usando o compilador Just-in-Time (JIT) da Julia, o qual se torna perceptível ao tentar executar o código de alguns pacotes pela primeira vez.
+:::
+
+
+
+## O futuro
+
+
+::: {.justify}
+Todo esse crescimento constante e expressivo nos últimos anos revela um futuro promissor para Julia, com muitas ferramentas, pacotes e bibliotecas ainda por serem criados e desenvolvidos. Embora existam desafios na implementação da linguagem em outras áreas, o ritmo acelerado de desenvolvimento mostra que Julia não é apenas uma moda passageira — ela tem tudo para ganhar cada vez mais espaço e popularidade.
+:::
+
+## Referências utilizadas para a construção do texto:
+
+::: {.justify}
+* O que é Julia?, [https://coodesh.com/blog/dicionario/o-que-e-julia/#:~:text=Julia%20%C3%A9%20uma%20linguagem%20de%20programa%C3%A7%C3%A3o%20criada%20pelos%20pesquisadores%20Jeff,Shah%20e%20Alan%20Edelman](https://coodesh.com/blog/dicionario/o-que-e-julia/#:~:text=Julia%20%C3%A9%20uma%20linguagem%20de%20programa%C3%A7%C3%A3o%20criada%20pelos%20pesquisadores%20Jeff,Shah%20e%20Alan%20Edelman), acessado em: 2025-05-20.
+* Conheca a linguagem de programação cada vez mais usada no MIT, [https://canaltech.com.br/carreira/julia-conheca-a-linguagem-de-programacao-cada-vez-mais-usada-no-mit-223354/](https://canaltech.com.br/carreira/julia-conheca-a-linguagem-de-programacao-cada-vez-mais-usada-no-mit-223354/), acessado em: 2025-06-01.
+* Julia vs python qual aprender?, [https://www.datacamp.com/pt/blog/julia-vs-python-which-to-learn](https://www.datacamp.com/pt/blog/julia-vs-python-which-to-learn), acessado em: 2025-06-01.
+* Julia Data Science, [https://juliadatascience.io/pt/julia_accomplish#:~:text=O%20%E2%80%9CProblema%20das%20Duas%20Linguagens%E2%80%9D%20%C3%A9%20bastante%20comum%20na%20computa%C3%A7%C3%A3o,(como%20Python%20ou%20R)](https://juliadatascience.io/pt/julia_accomplish#:~:text=O%20%E2%80%9CProblema%20das%20Duas%20Linguagens%E2%80%9D%20%C3%A9%20bastante%20comum%20na%20computa%C3%A7%C3%A3o,(como%20Python%20ou%20R)), acessado em: 2025-05-20.
+:::
+
+The `echo: false` option disables the printing of code (only output is displayed).

@@ -62,7 +62,7 @@ Ferramentas de IA foram utilizadas para correção ortográfica, aprimoramento d
 :::
 
 
-## Referências
+## Referências utilizadas para a construção do texto:
 
 ::: {.justify}
 * O que é Julia?, [https://coodesh.com/blog/dicionario/o-que-e-julia/#:~:text=Julia%20%C3%A9%20uma%20linguagem%20de%20programa%C3%A7%C3%A3o%20criada%20pelos%20pesquisadores%20Jeff,Shah%20e%20Alan%20Edelman](https://coodesh.com/blog/dicionario/o-que-e-julia/#:~:text=Julia%20%C3%A9%20uma%20linguagem%20de%20programa%C3%A7%C3%A3o%20criada%20pelos%20pesquisadores%20Jeff,Shah%20e%20Alan%20Edelman), acessado em: 2025-05-20.
