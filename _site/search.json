@@ -91,6 +91,13 @@
     "text": "Github\n  \n  \n    \n     Linkedin\n  \n  \n    \n     Lattes\n  \n\n\n\nMestrando em Estatística pela UNICAMP."
   },
   {
+    "objectID": "Equipe/Atual/Ana_Luisa.html",
+    "href": "Equipe/Atual/Ana_Luisa.html",
+    "title": "Ana Luisa Pereira da Silva Rodrigues",
+    "section": "",
+    "text": "Github\n  \n  \n    \n     Linkedin\n  \n\n      \nGraduando em Estatística pela UNICAMP."
+  },
+  {
     "objectID": "Equipe/Atual/carlos_trucios.html",
     "href": "Equipe/Atual/carlos_trucios.html",
     "title": "Carlos Trucíos",
@@ -98,179 +105,95 @@
     "text": "Website\n  \n  \n    \n     Lattes\n  \n  \n    \n     Scholar\n  \n  \n    \n     Github\n  \n  \n    \n     Linkedin\n  \n\n      \n\n    \n    \n  \n\n\nCoordenador do projeto e Professor do Departamento de Estatística do IMECC desde 2022.\n\nSala: 206 - IMECC\nE-mail: ctrucios at unicamp dot br"
   },
   {
-    "objectID": "Equipe/Atual/henrique_velloso.html",
-    "href": "Equipe/Atual/henrique_velloso.html",
-    "title": "Henrique Velloso",
+    "objectID": "Equipe/Atual/pedro_galera.html",
+    "href": "Equipe/Atual/pedro_galera.html",
+    "title": "Pedro H. G. Elias",
+    "section": "",
+    "text": "Lattes\n  \n  \n    \n     Github\n  \n  \n    \n     Linkedin\n  \n\n      \n\n    \n    \n  \n\n\nDoutorando em Estatística pela UNICAMP."
+  },
+  {
+    "objectID": "Equipe/Atual/esther_cleveston.html",
+    "href": "Equipe/Atual/esther_cleveston.html",
+    "title": "Esther Cleveston",
     "section": "",
     "text": "Github\n  \n  \n    \n     Linkedin\n  \n\n      \nGraduando em Estatística pela UNICAMP."
   },
   {
-    "objectID": "Equipe/Atual/sarah_silva.html",
-    "href": "Equipe/Atual/sarah_silva.html",
-    "title": "Sarah Silva",
+    "objectID": "Equipe/Atual/guiduarte.html",
+    "href": "Equipe/Atual/guiduarte.html",
+    "title": "Guilherme Duarte Alves Basso",
     "section": "",
-    "text": "Graduanda em Matemática Aplicada e Computacional. Pesquisadora Colaboradora em Iniciação Científica em Centro Nacional de Pesquisa em Energia e Materiais (CNPEM).\n \n  \n   \n  \n    \n     Github\n  \n  \n    \n     Linkedin"
+    "text": "Graduando em Estatística pela UNICAMP."
   },
   {
-    "objectID": "Equipe/Atual/thiago_paulichen.html",
-    "href": "Equipe/Atual/thiago_paulichen.html",
-    "title": "Thiago Paulichen",
+    "objectID": "Equipe/Atual/nicole_fredericci.html",
+    "href": "Equipe/Atual/nicole_fredericci.html",
+    "title": "Nicole Fredericci",
     "section": "",
-    "text": "Lattes\n  \n  \n    \n     Github\n  \n  \n    \n     Linkedin\n  \n\n      \n\n    \n    \n  \n\n\nEstudante de Doutorado em Estatística pela UNICAMP."
+    "text": "Github\n  \n  \n    \n     Linkedin\n  \n\n      \n\n    \n    \n  \n\n\nGraduanda em Estatística pela UNICAMP."
   },
   {
-    "objectID": "Equipe/Atual/heitor_bgs.html",
-    "href": "Equipe/Atual/heitor_bgs.html",
-    "title": "Heitor Brotto Gomes e Silva",
+    "objectID": "Equipe/Atual/gabriel_cardoso.html",
+    "href": "Equipe/Atual/gabriel_cardoso.html",
+    "title": "Gabriel Vieira Cardoso",
     "section": "",
-    "text": "Github\n  \n  \n    \n     Linkedin\n  \n  \n    \n     Site\n  \n\n\n\nGraduando em Estatística pela UNICAMP."
+    "text": "Github\n  \n  \n    \n     Linkedin\n  \n\n      \nGraduando em Estatística pela UNICAMP."
   },
   {
-    "objectID": "Equipe/Atual/caio_frare.html",
-    "href": "Equipe/Atual/caio_frare.html",
-    "title": "Caio Frare",
+    "objectID": "Equipe/Atual/vitor_ribas.html",
+    "href": "Equipe/Atual/vitor_ribas.html",
+    "title": "Vitor Ribas Perrone",
     "section": "",
     "text": "Github\n  \n  \n    \n     Linkedin\n  \n\n      \n\n    \n    \n  \n\n\nGraduando em Estatística pela UNICAMP."
   },
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
+    "objectID": "Blog/jupytercolab.html",
+    "href": "Blog/jupytercolab.html",
+    "title": "Notebooks em Julia: Jupyter e Colab",
     "section": "",
-    "text": "About this site\n\n1 + 1\n\n[1] 2"
+    "text": "A linguagem Julia foi projetada para ser ao mesmo tempo rápida e dinâmica. Quando integrada ao ambiente Jupyter, ela se transforma em uma poderosa ferramenta interativa, que permite combinar código, visualizações gráficas e textos em um único documento, criando um ambiente ideal para o ensino e a aprendizagem.\nNeste post, aprenderemos como instalar o Jupyter e adequá-lo ao ambiente da Julia, bem como a utilizar Julia no queridinho Colab"
   },
   {
-    "objectID": "Blog/as-origens.html",
-    "href": "Blog/as-origens.html",
-    "title": "Do Zero ao Julia: As origens",
+    "objectID": "Blog/jupytercolab.html#introdução",
+    "href": "Blog/jupytercolab.html#introdução",
+    "title": "Notebooks em Julia: Jupyter e Colab",
     "section": "",
-    "text": "A primeira vez que ouvi falar da linguagem Julia foi em 2014, quando ainda era estudante de doutorado no IMECC e buscava formas mais rápidas de executar as simulações da minha pesquisa, que já exigia computação intensiva (Bootstrap). Naquela época, pouquíssimas pessoas trabalhavam com Julia, mas as promessas de desempenho comparável ao de linguagens de baixo nível como C++ ou Fortran rapidamente chamaram minha atenção.\nAlguns meses depois, conversando com colegas da Estatística e da Matemática Aplicada, percebi que não era o único interessado. Isso me motivou a criar um Meetup (alias, estamos reativando ele, então inscriva-se para não perder as novidades). No entanto, com a correria do dia a dia, nunca conseguimos realizar um encontro. Por anos, o grupo ficou lá, crescendo aos poucos, mesmo sem atividades — cheguei a pensar em encerrá-lo, mas no fundo sempre mantive a esperança de um dia retomar essa ideia."
+    "text": "A linguagem Julia foi projetada para ser ao mesmo tempo rápida e dinâmica. Quando integrada ao ambiente Jupyter, ela se transforma em uma poderosa ferramenta interativa, que permite combinar código, visualizações gráficas e textos em um único documento, criando um ambiente ideal para o ensino e a aprendizagem.\nNeste post, aprenderemos como instalar o Jupyter e adequá-lo ao ambiente da Julia, bem como a utilizar Julia no queridinho Colab"
   },
   {
-    "objectID": "Blog/as-origens.html#o-início",
-    "href": "Blog/as-origens.html#o-início",
-    "title": "Do Zero ao Julia: As origens",
-    "section": "",
-    "text": "A primeira vez que ouvi falar da linguagem Julia foi em 2014, quando ainda era estudante de doutorado no IMECC e buscava formas mais rápidas de executar as simulações da minha pesquisa, que já exigia computação intensiva (Bootstrap). Naquela época, pouquíssimas pessoas trabalhavam com Julia, mas as promessas de desempenho comparável ao de linguagens de baixo nível como C++ ou Fortran rapidamente chamaram minha atenção.\nAlguns meses depois, conversando com colegas da Estatística e da Matemática Aplicada, percebi que não era o único interessado. Isso me motivou a criar um Meetup (alias, estamos reativando ele, então inscriva-se para não perder as novidades). No entanto, com a correria do dia a dia, nunca conseguimos realizar um encontro. Por anos, o grupo ficou lá, crescendo aos poucos, mesmo sem atividades — cheguei a pensar em encerrá-lo, mas no fundo sempre mantive a esperança de um dia retomar essa ideia."
+    "objectID": "Blog/jupytercolab.html#instalação-do-jupyter",
+    "href": "Blog/jupytercolab.html#instalação-do-jupyter",
+    "title": "Notebooks em Julia: Jupyter e Colab",
+    "section": "Instalação do Jupyter",
+    "text": "Instalação do Jupyter\n\nPara a baixarmos o Jupyter, temos duas alternativas. A primeira é usando o Python em conjunto com o Julia e a segunda é usando somente o Julia (neste caso pule para a seção: Instalação do Jupyter pelo IJulia).\nUsando as duas linguagens em questão, devemos primeiro instalar o Python. Na página direcionada, você poderá instalar a versão mais nova do Python para o seu sistema operacional (no momento da criação deste post é a versão 3.13).\nCom o arquivo instalado, deveremos deixar habilitado “Add python.exe to PATH” (para permitir usar o comando pip no prompt de comando).\n\n\n\n\nInstalação Python\n\n\n\nEm seguida, abrindo o prompt de comando (coloque “cmd” na barra de procura do Windows), digite pip install jupyter.\n\n\n\n\nInstalando Jupyter\n\n\n\nTendo o Julia e o Jupyter instalados, agora nós instalamos o IJulia. Abrindo o prompt do Julia seguimos com using Pkg e depois Pkg.add(“IJulia”).\n\n\n\n\nTerminal Julia\n\n\n\nFinalmente, abrindo o cmd e digitamos: jupyter notebook. Com o Jupyter aberto, para abrir um notebook, vamos para a barra New e selecionamos o Julia (o número da versão que você instalou). E voilá."
   },
   {
-    "objectID": "Blog/as-origens.html#o-transcurso",
-    "href": "Blog/as-origens.html#o-transcurso",
-    "title": "Do Zero ao Julia: As origens",
-    "section": "O transcurso",
-    "text": "O transcurso\n\nApós o doutorado, acabei focando em outras prioridades — publicar artigos, trabalhar na indústria, estudar para concursos, preparar aulas… Ainda assim, a vontade de usar Julia permanecia. Com o tempo, fui explorando outras particularidades da linguagem: a possibilidade de escrever símbolos matemáticos diretamente no código (o que facilita absurdamente a implementação de novos métodos propostos na literatura), a programação nativa em paralelo e distribuída, e o fato de Julia resolver o famoso problema das duas linuagens.\nMotivado pelas vantagens da linguagem, quando entrei na UNICAMP como docente resolvi incluir Julia como linguagem a ser utilizada em umas das disciplinas: Econometria. Posteriormente, trabalhando num artigo com alguns colegas (Hotta et al. 2025), resolvi implementar tudo em Julia, do zero, o que acabou sendo um ótima e desafiadora experiência."
+    "objectID": "Blog/jupytercolab.html#instalação-do-jupyter-pelo-ijulia",
+    "href": "Blog/jupytercolab.html#instalação-do-jupyter-pelo-ijulia",
+    "title": "Notebooks em Julia: Jupyter e Colab",
+    "section": "Instalação do Jupyter pelo IJulia",
+    "text": "Instalação do Jupyter pelo IJulia\n\nCaso você não queira instalar o Python podemos fazer tudo pelo Julia! Terminando de instalar o IJulia, no terminal, digite using IJulia e em seguida notebook(). Será perguntado se você deseja instalar o Jupyter via Conda, digite y.\n\n\n\n\nInstalando Jupyter (Julia)\n\n\n\nApós esperar o tempo de instalação, temos o Jupyter em mãos!"
   },
   {
-    "objectID": "Blog/as-origens.html#a-idealização",
-    "href": "Blog/as-origens.html#a-idealização",
-    "title": "Do Zero ao Julia: As origens",
-    "section": "A idealização",
-    "text": "A idealização\n\nApós a curta experiência mão na massa com Julia, entender a importância da extensão e de ver a necessidade dos alunos por se envolverem em atividade de extensão, resolvi unir o útil ao agradável e foi assim que surgiu a primeira ideia do projeto. Ainda no rascunho, perguntei aos meus orientandos o que eles achavam da ideia e alguns deles toparam participar desde o início (alias, foram eles que me ajudaram a escolher o nome). Passaram-se alguns meses e agora com a ideia mais amadurecida, escrevi uma proposta e a submeti à comissão de extensão do IMECC e, após algunas sugestões da comissão, o projeto foi aprovado e lançado oficialmente na sua forma atual.\n\n\n\n\n\nConfesso que, inicialmente, achei que apenas meus orientandos se interessariam. Mas, para minha grata surpresa, o projeto teve uma ótima recepção. Hoje, temos mais de 20 pessoas envolvidas, colaborando com as redes sociais, escrevendo posts, tutoriais, organizando minicursos e cuidando da parte editorial, entre outras atividades que loog logo ficarão sabendo."
+    "objectID": "Blog/jupytercolab.html#julia-no-colab",
+    "href": "Blog/jupytercolab.html#julia-no-colab",
+    "title": "Notebooks em Julia: Jupyter e Colab",
+    "section": "Julia no Colab",
+    "text": "Julia no Colab\n\nEm 5 de março de 2025, o Google Colab, o Jupyter hospedado na nuvem da Google, adicionou outro tipo de ambiente de execução, a linguagem de programação Julia. Divulgado por Eric Johnson em seu GitHub, o mesmo fala em seu post que além de facilitar o acesso à programação na linguagem Julia, sua introdução ao Google Colab é quase uma homenagem ao Jupyter. Isso porque “Jupyter” é nomeado a partir das três linguagens originalmente suportadas: Julia (“Ju”), Python (“Pyt”) e R (“R”). E agora com Julia sendo adicionado, a tríade das linguagens originais do Jupyter está completa.\nComo colocar Julia no Colab? Muito simples!\nApós criar um novo notebook no Colab. Na aba “Ambiente de execução”, selecione “Alterar o tipo de ambiente de execução”. Depois mude o tipo de ambiente para Julia.\n\n\n\n\nPasso a passo no Colab\n\n\nO ambiente no Colab está pronto para ser usado.\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
   },
   {
-    "objectID": "Blog/as-origens.html#a-meta",
-    "href": "Blog/as-origens.html#a-meta",
-    "title": "Do Zero ao Julia: As origens",
-    "section": "A meta",
-    "text": "A meta\n\nMinha esperança é que o site www.ime.unicamp.br/julialang se torne um ponto de referência para quem quer aprender e explorar a linguagem Julia — oferecendo desde dicas para iniciantes até tutoriais completos e atualizações sobre a linguagem. Mais do que isso, torço para que o projeto ajude os alunos a desenvolverem habilidades valiosas para o mercado e, ao mesmo tempo, inspire a comunidade acadêmica e de ciência de dados a enxergar Julia como um verdadeiro mar de possibilidades.\nEstou longe de ser um expert em Julia, mas espero que em breve tanto você quanto eu saibamos um pouco mais dessa linguagem.\nHappy coding!\n\n\n\n\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto, bem como para a geração de imagens."
-  },
-  {
-    "objectID": "Blog/instalar_julia.html",
-    "href": "Blog/instalar_julia.html",
-    "title": "Como instalar Julia?",
-    "section": "",
-    "text": "Há muitas vantagens em usar plataformas integradas para desenvolver seus projetos nas mais diversas linguagens de programação. Mas e se sua internet cair? E se você quiser continuar seu projeto de um lugar com conexão lenta? Ter Julia instalado no seu computador resolve esse problema!\nNeste post, aprenderemos algumas formas de instalar Julia no seu computador."
-  },
-  {
-    "objectID": "Blog/instalar_julia.html#introdução",
-    "href": "Blog/instalar_julia.html#introdução",
-    "title": "Como instalar Julia?",
-    "section": "",
-    "text": "Há muitas vantagens em usar plataformas integradas para desenvolver seus projetos nas mais diversas linguagens de programação. Mas e se sua internet cair? E se você quiser continuar seu projeto de um lugar com conexão lenta? Ter Julia instalado no seu computador resolve esse problema!\nNeste post, aprenderemos algumas formas de instalar Julia no seu computador."
-  },
-  {
-    "objectID": "Blog/instalar_julia.html#pelo-site-oficial",
-    "href": "Blog/instalar_julia.html#pelo-site-oficial",
-    "title": "Como instalar Julia?",
-    "section": "Pelo site oficial",
-    "text": "Pelo site oficial\nClicando em Julia, você será redirecionado para o site oficial de Julia, onde poderá realizar a instalação manual da versão mais recente de Julia apenas baixando um instalador compatível com seu sistema operacional (.exe, .dmg, etc). É importante escolher um instalador compatível com o seu sistema operacional, caso contrário não será possível a instalação.\nCertifique-se de ter pelo menos 0,98 GB livres para armazenar os arquivos em seu computador. Após o término do download, siga as instruções recomendadas de configuração do instalador oficial (clicando em “Próximo” em todas as abas, para o caso da instalação padrao) e aguarde enquanto Julia é instalado.\n\n\n\nAtalho no Desktop\n\n\n\nCriar um atalho na área de trabalho facilitará muito o acesso ao aplicativo no dia a dia, embora essa seleção seja opcional.\n\nUma vez instalado Julia no seu computador, você poderá programar diretamente no terminal de Julia, que deve se parecer com a seguinte imagem:\n\n\n\nTerminal Julia"
-  },
-  {
-    "objectID": "Blog/instalar_julia.html#outros-caminhos",
-    "href": "Blog/instalar_julia.html#outros-caminhos",
-    "title": "Como instalar Julia?",
-    "section": "Outros caminhos",
-    "text": "Outros caminhos\nJulia também está disponível para download pela Microsoft Store. Para os usuários de Linux e macOS, essa opção não se encontra disponível por enquanto, mas também é possível instalar e utilizar Julia diretamente do terminal do computador.\nNo Windows, pressione as teclas Windows + R, digite cmd e pressione “Enter” para abrir o terminal. Em seguida, execute o comando abaixo e digite Y quando solicitado pelo sistema:\nwinget install Julia\nQuando a instalação for concluída, você pode digitar where julia para localizar o caminho até o .exe de Julia, ou simplesmente digitar julia no terminal para obter uma interface semelhante à do aplicativo do programa.\nNo macOS ou Linux, abra o terminal e digite\ncurl -fsSL https://install.julialang.org | sh\nQuando a instalação for concluída, você pode digitar which julia para localizar o caminho até o executável de Julia, ou simplesmente digitar julia no terminal para acessar a interface interativa do programa.\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
-  },
-  {
-    "objectID": "oprojeto.html",
-    "href": "oprojeto.html",
-    "title": "Conheça mais sobre o projeto ‘Do Zero ao Julia’",
-    "section": "",
-    "text": "Julia?\n\nA linguagem de programação Julia, lançada oficialmente ao público em 2012, e com foco em ciência de dados e computação científica, tem surgido como uma alternativa a outras linguagem de programação já estabelecidas no mercado como Matlab, Python e R. Com desempenho comparável ao de C++ e facilidade de aprendizado similar a Python e R, Julia utiliza multiple dispatch, tem uma boa performance e permite utilizar símbolos matemáticos diretamente no código. Ademais, Julia também resolve o problema de duas linguagens, não sendo mais necessário fazer o protótipo em uma linguagem e colocar em produção em outra – uma característica especialmente vantajosa no desenvolvimento de aplicações no setor industrial e em projetos de grande escala.\n\n\n\nO Projeto\n\nDo Zero ao Julia é um projeto de extensão do IMECC/UNICAMP, coordenado pelo Professor Carlos Trucíos (Departamento de Estatística), com o objetivo de incentivar e disseminar o uso da linguagem Julia. O projeto visa destacar Julia como uma ferramenta poderosa e eficiente, não apenas no ensino de Estatística e Ciência de Dados, mas também como uma ferramenta poderosa na análise de dados, desenvolvimento de projetos e implantação de modelos tanto na academia quanto na industria. Através de palestras, cursos online e materiais educativos, como blogs e tutoriais, vamos apresentar os benefícios e recursos da linguagem de programação Julia a diferentes públicos. O projeto será uma oportunidade para envolver tanto a comunidade acadêmica quanto outras pessoas interessadas, como profissionais da indústria, buscando promover a troca de conhecimentos e fortalecer a conexão entre a universidade e a sociedade.\n\n\nAlém disso, o projeto irá oferecer materiais comparando Julia com outras linguagens populares, como Python e R, mostrando suas vantagens, limitações e características específicas. Também será explorado como Julia pode ser integrada com outras tecnologias, com foco na implementação de modelos em produção, proporcionando uma visão abrangente de como Julia se posiciona no vasto ecossistema de ferramentas tecnológicas da era digital."
-  },
-  {
-    "objectID": "Tutoriais/graf_basico.html",
-    "href": "Tutoriais/graf_basico.html",
-    "title": "Gráficos em Julia: primeiros passos",
-    "section": "",
-    "text": "Lidar com diferentes linguagens de programação faz parte do dia a dia de pesquisadores, desenvolvedores e usuários finais nas áreas de STEM (Science, Technology, Engineering and Mathematics). No entanto, tão importante quanto desenvolver, implementar e aplicar modelos ou metodologias é saber comunicar os resultados de forma clara e acessível ao público-alvo. E nada melhor para isso do que visualizações didáticas e informativas.\nEmbora existam excelentes ferramentas para visualização de dados, como o ggplot2 do R e o seaborn do Python, é sempre útil saber como produzir gráficos, mesmo que básicos, diretamente na linguagem em que o código principal está sendo desenvolvido.\nNeste tutorial, você aprenderá a criar visualizações básicas em Julia utilizando o pacote Plots.jl, além de conhecer algumas bibliotecas auxiliares que tornam esse processo mais eficiente e versátil."
-  },
-  {
-    "objectID": "Tutoriais/graf_basico.html#introdução",
-    "href": "Tutoriais/graf_basico.html#introdução",
-    "title": "Gráficos em Julia: primeiros passos",
-    "section": "",
-    "text": "Lidar com diferentes linguagens de programação faz parte do dia a dia de pesquisadores, desenvolvedores e usuários finais nas áreas de STEM (Science, Technology, Engineering and Mathematics). No entanto, tão importante quanto desenvolver, implementar e aplicar modelos ou metodologias é saber comunicar os resultados de forma clara e acessível ao público-alvo. E nada melhor para isso do que visualizações didáticas e informativas.\nEmbora existam excelentes ferramentas para visualização de dados, como o ggplot2 do R e o seaborn do Python, é sempre útil saber como produzir gráficos, mesmo que básicos, diretamente na linguagem em que o código principal está sendo desenvolvido.\nNeste tutorial, você aprenderá a criar visualizações básicas em Julia utilizando o pacote Plots.jl, além de conhecer algumas bibliotecas auxiliares que tornam esse processo mais eficiente e versátil."
-  },
-  {
-    "objectID": "Tutoriais/graf_basico.html#como-criar-os-gráficos",
-    "href": "Tutoriais/graf_basico.html#como-criar-os-gráficos",
-    "title": "Gráficos em Julia: primeiros passos",
-    "section": "Como criar os gráficos?",
-    "text": "Como criar os gráficos?\nPara instalar o pacote principal e carregar seus comandos no ambiente, execute as seguintes linhas de código:\n\nPkg.add(\"Plots\")\nusing Plots\n\n\nLembre-se que precisamos apenas instalar o pacote uma única vez, mas chamá-lo em cada sessão que formos utilizá-lo.\n\n\nTambém utilizaremos os pacotes Distributions.jl e StatsPlots.jl para permitir a criação de gráficos com dados simulados e utilizar algumas distribuições de probabilidade. Para instalá-los e carregá-los, use:\n\n\nPkg.add(\"Distributions\")\nusing Distributions\n\nPkg.add(\"StatsPlots\")\nusing StatsPlots\n\n\nObservação: Uma boa prática em Julia é carregar os pacotes um por um, logo no início do script, seguindo a ordem alfabética. Isso torna o código mais organizado, facilita a leitura e a identificação de dependências. Por exemplo:\n\n\nusing Distributions\nusing Plots\nusing StatsPlots\n\n\nGráfico de Densidades\n\nUm dos gráficos mais básicos (e úteis) para visualização de dados é o gráfico de densidades. Vamos gerando um gráfico de densidade da distribuição Normal com média 0 e variância 1. Para isso, execute:\n\n\nplot(Normal(0,1), title = \"Distribuição Normal\", size = (800, 500))\n\n\n\n\n\n\n\n\nOutras distribuições contidas no pacote:\n\nBernoulli(\\(p\\))\nBeta(\\(\\alpha\\), \\(\\beta\\))\nBinomial(n, p)\nCauchy(\\(\\mu\\), \\(\\sigma\\))\nExponential(\\(\\theta\\))\nGamma(\\(\\alpha\\), \\(\\gamma\\))\nPoisson(\\(\\lambda\\))\nUniform(\\(a\\), \\(b\\))\nTDist(\\(\\nu\\))\n\n\nVocê pode conferir a documentação completa das funções no site oficial de Julia.\nA função plot() também pode ser utilizada para criar gráficos de linha ou de sequência:\n\n\nplot(randn(10), title = \"Gráfico de linha ou de sequência\", size = (800, 500))\n\n\n\n\n\n\n\n\n\n\nGráfico de Dispersão\n\nTambém é possível fazer um gráfico de dispersão (scatterplot) com o código abaixo. Neste exemplo, geramos valores em x de 0 a 10 com um espaçamento de 0,5 entre eles e calculamos y como o logaritmo de cada valor de x. Além de personalizar o título e o nome dos eixos, é possível controlar a exibição da legenda — o padrão é mostrar legend = auto, mas você pode ocultá-la com legend = false.\n\n\nx = 0:0.5:10\n\n0.0:0.5:10.0\n\ny = log.(x);\nscatter(x, y, title = \"Gráfico de Dispersão\", xlabel = \"x\", ylabel = \"log(x)\", legend = false)\n\n\n\n\n\n\n\n\n\nObservação: o operador \\(\\cdot\\) (dot), aplica a função \\(\\log()\\) a cada elemento do vetor x. O “;” evita que a variável y seja impressa (como aconteceu com a variável x).\n\n\n\nHistograma\n\nOutro recurso valioso na visualização de dados é o histograma, ideal para visualizar a distribuição de uma variável. Vamos construí-lo a partir da criação de uma variável x equivalente a 1000 números aleatórios de uma distribuição Normal(0, 1), executando o seguinte bloco:\n\n\nx = randn(1000);\nhistogram(x, title = \"Histograma\", color = :purple)\n\n\n\n\n\n\n\n\n\nNote que é possível customizar o número de intervalos (bins = 100, por exemplo) do seu histograma e modificar sua cor base. No exemplo abaixo, a cor é definida por nome (:purple), mas você também pode usar códigos hexadecimais — por exemplo, color = \"#800080\" produz o mesmo tom de roxo.\n\n\nhistogram(x, title = \"Histograma\", bins = 10, color = \"#111080\")\n\n\n\n\n\n\n\n\n\n\nBoxplot\n\nPara os estatísticos e cientistas de dados, o pacote Plots.jl oferece suporte ao conhecido boxplot, uma ferramenta eficaz para resumir estatísticas, ver assimetrias e identificar outliers. Ao executar o código abaixo, estaremos gerando dois vetores de 50 números aleatórios cada que, multiplicadas por 5, vão compor o conjunto de dados y.\n\n\ny = 5 * rand(50, 2);\nsize(y)\n\n(50, 2)\n\nboxplot(y, title = \"Boxplot\", color = [:darkorchid :darkorange])\n\n\n\n\n\n\n\n\n\nNote que para especificar cores manualmente, basta listar os nomes sem vírgula entre eles, tal qual no bloco acima. Esse detalhe é importante quando seus dados estão organizados em colunas no mesmo array. Abaixo veremos quando devemos incluir a vírgula.\n\n\n\nGráfico de Pizza\n\nTudo bem se você preferir os gráficos de pizza, eles ainda têm seu charme! 🎉 O bloco a seguir cria um gráfico de pizza utilizando a paleta de cores :tab10, que já vem disponível por padrão no pacote Plots.jl.\nVamos supor que os institutos IMECC, IG, IFGW e IFCH tenham, respectivamente, 700, 600, 500 e 470 alunos. Nosso objetivo é representar essas quantidades como porcentagens em um gráfico de pizza, considerando o total de alunos dos quatro institutos como 100%.\n\n\nz = [\"IMECC\", \"IG\", \"IFGW\", \"IFCH\"]\n\n4-element Vector{String}:\n \"IMECC\"\n \"IG\"\n \"IFGW\"\n \"IFCH\"\n\nalunos = [700, 600, 500, 470];\nw = 100 .* alunos ./ sum(alunos)\n\n4-element Vector{Float64}:\n 30.837004405286343\n 26.431718061674008\n 22.026431718061673\n 20.704845814977972\n\npie(z, w, title = \"Quantidade de alunos por instituto\", palette = :tab10)\n\n\n\n\n\n\n\n\nPara escolher manualmente as cores de cada fatia do gráfico de pizza, você pode usar uma lista de cores assim como no boxplot. Mas cuidado! Aqui os dados não foram gerados em conjunto, mas sim em dois vetores separados. Assim, para substituir o argumento palette, a vígula entre os nomes é necessária.\n\ncolor = [:darkorchid, :darkorange, :purple, :blue]\n\n\nLembre-se de definir uma cor para cada categoria presente no seu conjunto de dados, para evitar que as cores se repitam no gráfico.\n\n\n\nGráfico de Barras\nPara comparar valores entre diferentes grupos e categorias, podemos construir um gráfico de barras de estrutura semelhante ao seguinte:\n\nnum = [\"A\", \"B\", \"C\", \"D\", \"E\"]\n\n5-element Vector{String}:\n \"A\"\n \"B\"\n \"C\"\n \"D\"\n \"E\"\n\nqnt = [100; 70; 100; 80; 60]\n\n5-element Vector{Int64}:\n 100\n  70\n 100\n  80\n  60\n\nbar(num, qnt, color = :seagreen)"
-  },
-  {
-    "objectID": "Tutoriais/graf_basico.html#grids-e-combinações",
-    "href": "Tutoriais/graf_basico.html#grids-e-combinações",
-    "title": "Gráficos em Julia: primeiros passos",
-    "section": "Grids e Combinações",
-    "text": "Grids e Combinações\n\nUma ferramenta bastante utilizada na visualização de dados é a junção de gráficos distintos na mesma imagem para facilitar a comparação, ou sobrepor múltiplas curvas em um único gráfico para contrastá-las no mesmo plano. Se você deseja criar o famoso grid (também chamado de malha gráfica), Julia oferece soluções práticas.\n\n\nh = range(0, 10, length = 100);\nk = @. log(h);\nj = @. exp(h);\nplot(h, [k j], layout = (2, 1), legend = false, color = :green)\n\n\n\n\n\n\n\n\n\nNa figura acima criamos um vetor h com 100 valores uniformemente espaçados entre 0 e 10, um vetor k correspondente ao logaritmo dos elementos de h, e j ao exponencial dos mesmos elementos. O argumento layout define a disposição dos gráficos na figura, no qual o primeiro número indica o número de linhas e o segundo o número de colunas do grid. Agora, vamos combinar essas mesmas informações em um único gráfico, ajustando j para que sua escala fique mais próxima à de k.\n\n\nj2 = @. exp(h)/5000;\n\nplot(h, k, label = \"log\", color = :green)\n\n\n\n\n\n\n\nplot!(h, j2, label = \"exp/5000\", color = :steelblue, ls = :dash)\n\n\n\n\n\n\n\n\n\nNote que além de ocultar ou exibir a legenda, é possível personalizar os rótulos (labels) do seu gráfico e escolher diferentes estilos para as linhas das curvas."
-  },
-  {
-    "objectID": "Tutoriais/graf_basico.html#personalização-de-atributos",
-    "href": "Tutoriais/graf_basico.html#personalização-de-atributos",
-    "title": "Gráficos em Julia: primeiros passos",
-    "section": "Personalização de atributos",
-    "text": "Personalização de atributos\n\nCaso nenhuma das customizações mostradas até agora seja suficiente para ilustrar seus dados de forma adequada, segue-se uma gama de opções adicionais para ajustar os atributos visuais do gráfico.\n\n\nCores e Paletas\n\nPara explorar as cores nomeadas disponíveis na base do Julia e seus códigos RGB (uma tripla que representa a composição de vermelho, verde e azul), você pode acessar a lista oficial clicando em cores. Se você quiser diversificar as opções de paletas disponíveis, o pacote ColorSchemes pode ser adicionado à sua biblioteca:\n\n\nPkg.add(\"ColorSchemes\")\nusing ColorSchemes\n\n\nO pacote conta com opções de paletas para usuários com Deficiência de Visão de Cores!\n\n\n\nEstilo da linha\nOs seguintes estilos podem ser determinados no argumento ls (line style) para customizar as curvas do gráfico:\n\n:solid      #linha sólida\n:dash       #tracejado\n:dot        #pontos\n:dashdot    #tracejado seguido de um ponto\n:dashdotdot #tracejado seguido de dois pontos"
-  },
-  {
-    "objectID": "Tutoriais/graf_basico.html#como-salvar-o-gráfico",
-    "href": "Tutoriais/graf_basico.html#como-salvar-o-gráfico",
-    "title": "Gráficos em Julia: primeiros passos",
-    "section": "Como salvar o gráfico?",
-    "text": "Como salvar o gráfico?\nPor fim, você pode salvar o gráfico no diretório do seu projeto utilizando o seguinte comando:\n\np = plot(x, y)\nsavefig(p,\"nome.png\")\n\nCaso você não tenha atribuído o gráfico a um objeto p, é possível salvar a figura imediatamente após a criação do gráfico, omitindo o objeto.\n\nplot(x, y)\nsavefig(\"meu_gráfico.png\")\n\nSe fizer alterações no gráfico e quiser atualizar a imagem salva, basta executar novamente o comando savefig com o mesmo nome. A figura anterior será substituída pela versão atualizada no seu diretório.\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
-  },
-  {
-    "objectID": "equipe.html",
-    "href": "equipe.html",
+    "objectID": "index.html",
+    "href": "index.html",
     "title": "Do Zero ao Julia",
     "section": "",
-    "text": "Graduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCoordenador\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDoutorando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Matemática Aplicada e Computacional\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDoutorando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\nNenhum item correspondente"
+    "text": "Descubra e explore as vantagens da linguagem de programação Julia: uma poderosa ferramenta para o ensino, a implementação e o desenvolvimento de métodos estatísticos e de ciência de dados.\n\n\n\n\n\n\n\n\n\n\n\nDescubra as vantagens e dicas de Julia\n\nBlog\n\n\n\n\n\n\n\n\n\nExplore diversos tópicos em Julia\n\nTutoriais\n\n\n\n\n\n\n\n\n\nConheça casos de sucesso e amplie seu networking.\n\nMeetup"
   },
   {
-    "objectID": "equipe.html#equipe",
-    "href": "equipe.html#equipe",
-    "title": "Do Zero ao Julia",
+    "objectID": "meetup.html",
+    "href": "meetup.html",
+    "title": "Meetup",
     "section": "",
-    "text": "Graduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCoordenador\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDoutorando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Matemática Aplicada e Computacional\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDoutorando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\nNenhum item correspondente"
-  },
-  {
-    "objectID": "tutoriais.html",
-    "href": "tutoriais.html",
-    "title": "Tutoriais",
-    "section": "",
-    "text": "Introdução à Análise Exploratória de Dados (EDA) em Julia\n\n\n\nAplicação\n\n\nVisualização de Dados\n\n\n\nUm guia completo e prático sobre como realizar Análise Exploratória de Dados (EDA) em Julia. Explore desde estatísticas descritivas, manipulação de dados, visualizações com…\n\n\n\nArthur Dionizio, Henrique Velloso\n\n\n23 de mai. de 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGráficos em Julia: primeiros passos\n\n\n\nGráficos\n\n\n\nTão importante quanto desenvolver, implementar e aplicar modelos/metodologías é saber comunicar os resultados de forma clara e acessível para o público-alvo. E que melhor…\n\n\n\nNicole Fredericci, Carlos Trucíos\n\n\n23 de mai. de 2025\n\n\n\n\n\n\n\n\nNenhum item correspondente"
+    "text": "Os meetups acontecem toda terceira quinta-feira do mês, nas dependências do IMECC/UNICAMP. O ingresso é gratuito e aberto ao público (mas precisa de inscrição). Para participar, inscreva-se aqui.\n\n\n\n\n\n\nÉ gratis, é sobre Julia e é no IMECC/UNICAMP!"
   },
   {
     "objectID": "Tutoriais/tutorial-eda.html",
@@ -371,53 +294,137 @@
     "text": "Série Temporal\nPor último, criamos uma série temporal simulada para ilustrar como visualizar dados ao longo do tempo. A função cumsum() é usada para calcular a soma acumulada (no nosso caso, acumular número aleatório de uma distribuição Normal padrão), e o gráfico mostra a evolução dos valores ao longo do ano.\n\nusing Dates\n\n# Gerando uma série temporal simulada\n\ndatas = Date(2024,1,1):Day(1):Date(2024,12,31)\n\nDate(\"2024-01-01\"):Day(1):Date(\"2024-12-31\")\n\nvalores = cumsum(randn(length(datas))) .+ 100\n\n366-element Vector{Float64}:\n  99.93356752809319\n 100.68920283747816\n 101.60107790420861\n 100.80867532750842\n 100.22443383684116\n  98.5038393366958\n  98.73218906091287\n  99.46750522556687\n  97.83974470691781\n  96.0199549308198\n   ⋮\n 101.50097700552809\n 100.33548507315055\n 100.31383058790584\n 101.02944569713357\n 101.40802609294452\n 100.68350893826006\n  99.82193264955082\n  97.79657769045133\n  97.80224894941702\n\n\n# Plotando a série temporal\n\nplot(datas, valores,\n     xlabel=\"Data\", ylabel=\"Valor\",\n     title=\"Série Temporal Simulada\",\n     linewidth=2, label=\"\")"
   },
   {
-    "objectID": "meetup.html",
-    "href": "meetup.html",
-    "title": "Meetup",
+    "objectID": "tutoriais.html",
+    "href": "tutoriais.html",
+    "title": "Tutoriais",
     "section": "",
-    "text": "Os meetups acontecem toda terceira quinta-feira do mês, nas dependências do IMECC/UNICAMP. O ingresso é gratuito e aberto ao público (mas precisa de inscrição). Para participar, inscreva-se aqui.\n\n\n\n\n\n\nÉ gratis, é sobre Julia e é no IMECC/UNICAMP!"
+    "text": "Introdução à Análise Exploratória de Dados (EDA) em Julia\n\n\n\nAplicação\n\n\nVisualização de Dados\n\n\n\nUm guia completo e prático sobre como realizar Análise Exploratória de Dados (EDA) em Julia. Explore desde estatísticas descritivas, manipulação de dados, visualizações com…\n\n\n\nArthur Dionizio, Henrique Velloso\n\n\n23 de mai. de 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGráficos em Julia: primeiros passos\n\n\n\nGráficos\n\n\n\nTão importante quanto desenvolver, implementar e aplicar modelos/metodologías é saber comunicar os resultados de forma clara e acessível para o público-alvo. E que melhor…\n\n\n\nNicole Fredericci, Carlos Trucíos\n\n\n23 de mai. de 2025\n\n\n\n\n\n\n\n\nNenhum item correspondente"
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
+    "objectID": "equipe.html",
+    "href": "equipe.html",
     "title": "Do Zero ao Julia",
     "section": "",
-    "text": "Descubra e explore as vantagens da linguagem de programação Julia: uma poderosa ferramenta para o ensino, a implementação e o desenvolvimento de métodos estatísticos e de ciência de dados.\n\n\n\n\n\n\n\n\n\n\n\nDescubra as vantagens e dicas de Julia\n\nBlog\n\n\n\n\n\n\n\n\n\nExplore diversos tópicos em Julia\n\nTutoriais\n\n\n\n\n\n\n\n\n\nConheça casos de sucesso e amplie seu networking.\n\nMeetup"
+    "text": "Graduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Matemática Aplicada e Computacional\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCoordenador\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDoutorando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Matemática Aplicada e Computacional\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDoutorando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\nNenhum item correspondente"
   },
   {
-    "objectID": "Blog/jupytercolab.html",
-    "href": "Blog/jupytercolab.html",
-    "title": "Notebooks em Julia: Jupyter e Colab",
+    "objectID": "equipe.html#equipe",
+    "href": "equipe.html#equipe",
+    "title": "Do Zero ao Julia",
     "section": "",
-    "text": "A linguagem Julia foi projetada para ser ao mesmo tempo rápida e dinâmica. Quando integrada ao ambiente Jupyter, ela se transforma em uma poderosa ferramenta interativa, que permite combinar código, visualizações gráficas e textos em um único documento, criando um ambiente ideal para o ensino e a aprendizagem.\nNeste post, aprenderemos como instalar o Jupyter e adequá-lo ao ambiente da Julia, bem como a utilizar Julia no queridinho Colab"
+    "text": "Graduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Matemática Aplicada e Computacional\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCoordenador\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDoutorando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Matemática Aplicada e Computacional\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDoutorando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\nNenhum item correspondente"
   },
   {
-    "objectID": "Blog/jupytercolab.html#introdução",
-    "href": "Blog/jupytercolab.html#introdução",
-    "title": "Notebooks em Julia: Jupyter e Colab",
+    "objectID": "Tutoriais/graf_basico.html",
+    "href": "Tutoriais/graf_basico.html",
+    "title": "Gráficos em Julia: primeiros passos",
     "section": "",
-    "text": "A linguagem Julia foi projetada para ser ao mesmo tempo rápida e dinâmica. Quando integrada ao ambiente Jupyter, ela se transforma em uma poderosa ferramenta interativa, que permite combinar código, visualizações gráficas e textos em um único documento, criando um ambiente ideal para o ensino e a aprendizagem.\nNeste post, aprenderemos como instalar o Jupyter e adequá-lo ao ambiente da Julia, bem como a utilizar Julia no queridinho Colab"
+    "text": "Lidar com diferentes linguagens de programação faz parte do dia a dia de pesquisadores, desenvolvedores e usuários finais nas áreas de STEM (Science, Technology, Engineering and Mathematics). No entanto, tão importante quanto desenvolver, implementar e aplicar modelos ou metodologias é saber comunicar os resultados de forma clara e acessível ao público-alvo. E nada melhor para isso do que visualizações didáticas e informativas.\nEmbora existam excelentes ferramentas para visualização de dados, como o ggplot2 do R e o seaborn do Python, é sempre útil saber como produzir gráficos, mesmo que básicos, diretamente na linguagem em que o código principal está sendo desenvolvido.\nNeste tutorial, você aprenderá a criar visualizações básicas em Julia utilizando o pacote Plots.jl, além de conhecer algumas bibliotecas auxiliares que tornam esse processo mais eficiente e versátil."
   },
   {
-    "objectID": "Blog/jupytercolab.html#instalação-do-jupyter",
-    "href": "Blog/jupytercolab.html#instalação-do-jupyter",
-    "title": "Notebooks em Julia: Jupyter e Colab",
-    "section": "Instalação do Jupyter",
-    "text": "Instalação do Jupyter\n\nPara a baixarmos o Jupyter, temos duas alternativas. A primeira é usando o Python em conjunto com o Julia e a segunda é usando somente o Julia (neste caso pule para a seção: Instalação do Jupyter pelo IJulia).\nUsando as duas linguagens em questão, devemos primeiro instalar o Python. Na página direcionada, você poderá instalar a versão mais nova do Python para o seu sistema operacional (no momento da criação deste post é a versão 3.13).\nCom o arquivo instalado, deveremos deixar habilitado “Add python.exe to PATH” (para permitir usar o comando pip no prompt de comando).\n\n\n\n\nInstalação Python\n\n\n\nEm seguida, abrindo o prompt de comando (coloque “cmd” na barra de procura do Windows), digite pip install jupyter.\n\n\n\n\nInstalando Jupyter\n\n\n\nTendo o Julia e o Jupyter instalados, agora nós instalamos o IJulia. Abrindo o prompt do Julia seguimos com using Pkg e depois Pkg.add(“IJulia”).\n\n\n\n\nTerminal Julia\n\n\n\nFinalmente, abrindo o cmd e digitamos: jupyter notebook. Com o Jupyter aberto, para abrir um notebook, vamos para a barra New e selecionamos o Julia (o número da versão que você instalou). E voilá."
+    "objectID": "Tutoriais/graf_basico.html#introdução",
+    "href": "Tutoriais/graf_basico.html#introdução",
+    "title": "Gráficos em Julia: primeiros passos",
+    "section": "",
+    "text": "Lidar com diferentes linguagens de programação faz parte do dia a dia de pesquisadores, desenvolvedores e usuários finais nas áreas de STEM (Science, Technology, Engineering and Mathematics). No entanto, tão importante quanto desenvolver, implementar e aplicar modelos ou metodologias é saber comunicar os resultados de forma clara e acessível ao público-alvo. E nada melhor para isso do que visualizações didáticas e informativas.\nEmbora existam excelentes ferramentas para visualização de dados, como o ggplot2 do R e o seaborn do Python, é sempre útil saber como produzir gráficos, mesmo que básicos, diretamente na linguagem em que o código principal está sendo desenvolvido.\nNeste tutorial, você aprenderá a criar visualizações básicas em Julia utilizando o pacote Plots.jl, além de conhecer algumas bibliotecas auxiliares que tornam esse processo mais eficiente e versátil."
   },
   {
-    "objectID": "Blog/jupytercolab.html#instalação-do-jupyter-pelo-ijulia",
-    "href": "Blog/jupytercolab.html#instalação-do-jupyter-pelo-ijulia",
-    "title": "Notebooks em Julia: Jupyter e Colab",
-    "section": "Instalação do Jupyter pelo IJulia",
-    "text": "Instalação do Jupyter pelo IJulia\n\nCaso você não queira instalar o Python podemos fazer tudo pelo Julia! Terminando de instalar o IJulia, no terminal, digite using IJulia e em seguida notebook(). Será perguntado se você deseja instalar o Jupyter via Conda, digite y.\n\n\n\n\nInstalando Jupyter (Julia)\n\n\n\nApós esperar o tempo de instalação, temos o Jupyter em mãos!"
+    "objectID": "Tutoriais/graf_basico.html#como-criar-os-gráficos",
+    "href": "Tutoriais/graf_basico.html#como-criar-os-gráficos",
+    "title": "Gráficos em Julia: primeiros passos",
+    "section": "Como criar os gráficos?",
+    "text": "Como criar os gráficos?\nPara instalar o pacote principal e carregar seus comandos no ambiente, execute as seguintes linhas de código:\n\nPkg.add(\"Plots\")\nusing Plots\n\n\nLembre-se que precisamos apenas instalar o pacote uma única vez, mas chamá-lo em cada sessão que formos utilizá-lo.\n\n\nTambém utilizaremos os pacotes Distributions.jl e StatsPlots.jl para permitir a criação de gráficos com dados simulados e utilizar algumas distribuições de probabilidade. Para instalá-los e carregá-los, use:\n\n\nPkg.add(\"Distributions\")\nusing Distributions\n\nPkg.add(\"StatsPlots\")\nusing StatsPlots\n\n\nObservação: Uma boa prática em Julia é carregar os pacotes um por um, logo no início do script, seguindo a ordem alfabética. Isso torna o código mais organizado, facilita a leitura e a identificação de dependências. Por exemplo:\n\n\nusing Distributions\nusing Plots\nusing StatsPlots\n\n\nGráfico de Densidades\n\nUm dos gráficos mais básicos (e úteis) para visualização de dados é o gráfico de densidades. Vamos gerando um gráfico de densidade da distribuição Normal com média 0 e variância 1. Para isso, execute:\n\n\nplot(Normal(0,1), title = \"Distribuição Normal\", size = (800, 500))\n\n\n\n\n\n\n\n\nOutras distribuições contidas no pacote:\n\nBernoulli(\\(p\\))\nBeta(\\(\\alpha\\), \\(\\beta\\))\nBinomial(n, p)\nCauchy(\\(\\mu\\), \\(\\sigma\\))\nExponential(\\(\\theta\\))\nGamma(\\(\\alpha\\), \\(\\gamma\\))\nPoisson(\\(\\lambda\\))\nUniform(\\(a\\), \\(b\\))\nTDist(\\(\\nu\\))\n\n\nVocê pode conferir a documentação completa das funções no site oficial de Julia.\nA função plot() também pode ser utilizada para criar gráficos de linha ou de sequência:\n\n\nplot(randn(10), title = \"Gráfico de linha ou de sequência\", size = (800, 500))\n\n\n\n\n\n\n\n\n\n\nGráfico de Dispersão\n\nTambém é possível fazer um gráfico de dispersão (scatterplot) com o código abaixo. Neste exemplo, geramos valores em x de 0 a 10 com um espaçamento de 0,5 entre eles e calculamos y como o logaritmo de cada valor de x. Além de personalizar o título e o nome dos eixos, é possível controlar a exibição da legenda — o padrão é mostrar legend = auto, mas você pode ocultá-la com legend = false.\n\n\nx = 0:0.5:10\n\n0.0:0.5:10.0\n\ny = log.(x);\nscatter(x, y, title = \"Gráfico de Dispersão\", xlabel = \"x\", ylabel = \"log(x)\", legend = false)\n\n\n\n\n\n\n\n\n\nObservação: o operador \\(\\cdot\\) (dot), aplica a função \\(\\log()\\) a cada elemento do vetor x. O “;” evita que a variável y seja impressa (como aconteceu com a variável x).\n\n\n\nHistograma\n\nOutro recurso valioso na visualização de dados é o histograma, ideal para visualizar a distribuição de uma variável. Vamos construí-lo a partir da criação de uma variável x equivalente a 1000 números aleatórios de uma distribuição Normal(0, 1), executando o seguinte bloco:\n\n\nx = randn(1000);\nhistogram(x, title = \"Histograma\", color = :purple)\n\n\n\n\n\n\n\n\n\nNote que é possível customizar o número de intervalos (bins = 100, por exemplo) do seu histograma e modificar sua cor base. No exemplo abaixo, a cor é definida por nome (:purple), mas você também pode usar códigos hexadecimais — por exemplo, color = \"#800080\" produz o mesmo tom de roxo.\n\n\nhistogram(x, title = \"Histograma\", bins = 10, color = \"#111080\")\n\n\n\n\n\n\n\n\n\n\nBoxplot\n\nPara os estatísticos e cientistas de dados, o pacote Plots.jl oferece suporte ao conhecido boxplot, uma ferramenta eficaz para resumir estatísticas, ver assimetrias e identificar outliers. Ao executar o código abaixo, estaremos gerando dois vetores de 50 números aleatórios cada que, multiplicadas por 5, vão compor o conjunto de dados y.\n\n\ny = 5 * rand(50, 2);\nsize(y)\n\n(50, 2)\n\nboxplot(y, title = \"Boxplot\", color = [:darkorchid :darkorange])\n\n\n\n\n\n\n\n\n\nNote que para especificar cores manualmente, basta listar os nomes sem vírgula entre eles, tal qual no bloco acima. Esse detalhe é importante quando seus dados estão organizados em colunas no mesmo array. Abaixo veremos quando devemos incluir a vírgula.\n\n\n\nGráfico de Pizza\n\nTudo bem se você preferir os gráficos de pizza, eles ainda têm seu charme! 🎉 O bloco a seguir cria um gráfico de pizza utilizando a paleta de cores :tab10, que já vem disponível por padrão no pacote Plots.jl.\nVamos supor que os institutos IMECC, IG, IFGW e IFCH tenham, respectivamente, 700, 600, 500 e 470 alunos. Nosso objetivo é representar essas quantidades como porcentagens em um gráfico de pizza, considerando o total de alunos dos quatro institutos como 100%.\n\n\nz = [\"IMECC\", \"IG\", \"IFGW\", \"IFCH\"]\n\n4-element Vector{String}:\n \"IMECC\"\n \"IG\"\n \"IFGW\"\n \"IFCH\"\n\nalunos = [700, 600, 500, 470];\nw = 100 .* alunos ./ sum(alunos)\n\n4-element Vector{Float64}:\n 30.837004405286343\n 26.431718061674008\n 22.026431718061673\n 20.704845814977972\n\npie(z, w, title = \"Quantidade de alunos por instituto\", palette = :tab10)\n\n\n\n\n\n\n\n\nPara escolher manualmente as cores de cada fatia do gráfico de pizza, você pode usar uma lista de cores assim como no boxplot. Mas cuidado! Aqui os dados não foram gerados em conjunto, mas sim em dois vetores separados. Assim, para substituir o argumento palette, a vígula entre os nomes é necessária.\n\ncolor = [:darkorchid, :darkorange, :purple, :blue]\n\n\nLembre-se de definir uma cor para cada categoria presente no seu conjunto de dados, para evitar que as cores se repitam no gráfico.\n\n\n\nGráfico de Barras\nPara comparar valores entre diferentes grupos e categorias, podemos construir um gráfico de barras de estrutura semelhante ao seguinte:\n\nnum = [\"A\", \"B\", \"C\", \"D\", \"E\"]\n\n5-element Vector{String}:\n \"A\"\n \"B\"\n \"C\"\n \"D\"\n \"E\"\n\nqnt = [100; 70; 100; 80; 60]\n\n5-element Vector{Int64}:\n 100\n  70\n 100\n  80\n  60\n\nbar(num, qnt, color = :seagreen)"
   },
   {
-    "objectID": "Blog/jupytercolab.html#julia-no-colab",
-    "href": "Blog/jupytercolab.html#julia-no-colab",
-    "title": "Notebooks em Julia: Jupyter e Colab",
-    "section": "Julia no Colab",
-    "text": "Julia no Colab\n\nEm 5 de março de 2025, o Google Colab, o Jupyter hospedado na nuvem da Google, adicionou outro tipo de ambiente de execução, a linguagem de programação Julia. Divulgado por Eric Johnson em seu GitHub, o mesmo fala em seu post que além de facilitar o acesso à programação na linguagem Julia, sua introdução ao Google Colab é quase uma homenagem ao Jupyter. Isso porque “Jupyter” é nomeado a partir das três linguagens originalmente suportadas: Julia (“Ju”), Python (“Pyt”) e R (“R”). E agora com Julia sendo adicionado, a tríade das linguagens originais do Jupyter está completa.\nComo colocar Julia no Colab? Muito simples!\nApós criar um novo notebook no Colab. Na aba “Ambiente de execução”, selecione “Alterar o tipo de ambiente de execução”. Depois mude o tipo de ambiente para Julia.\n\n\n\n\nPasso a passo no Colab\n\n\nO ambiente no Colab está pronto para ser usado.\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
+    "objectID": "Tutoriais/graf_basico.html#grids-e-combinações",
+    "href": "Tutoriais/graf_basico.html#grids-e-combinações",
+    "title": "Gráficos em Julia: primeiros passos",
+    "section": "Grids e Combinações",
+    "text": "Grids e Combinações\n\nUma ferramenta bastante utilizada na visualização de dados é a junção de gráficos distintos na mesma imagem para facilitar a comparação, ou sobrepor múltiplas curvas em um único gráfico para contrastá-las no mesmo plano. Se você deseja criar o famoso grid (também chamado de malha gráfica), Julia oferece soluções práticas.\n\n\nh = range(0, 10, length = 100);\nk = @. log(h);\nj = @. exp(h);\nplot(h, [k j], layout = (2, 1), legend = false, color = :green)\n\n\n\n\n\n\n\n\n\nNa figura acima criamos um vetor h com 100 valores uniformemente espaçados entre 0 e 10, um vetor k correspondente ao logaritmo dos elementos de h, e j ao exponencial dos mesmos elementos. O argumento layout define a disposição dos gráficos na figura, no qual o primeiro número indica o número de linhas e o segundo o número de colunas do grid. Agora, vamos combinar essas mesmas informações em um único gráfico, ajustando j para que sua escala fique mais próxima à de k.\n\n\nj2 = @. exp(h)/5000;\n\nplot(h, k, label = \"log\", color = :green)\n\n\n\n\n\n\n\nplot!(h, j2, label = \"exp/5000\", color = :steelblue, ls = :dash)\n\n\n\n\n\n\n\n\n\nNote que além de ocultar ou exibir a legenda, é possível personalizar os rótulos (labels) do seu gráfico e escolher diferentes estilos para as linhas das curvas."
+  },
+  {
+    "objectID": "Tutoriais/graf_basico.html#personalização-de-atributos",
+    "href": "Tutoriais/graf_basico.html#personalização-de-atributos",
+    "title": "Gráficos em Julia: primeiros passos",
+    "section": "Personalização de atributos",
+    "text": "Personalização de atributos\n\nCaso nenhuma das customizações mostradas até agora seja suficiente para ilustrar seus dados de forma adequada, segue-se uma gama de opções adicionais para ajustar os atributos visuais do gráfico.\n\n\nCores e Paletas\n\nPara explorar as cores nomeadas disponíveis na base do Julia e seus códigos RGB (uma tripla que representa a composição de vermelho, verde e azul), você pode acessar a lista oficial clicando em cores. Se você quiser diversificar as opções de paletas disponíveis, o pacote ColorSchemes pode ser adicionado à sua biblioteca:\n\n\nPkg.add(\"ColorSchemes\")\nusing ColorSchemes\n\n\nO pacote conta com opções de paletas para usuários com Deficiência de Visão de Cores!\n\n\n\nEstilo da linha\nOs seguintes estilos podem ser determinados no argumento ls (line style) para customizar as curvas do gráfico:\n\n:solid      #linha sólida\n:dash       #tracejado\n:dot        #pontos\n:dashdot    #tracejado seguido de um ponto\n:dashdotdot #tracejado seguido de dois pontos"
+  },
+  {
+    "objectID": "Tutoriais/graf_basico.html#como-salvar-o-gráfico",
+    "href": "Tutoriais/graf_basico.html#como-salvar-o-gráfico",
+    "title": "Gráficos em Julia: primeiros passos",
+    "section": "Como salvar o gráfico?",
+    "text": "Como salvar o gráfico?\nPor fim, você pode salvar o gráfico no diretório do seu projeto utilizando o seguinte comando:\n\np = plot(x, y)\nsavefig(p,\"nome.png\")\n\nCaso você não tenha atribuído o gráfico a um objeto p, é possível salvar a figura imediatamente após a criação do gráfico, omitindo o objeto.\n\nplot(x, y)\nsavefig(\"meu_gráfico.png\")\n\nSe fizer alterações no gráfico e quiser atualizar a imagem salva, basta executar novamente o comando savefig com o mesmo nome. A figura anterior será substituída pela versão atualizada no seu diretório.\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
+  },
+  {
+    "objectID": "oprojeto.html",
+    "href": "oprojeto.html",
+    "title": "Conheça mais sobre o projeto ‘Do Zero ao Julia’",
+    "section": "",
+    "text": "Julia?\n\nA linguagem de programação Julia, lançada oficialmente ao público em 2012, e com foco em ciência de dados e computação científica, tem surgido como uma alternativa a outras linguagem de programação já estabelecidas no mercado como Matlab, Python e R. Com desempenho comparável ao de C++ e facilidade de aprendizado similar a Python e R, Julia utiliza multiple dispatch, tem uma boa performance e permite utilizar símbolos matemáticos diretamente no código. Ademais, Julia também resolve o problema de duas linguagens, não sendo mais necessário fazer o protótipo em uma linguagem e colocar em produção em outra – uma característica especialmente vantajosa no desenvolvimento de aplicações no setor industrial e em projetos de grande escala.\n\n\n\nO Projeto\n\nDo Zero ao Julia é um projeto de extensão do IMECC/UNICAMP, coordenado pelo Professor Carlos Trucíos (Departamento de Estatística), com o objetivo de incentivar e disseminar o uso da linguagem Julia. O projeto visa destacar Julia como uma ferramenta poderosa e eficiente, não apenas no ensino de Estatística e Ciência de Dados, mas também como uma ferramenta poderosa na análise de dados, desenvolvimento de projetos e implantação de modelos tanto na academia quanto na industria. Através de palestras, cursos online e materiais educativos, como blogs e tutoriais, vamos apresentar os benefícios e recursos da linguagem de programação Julia a diferentes públicos. O projeto será uma oportunidade para envolver tanto a comunidade acadêmica quanto outras pessoas interessadas, como profissionais da indústria, buscando promover a troca de conhecimentos e fortalecer a conexão entre a universidade e a sociedade.\n\n\nAlém disso, o projeto irá oferecer materiais comparando Julia com outras linguagens populares, como Python e R, mostrando suas vantagens, limitações e características específicas. Também será explorado como Julia pode ser integrada com outras tecnologias, com foco na implementação de modelos em produção, proporcionando uma visão abrangente de como Julia se posiciona no vasto ecossistema de ferramentas tecnológicas da era digital."
+  },
+  {
+    "objectID": "Blog/instalar_julia.html",
+    "href": "Blog/instalar_julia.html",
+    "title": "Como instalar Julia?",
+    "section": "",
+    "text": "Há muitas vantagens em usar plataformas integradas para desenvolver seus projetos nas mais diversas linguagens de programação. Mas e se sua internet cair? E se você quiser continuar seu projeto de um lugar com conexão lenta? Ter Julia instalado no seu computador resolve esse problema!\nNeste post, aprenderemos algumas formas de instalar Julia no seu computador."
+  },
+  {
+    "objectID": "Blog/instalar_julia.html#introdução",
+    "href": "Blog/instalar_julia.html#introdução",
+    "title": "Como instalar Julia?",
+    "section": "",
+    "text": "Há muitas vantagens em usar plataformas integradas para desenvolver seus projetos nas mais diversas linguagens de programação. Mas e se sua internet cair? E se você quiser continuar seu projeto de um lugar com conexão lenta? Ter Julia instalado no seu computador resolve esse problema!\nNeste post, aprenderemos algumas formas de instalar Julia no seu computador."
+  },
+  {
+    "objectID": "Blog/instalar_julia.html#pelo-site-oficial",
+    "href": "Blog/instalar_julia.html#pelo-site-oficial",
+    "title": "Como instalar Julia?",
+    "section": "Pelo site oficial",
+    "text": "Pelo site oficial\nClicando em Julia, você será redirecionado para o site oficial de Julia, onde poderá realizar a instalação manual da versão mais recente de Julia apenas baixando um instalador compatível com seu sistema operacional (.exe, .dmg, etc). É importante escolher um instalador compatível com o seu sistema operacional, caso contrário não será possível a instalação.\nCertifique-se de ter pelo menos 0,98 GB livres para armazenar os arquivos em seu computador. Após o término do download, siga as instruções recomendadas de configuração do instalador oficial (clicando em “Próximo” em todas as abas, para o caso da instalação padrao) e aguarde enquanto Julia é instalado.\n\n\n\nAtalho no Desktop\n\n\n\nCriar um atalho na área de trabalho facilitará muito o acesso ao aplicativo no dia a dia, embora essa seleção seja opcional.\n\nUma vez instalado Julia no seu computador, você poderá programar diretamente no terminal de Julia, que deve se parecer com a seguinte imagem:\n\n\n\nTerminal Julia"
+  },
+  {
+    "objectID": "Blog/instalar_julia.html#outros-caminhos",
+    "href": "Blog/instalar_julia.html#outros-caminhos",
+    "title": "Como instalar Julia?",
+    "section": "Outros caminhos",
+    "text": "Outros caminhos\nJulia também está disponível para download pela Microsoft Store. Para os usuários de Linux e macOS, essa opção não se encontra disponível por enquanto, mas também é possível instalar e utilizar Julia diretamente do terminal do computador.\nNo Windows, pressione as teclas Windows + R, digite cmd e pressione “Enter” para abrir o terminal. Em seguida, execute o comando abaixo e digite Y quando solicitado pelo sistema:\nwinget install Julia\nQuando a instalação for concluída, você pode digitar where julia para localizar o caminho até o .exe de Julia, ou simplesmente digitar julia no terminal para obter uma interface semelhante à do aplicativo do programa.\nNo macOS ou Linux, abra o terminal e digite\ncurl -fsSL https://install.julialang.org | sh\nQuando a instalação for concluída, você pode digitar which julia para localizar o caminho até o executável de Julia, ou simplesmente digitar julia no terminal para acessar a interface interativa do programa.\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
+  },
+  {
+    "objectID": "Blog/as-origens.html",
+    "href": "Blog/as-origens.html",
+    "title": "Do Zero ao Julia: As origens",
+    "section": "",
+    "text": "A primeira vez que ouvi falar da linguagem Julia foi em 2014, quando ainda era estudante de doutorado no IMECC e buscava formas mais rápidas de executar as simulações da minha pesquisa, que já exigia computação intensiva (Bootstrap). Naquela época, pouquíssimas pessoas trabalhavam com Julia, mas as promessas de desempenho comparável ao de linguagens de baixo nível como C++ ou Fortran rapidamente chamaram minha atenção.\nAlguns meses depois, conversando com colegas da Estatística e da Matemática Aplicada, percebi que não era o único interessado. Isso me motivou a criar um Meetup (alias, estamos reativando ele, então inscriva-se para não perder as novidades). No entanto, com a correria do dia a dia, nunca conseguimos realizar um encontro. Por anos, o grupo ficou lá, crescendo aos poucos, mesmo sem atividades — cheguei a pensar em encerrá-lo, mas no fundo sempre mantive a esperança de um dia retomar essa ideia."
+  },
+  {
+    "objectID": "Blog/as-origens.html#o-início",
+    "href": "Blog/as-origens.html#o-início",
+    "title": "Do Zero ao Julia: As origens",
+    "section": "",
+    "text": "A primeira vez que ouvi falar da linguagem Julia foi em 2014, quando ainda era estudante de doutorado no IMECC e buscava formas mais rápidas de executar as simulações da minha pesquisa, que já exigia computação intensiva (Bootstrap). Naquela época, pouquíssimas pessoas trabalhavam com Julia, mas as promessas de desempenho comparável ao de linguagens de baixo nível como C++ ou Fortran rapidamente chamaram minha atenção.\nAlguns meses depois, conversando com colegas da Estatística e da Matemática Aplicada, percebi que não era o único interessado. Isso me motivou a criar um Meetup (alias, estamos reativando ele, então inscriva-se para não perder as novidades). No entanto, com a correria do dia a dia, nunca conseguimos realizar um encontro. Por anos, o grupo ficou lá, crescendo aos poucos, mesmo sem atividades — cheguei a pensar em encerrá-lo, mas no fundo sempre mantive a esperança de um dia retomar essa ideia."
+  },
+  {
+    "objectID": "Blog/as-origens.html#o-transcurso",
+    "href": "Blog/as-origens.html#o-transcurso",
+    "title": "Do Zero ao Julia: As origens",
+    "section": "O transcurso",
+    "text": "O transcurso\n\nApós o doutorado, acabei focando em outras prioridades — publicar artigos, trabalhar na indústria, estudar para concursos, preparar aulas… Ainda assim, a vontade de usar Julia permanecia. Com o tempo, fui explorando outras particularidades da linguagem: a possibilidade de escrever símbolos matemáticos diretamente no código (o que facilita absurdamente a implementação de novos métodos propostos na literatura), a programação nativa em paralelo e distribuída, e o fato de Julia resolver o famoso problema das duas linuagens.\nMotivado pelas vantagens da linguagem, quando entrei na UNICAMP como docente resolvi incluir Julia como linguagem a ser utilizada em umas das disciplinas: Econometria. Posteriormente, trabalhando num artigo com alguns colegas (Hotta et al. 2025), resolvi implementar tudo em Julia, do zero, o que acabou sendo um ótima e desafiadora experiência."
+  },
+  {
+    "objectID": "Blog/as-origens.html#a-idealização",
+    "href": "Blog/as-origens.html#a-idealização",
+    "title": "Do Zero ao Julia: As origens",
+    "section": "A idealização",
+    "text": "A idealização\n\nApós a curta experiência mão na massa com Julia, entender a importância da extensão e de ver a necessidade dos alunos por se envolverem em atividade de extensão, resolvi unir o útil ao agradável e foi assim que surgiu a primeira ideia do projeto. Ainda no rascunho, perguntei aos meus orientandos o que eles achavam da ideia e alguns deles toparam participar desde o início (alias, foram eles que me ajudaram a escolher o nome). Passaram-se alguns meses e agora com a ideia mais amadurecida, escrevi uma proposta e a submeti à comissão de extensão do IMECC e, após algunas sugestões da comissão, o projeto foi aprovado e lançado oficialmente na sua forma atual.\n\n\n\n\n\nConfesso que, inicialmente, achei que apenas meus orientandos se interessariam. Mas, para minha grata surpresa, o projeto teve uma ótima recepção. Hoje, temos mais de 20 pessoas envolvidas, colaborando com as redes sociais, escrevendo posts, tutoriais, organizando minicursos e cuidando da parte editorial, entre outras atividades que loog logo ficarão sabendo."
+  },
+  {
+    "objectID": "Blog/as-origens.html#a-meta",
+    "href": "Blog/as-origens.html#a-meta",
+    "title": "Do Zero ao Julia: As origens",
+    "section": "A meta",
+    "text": "A meta\n\nMinha esperança é que o site www.ime.unicamp.br/julialang se torne um ponto de referência para quem quer aprender e explorar a linguagem Julia — oferecendo desde dicas para iniciantes até tutoriais completos e atualizações sobre a linguagem. Mais do que isso, torço para que o projeto ajude os alunos a desenvolverem habilidades valiosas para o mercado e, ao mesmo tempo, inspire a comunidade acadêmica e de ciência de dados a enxergar Julia como um verdadeiro mar de possibilidades.\nEstou longe de ser um expert em Julia, mas espero que em breve tanto você quanto eu saibamos um pouco mais dessa linguagem.\nHappy coding!\n\n\n\n\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto, bem como para a geração de imagens."
   },
   {
     "objectID": "Blog/julia_rstudio.html",
@@ -455,46 +462,60 @@
     "text": "Como utilizar\nCom tudo configurado, podemos começar a usar o Julia no RStudio. Para isso, criamos um arquivo R Markdown e escrevemos o código em Julia dentro do chunck Julia:\n\n\n\nChunk Julia\n\n\nAgora é só colocar a mão na massa e começar a programar em Julia diretamente no RStudio, uma interface que você já conhece bem!\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
   },
   {
-    "objectID": "Equipe/Atual/vitor_ribas.html",
-    "href": "Equipe/Atual/vitor_ribas.html",
-    "title": "Vitor Ribas Perrone",
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "Equipe/Atual/caio_frare.html",
+    "href": "Equipe/Atual/caio_frare.html",
+    "title": "Caio Frare",
     "section": "",
     "text": "Github\n  \n  \n    \n     Linkedin\n  \n\n      \n\n    \n    \n  \n\n\nGraduando em Estatística pela UNICAMP."
   },
   {
-    "objectID": "Equipe/Atual/gabriel_cardoso.html",
-    "href": "Equipe/Atual/gabriel_cardoso.html",
-    "title": "Gabriel Vieira Cardoso",
+    "objectID": "Equipe/Atual/heitor_bgs.html",
+    "href": "Equipe/Atual/heitor_bgs.html",
+    "title": "Heitor Brotto Gomes e Silva",
+    "section": "",
+    "text": "Github\n  \n  \n    \n     Linkedin\n  \n  \n    \n     Site\n  \n\n\n\nGraduando em Estatística pela UNICAMP."
+  },
+  {
+    "objectID": "Equipe/Atual/thiago_paulichen.html",
+    "href": "Equipe/Atual/thiago_paulichen.html",
+    "title": "Thiago Paulichen",
+    "section": "",
+    "text": "Lattes\n  \n  \n    \n     Github\n  \n  \n    \n     Linkedin\n  \n\n      \n\n    \n    \n  \n\n\nEstudante de Doutorado em Estatística pela UNICAMP."
+  },
+  {
+    "objectID": "Equipe/Atual/sarah_silva.html",
+    "href": "Equipe/Atual/sarah_silva.html",
+    "title": "Sarah Silva",
+    "section": "",
+    "text": "Graduanda em Matemática Aplicada e Computacional. Pesquisadora Colaboradora em Iniciação Científica em Centro Nacional de Pesquisa em Energia e Materiais (CNPEM).\n \n  \n   \n  \n    \n     Github\n  \n  \n    \n     Linkedin"
+  },
+  {
+    "objectID": "Equipe/Atual/henrique_velloso.html",
+    "href": "Equipe/Atual/henrique_velloso.html",
+    "title": "Henrique Velloso",
     "section": "",
     "text": "Github\n  \n  \n    \n     Linkedin\n  \n\n      \nGraduando em Estatística pela UNICAMP."
   },
   {
-    "objectID": "Equipe/Atual/nicole_fredericci.html",
-    "href": "Equipe/Atual/nicole_fredericci.html",
-    "title": "Nicole Fredericci",
-    "section": "",
-    "text": "Github\n  \n  \n    \n     Linkedin\n  \n\n      \n\n    \n    \n  \n\n\nGraduanda em Estatística pela UNICAMP."
-  },
-  {
-    "objectID": "Equipe/Atual/guiduarte.html",
-    "href": "Equipe/Atual/guiduarte.html",
-    "title": "Guilherme Duarte Alves Basso",
-    "section": "",
-    "text": "Graduando em Estatística pela UNICAMP."
-  },
-  {
-    "objectID": "Equipe/Atual/esther_cleveston.html",
-    "href": "Equipe/Atual/esther_cleveston.html",
-    "title": "Esther Cleveston",
+    "objectID": "Equipe/Atual/Leonardo_dos_Santos.html",
+    "href": "Equipe/Atual/Leonardo_dos_Santos.html",
+    "title": "Leonardo dos Santos",
     "section": "",
     "text": "Github\n  \n  \n    \n     Linkedin\n  \n\n      \nGraduando em Estatística pela UNICAMP."
   },
   {
-    "objectID": "Equipe/Atual/pedro_galera.html",
-    "href": "Equipe/Atual/pedro_galera.html",
-    "title": "Pedro H. G. Elias",
+    "objectID": "Equipe/Atual/arthur_dionizio.html",
+    "href": "Equipe/Atual/arthur_dionizio.html",
+    "title": "Arthur Dionizio",
     "section": "",
-    "text": "Lattes\n  \n  \n    \n     Github\n  \n  \n    \n     Linkedin\n  \n\n      \n\n    \n    \n  \n\n\nDoutorando em Estatística pela UNICAMP."
+    "text": "Github\n  \n  \n    \n     Linkedin\n  \n\n      \nGraduando em Matemática Aplicada e Computacional pela UNICAMP."
   },
   {
     "objectID": "Equipe/Antigos/thiago.html",

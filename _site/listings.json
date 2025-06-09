@@ -1,7 +1,16 @@
 [
   {
+    "listing": "/tutoriais.html",
+    "items": [
+      "/Tutoriais/tutorial-eda.html",
+      "/Tutoriais/graf_basico.html"
+    ]
+  },
+  {
     "listing": "/equipe.html",
     "items": [
+      "/Equipe/Atual/Ana_Luisa.html",
+      "/Equipe/Atual/arthur_dionizio.html",
       "/Equipe/Atual/caio_frare.html",
       "/Equipe/Atual/carlos_trucios.html",
       "/Equipe/Atual/esther_cleveston.html",
@@ -9,18 +18,12 @@
       "/Equipe/Atual/guiduarte.html",
       "/Equipe/Atual/heitor_bgs.html",
       "/Equipe/Atual/henrique_velloso.html",
+      "/Equipe/Atual/Leonardo_dos_Santos.html",
       "/Equipe/Atual/nicole_fredericci.html",
       "/Equipe/Atual/pedro_galera.html",
       "/Equipe/Atual/sarah_silva.html",
       "/Equipe/Atual/thiago_paulichen.html",
       "/Equipe/Atual/vitor_ribas.html"
-    ]
-  },
-  {
-    "listing": "/tutoriais.html",
-    "items": [
-      "/Tutoriais/tutorial-eda.html",
-      "/Tutoriais/graf_basico.html"
     ]
   },
   {

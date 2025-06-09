@@ -2,7 +2,7 @@
 title: "Ana Luisa Pereira da Silva Rodrigues"
 sortby: "Ana Luisa Pereira da Silva Rodrigues"
 subtitle: "Graduanda em Estatística"
-image: foto_AnaLuisa.jpg
+image: foto_AnaLuisa.jpeg
 about:
   id: person-profile
   template: solana

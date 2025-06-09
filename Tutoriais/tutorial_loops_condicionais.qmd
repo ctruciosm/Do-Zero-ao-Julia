@@ -16,7 +16,7 @@ format:
   html:
     toc: true
     self-contained: false
-draft: false
+draft: true
 engine: knitr
 ---
 

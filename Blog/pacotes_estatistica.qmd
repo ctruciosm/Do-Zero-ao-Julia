@@ -21,16 +21,19 @@ format:
     toc: true
     toc-depth: 3
     self-contained: false
-draft: false
+draft: true
 ---
 
 ## Introdução
 
+::: {.justify}
 Ao falar de Estatística, a primeira linguagem de programação que costuma vir à mente é R. Criada especificamente para análise estatística e ciência de dados, oferece uma ampla gama de ferramentas estatísticas já disponíveis por padrão, além de milhares de pacotes criados para os mais diversos propósitos.
 
 Para nossa sorte, embora a linguagem Julia não tenha sido projetada exclusivamente para a Estatística, já conta com grande parte das ferramentas essenciais, graças a um ecossistema de pacotes que cresce rapidamente e abrange diversas áreas da análise de dados, da modelagem estatística e do aprendizado de máquina.
 
-Vamos, então, conhecer os principais pacotes para trabalhar com Estatística em Julia, organizados por área de aplicação — desde tarefas básicas até análises inferenciais sofisticadas.
+Vamos, então, conhecer os principais pacotes para trabalhar com Estatística em Julia, organizados por área de aplicação (desde tarefas básicas até análises mais complexas).
+:::
+
 
 ## Manipulação de Dados e Estatísticas Sumárias
 
@@ -70,11 +73,18 @@ Vamos, então, conhecer os principais pacotes para trabalhar com Estatística em
  - [MLBase](https://github.com/JuliaStats/MLBase.jl): Ferramentas auxiliares para aplicação de modelos de machine learning.
 
 
+::: {.justify}
+Até aqui, temos apresentados apenas alguns exemplos de pacotes que podem ser utilizados em Julia, mas existem muitos outros!. Para explorar mais, acesse o site [Julia Packages](https://juliapackages.com/) e descubra todo o potencial que Julia pode lhe oferecer.
+:::
+
+
+
 ## Conclusão
 
-Com esse conjunto de pacotes, a Julia se consolida como uma linguagem extremamente capaz para as áreas supracitadas, que incluem análise estatística, modelagem e aprendizado de máquina. Embora seu uso ainda esteja em crescimento, já é possível realizar praticamente qualquer tarefa estatística — desde análises descritivas simples até modelagens complexas, sejam frequentistas, bayesianas ou baseadas em aprendizado de máquina.
+::: {.justify}
+Com esse conjunto de pacotes, a Julia se consolida como uma linguagem extremamente capaz para as áreas supracitadas, que incluem análise estatística, modelagem e aprendizado de máquina. Embora seu uso ainda esteja em crescimento, já é possível realizar praticamente qualquer tarefa estatística (desde análises descritivas simples até modelagens complexas).
+:::
 
-Além dos pacotes mencionados, existem muitos outros. Para explorar mais, acesse o site [Julia Packages](https://juliapackages.com/) e descubra todo o potencial que a linguagem oferece.
 
 ::: callout-note
 Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.

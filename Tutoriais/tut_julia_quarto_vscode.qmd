@@ -249,12 +249,13 @@ No menu de extensões do VS Code:
 
 2. Use a seguinte estrutura básica como exemplo:
 
-```markdown
+```{markdown}
 ---
 title: "Meu Primeiro Documento"
 format: html
 jupyter: julia-1.9
 ---
+```
 
 ### Introdução
 
@@ -281,9 +282,11 @@ Se você instalou a extensão do Quarto, verá um botão **Render** no canto sup
 
 Abra o terminal na pasta onde está seu arquivo `.qmd` e digite:
 
-```bash
+```{bash}
 quarto render exemplo.qmd
 ```
+
+
 
 Se tudo estiver certo, será gerado um arquivo `exemplo.html` na mesma pasta, contendo seu texto e os resultados dos códigos Julia.
 
