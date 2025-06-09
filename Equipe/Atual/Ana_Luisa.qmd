@@ -1,0 +1,21 @@
+---
+title: "Ana Luisa Pereira da Silva Rodrigues"
+sortby: "Ana Luisa Pereira da Silva Rodrigues"
+subtitle: "Graduanda em Estatística"
+image: foto_AnaLuisa.jpg
+about:
+  id: person-profile
+  template: solana
+  image-width: 10em
+  links:
+    - icon: github
+      text: Github
+      href: https://github.com/analuisarodrigues2906
+    - icon: linkedin
+      text: Linkedin
+      href: https://www.linkedin.com/in/ana-luisa-rodrigues20042906
+---
+
+::: {#person-profile}
+Graduando em Estatística pela UNICAMP.
+:::
