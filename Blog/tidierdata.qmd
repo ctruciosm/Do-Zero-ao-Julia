@@ -1,0 +1,211 @@
+---
+title: "Introdução ao pacote TidierData.jl"
+description: |
+  Um guia introdutório sobre o pacote TidierData.jl! Entenda como aplicar a gramática tidy para manipulação de dados de forma intuitiva, utilizando funções familiares para quem vem do tidyverse em R.
+categories:
+  - Manipulação de Dados
+  - Tidy Data
+  - Ferramentas
+author:
+  - name: Henrique Anunciação Velloso Silva
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/henriqueavelloso
+    orcid: 0009-0002-8262-031X
+date: "2025-06-10"
+image: imagens/tidierdata.png
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+engine: knitr
+draft: false
+---
+
+# Introdução
+
+::: {.justify}
+O **TidierData.jl** é um pacote da linguagem `julia` que traz uma abordagem familiar aos usuários do R, inspirado diretamente nos pacotes `dplyr` e `tidyr`. Ele permite manipular e transformar conjuntos de dados com uma sintaxe concisa e legível no  estilo *tidy*.
+
+Neste post, vamos explorar como o **TidierData.jl** facilita tarefas comuns de manipulação de dados, como seleção, filtragem, agregações, junções e muito mais.
+
+> Por trás da cortina, o **TidierData.jl** é construído sobre o robusto **DataFrames.jl**, combinando a performance de `julia` com a ergonomia do `tidyverse`.  
+:::
+
+# Carregando o pacote
+
+```{julia}
+import Pkg
+
+# Suprime mensagens e warnings durante a instalação dos pacotes
+redirect_stdout(devnull) do
+    redirect_stderr(devnull) do
+        Pkg.add("TidierData")
+        Pkg.add("DataFrames")
+        Pkg.add("RDatasets") # Vamos usar o pacote RDatasets para gerar um banco de dados para análise  
+    end
+end
+```
+
+# Funções
+
+## Carregando o dataset 'mtcars'
+
+```{julia}
+using RDatasets
+
+mtcars = dataset("datasets", "mtcars")
+
+first(mtcars, 5)
+```
+
+## Funções Macro
+
+::: {.justify}
+No pacote temos mais de 40 funções macro, que podemos usar para manipular os nossos dados. Nesse blog, vamos explorar algumas das principais funções, e observar sua sintaxe de forma clara e concisa.
+:::
+
+```{julia}
+using TidierData, DataFrames
+
+# Exemplo com o dataset mtcars
+
+@chain mtcars begin
+    @mutate(Eficiencia = MPG / WT)
+    @filter(Cyl == 6)
+    @arrange(desc("Eficiencia"))
+    @select(Model, MPG, WT, Eficiencia)
+    @slice(1:6)
+end
+```
+::: {.justify}
+- Primeiro, para quem já está familiarizado com a linguagem R, a função `@chain()` é similar à pipeline `%>%` ou `|>` usada em R, que possui o intuito de encadear várias operações em sequência no mesmo conjunto de dados.
+
+- Seguinte, criamos a nova coluna **Eficiencia** no nosso dataset, sendo ela a divisão das colunas *MPG / WT*. 
+
+- Além disso, colocamos certas "restrições" na saída do nosso dataset, onde filtramos os carros para apenas aqueles que possuem exatamente 6 cilindros, usando `@filter()`.
+
+- Selecionamos apenas as colunas *Model*, *MPG*, *WT*, *Eficiencia*, usando `@select()`.
+
+- Ordenamos o dataset pelo valor da `Eficiencia`, em ordem decrescente, usando `@arrange()` para ordenar e `desc()` para determinar que era decrescente.
+
+> Obs.: `desc()` é uma função auxiliar.
+
+- E, por último, decidimos visualizar apenas da linha 1 até a linha 5 do dataset, utilizando a função `@slice()`.
+
+Agora, vejamos um exemplo de formatação dos dados e utilização das funções de _join_.
+
+Vamos supor que possuimos dois dataframes: um com informações sobre **clientes** e outro com **compras**. Queremos **combinar** os dados para ver o nome dos clientes junto com seus respectivos valores de compra.
+:::
+
+```{julia}
+using TidierData, DataFrames
+
+clientes = DataFrame(ID = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], Nome = ["Leonardo", "Arthur", "Carlos", "Esther", "Caio", "Guilherme", "Henrique", "Nicole", "Pedro", "Sarah"])
+compras = DataFrame(ID = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], Valor = [150, 200, 300, 100, 250, 220, 310, 420, 500, 50])
+
+@left_join(compras, clientes)
+
+```
+
+::: {.justify}
+Aqui, usamos a função `@left_join()` para juntar os nossos dados através da coluna `ID`. Assim, obtemos um dataframe alinhado por ID, com informações dos clientes e o valor das suas respectivas compras.
+
+> Vejamos que o uso da função `@left_join()` é bem simples e intuitivo, logo que ela junta os dois dataframes através da coluna que se sobrepõe nos datasets, sem precisar de uma especificação.
+:::
+
+```{julia}
+using TidierData, DataFrames
+
+df = DataFrame(Nome = ["Thiago", "Vitor", "Gabriel", "Ana", "Gustavo", "Leticia"], Nota1 = [8, 7, 7.5, 6, 9, 10], Nota2 = [9, 10, 4, 5.5, 5, 9])
+
+print(df)
+
+@chain df begin
+    @pivot_longer(cols = [:Nota1, :Nota2], names_to = :Avaliação, values_to = :Nota)
+end
+```
+
+::: {.justify}
+Aqui, transformamos o dataframe de formato **wide** para **long**, usando a função `@pivot_longer()`, usamos a mesma lógica caso quisermos passar de long para wide, usando a função `@pivot_wider()`.
+:::
+## Funções auxiliares
+
+::: {.justify}
+Além das macros principais como `@mutate`, `@filter` e `@summarize`, o `TidierData.jl` oferece **funções auxiliares** que tornam seu código mais expressivo, claro e eficiente. Vamos explorar algumas delas com exemplos práticos:
+:::
+
+### `if_else()`
+
+::: {.justify}
+Lógica condicional simples e vetorizada:
+:::
+
+```{julia}
+using TidierData, DataFrames
+
+valores = DataFrame(Nome = ["A", "B", "C"], Salario = [3000, 5000, 4000])
+
+@chain valores begin
+    @mutate(Status = if_else(`Salario` .> 4000, "Alto", "Médio ou Baixo"))
+end
+
+```
+
+### `case_when()`
+
+::: {.justify}
+Para múltiplas condições, substituindo vários `if_else()`:
+:::
+
+```{julia}
+using TidierData, DataFrames
+
+df2 = DataFrame(Nota = [10, 2, 6, 4, 7.1, 4.9, 9.7])
+
+@chain df2 begin
+    @mutate(Conceito = case_when(
+        `Nota` .>= 9 => "A",
+        `Nota` .>= 7 => "B",
+        `Nota` .>= 5 => "C",
+        true        => "D"
+    ))
+end
+```
+
+### `starts_with()`, `ends_with()`
+
+::: {.justify}
+Selecionando colunas com nomes que seguem um padrão:
+:::
+
+```{julia}
+using TidierData, DataFrames
+
+df3 = DataFrame(
+    Nome = ["José", "Carla", "Humberto"],
+    Nota1 = [7, 9, 8],
+    Nota2 = [8, 10, 10],
+    Idade = [20, 22, 24]
+)
+
+comeca = @chain df3 begin
+    @select(`Nome`, starts_with("Nota"))
+end
+
+termina = @chain df3 begin
+  @select(`Nome`, ends_with("ade"))
+end
+
+[comeca, termina]
+```
+
+::: {.justify}
+> Obs.: As funções `endswith()` da base do `julia` e `ends_with()` do pacote TidierData.jl tem uma pequena diferença: a função `ends_with()` é usada para nomes de colunas, já `endswith()` é usada para valores em colunas.
+:::
+
+# Referências
+
+::: {.justify}
+Blog inspirado na documentação disponibilizada pelos autores do pacote, acessado pelo link `https://tidierorg.github.io/TidierData.jl/latest/`.
+:::
