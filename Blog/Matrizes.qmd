@@ -1,0 +1,256 @@
+---
+title: "Matrizes em Julia"
+description: |
+  Guia para iniciantes sobre a utilização de matrizes em Julia
+categories:
+  - Guia
+author:
+  - name: Caio Frare
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/caiofrare
+  - name: Carlos Trucíos
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://ctruciosm.github.io
+    orcid: 0000-0001-8746-8877
+date: "2025-06-11"
+image: imagens/matriz.png ############# TROCAR
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+draft: true
+---
+
+## O que são Matrizes?
+
+Matrizes são estruturas matemáticas em formato tabular, organizadas em linhas e colunas, com operações bem definidas como adição, subtração e multiplicação.
+
+São amplamente utilizadas para armazenar dados e têm papel central em áreas como álgebra linear e métodos de Machine Learning.
+
+Podem ser vistas como uma espécie de vetor em duas dimensões.
+
+Em Julia, a notação tradicional de matrizes utiliza colchetes [ ]. O espaço é usado para separar as colunas, enquanto o ponto e vírgula (;) separa as linhas, e o triplo ponto e vírgula (;;;) separa os "andares" (terceira dimensão).
+
+```{julia}
+# Exemplos
+
+# vetor (1D)
+v = [1 2 3 4 5 6]
+
+# matriz (2D)
+m = [1 2 3; 4 5 6]
+
+# matriz (3D)
+M = [1 2 3; 4 5 6; 7 8 9 ;;; 10 11 12; 13 14 15; 16 17 18]
+
+```
+
+## Criando de Outras Formas
+
+Além de escrever manualmente com colchetes, Julia oferece funções que facilitam a criação de matrizes com formatos específicos ou automáticos. Aqui estão algumas das mais comuns:
+
+- zeros(m, n): cria uma matriz m × n preenchida com zeros.
+
+- ones(m, n): cria uma matriz m × n preenchida com uns.
+
+- rand(m, n): gera uma matriz m × n com valores aleatórios entre 0 e 1.
+
+- reshape(v, m, n): transforma um vetor(v) ou matriz existente em uma nova forma m × n.
+
+- Matrix(...): converte estruturas em matriz, como por exemplo Matrix(I, m, m) para identidade.
+ 
+```{julia}
+# Exemplos
+
+# 2x3 matriz de zeros
+A = zeros(2, 3)
+
+# 3x2 matriz de uns
+B = ones(3, 2)
+
+# 2x2 matriz aleatória
+C = rand(2, 2)
+
+# reshape de vetor para matriz 2x3
+v = 1:6
+D = reshape(v, 2, 3)
+
+# matriz identidade 4x4 especificando o formato dos dados
+E = Matrix{Float64}(I, 4, 4)
+
+# matriz 3x2 gerada por compreensão
+F = [i + j for i in 1:3, j in 1:2]
+
+```
+
+## Indexação e Acesso a Elementos
+
+Assim como em R, a indexação em Julia é 1-based, ou seja, começa do 1 — diferente do Python, que utiliza 0-based indexing.
+
+Para acessar os elementos de uma matriz, usamos a notação matriz[linha, coluna]. Também é possível acessar linhas inteiras, colunas inteiras ou subconjuntos da matriz usando os dois-pontos (:).
+
+```{julia}
+# Exemplos
+
+# matrix 3x3
+m1 = reshape(1:9, 3, 3)
+
+# Acessa o elemento da 1ª linha, 2ª coluna → 4
+m1[1, 2]
+
+# Acessa o elemento da 3ª linha, 3ª coluna → 9
+m1[3, 3]
+
+# Acessa toda a 2ª linha → [2 5 8]
+m1[2,:]
+
+# Acessa toda a 1ª coluna → [1 2 3]
+m1[:, 1]
+
+# Acessa um bloco 2x2 → [4 7; 5 8]
+m1[1:2, 2:3]
+```
+
+## Operações
+
+Julia permite realizar operações matemáticas entre matrizes de forma simples e direta, desde que as dimensões sejam compatíveis.
+
+### Adição e Subtração
+
+```{julia}
+# Exemplos
+
+G = [1 2; 3 4]
+H = [5 6; 7 8]
+
+G + H  # Soma
+G - H  # Subtração
+
+```
+
+### Multiplicação
+
+Julia diferencia dois tipos de multiplicação:
+
+- *: multiplicação matricial (produto linear) e multiplicação por escalar;
+
+- .*: multiplicação elemento a elemento.
+
+```{julia}
+# Exemplos
+
+# Multiplicação matricial
+G * H
+
+# Multiplicação elemento a elemento
+G .* H
+
+# Multiplicação da Matrix G pelo escalar 2
+G * 2
+
+```
+### Transposição
+
+Existem também maneiras para transpor uma matriz (trocar linhas por colunas):
+
+```{julia}
+# Exemplo
+
+# Transposição real
+transpose(G)
+
+# Atalho (funciona bem para números reais, mas pode não funcionar para complexos)
+G'
+
+```
+
+## Propriedas e Funções Úteis
+
+Usando o pacote `LinearAlgebra`, que já vem incluído na instalação padrão do Julia, podemos acessar várias propriedades e aplicar funções úteis às matrizes.
+
+### Propriedades Básicas
+
+- size(m): retorna uma tupla com o número de linhas e colunas.
+
+- length(m): retorna o número total de elementos.
+
+- eltype(m): retorna o tipo dos elementos da matriz.
+
+- ndims(m): retorna o número de dimensões (normalmente 2 para matrizes).
+
+```{julia}
+# Exemplos
+
+using LinearAlgebra
+
+# matrix 2x2
+J = [1 2; 3 4]
+
+# (2, 2)
+size(J)
+
+# 4
+length(J)
+
+# Int64
+eltype(J)
+
+ # 2
+ndims(J)
+```
+
+### Operações em Algebra Linear
+
+- det(m): determinante.
+
+- inv(m): inversa (se existir).
+
+- rank(m): posto (número de linhas/colunas linearmente independentes).
+
+- eigvals(m): autovalores.
+
+- eigvecs(m): autovetores.
+
+- tr(m): traço da matrix (soma da diagonal principal).
+
+```{julia}
+# Exemplos
+
+using LinearAlgebra
+
+# matrix 2x2
+J = [1 2; 3 4]
+
+# -2.0
+det(J)
+
+# [-2.0 1.0; 1.5 -0.5]
+inv(J)
+
+# 2
+rank(J)
+
+# [-0.372, 5.372]
+eigvals(J)
+
+# -0.3722813232690143 e 5.372281323269014
+eigvecs(J)
+
+# 5 (1 + 4)
+tr(J)
+
+```
+
+## Conclusão
+
+Este foi um guia básico sobre o uso de matrizes em Julia, cobrindo desde a criação até operações fundamentais e funções úteis com o pacote `LinearAlgebra`.
+
+Matrizes são estruturas centrais em muitas aplicações científicas e computacionais, e Julia oferece ferramentas poderosas e eficientes para manipulá-las de forma intuitiva.
+
+Nos próximos posts, podemos explorar tópicos mais avançados como sistemas lineares, decomposições matriciais e uso de matrizes em machine learning. Até lá!
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::
