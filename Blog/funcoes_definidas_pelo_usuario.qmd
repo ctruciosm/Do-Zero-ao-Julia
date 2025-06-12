@@ -1,0 +1,150 @@
+---
+title: "Funções definidas pelo usuário em Julia"
+description: |
+  Funções definidas pelo usuário permitem encapsular códigos reutilizáveis em blocos. As funções aceitam parâmetros diversos e retornam valores definidas pelo programador ao escrevê-la. Elas tornam o código mais organizado e fácil de manter, além de facilitar a programação.
+categories:
+  - Aplicação
+  - Primeiros Passos
+author:
+  - name: Davi Jorge Negrete
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/davinegretee
+lang: pt
+format:
+  html:
+    toc: true
+    self-contained: false
+draft: true
+---
+
+# Introdução
+
+Funções definidas pelo usuário são comuns em todas as linguagens de programação e tornam o código mais organizado e fácil de manter. Em Julia, elas ganham um diferencial chamado múltiplo dispatch, que permite que a mesma função execute comportamentos distintos dependendo dos tipos de todos os seus argumentos. Este post mostra como criar, usar e explorar funções em Julia, além de explicar o funcionamento do múltiplo dispatch.
+
+# Definindo Funções
+
+## Sintaxe Básica
+
+Definir funções em Julia é simples e semelhante a outras linguagens como Python ou R. Basta usar a palavra-chave `function`, dar um nome e listar os parâmetros; depois, fechar o bloco com `end`:
+
+```{julia}
+function ola(nome)
+    println("Olá, $nome")
+end
+
+ola("mundo")
+```
+
+Para definir o que a sua função deve retornar, basta utilizar a sintaxe `return` antes do fim do bloco:
+
+```{julia}
+function quadrado(x)
+  return x^2
+end
+
+quadrado(2)
+```
+
+Para funções curtas, de uma única expressão, pode-se utilizar a sintaxe abreviada para compactar o código:
+
+```{julia}
+cubo(x) = x^3
+cubo(2)
+```
+
+## Valores Padrão de Argumentos
+
+Caso deseje-se definir um valor padrão para algum argumento, que será utilizado caso nenhum outro valor seja especificado para este argumento ao chamar a função, deve-se separar os argumentos indefinidos e definidos com `;`, e então, definir os valores padrão dos argumentos definidos.
+
+```{julia}
+function info(nome; idade=18, genero= "Masculino")
+    println("Nome: $nome, Idade: $idade, Gênero = $genero")
+end
+info("Pedro")                
+info("Ana", idade=25, genero = "Feminino")    
+
+```
+
+## Argumentos variádicos
+
+Pode-se também criar funções que aceitam uma quantidade variável de argumentos:
+
+```{julia}
+function soma(nums::Number...)
+  sum(nums)
+end
+
+soma(1,2,3,4)
+```
+
+# Funções Lambda
+
+Funções lambda são funções definidas rápidamente que não recebem nome. Costumam ser utilziadas quando seu uso é instatâneo, e não será repetida pelo código, mas sim utilizada na linha em que ela é criada. Sua definição é feita definindo apenas seu argumento e retorno, separados por um símbolo de seta, como a seguir: `x ->x^2`. Utilizaremos, como exemplo de sua utilidade, uma outra função: `map()`, que recebe como primeiro argumento uma função, e a aplica no objeto dado pelo segundo argumento.
+
+Funções lambda são excepcionamelmente úteis para compactar e simplificar o código em situais parecidas, de uso instantâneo.
+
+```{julia}
+map(x -> x^2, [1, 2, 3, 4])
+```
+
+# Múltiplo Dispatch
+
+Uma das ferramentar diferenciais, e mais poderosas de Julia é justamente uma característica especial de suas funções definidas pelo usuário: o Múltiplo Dispatch.
+
+O Múltiplo Dispatch permite que você utilize defina múltiplas, diferentes funções, utilizando o mesmo nome para todas. Assim você pode chamar uma unica função com um nome genérico, em que sua funcionalidade é diferenciada pelas classes dos argumentos que a função recebe. Isso mesmo! Pode-se ter multiplas funções, com argumentos de tipos diferentes, com o mesmo nome.
+
+Por que isso é útil?
+
+Além de simplificar o código e deixá-lo mais compacto e direto, você nao precisa utilizar multiplos condicionais `if` dentro de uma função para diferenciar sua funcinoalidade, alem de compilar mais rápidamente para o método desejado, isso deixa o código mais eficiente, atingindo velocidades comparáveis a linguagens mais complexas como C/C++ nestas situações. Também pode-se extender uma função já existente de Julia ou de um pacote já existente adicionando uma funcionabilidade especifica para seu código.
+
+## Como usar?
+
+Ao definir os argumentos da sua função, deve-se especificar o tipo deste argumento com um símbolo de `::`. Vamos criar uma função `area()` que calculará a área de um círculo, ao receber a medida do raio, ou de um retângulo, ao receber a medida de ambos os lados:
+
+```{julia}
+function area(r::Float64)             
+  π * r^2
+end
+
+function area(a::Float64, b::Float64) 
+  a * b
+end
+
+area(3.0)
+area(2.0,4.0)
+```
+
+Vamos criar uma função mais complexa: `main`, que receberá argumentos flutuantes a, b, e retornará sua soma. Caso, entretanto, sejam ambos argumentos strings, a função retornará sua concatenação. Além disso, caso a função receba apenas um argumento a flutuante, retornará o dobro de a:
+
+```{julia}
+# Para um único argumento numérico: dobra o valor
+function main(a::Float64)
+    return 2 * a
+end
+
+# Para dois argumentos numéricos: soma os dois
+function main(a::Float64, b::Float64)
+    return a + b
+end
+
+# Para dois argumentos do tipo String: concatena as strings
+function main(a::String, b::String)
+    return a * "" * b
+end
+
+main(2.0)
+main(1.0,2.0)
+main("ab","cd")
+```
+
+# Conclusão
+
+Apesar de uma ferramenta básica e comum em todas linguagens de programação, as funções definidas pelo usuário em Julia, aliadas ao despacho múltiplo, permitem escrever código claro e de alto desempenho. Com sintaxe concisa e flexível, você pode criar comportamentos específicos para diferentes tipos de dados sem recorrer a condicionais internos, tornando seu código mais legível e eficiente. Esperamos que este post tenha ensinado os básicos necessários.
+
+Referências e informações adicionais:
+
+-   [julialang](https://docs.julialang.org/en/v1/manual/functions/)
+
+::: {.callout-warning appearance="simple"}
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::
