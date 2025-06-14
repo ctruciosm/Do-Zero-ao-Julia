@@ -6,6 +6,7 @@ categories:
   - Manipulação de Dados
   - Tidy Data
   - Ferramentas
+  - Pacotes
 author:
   - name: Henrique Anunciação Velloso Silva
     affiliation: "Universidade Estadual de Campinas"
@@ -15,7 +16,7 @@ author:
     affiliation: "Universidade Estadual de Campinas"
     url: https://github.com/Arthur-Dionizio
     orcid: 0009-0002-4313-9187
-date: "2025-06-10"
+date: "2025-06-14"
 image: imagens/tidierdata.png
 lang: "pt"
 format:
@@ -95,7 +96,7 @@ end
 
 > Obs.: `desc()` é uma função auxiliar.
 
-- Por fim, optamos por visualizar apenas da linha 1 até a linha 5 do dataset, utilizando a função `@slice()`.
+- Por fim, optamos por visualizar apenas da linha 1 até a linha 6 do dataset, utilizando a função `@slice()`.
 
 Agora, vejamos um exemplo de formatação dos dados e utilização das funções de _join_.
 
@@ -200,8 +201,6 @@ end
 termina = @chain df3 begin
   @select(`Nome`, ends_with("ade"))
 end
-
-[comeca, termina]
 ```
 
 ::: {.justify}
@@ -211,7 +210,7 @@ end
 # Referências
 
 ::: {.justify}
-Blog inspirado na documentação disponibilizada pelos autores do pacote, a qual pode ser acessada pelo link `https://tidierorg.github.io/TidierData.jl/latest/`.
+Blog inspirado na documentação disponibilizada pelos autores do pacote, a qual pode ser acessada pelo link [https://tidierorg.github.io/TidierData.jl/latest/](https://tidierorg.github.io/TidierData.jl/latest/).
 :::
 
 ::: callout-note

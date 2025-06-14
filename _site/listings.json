@@ -1,12 +1,5 @@
 [
   {
-    "listing": "/tutoriais.html",
-    "items": [
-      "/Tutoriais/tutorial-eda.html",
-      "/Tutoriais/graf_basico.html"
-    ]
-  },
-  {
     "listing": "/equipe.html",
     "items": [
       "/Equipe/Atual/Ana_Luisa.html",
@@ -27,8 +20,18 @@
     ]
   },
   {
+    "listing": "/tutoriais.html",
+    "items": [
+      "/Tutoriais/tutorial-eda.html",
+      "/Tutoriais/graf_basico.html"
+    ]
+  },
+  {
     "listing": "/blog.html",
     "items": [
+      "/Blog/tidierdata.html",
+      "/Blog/pacotes_estatistica.html",
+      "/Blog/HistoriaJulia.html",
       "/Blog/julia_rstudio.html",
       "/Blog/jupytercolab.html",
       "/Blog/instalar_julia.html",
