@@ -29,6 +29,7 @@
   {
     "listing": "/blog.html",
     "items": [
+      "/Blog/markdown_pluto.html",
       "/Blog/tidierdata.html",
       "/Blog/pacotes_estatistica.html",
       "/Blog/HistoriaJulia.html",

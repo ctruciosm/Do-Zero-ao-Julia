@@ -10,9 +10,9 @@ author:
     url: https://github.com/VitorRibasP
     orcid: 0009-0009-6923-7712
   - name: Guilherme Duarte Alves Basso
-    affilliation: "Universidade Estadual de Campinas"
+    affiliation: "Universidade Estadual de Campinas"
     url: https://www.linkedin.com/in/guilherme-duarte-60a86a361/
-date: "2025-05-09"
+date: "2025-07-01"
 image: imagens/logo_pluto.png
 lang: pt
 format:
@@ -21,6 +21,7 @@ format:
     toc-depth: 3
     self-contained: false
 draft: false
+engine: knitr
 ---
 
 ## Introdução
