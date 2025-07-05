@@ -3,7 +3,7 @@ title: "Como utilizar Julia no RStudio no Windows"
 description: "Passo a passo para configurar Julia no Rstudio"
 categories:
   - Instalação
-  - Markdown
+  - IDE
 author:
   - name: Vitor Ribas Perrone
     affiliation: "Universidade Estadual de Campinas"
