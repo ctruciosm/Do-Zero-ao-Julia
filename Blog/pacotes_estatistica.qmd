@@ -13,7 +13,7 @@ author:
     affiliation: "Universidade Estadual de Campinas"
     url: https://github.com/Arthur-Dionizio
     orcid: 0009-0002-4313-9187
-date: "2025-05-29"
+date: "2025-06-13"
 image: imagens/pacotes_estatistica.png
 lang: pt
 format:
@@ -21,7 +21,7 @@ format:
     toc: true
     toc-depth: 3
     self-contained: false
-draft: true
+draft: false
 ---
 
 ## Introdução
@@ -82,7 +82,7 @@ Até aqui, temos apresentados apenas alguns exemplos de pacotes que podem ser ut
 ## Conclusão
 
 ::: {.justify}
-Com esse conjunto de pacotes, a Julia se consolida como uma linguagem extremamente capaz para as áreas supracitadas, que incluem análise estatística, modelagem e aprendizado de máquina. Embora seu uso ainda esteja em crescimento, já é possível realizar praticamente qualquer tarefa estatística (desde análises descritivas simples até modelagens complexas).
+Com esse conjunto de pacotes, Julia se consolida como uma linguagem útil para análise de dados, modelagem estatística/econometrica e aprendizado de máquina. Embora seu uso ainda esteja em crescimento, já é possível realizar diversas análises envolvendo dados (desde análises descritivas simples até modelagens complexas).
 :::
 
 

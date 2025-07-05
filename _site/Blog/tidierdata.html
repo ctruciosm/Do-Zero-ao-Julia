@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt" xml:lang="pt"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.39">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Henrique Anunciação Velloso Silva">
+<meta name="author" content="Arthur Dionizio Martins da Silva">
+<meta name="description" content="Um guia introdutório sobre o pacote TidierData.jl! Entenda como aplicar a gramática tidy para manipulação de dados de forma intuitiva, utilizando funções familiares para quem vem do tidyverse em R.">
+
+<title>Introdução ao pacote TidierData.jl – Do Zero ao Julia</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-6bd9cfa162949bde0a231f530c97869d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Nenhum resultado",
+    "search-matching-documents-text": "documentos correspondentes",
+    "search-copy-link-title": "Copiar link para a busca",
+    "search-hide-matches-text": "Esconder correspondências adicionais",
+    "search-more-match-text": "mais correspondência neste documento",
+    "search-more-matches-text": "mais correspondências neste documento",
+    "search-clear-button-title": "Limpar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Procurar"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Do Zero ao Julia</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Procurar"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Alternar de navegação" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../oprojeto.html"> 
+<span class="menu-text">O projeto</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../equipe.html"> 
+<span class="menu-text">Equipe</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../blog.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../tutoriais.html"> 
+<span class="menu-text">Tutoriais</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../meetup.html"> 
+<span class="menu-text">Meetup</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Nesta página</h2>
+   
+  <ul>
+  <li><a href="#introdução" id="toc-introdução" class="nav-link active" data-scroll-target="#introdução">Introdução</a></li>
+  <li><a href="#carregando-o-pacote" id="toc-carregando-o-pacote" class="nav-link" data-scroll-target="#carregando-o-pacote">Carregando o pacote</a></li>
+  <li><a href="#funções" id="toc-funções" class="nav-link" data-scroll-target="#funções">Funções</a>
+  <ul class="collapse">
+  <li><a href="#carregando-o-dataset-mtcars" id="toc-carregando-o-dataset-mtcars" class="nav-link" data-scroll-target="#carregando-o-dataset-mtcars">Carregando o dataset ‘mtcars’</a></li>
+  <li><a href="#funções-macro" id="toc-funções-macro" class="nav-link" data-scroll-target="#funções-macro">Funções Macro</a></li>
+  <li><a href="#funções-auxiliares" id="toc-funções-auxiliares" class="nav-link" data-scroll-target="#funções-auxiliares">Funções auxiliares</a>
+  <ul class="collapse">
+  <li><a href="#if_else" id="toc-if_else" class="nav-link" data-scroll-target="#if_else"><code>if_else()</code></a></li>
+  <li><a href="#case_when" id="toc-case_when" class="nav-link" data-scroll-target="#case_when"><code>case_when()</code></a></li>
+  <li><a href="#starts_with-ends_with" id="toc-starts_with-ends_with" class="nav-link" data-scroll-target="#starts_with-ends_with"><code>starts_with()</code>, <code>ends_with()</code></a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#referências" id="toc-referências" class="nav-link" data-scroll-target="#referências">Referências</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Introdução ao pacote TidierData.jl</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Manipulação de Dados</div>
+    <div class="quarto-category">Tidy Data</div>
+    <div class="quarto-category">Ferramentas</div>
+    <div class="quarto-category">Pacotes</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    <p>Um guia introdutório sobre o pacote TidierData.jl! Entenda como aplicar a gramática tidy para manipulação de dados de forma intuitiva, utilizando funções familiares para quem vem do tidyverse em R.</p>
+  </div>
+</div>
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Autores</div>
+  <div class="quarto-title-meta-heading">Afiliação</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author"><a href="https://github.com/henriqueavelloso">Henrique Anunciação Velloso Silva</a> <a href="https://orcid.org/0009-0002-8262-031X" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Universidade Estadual de Campinas
+          </p>
+      </div>
+    <div class="quarto-title-meta-contents">
+    <p class="author"><a href="https://github.com/Arthur-Dionizio">Arthur Dionizio Martins da Silva</a> <a href="https://orcid.org/0009-0002-4313-9187" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Universidade Estadual de Campinas
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Data de Publicação</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">14 de junho de 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introdução" class="level1">
+<h1>Introdução</h1>
+<div class="justify">
+<p>O <strong>TidierData.jl</strong> é um pacote da linguagem <code>julia</code> que traz uma abordagem familiar aos usuários do R, inspirado diretamente nos pacotes <code>dplyr</code> e <code>tidyr</code>. Ele permite manipular e transformar conjuntos de dados com uma sintaxe concisa e legível no estilo <em>tidy</em>.</p>
+<p>Neste post, vamos explorar como o <strong>TidierData.jl</strong> facilita tarefas comuns de manipulação de dados, como seleção, filtragem, agregações, junções e muito mais.</p>
+<blockquote class="blockquote">
+<p>Por trás das cortinas, o <strong>TidierData.jl</strong> é construído sobre o robusto <strong>DataFrames.jl</strong>, combinando a performance de <code>julia</code> com a ergonomia do <code>tidyverse</code>.</p>
+</blockquote>
+</div>
+</section>
+<section id="carregando-o-pacote" class="level1">
+<h1>Carregando o pacote</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="bu">Pkg</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Suprime mensagens e warnings durante a instalação dos pacotes</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">redirect_stdout</span>(<span class="cn">devnull</span>) <span class="cf">do</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">redirect_stderr</span>(<span class="cn">devnull</span>) <span class="cf">do</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="bu">Pkg</span>.<span class="fu">add</span>(<span class="st">"TidierData"</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        <span class="bu">Pkg</span>.<span class="fu">add</span>(<span class="st">"DataFrames"</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="bu">Pkg</span>.<span class="fu">add</span>(<span class="st">"RDatasets"</span>) <span class="co"># Vamos usar o pacote RDatasets para gerar um banco de dados para análise  </span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="funções" class="level1">
+<h1>Funções</h1>
+<section id="carregando-o-dataset-mtcars" class="level2">
+<h2 class="anchored" data-anchor-id="carregando-o-dataset-mtcars">Carregando o dataset ‘mtcars’</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">RDatasets</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>mtcars <span class="op">=</span> <span class="fu">dataset</span>(<span class="st">"datasets"</span>, <span class="st">"mtcars"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>32×12 DataFrame
+ Row │ Model              MPG      Cyl    Disp     HP     DRat     WT       QS ⋯
+     │ String31           Float64  Int64  Float64  Int64  Float64  Float64  Fl ⋯
+─────┼──────────────────────────────────────────────────────────────────────────
+   1 │ Mazda RX4             21.0      6    160.0    110     3.9     2.62      ⋯
+   2 │ Mazda RX4 Wag         21.0      6    160.0    110     3.9     2.875
+   3 │ Datsun 710            22.8      4    108.0     93     3.85    2.32
+   4 │ Hornet 4 Drive        21.4      6    258.0    110     3.08    3.215
+   5 │ Hornet Sportabout     18.7      8    360.0    175     3.15    3.44      ⋯
+   6 │ Valiant               18.1      6    225.0    105     2.76    3.46
+   7 │ Duster 360            14.3      8    360.0    245     3.21    3.57
+   8 │ Merc 240D             24.4      4    146.7     62     3.69    3.19
+  ⋮  │         ⋮             ⋮       ⋮       ⋮       ⋮       ⋮        ⋮        ⋱
+  26 │ Fiat X1-9             27.3      4     79.0     66     4.08    1.935     ⋯
+  27 │ Porsche 914-2         26.0      4    120.3     91     4.43    2.14
+  28 │ Lotus Europa          30.4      4     95.1    113     3.77    1.513
+  29 │ Ford Pantera L        15.8      8    351.0    264     4.22    3.17
+  30 │ Ferrari Dino          19.7      6    145.0    175     3.62    2.77      ⋯
+  31 │ Maserati Bora         15.0      8    301.0    335     3.54    3.57
+  32 │ Volvo 142E            21.4      4    121.0    109     4.11    2.78
+                                                   5 columns and 17 rows omitted</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">first</span>(mtcars, <span class="fl">5</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>5×12 DataFrame
+ Row │ Model              MPG      Cyl    Disp     HP     DRat     WT       QS ⋯
+     │ String31           Float64  Int64  Float64  Int64  Float64  Float64  Fl ⋯
+─────┼──────────────────────────────────────────────────────────────────────────
+   1 │ Mazda RX4             21.0      6    160.0    110     3.9     2.62      ⋯
+   2 │ Mazda RX4 Wag         21.0      6    160.0    110     3.9     2.875
+   3 │ Datsun 710            22.8      4    108.0     93     3.85    2.32
+   4 │ Hornet 4 Drive        21.4      6    258.0    110     3.08    3.215
+   5 │ Hornet Sportabout     18.7      8    360.0    175     3.15    3.44      ⋯
+                                                               5 columns omitted</code></pre>
+</div>
+</div>
+</section>
+<section id="funções-macro" class="level2">
+<h2 class="anchored" data-anchor-id="funções-macro">Funções Macro</h2>
+<div class="justify">
+<p>O pacote oferece mais de 40 funções macro, as quais podemos usar para manipular dados. A seguir, exploraremos algumas das principais funções e observaremos sua sintaxe de forma clara e concisa.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">TidierData</span>, <span class="bu">DataFrames</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Exemplo com o dataset mtcars</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="pp">@chain</span> mtcars <span class="cf">begin</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@mutate</span>(Eficiencia <span class="op">=</span> MPG <span class="op">/</span> WT)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@filter</span>(Cyl <span class="op">==</span> <span class="fl">6</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@arrange</span>(<span class="fu">desc</span>(<span class="st">"Eficiencia"</span>))</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@select</span>(Model, MPG, WT, Eficiencia)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@slice</span>(<span class="fl">1</span><span class="op">:</span><span class="fl">6</span>)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>6×4 DataFrame
+ Row │ Model           MPG      WT       Eficiencia
+     │ String31        Float64  Float64  Float64
+─────┼──────────────────────────────────────────────
+   1 │ Mazda RX4          21.0    2.62      8.01527
+   2 │ Mazda RX4 Wag      21.0    2.875     7.30435
+   3 │ Ferrari Dino       19.7    2.77      7.11191
+   4 │ Hornet 4 Drive     21.4    3.215     6.6563
+   5 │ Merc 280           19.2    3.44      5.5814
+   6 │ Valiant            18.1    3.46      5.23121</code></pre>
+</div>
+</div>
+<div class="justify">
+<ul>
+<li><p>Primeiramente, para quem já está familiarizado com a linguagem R, a função <code>@chain()</code> é similar ao pipeline <code>%&gt;%</code> ou <code>|&gt;</code>, usado para encadear várias operações em sequência no mesmo conjunto de dados.</p></li>
+<li><p>Em seguida, criamos a nova coluna <em>Eficiencia</em> no nosso dataset, definida como a razão entre as colunas <em>MPG</em> e <em>WT</em>.</p></li>
+<li><p>Além disso, aplicamos restrições à saída do dataset, filtrando apenas os carros que possuem exatamente 6 cilindros, usando <code>@filter()</code>.</p></li>
+<li><p>Selecionamos apenas as colunas <em>Model</em>, <em>MPG</em>, <em>WT</em> e <em>Eficiencia</em>, usando <code>@select()</code>.</p></li>
+<li><p>Ordenamos o dataset pelo valor da <code>Eficiencia</code>, em ordem decrescente, usando <code>@arrange()</code> para ordenar e <code>desc()</code> para determinar que era decrescente.</p></li>
+</ul>
+<blockquote class="blockquote">
+<p>Obs.: <code>desc()</code> é uma função auxiliar.</p>
+</blockquote>
+<ul>
+<li>Por fim, optamos por visualizar apenas da linha 1 até a linha 6 do dataset, utilizando a função <code>@slice()</code>.</li>
+</ul>
+<p>Agora, vejamos um exemplo de formatação dos dados e utilização das funções de <em>join</em>.</p>
+<p>Vamos supor que possuímos dois dataframes: um com informações sobre <strong>clientes</strong> e outro com <strong>compras</strong>. Queremos <strong>combinar</strong> os dados para visualizar o nome dos clientes junto com seus respectivos valores de compra.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">TidierData</span>, <span class="bu">DataFrames</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>clientes <span class="op">=</span> <span class="fu">DataFrame</span>(ID <span class="op">=</span> [<span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">6</span>, <span class="fl">7</span>, <span class="fl">8</span>, <span class="fl">9</span>, <span class="fl">10</span>], Nome <span class="op">=</span> [<span class="st">"Leonardo"</span>, <span class="st">"Arthur"</span>, <span class="st">"Carlos"</span>, <span class="st">"Esther"</span>, <span class="st">"Caio"</span>, <span class="st">"Guilherme"</span>, <span class="st">"Henrique"</span>, <span class="st">"Nicole"</span>, <span class="st">"Pedro"</span>, <span class="st">"Sarah"</span>])</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>10×2 DataFrame
+ Row │ ID     Nome
+     │ Int64  String
+─────┼──────────────────
+   1 │     1  Leonardo
+   2 │     2  Arthur
+   3 │     3  Carlos
+   4 │     4  Esther
+   5 │     5  Caio
+   6 │     6  Guilherme
+   7 │     7  Henrique
+   8 │     8  Nicole
+   9 │     9  Pedro
+  10 │    10  Sarah</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>compras <span class="op">=</span> <span class="fu">DataFrame</span>(ID <span class="op">=</span> [<span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">6</span>, <span class="fl">7</span>, <span class="fl">8</span>, <span class="fl">9</span>, <span class="fl">10</span>], Valor <span class="op">=</span> [<span class="fl">150</span>, <span class="fl">200</span>, <span class="fl">300</span>, <span class="fl">100</span>, <span class="fl">250</span>, <span class="fl">220</span>, <span class="fl">310</span>, <span class="fl">420</span>, <span class="fl">500</span>, <span class="fl">50</span>])</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>10×2 DataFrame
+ Row │ ID     Valor
+     │ Int64  Int64
+─────┼──────────────
+   1 │     1    150
+   2 │     2    200
+   3 │     3    300
+   4 │     4    100
+   5 │     5    250
+   6 │     6    220
+   7 │     7    310
+   8 │     8    420
+   9 │     9    500
+  10 │    10     50</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="pp">@left_join</span>(compras, clientes)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>10×3 DataFrame
+ Row │ ID     Valor  Nome
+     │ Int64  Int64  String?
+─────┼─────────────────────────
+   1 │     1    150  Leonardo
+   2 │     2    200  Arthur
+   3 │     3    300  Carlos
+   4 │     4    100  Esther
+   5 │     5    250  Caio
+   6 │     6    220  Guilherme
+   7 │     7    310  Henrique
+   8 │     8    420  Nicole
+   9 │     9    500  Pedro
+  10 │    10     50  Sarah</code></pre>
+</div>
+</div>
+<div class="justify">
+<p>Aqui, usamos a função <code>@left_join()</code> para unir nossos dados através da coluna <code>ID</code>. Assim, obtemos um dataframe alinhado por ID, com as informações dos clientes e o valor de suas respectivas compras.</p>
+<blockquote class="blockquote">
+<p>Observe que o uso da função <code>@left_join()</code> é simples e intuitivo, pois ela une os dois dataframes automaticamente pela coluna em comum, sem necessidade de especificação explícita.</p>
+</blockquote>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">TidierData</span>, <span class="bu">DataFrames</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> <span class="fu">DataFrame</span>(Nome <span class="op">=</span> [<span class="st">"Thiago"</span>, <span class="st">"Vitor"</span>, <span class="st">"Gabriel"</span>, <span class="st">"Ana"</span>, <span class="st">"Gustavo"</span>, <span class="st">"Leticia"</span>], Nota1 <span class="op">=</span> [<span class="fl">8</span>, <span class="fl">7</span>, <span class="fl">7.5</span>, <span class="fl">6</span>, <span class="fl">9</span>, <span class="fl">10</span>], Nota2 <span class="op">=</span> [<span class="fl">9</span>, <span class="fl">10</span>, <span class="fl">4</span>, <span class="fl">5.5</span>, <span class="fl">5</span>, <span class="fl">9</span>])</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>6×3 DataFrame
+ Row │ Nome     Nota1    Nota2
+     │ String   Float64  Float64
+─────┼───────────────────────────
+   1 │ Thiago       8.0      9.0
+   2 │ Vitor        7.0     10.0
+   3 │ Gabriel      7.5      4.0
+   4 │ Ana          6.0      5.5
+   5 │ Gustavo      9.0      5.0
+   6 │ Leticia     10.0      9.0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(df)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>6×3 DataFrame
+ Row │ Nome     Nota1    Nota2
+     │ String   Float64  Float64
+─────┼───────────────────────────
+   1 │ Thiago       8.0      9.0
+   2 │ Vitor        7.0     10.0
+   3 │ Gabriel      7.5      4.0
+   4 │ Ana          6.0      5.5
+   5 │ Gustavo      9.0      5.0
+   6 │ Leticia     10.0      9.0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="pp">@chain</span> df <span class="cf">begin</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@pivot_longer</span>(cols <span class="op">=</span> [<span class="op">:</span>Nota1, <span class="op">:</span>Nota2], names_to <span class="op">=</span> <span class="op">:</span>Avaliação, values_to <span class="op">=</span> <span class="op">:</span>Nota)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>12×3 DataFrame
+ Row │ Nome     Avaliação  Nota
+     │ String   String     Float64
+─────┼─────────────────────────────
+   1 │ Thiago   Nota1          8.0
+   2 │ Vitor    Nota1          7.0
+   3 │ Gabriel  Nota1          7.5
+   4 │ Ana      Nota1          6.0
+   5 │ Gustavo  Nota1          9.0
+   6 │ Leticia  Nota1         10.0
+   7 │ Thiago   Nota2          9.0
+   8 │ Vitor    Nota2         10.0
+   9 │ Gabriel  Nota2          4.0
+  10 │ Ana      Nota2          5.5
+  11 │ Gustavo  Nota2          5.0
+  12 │ Leticia  Nota2          9.0</code></pre>
+</div>
+</div>
+<div class="justify">
+<p>Aqui, transformamos o dataframe do formato <strong>wide</strong> para <strong>long</strong> usando a função <code>@pivot_longer</code>(). A mesma lógica se aplica caso queiramos converter de <strong>long</strong> para <strong>wide</strong>, utilizando a função <code>@pivot_wider</code>().</p>
+</div>
+</section>
+<section id="funções-auxiliares" class="level2">
+<h2 class="anchored" data-anchor-id="funções-auxiliares">Funções auxiliares</h2>
+<div class="justify">
+<p>Além das macros principais como <code>@mutate</code>, <code>@filter</code> e <code>@summarize</code>, o <code>TidierData.jl</code> oferece <strong>funções auxiliares</strong> que tornam seu código mais expressivo, claro e eficiente. Vamos explorar algumas delas com exemplos práticos:</p>
+</div>
+<section id="if_else" class="level3">
+<h3 class="anchored" data-anchor-id="if_else"><code>if_else()</code></h3>
+<div class="justify">
+<p>Lógica condicional simples e vetorizada:</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">TidierData</span>, <span class="bu">DataFrames</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>valores <span class="op">=</span> <span class="fu">DataFrame</span>(Nome <span class="op">=</span> [<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>], Salario <span class="op">=</span> [<span class="fl">3000</span>, <span class="fl">5000</span>, <span class="fl">4000</span>])</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>3×2 DataFrame
+ Row │ Nome    Salario
+     │ String  Int64
+─────┼─────────────────
+   1 │ A          3000
+   2 │ B          5000
+   3 │ C          4000</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="pp">@chain</span> valores <span class="cf">begin</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@mutate</span>(Status <span class="op">=</span> <span class="fu">if_else</span>(<span class="ss">`Salario`</span> <span class="op">.&gt;</span> <span class="fl">4000</span>, <span class="st">"Alto"</span>, <span class="st">"Médio ou Baixo"</span>))</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>3×3 DataFrame
+ Row │ Nome    Salario  Status
+     │ String  Int64    String
+─────┼─────────────────────────────────
+   1 │ A          3000  Médio ou Baixo
+   2 │ B          5000  Alto
+   3 │ C          4000  Médio ou Baixo</code></pre>
+</div>
+</div>
+</section>
+<section id="case_when" class="level3">
+<h3 class="anchored" data-anchor-id="case_when"><code>case_when()</code></h3>
+<div class="justify">
+<p>Para múltiplas condições, substituindo vários <code>if_else()</code>:</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">TidierData</span>, <span class="bu">DataFrames</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>df2 <span class="op">=</span> <span class="fu">DataFrame</span>(Nota <span class="op">=</span> [<span class="fl">10</span>, <span class="fl">2</span>, <span class="fl">6</span>, <span class="fl">4</span>, <span class="fl">7.1</span>, <span class="fl">4.9</span>, <span class="fl">9.7</span>])</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>7×1 DataFrame
+ Row │ Nota
+     │ Float64
+─────┼─────────
+   1 │    10.0
+   2 │     2.0
+   3 │     6.0
+   4 │     4.0
+   5 │     7.1
+   6 │     4.9
+   7 │     9.7</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="pp">@chain</span> df2 <span class="cf">begin</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@mutate</span>(Conceito <span class="op">=</span> <span class="fu">case_when</span>(</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>        <span class="ss">`Nota`</span> <span class="op">.&gt;=</span> <span class="fl">9</span> <span class="op">=&gt;</span> <span class="st">"A"</span>,</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>        <span class="ss">`Nota`</span> <span class="op">.&gt;=</span> <span class="fl">7</span> <span class="op">=&gt;</span> <span class="st">"B"</span>,</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>        <span class="ss">`Nota`</span> <span class="op">.&gt;=</span> <span class="fl">5</span> <span class="op">=&gt;</span> <span class="st">"C"</span>,</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>        <span class="cn">true</span>        <span class="op">=&gt;</span> <span class="st">"D"</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    ))</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>7×2 DataFrame
+ Row │ Nota     Conceito
+     │ Float64  String
+─────┼───────────────────
+   1 │    10.0  A
+   2 │     2.0  D
+   3 │     6.0  C
+   4 │     4.0  D
+   5 │     7.1  B
+   6 │     4.9  D
+   7 │     9.7  A</code></pre>
+</div>
+</div>
+</section>
+<section id="starts_with-ends_with" class="level3">
+<h3 class="anchored" data-anchor-id="starts_with-ends_with"><code>starts_with()</code>, <code>ends_with()</code></h3>
+<div class="justify">
+<p>Selecionando colunas com nomes que seguem um padrão:</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">TidierData</span>, <span class="bu">DataFrames</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>df3 <span class="op">=</span> <span class="fu">DataFrame</span>(</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    Nome <span class="op">=</span> [<span class="st">"José"</span>, <span class="st">"Carla"</span>, <span class="st">"Humberto"</span>],</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>    Nota1 <span class="op">=</span> [<span class="fl">7</span>, <span class="fl">9</span>, <span class="fl">8</span>],</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>    Nota2 <span class="op">=</span> [<span class="fl">8</span>, <span class="fl">10</span>, <span class="fl">10</span>],</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>    Idade <span class="op">=</span> [<span class="fl">20</span>, <span class="fl">22</span>, <span class="fl">24</span>]</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>3×4 DataFrame
+ Row │ Nome      Nota1  Nota2  Idade
+     │ String    Int64  Int64  Int64
+─────┼───────────────────────────────
+   1 │ José          7      8     20
+   2 │ Carla         9     10     22
+   3 │ Humberto      8     10     24</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>comeca <span class="op">=</span> <span class="pp">@chain</span> df3 <span class="cf">begin</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@select</span>(<span class="ss">`Nome`</span>, <span class="fu">starts_with</span>(<span class="st">"Nota"</span>))</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>3×3 DataFrame
+ Row │ Nome      Nota1  Nota2
+     │ String    Int64  Int64
+─────┼────────────────────────
+   1 │ José          7      8
+   2 │ Carla         9     10
+   3 │ Humberto      8     10</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>termina <span class="op">=</span> <span class="pp">@chain</span> df3 <span class="cf">begin</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="pp">@select</span>(<span class="ss">`Nome`</span>, <span class="fu">ends_with</span>(<span class="st">"ade"</span>))</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>3×2 DataFrame
+ Row │ Nome      Idade
+     │ String    Int64
+─────┼─────────────────
+   1 │ José         20
+   2 │ Carla        22
+   3 │ Humberto     24</code></pre>
+</div>
+</div>
+<div class="justify">
+<blockquote class="blockquote">
+<p>Obs.: As funções <code>endswith()</code> da base do <code>julia</code> e <code>ends_with()</code> do pacote TidierData.jl tem uma pequena diferença: a função <code>ends_with()</code> é usada para nomes de colunas, enquanto <code>endswith()</code> é usada para valores dentro das colunas.</p>
+</blockquote>
+</div>
+</section>
+</section>
+</section>
+<section id="referências" class="level1">
+<h1>Referências</h1>
+<div class="justify">
+<p>Blog inspirado na documentação disponibilizada pelos autores do pacote, a qual pode ser acessada pelo link <a href="https://tidierorg.github.io/TidierData.jl/latest/">https://tidierorg.github.io/TidierData.jl/latest/</a>.</p>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Nota
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.</p>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copiada");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copiada");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Website feito com <a href="https://quarto.org/">Quarto</a>. License: <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
