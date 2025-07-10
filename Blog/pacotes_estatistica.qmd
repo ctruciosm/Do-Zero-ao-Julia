@@ -1,6 +1,6 @@
 ---
-title: "Pacotes com Bancos de Dados para Trabalhar em Julia"
-description: "Principais pacotes para acessar diversos bancos de dados para as suas análises estatísticas em Julia."
+title: "Pacotes Essenciais para Trabalhar com Estatística em Julia"
+description: "Principais pacotes para realizar as mais diversas análises estatísticas em Julia."
 categories:
   - Pacotes
   - Primeiros Passos
@@ -9,96 +9,82 @@ author:
     affiliation: "Universidade Estadual de Campinas"
     url: https://github.com/VitorRibasP
     orcid: 0009-0009-6923-7712
-date: "2025-07-10"
-image: imagens/pacotes_datasets.png
+  - name: Arthur Dionizio Martins da Silva
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/Arthur-Dionizio
+    orcid: 0009-0002-4313-9187
+date: "2025-06-13"
+image: imagens/pacotes_estatistica.png
 lang: pt
 format:
   html:
     toc: true
     toc-depth: 3
     self-contained: false
-draft: true
+draft: false
 ---
 
 ## Introdução
 
 ::: {.justify}
-Ao trabalhar com Estatística, é fundamental termos conjuntos de dados à disposição, seja para testar funções, aplicar análises aprendidas ou realizar simulações. No R, diversos bancos de dados já vêm carregados por padrão, o que facilita bastante esse processo. Felizmente, em Julia também contamos com vários pacotes que oferecem conjuntos de dados prontos para utilizarmos em nossas análises. Neste post, vamos conhecer alguns desses pacotes.
+Ao falar de Estatística, a primeira linguagem de programação que costuma vir à mente é R. Criada especificamente para análise estatística e ciência de dados, oferece uma ampla gama de ferramentas estatísticas já disponíveis por padrão, além de milhares de pacotes criados para os mais diversos propósitos.
+
+Para nossa sorte, embora a linguagem Julia não tenha sido projetada exclusivamente para a Estatística, já conta com grande parte das ferramentas essenciais, graças a um ecossistema de pacotes que cresce rapidamente e abrange diversas áreas da análise de dados, da modelagem estatística e do aprendizado de máquina.
+
+Vamos, então, conhecer os principais pacotes para trabalhar com Estatística em Julia, organizados por área de aplicação (desde tarefas básicas até análises mais complexas).
 :::
 
-## Instalando e Carregando os Pacotes Necessários
 
-Em primeiro lugar, vamos instalar e carregar os pacotes que serão utilizados.
-```{julia}
-Pkg.add("DataFrames")
-using DataFrames
-Pkg.add("RDatasets")
-using RDatasets
-Pkg.add("MLDatasets")
-ENV["DATADEPS_ALWAYS_ACCEPT"] = "true"
-using MLDatasets
-Pkg.add("WorldBankData")
-using WorldBankData
-Pkg.add("YFinance")
-using YFinance
-```
+## Manipulação de Dados e Estatísticas Sumárias
 
-## RDatasets.jl
-::: justify
-O pacote [RDatasets.jl](https://github.com/JuliaStats/RDatasets.jl) faz exatamente o que o nome sugere: disponibiliza os bancos de dados presentes no R base e em diversos de seus pacotes, prontos para uso em Julia. Ou seja, todos os conjuntos de dados tradicionais, como `iris` e `mtcars`, estão acessíveis aqui. Para carregá-los, utilizamos a função `dataset`.
-:::
-```{julia}
-iris = dataset("datasets", "iris")
-```
-```{julia}
-mtcars = dataset("datasets", "mtcars")
-```
-::: justify
-Para verificar de quais pacotes do R podemos utilizar os bancos de dados, utilizamos a função `RDatasets.packages`.
-:::
-```{julia}
-RDatasets.packages()
-```
-::: justify
-E, para verificar quais bancos de dados estão disponíveis por pacote, utilizamos a função `RDatasets.datasets` (`datasets` representa os conjuntos de dados do R base).
-:::
-```{julia}
-RDatasets.datasets("datasets")
-```
+ - [StatsBase](https://github.com/JuliaStats/StatsBase.jl): Ferramentas básicas de estatística descritiva;
+ - [FreqTables](https://github.com/nalimilan/FreqTables.jl): Construção de tabelas de frequências para análise exploratória;
+ - [DataFrames](https://github.com/JuliaData/DataFrames.jl): Importação e manipulação de bases de dados tabulares.
 
-## MLDatasets.jl
-::: justify
-O pacote [MLDatasets.jl](https://juliaml.github.io/MLDatasets.jl/stable/) possui inúmeros bancos de dados com foco em Machine Learning, desde detecção de imagens até treinamento de modelos de linguagem. Vamos acessar, por exemplo, o clássico conjunto de dados `MNIST`.
-:::
-```{julia}
-MNIST(:train)
-```
+## Variáveis Aleatórias
 
-## WorldBankData.jl
-::: justify
-O pacote [WorldBankData.jl](https://github.com/4gh/WorldBankData.jl) permite o acesso direto aos dados do [Manco Mundial](https://data.worldbank.org/). A função principal é `wdi`, por meio da qual é possível consultar inúmeros indicadores para diferentes países. Por exemplo, vamos obter a população total do Brasil ao longo dos anos.
-:::
-```{julia}
-wdi("SP.POP.TOTL", "BR")
-```
-Para visualizar a lista de indicadores, podemos utilizar a função `search_wdi`.
-```{julia}
-search_wdi("indicators", "name", r"." )
-```
+ - [Distributions](https://github.com/JuliaStats/Distributions.jl): Definição, manipulação e amostragem de distribuições de probabilidade;
+ - [Random](https://docs.julialang.org/en/v1/stdlib/Random/): Geração de números aleatórios com uso de sementes, garantindo a reprodutibilidade.
 
-## YFinance.jl
-::: justify
-O pacote [YFinance.jl](https://eohne.github.io/YFinance.jl/dev/) é uma forma direta de utilizar dados de ações. Entretanto, existem algumas limitações quanto ao seu uso. Para carregar os dados, utilizamos a função `get_prices`, em que especificamos a ação, o intervalo total dos dados e a frequência das observações. 
+## Visualização de Dados
+
+ - [Plots](https://github.com/JuliaPlots/Plots.jl): Construção de uma ampla variedade de gráficos;
+ - [Gadfly](https://github.com/GiovineItalia/Gadfly.jl): Criação de gráficos com sintaxe semelhante à do pacote ggplot2, do R.
+
+## Modelagem e Testes de Hipótese
+
+ - [HypotesisTests](https://github.com/JuliaStats/HypothesisTests.jl): Realização de testes de hipótese frequentistas, incluindo testes paramétricos e não paramétricos;
+ - [GLM](https://github.com/JuliaStats/GLM.jl): Modelagens de regressões lineares e regressões lineares generalizadas;
+ - [MixedModels](https://github.com/JuliaStats/MixedModels.jl): Ajuste de modelos lineares e generalizados com efeitos mistos;
+ - [Optim](https://github.com/JuliaNLSolvers/Optim.jl): Otimização de funções, essencial para maximizar verossimilhanças;
+ - [MultivariateStats](https://github.com/JuliaStats/MultivariateStats.jl): Ferramentas de análise multivariada, como PCA e LDA;
+ - [TimeSeries](https://github.com/JuliaStats/TimeSeries.jl): Manipulação, visualização e modelagem de séries temporais.
+
+## Inferência Bayesiana
+
+ - [Turing](https://github.com/TuringLang/Turing.jl): Modelagem estatística bayesiana baseada em amostragem;
+ - [MCMCChains](https://github.com/TuringLang/MCMCChains.jl): Ferramentas para diagnóstico, resumo e visualização de cadeias de Markov geradas por MCMC.
+
+## Aprendizado de Máquina
+
+ - [DecisionTree](https://github.com/JuliaAI/DecisionTree.jl): Algoritmos de árvores de decisão, árvores de regressão e florestas aleatórias;
+ - [Clustering](https://github.com/JuliaStats/Clustering.jl): Algoritmos de clusterização, voltados para aprendizado de máquina não supervisionado;
+ - [ScikitLearn](https://github.com/cstjean/ScikitLearn.jl): Diversos algoritmos de machine learning com sintaxe semelhante à da biblioteca do Python, de mesmo nome;
+ - [MLBase](https://github.com/JuliaStats/MLBase.jl): Ferramentas auxiliares para aplicação de modelos de machine learning.
+
+
+::: {.justify}
+Até aqui, temos apresentados apenas alguns exemplos de pacotes que podem ser utilizados em Julia, mas existem muitos outros!. Para explorar mais, acesse o site [Julia Packages](https://juliapackages.com/) e descubra todo o potencial que Julia pode lhe oferecer.
 :::
-```{julia}
-get_prices("AAPL", range="1y", interval="1d")
-```
+
+
+
 ## Conclusão
 
 ::: {.justify}
-Portanto, gora você já sabe como acessar diversos conjuntos de dados em Julia para suas análises estatísticas. Para continuar aprendendo, escolha um desses pacotes, explore os dados disponíveis e realize uma análise completa. Para isso, recomendamos os tutoriais [Introdução à Análise Exploratória de Dados (EDA) em Julia](https://ime.unicamp.br/julialang/Tutoriais/tutorial-eda.html) e [Gráficos em Julia: primeiros passos
-](https://ime.unicamp.br/julialang/Tutoriais/graf_basico.html).
+Com esse conjunto de pacotes, Julia se consolida como uma linguagem útil para análise de dados, modelagem estatística/econometrica e aprendizado de máquina. Embora seu uso ainda esteja em crescimento, já é possível realizar diversas análises envolvendo dados (desde análises descritivas simples até modelagens complexas).
 :::
+
 
 ::: callout-note
 Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
