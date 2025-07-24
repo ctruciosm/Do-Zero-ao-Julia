@@ -1,0 +1,481 @@
+---
+title: "webscraping"
+author: "Gabriel Campovilla"
+format: html
+editor: visual
+---
+
+# O que veremos?
+
+1.  O que é Web Scraping e para que serve?
+2.  Python, R ou Julia?
+3.  Para que eu uso o Python?
+4.  Para que eu uso o R?
+5.  Para que eu uso o Julia?
+6.  Regras
+7.  Exemplos
+
+# O que é Web Scraping e para que serve?
+
+Se levarmos ao pé da letra, seria "Raspagem da Internet", mas o que de fato é?
+
+É uma técnica para extrair informações da internet de forma automática utilizando bots, geralmente, automatiza uma sequência de tarefas manuais e repetitivas. E pode ser realizada a partir de várias linguagens de programação (R, Python, JavaScript, Julia e etc). Algo importante de se citar é que, como ele automatiza tarefas manuais, a primeira vez é como se voc\~e estivesse fazendo, para que consiga dar todos os passos e informações necessárias, para que ai sim ele faça os subsequentes.
+
+Sua principal serventia é para obter informações estruturadas disponíveis em sites da internet, para que assim você construção de bancos de dados com base em conteúdos disponíveis online. Entretanto pode envolver questões legais que vamos discutir adiante.
+
+Mas os usos são diversos:
+
+-   Marketing digital;
+
+-   Automação de tarefas repetitivas;
+
+-   Monitoramento de notícias;
+
+-   Mapeamento de clientes;
+
+-   Etc.
+
+# Python, R ou Julia
+
+As linguagens citadas acima, cada uma em teoria tem um proposito diferente uma da outra, então qual seria a melhor?
+
+A melhor linguagem de programação é aquela que eu sei usar, mas de modo geral, dentre elas uma é melhor em uma coisa do que a outra.
+
+## Python
+
+✓ Ampla gama de bibliotecas: requests, httpx, BeautifulSoup, lxml, Scrapy, Selenium, Playwright, entre outras.
+
+✓ Comunidade e suporte: imensa comunidade, com muitos tutoriais, exemplos e perguntas já respondidas.
+
+✓ Versatilidade: fácil integração com automação, banco de dados, análise de dados e machine learning.
+
+✓ Compatibilidade com scraping dinâmico: bibliotecas como Selenium e Playwright permitem interagir com páginas que carregam conteúdo via JavaScript.
+
+✓ Facilidade de uso: sintaxe clara, APIs bem documentadas.
+
+X Problemas de performance: para scraping muito massivo, pode ser mais lento que soluções especializadas (mas geralmente é suficiente).
+
+X Gerenciamento de dependências: pode gerar conflitos se não bem organizado (uso de ambientes virtuais é recomendado).
+
+X Bloqueios: sites podem bloquear scripts baseados em requests ou Selenium mais facilmente, sendo necessário contornar com proxies e técnicas anti-bot.
+
+### Tarefas mais fáceis de usar Python
+
+Qualquer coisa que envolva interagir com páginas da web é prefirivél fazer em Python, exemplos:
+
+-   lincar em botões;
+
+<!-- -->
+
+-   Escrever textos em campos;
+
+<!-- -->
+
+-   Navegar pelas páginas da internet;
+
+<!-- -->
+
+-   Automações de tarefas que envolvam mouse.
+
+### Bibliotecas úteis em Python
+
+Selenium: navegar nos sites
+
+Exemplos:
+
+-   Driver = webdriver.&(): criar uma janela. (& indica seu navegador: Chrome, Edge, etc.)
+
+-   Driver.get(‘url’): acessa a url na internet;
+
+-   Driver.find_element(By.#, ‘\$’): procurar o objeto na página (# = CSS_SELECTOR, XPATH.(são diferentes formas de identificar e selecionar elementos em uma página web para aplicar estilos ou interagir com eles) e \$ = objeto, que seria como o ebjetos se encontra no HTML)
+
+-   Elemento.click(): clicar no elemento (pode ser encontrado com driver.find_element).
+
+-   Elemento.send_keys(‘texto’): escreve ‘texto’ no elemento.
+
+-   Time: código esperar, pausa o código por n segundos.
+
+-   Time.sleep(n): pausa o código por n segundos.
+
+## R
+
+✓ Bibliotecas poderosas para scraping: rvest, httr, xml2, curl.
+
+✓ Integração direta com análise de dados: após o scraping, você já está em um ambiente ideal para visualização (ggplot2) e modelagem estatística.
+
+✓ Foco em cientistas de dados: para quem já trabalha com estatística e modelagem no R, é mais natural não mudar de linguagem.
+
+✓ Expressividade para tarefas simples: tarefas de scraping mais simples são muito concisas e legíveis.
+
+X Suporte limitado para scraping dinâmico: interagir com páginas que usam JavaScript é mais difícil; não há equivalente robusto a Selenium ou Playwright nativo.
+
+X Menor número de bibliotecas e recursos para scraping complexo: quando comparado ao Python.
+
+X Menor foco em web scraping na comunidade: a maioria dos exemplos e frameworks avançados está em Python.
+
+### Tarefas mais fáceis em R
+
+Qualquer coisa que envolva extrair textos de uma página da internet, sem interagir com ela, exemplos:
+
+-   Extrair tabelas de algum site;
+
+-   Extrair texto de uma página da internet.
+
+### Pacotes úteis em R
+
+-   utils::download.file(url, file): faz download da página para o arquivo
+
+-   Html \<– xml2::read_html(‘file’): lê o arquivo html ‘file’. Funciona com url também;
+
+-   Rvest: extrair objetos direto do HTML -Funciona bem com o operador pipe (%\>%), deixando o código mais legível;
+
+-   html_element(Html, css, xpath): extrai os elementos com esse css/xpath;
+
+-   html_attr(Html, ‘atributo’): extrai o valor do atributo do html
+
+-   Permite extrair outras coisas, mas a sintaxe é bem parecida -Tidyverse: útil para manipular os textos
+
+## Julia
+
+✓ Performance: compilação Just-In-Time (JIT) garante alta velocidade para tarefas pesadas.
+
+✓ Bibliotecas básicas disponíveis: HTTP.jl, Gumbo.jl (HTML parsing), Cascadia.jl (CSS selectors), JSON3.jl (JSON parsing).
+
+✓ Integração matemática: para quem já trabalha com modelagem numérica ou científica, facilita manter tudo em Julia.
+
+X Ecossistema imaturo para web scraping: faltam frameworks integrados e robustos como Scrapy ou rvest.
+
+X Pouca documentação e exemplos: principalmente para scraping dinâmico ou técnicas avançadas.
+
+X Curva de aprendizado maior para web scraping: menos material didático específico.
+
+### Tarefas mais fáceis em Julia
+
+-Qualquer coisa que envolva baixar o conteúdo de páginas estáticas ou processar arquivos HTML/XML de forma automatizada e rápida, especialmente quando integrado a análises matemáticas ou computacionais mais pesadas, exemplos:
+
+-   Baixar conteúdo bruto de uma página;
+
+-   Extrair informações de arquivos HTML/XML usando seletores;
+
+-   Fazer scraping leve de APIs ou páginas estáticas (que não exigem interação dinâmica).
+
+### Pacotes úteis em Julia
+
+-   HTTP.jl: para fazer requisições HTTP (GET, POST, etc.).
+
+-   Gumbo.jl: para fazer parsing de HTML, transformando a página em uma árvore navegável.
+
+-   Cascadia.jl: para selecionar elementos HTML com CSS Selectors, semelhante ao funcionamento do rvest ou BeautifulSoup.
+
+-   JSON3.jl: para processar dados em formato JSON (muito comum em APIs).
+
+# Regras
+
+Como saber se é permitido?
+
+Observar os Termos de Serviço (Terms of Service – ToS) / Termos e Condições / Legal do site e procurar por atividades ilegais, restrições de acesso automatizado ou uso não autorizado do site; Fazer análise dos headers; Ver se há algo que impeça (como CAPTCHAs ); Mais detalhes em: <https://medium.com/>@datajournal/check-if-a-website-allows-scraping-77122e9aa4fb.
+
+Robots.txt -Especifica quais sites podem ou não ser acessados por robôs, regras gerais de acesso a páginas, imagens, etc. Pode ser encontrado (se existir em \*/robots.txt), mais detalhes em: <https://rockcontent.com/br/blog/robots-txt/,> entretanto quando estiver escrito na pagina "Disallow" é o que não permitido utilizar, já o allow diz o que pode ser acessado
+
+Boas práticas
+
+Evite fazer download das páginas web; Não envie muitas requisições em pouco tempo (você pode ser bloqueado ou derrubar o site). Por isso é importante incluir time.sleep(1) ou Sys.sleep(1) no seu código. Ademais caso não utilizei, pode ser que sobrecarregue o site e ele acabe caindo, e se isso acontece pode ser considerado crime. Coloque tempo suficiente para as páginas carregarem no seu computador (varia com velocidade do computador e qualidade da internet, pois pode ser que o site não carregue e de errado o web);
+
+NÃO FAÇA WEB SCRAPING ONDE NÃO É PERMITIDO!
+
+# Exemplo
+
+Queremos acesasr o página do <https://en.wikipedia.org/wiki/List_of_statisticians,> da lista de estatísticos do Wikipedia, depos acessar a página do Fisher, Sir Ronald A.
+
+1)  Instalar pacotes necessários:\
+
+```{julia}
+using Pkg
+Pkg.add("HTTP")
+Pkg.add("Gumbo")
+Pkg.add("Cascadia")
+Pkg.add("CSV")
+Pkg.add("DataFrames")
+```
+
+2)  Carregar os pacotes:
+
+```{julia}
+using HTTP
+using Gumbo
+using Cascadia
+```
+
+3)  Acessar a página de estatísticos
+
+```{julia}
+# Como sabemos a pagina em si que queremos fazer o WebScraping, apenas salvamos e
+url = "https://en.wikipedia.org/wiki/List_of_statisticians"
+
+# Fazendo a requisição
+resp = HTTP.get(url) # estamos pedindo para o computador visitar um site (no endereço url) e trazer de volta tudo o que ele encontrar lá.  O que ele traz de volta vai para a variável resp
+
+html = String(resp.body) #já aqui o resp.body corresponde com o corpo da resposta do site. Mas ele vem como uma sequência de bytes, o que não conseguimos ler diretamente.  Tomando por completo, String(resp.body), transforma esses bytes em uma string de texto, assim conseguimos ler 
+
+# Fazendo o parsing do HTML
+parsed = parsehtml(html)
+#Acima temos um comando que diz pegue o texto da página e transforme em uma estrutura que eu possa explorar e navegar, de um modo esdrúxulo. De um jeito mais detalhadamente: o html vem como só como um grande texto corrido com tags como <html>, <body>, <p>, <table>, <div>, etc. E como queremos fazer scraping, precisamos entender a estrutura dos elementos da página (o que está dentro de quê). Para isso usamos o comando parsehtml(html) que faz a função que lê esse texto e transforma em uma estrutura de elementos em que podemos manipular no código. Agora então é possivel perguntar: 
+#"me dê todos os parágrafos <p>".
+#Ou: "me dê todas as tabelas <table>".
+#Ou: "me dê todos os links <a>".
+#O que será muito importante para tarefas futuras
+
+# Selecionando todos os links na lista
+selector = Selector("div.mw-parser-output ul li a") 
+#Aqui acaba sendo um pouco mais trabalhoso de se entender, mas não tão difícil. De um certo modo quero um seletor que me permita pegar os links (<a>) que estão dentro de listas (<ul> <li>) que estão dentro de um bloco com a classe mw-parser-output.
+#Destrinchar com calma temos "div.mw-parser-output" que pega um elemento <div> com a classe mw-parser-output. se aprofundando um pouco mais temos que em "div.mw-parser-output" o ".mw-parser-output"   significa classe chamada mw-parser-output".
+#em "ul", ele pega as listas não ordenadas (<ul>) que estão dentro dessa div. Em sequência o "li" pega os itens da lista (<li>).E por fim "a" pega os links (<a>) dentro desses <li>.
+
+elements = eachmatch(selector, parsed.root) #Em eachmatch percorre a árvore HTML (parsed.root) e procura todos os elementos que correspondem ao seu selector que você criou antes.
+
+# Criando listas para armazenar nomes e links
+nomes = String[]
+links = String[]
+
+# Mostrando os nomes e seus links
+for el in elements #aqui pegamos todos os nomes de quem está na lista
+    nome = strip(text(el)) 
+    link = get(el.attributes, "href", "")
+    println("Nome: ", nome)
+    println("Link: https://en.wikipedia.org", link)
+    println("-----------")
+end
+
+for el in elements #aqui pegamos todos os nomes de quem está na lista
+    nome = strip(text(el))  #Já aqui pega o texto que está dentro do link <a>, ou seja, o nome do estatístico.e em strip(...) remove espaços extras no começo e no fim.
+    link = get(el.attributes, "href", "") #agora em el.attributes acessa o dicionário de atributos do elemento HTML.  Já "href" referência o atributo que guarda o link de destino do <a>. Por fim "get(..., "href", "")" lê o href e se não existir, retorna uma string vazia "". Então de modo geral estou pegando o link para a página da Wikipedia de cada estatístico.
+    if startswith(link, "/wiki/")  # Aqui por segurança filtramos apenas links válidos (começam com /wiki/), por que as vezes pode ser que venha um link indesejado
+        push!(nomes, nome)
+        push! # nomes é uma lista (array) que você criou para guardar os nomes dos estatísticos.  push! é uma função que adiciona um novo item no final da lista.  Aqui, você está colocando o valor nome dentro da lista nomes.
+    end
+end
+
+# Criando um DataFrame com os resultados
+df = DataFrame(Nome = nomes, Link = links)
+
+# Salvando em CSV
+CSV.write("estatisticos.csv", df)
+
+println("Arquivo 'estatisticos.csv' criado com ", nrow(df), " registros!")
+```
+
+De modo geral o que esse código acima fez?
+
+Baixa o HTML da página. Analisa a árvore/estrutura. Filtra os elementos para que pega os <a> (links) dentro das listas (
+
+<ul>
+
+<li>
+
+). Exibe os nomes e links dos estatísticos.
+
+4)  Acessar a página do Ronald Fisher Para isso é preciso encontrar o link de Ronald Fisher automaticamente:
+
+```{julia}
+# Procurando o link de Ronald Fisher
+fisher_link = "" #então aqui criamos uma variável fisher_link vazia (string vazia), onde será guardado o link do Ronald Fisher quando encontrado.
+
+for el in elements #Começa um loop que vai passar por cada elemento da lista elements
+    if occursin("Ronald Fisher", text(el)) #Aqui o código verifica se o texto dentro do elemento (text(el)) contém a palavra "Ronald Fisher".  Em "occursin("Ronald Fisher", texto)" retorna true se "Ronald Fisher" estiver dentro do texto, e false se não.
+        fisher_link = get(el.attributes, "href", "") #Se encontrou "Ronald Fisher", ele pega o link do elemento, lendo o atributo "href".  O link é guardado na variável fisher_link.
+        break #Interrompe o loop assim que encontrar o primeiro elemento que contenha "Ronald Fisher".  Sem o break, o loop continuaria procurando, mesmo após achar o link.
+    end #fecha o if
+end #fecha o for
+
+println("Link do Ronald Fisher: https://en.wikipedia.org", fisher_link) #Imprime na tela o link completo da página de Ronald Fisher.
+```
+
+5)  Depois, acessamos a página dele:
+
+```{julia}
+# Acessando a página do Ronald Fisher
+fisher_url = "https://en.wikipedia.org/wiki/Ronald_Fisher"  #Aqui montamos a URL da página do Ronald Fisher. então pegamos a url base "https://en.wikipedia.org/wiki/Ronald_Fisher". 
+resp_fisher = HTTP.get(fisher_url) #Agora fazemos uma requisição HTTP: onde diz vai até o site da Wikipedia e baixa a página de Ronald Fisher. Guarda a resposta em "resp_fishe".
+html_fisher = String(resp_fisher.body) #transforma o conteúdo da resposta em uma string HTML. Onde "resp_fisher.body" diz  a respeito ao conteúdo da página em bytes. Pra resolver isso a "String(...)" converte para texto que possamos manipular
+parsed_fisher = parsehtml(html_fisher) #Agora analisamos e transformamos o HTML: Criando uma árvore de elementos HTML. Para que assim possamos "navegar" pela página e buscar as partes que queremos, podendo ser elas parágrafos, tabela e etc.
+
+# Pegando todos os parágrafos
+selector_p = Selector("p") #cria-se um seletor para pegar todos os elementos <p; Em HTML, <p> condiz como parágrafo. Esse seletor serve para buscar todos os textos da página que estão dentro de um parágrafo.
+paragrafos = [strip(text(p)) for p in eachmatch(selector_p, parsed_fisher.root)] # Faz uma lista com todos os parágrafos onde "eachmatch(selector_p, parsed_fisher.root)"  busca todos os elementos <p> na página. Em sequência "text(p)" pega o texto de cada parágrafo. "strip(...)" Remove espaços em branco no começo e no fim. Assim o resultado obtido é uma lista chamada paragrafos com o texto de todos os parágrafos da página.
+
+println("Parágrafos:")
+for p in paragrafos
+    println(p, "\n---\n")
+end
+#O código acima referese a imprimir todos os parágrafos, fazer um loop para cada parágrafo da lista. Imprime o texto e depois imprime uma linha com --- para separar visualmente.
+  
+# Extraindo a infobox
+selector_infobox = Selector("table.infobox") #Cria um seletor para buscar a infobox: Na Wikipedia, a infobox (aquela tabelinha lateral com resumo da pessoa) é uma tabela HTML com a classe infobox. O seletor "table.infobox" serve para buscar essa tabela.
+infobox_elements = eachmatch(selector_infobox, parsed_fisher.root) #Busca os elementos da infobox: "eachmatch(...)" busca todas as tabelas com a classe infobox. Normalmente só existe uma.
+
+tabela = "" #Cria uma variável tabela inicialmente vazia (caso não encontre a infobox).
+
+if !isempty(infobox_elements)
+    tabela = text(infobox_elements[1])
+end
+#Acima pega o texto da primeira infobox (infobox_elements[1]). Em depois armazena esse texto na variável tabela.
+
+println("Tabela (Infobox):")
+println(tabela) #Por fim mostra o texto da infobox na tela.
+```
+
+O que esse código acima fez?
+
+Uma lista de estatísticos, com os nomes e links. O link da página de Ronald Fisher. O primeiro parágrafo da página dele, que normalmente é um resumo biográfico.
+
+Assim realizamos um WebScraping de um modo simples e rápido no Júlia.
+
+Ademais abaixo temos o mesmo exemplo em R e em Python para motivos de comparação.
+
+Em R
+
+```{r}
+# Instalando os pacotes necessário
+install.packages(c("rvest", "httr", "dplyr", "readr"))
+
+library(httr)
+library(rvest)
+library(dplyr)
+library(readr)
+
+url <- "https://en.wikipedia.org/wiki/List_of_statisticians"
+resp <- GET(url)
+html <- content(resp, as = "text")
+parsed <- read_html(html)
+
+elements <- html_elements(parsed, "div.mw-parser-output ul li a")
+
+nomes <- character()
+links <- character()
+
+for (el in elements) {
+  nome <- html_text(el, trim = TRUE)
+  link <- html_attr(el, "href")
+  if (!is.na(link) && startsWith(link, "/wiki/")) {
+    nomes <- c(nomes, nome)
+    links <- c(links, link)
+  }
+}
+
+df <- data.frame(Nome = nomes, Link = links)
+write_csv(df, "estatisticos.csv")
+
+fisher_link <- ""
+for (el in elements) {
+  if (grepl("Ronald Fisher", html_text(el))) {
+    fisher_link <- html_attr(el, "href")
+    break
+  }
+}
+cat("Link do Ronald Fisher: https://en.wikipedia.org", fisher_link, "\n")
+
+
+fisher_url <- "https://en.wikipedia.org/wiki/Ronald_Fisher"
+resp_fisher <- GET(fisher_url)
+html_fisher <- content(resp_fisher, as = "text")
+parsed_fisher <- read_html(html_fisher)
+
+paragrafos <- html_elements(parsed_fisher, "p") %>%
+  html_text(trim = TRUE)
+
+cat("Parágrafos:\n")
+for (p in paragrafos) {
+  cat(p, "\n---\n")
+}
+
+
+infobox <- html_element(parsed_fisher, "table.infobox")
+tabela <- if (!is.null(infobox)) html_text(infobox) else ""
+cat("Tabela (Infobox):\n")
+cat(tabela, "\n")
+
+```
+
+Em Python
+
+```{python}
+import requests
+from bs4 import BeautifulSoup
+import pandas as pd
+
+url = "https://en.wikipedia.org/wiki/List_of_statisticians"
+resp = requests.get(url)
+soup = BeautifulSoup(resp.text, "html.parser")
+
+elements = soup.select("div.mw-parser-output ul li a")
+
+nomes = []
+links = []
+
+for el in elements:
+    nome = el.get_text(strip=True)
+    link = el.get("href", "")
+    if link.startswith("/wiki/"):
+        nomes.append(nome)
+        links.append(link)
+
+df = pd.DataFrame({"Nome": nomes, "Link": links})
+df.to_csv("estatisticos.csv", index=False)
+
+
+fisher_link = ""
+for el in elements:
+    if "Ronald Fisher" in el.get_text():
+        fisher_link = el.get("href", "")
+        break
+
+print("Link do Ronald Fisher: https://en.wikipedia.org" + fisher_link)
+
+
+fisher_url = "https://en.wikipedia.org/wiki/Ronald_Fisher"
+resp_fisher = requests.get(fisher_url)
+soup_fisher = BeautifulSoup(resp_fisher.text, "html.parser")
+
+paragrafos = [p.get_text(strip=True) for p in soup_fisher.find_all("p")]
+print("Parágrafos:")
+for p in paragrafos:
+    print(p)
+    print("---")
+
+
+infobox = soup_fisher.find("table", {"class": "infobox"})
+tabela = infobox.get_text(strip=True) if infobox else ""
+print("Tabela (Infobox):")
+print(tabela)
+
+```
+
+Comparação Detalhada: Julia, R e Python no Web Scraping Quando comparamos Julia, R e Python para tarefas de web scraping, percebemos diferenças importantes que vão desde a sintaxe até a maturidade do ecossistema.
+
+1)  Sintaxe e Legibilidade Python é, sem dúvida, a linguagem mais direta e legível para web scraping. Com bibliotecas como BeautifulSoup e requests, o código se torna bastante intuitivo. A seleção de elementos com seletores CSS (select) é muito semelhante à que encontramos no desenvolvimento web, o que facilita bastante o entendimento, mesmo para quem não domina a linguagem profundamente.
+
+R, com o pacote rvest, também oferece uma abordagem bastante expressiva e legível, principalmente para quem já está habituado com a lógica do tidyverse. O uso do operador %\>% permite encadear várias operações de maneira limpa, como ler HTML, navegar pela árvore de elementos e extrair textos. O foco declarativo torna o código bem próximo da descrição da tarefa: "ler", "navegar", "extrair".
+
+Julia, por sua vez, ainda está em um estágio de maturidade menor nesse aspecto. As bibliotecas HTTP.jl, Gumbo.jl e Cascadia.jl permitem realizar web scraping de forma eficiente, mas a sintaxe é um pouco mais "manual" e exige um entendimento maior de como funciona o parsing e a seleção de elementos. O código pode parecer um pouco mais técnico, mas não é necessariamente mais difícil; apenas exige mais configuração e conhecimento prévio.
+
+2)  Maturidade e Ecossistema Em termos de ecossistema, Python é imbatível. Há uma enorme quantidade de bibliotecas, extensões, tutoriais, fóruns e exemplos de web scraping, incluindo scraping de páginas dinâmicas com JavaScript através de ferramentas como Selenium e Playwright.
+
+R possui um conjunto de ferramentas bem estável para web scraping de páginas estáticas: rvest, httr, xml2. Apesar de menos extenso que o Python, cobre bem a maioria dos casos de uso clássico, especialmente aqueles que não envolvem interação dinâmica com páginas web.
+
+Julia, embora com bibliotecas fundamentais disponíveis, ainda carece de frameworks integrados e de uma comunidade focada especificamente em scraping. Além disso, a quantidade de tutoriais e exemplos práticos é muito menor, o que pode dificultar para quem está começando. Ainda assim, para quem já trabalha com Julia em contextos de computação científica ou modelagem matemática, integrar o scraping à análise pode ser uma vantagem significativa.
+
+3)  Performance e Eficiência Em termos de velocidade pura, Julia pode levar vantagem, graças ao seu compilador JIT (Just-In-Time), que gera código muito eficiente para operações intensivas. No entanto, para tarefas comuns de web scraping (requisições HTTP, parsing de HTML), essa vantagem prática é marginal, já que o gargalo costuma ser o tempo de resposta da própria rede ou do servidor.
+
+Python e R são suficientemente rápidos para a maioria das tarefas de web scraping de pequeno e médio porte. A diferença real aparece apenas quando se pensa em scraping de milhares ou milhões de páginas, onde soluções mais otimizadas podem ser consideradas.
+
+4)  Integração com Outras Tarefas Python se destaca pela facilidade de integração com bancos de dados, automação, machine learning e análise de dados, o que permite criar pipelines completos de coleta e análise de informações.
+
+R é ideal para quem deseja rapidamente coletar dados e já realizar análises estatísticas, gráficos ou relatórios diretamente no mesmo ambiente.
+
+Julia, por sua vez, é perfeita para quem deseja integrar o scraping com cálculos matemáticos pesados, simulações ou processamento numérico intensivo, tudo sem sair do mesmo ecossistema.
+
+5)  Quando usar cada uma? Use Python se deseja uma solução rápida, bem suportada, com possibilidade de scraping dinâmico e ampla comunidade.
+
+Use R se quer um fluxo direto do scraping para a análise estatística e visualização, principalmente com páginas estáticas e bem estruturadas.
+
+Use Julia se já está inserido no ecossistema Julia e precisa integrar a coleta de dados com análises computacionais complexas, ou se quer máxima performance.

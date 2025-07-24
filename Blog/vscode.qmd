@@ -2,9 +2,8 @@
 title: "Como programar em Julia no Vscode"
 description: |
      Aprenda o como utilizar o Julia no Vscode, da configuração aos primeiros passos.
-  
 categories:
-  - Quarto
+  - IDE
 author:
   - name: Guilherme Duarte
     affiliation: "Universidade Estadual de Campinas"
@@ -12,7 +11,7 @@ author:
     affiliation: "Universidade Estadual de Campinas"
     url: https://github.com/phgelias
     orcid: 0009-0003-8992-9827
-date: "2025-06-25"
+date: "2025-07-05"
 image: imagens/logo_vscode.png
 lang: pt
 format:
@@ -20,14 +19,14 @@ format:
     toc: true
     toc-depth: 3
     self-contained: false
-draft: true
+draft: false
 ---
 
 ## Introdução
 
-A linguagem Julia tem ganhado cada vez mais espaço entre cientistas de dados, estatísticos, engenheiros e matemáticos, graças à sua velocidade e sintaxe simples. Uma das formas mais práticas de programar em Julia é por meio do Visual Studio Code (VS Code), um editor leve, moderno e altamente extensível.
+A linguagem Julia tem ganhado cada vez mais espaço entre cientistas de dados, estatísticos, economistas, engenheiros e matemáticos. Isto, graças à sua velocidade de processamento e sintaxe simples. Uma das formas mais práticas de programar em Julia é por meio do Visual Studio Code (VS Code), um editor leve, moderno e altamente extensível.
 
-Neste post, vamos mostrar como configurar e usar o Julia no VS Code — ideal para quem está começando do zero.
+Neste post, mostraremos como configurar e usar o Julia no VS Code (ideal para quem está começando do zero).
 
 ## Pré-requisitos
 
@@ -62,3 +61,8 @@ Com a extensão do Julia instalada, chegou a hora de pôr a mão na massa. Para 
 ![Olá Mundo!](imagens/helloworld.png)
 
 Pronto! Agora você já pode começar a programar e desenvolver seus projetos em Julia com o VS Code!
+
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::
