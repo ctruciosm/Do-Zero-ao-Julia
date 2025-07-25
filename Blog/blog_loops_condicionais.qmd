@@ -1,0 +1,294 @@
+---
+title: "Loops e condicionais em Julia"
+description: |
+  Loops e condicionais em Julia são estruturas fundamentais para controle de fluxo. Condicionais (if, elseif, else) permitem decisões baseadas em condições lógicas. Loops (for, while) repetem blocos de código, facilitando a automação de tarefas repetitivas e processamento de dados.
+categories:
+  - Aplicação
+  - Visualização de Dados
+author:
+  - name: Sarah Teixeira
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/astrogenun
+date: "2025-06-05"
+image: imagens/eda-em-julia.png
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+draft: true
+engine: knitr
+---
+
+# Introdução
+
+------------------------------------------------------------------------
+
+Julia é uma linguagem de programação de alto desempenho voltada para computação científica e análise de dados. Neste artigo, vamos explorar dois dos principais mecanismos de controle de fluxo de sua sintaxe poderosa: **loops** (laços de repetição) e **condicionais**. Com eles, você pode automatizar tarefas repetitivas e tomar decisões baseadas em condições, escrevendo códigos mais flexíveis e eficientes.
+
+## Condicionais
+
+------------------------------------------------------------------------
+
+Em Julia, a estrutura condicional é semelhante à de outras linguagens, como Python e C. São utilizadas estruturas como if, elseif e else, que servem para controlar o fluxo de execução de um programa, permitindo que decisões sejam tomadas com base em condições booleanas (ou seja, que podem ser verdadeiras ou falsas).
+
+#### Sintaxe basica:
+
+```         
+if condição_1
+   
+elseif condição_2
+    
+else
+    condicao_complementar
+end
+```
+
+#### Exemplo:
+
+```{julia}
+x = 50
+
+if x > 0
+    println("x é positivo")
+elseif x < 0
+    println("x é negativo")
+else
+    println("x é zero")
+end
+
+```
+
+`if` e uma estrutura condicional inicial. Se a condicao for verdadeira (True), o bloco de codigo dentro de `if` sera executado. Caso contrario (ou seja, se a condicao for falsa (False)), o programa dara continuidade em `elseif` ou `else` caso existirem. Se nao houverem outras condicoes, o bloco sera ignorado.
+
+> `end` sempre fecha a estrutura.
+
+> parentereses nao sao necessarios
+
+### Operador ternario
+
+O **operador ternário** é uma forma alternativa mais concisa de escrever uma **expressão condicional** em uma única linha. Ele serve para escolher entre dois valores com base em uma condição booleana, sendo uma alternativa mais compacta ao tradicional `if-else`.
+
+```         
+condição ? valor_verdadeiro : valor_falso
+```
+
+#### Exemplo:
+
+```{julia}
+x = 50
+
+resultado = x > 5 ? "Maior que 5" : "Menor ou igual a 5"
+```
+
+#### Equivalencia com if-else:
+
+```{julia}
+x = 50
+if x > 5
+    resultado = "Maior que 5"
+else
+    resultado = "Menor ou igual a 5"
+end
+```
+
+Use o operador ternario quando a condição for simples e o resultado for um valor ou expressão curto. Evite quando a lógica for complexa ou envolver muitos passos, pois pode dificultar a leitura.
+
+## Loops
+
+------------------------------------------------------------------------
+
+Loops são estruturas fundamentais em qualquer linguagem de programação, e em Julia eles são especialmente eficientes e versáteis. Eles sao estruturas de repeticao que te permitem executar um bloco de codigo diversas vezes, automatizando a tarefa. Julia possui estruturas como `for`, `while`, `zip`, `break` e `continue`.
+
+### Loop `for`
+
+O loop `for` é usado para **iterar** sobre uma coleção de elementos, como vetores, ranges, strings ou quaisquer objetos iteráveis.
+
+```         
+for variável in coleção
+    # condicao a ser testada
+end
+```
+
+No caso dessa condicional, `for` é o que ira definir o loop, `in` definira o intervalo de iteracao (que depende da variavel que voce declarou para ser condicionada ao loop), e `end` indica o fim do loop.
+
+#### Exemplos:
+
+```{julia}
+# Loop for em um range
+
+print("\nIteracao em range\n")
+for i in 1:5
+    println("O valor de i é ", i)
+end
+```
+
+```{julia}
+# Loop for em uma lista
+
+print("\nIteracao em lista\n")
+nomes = ["Ana", "Bruno", "Carlos"]
+
+for nome in nomes
+    println("Olá, ", nome, "!")
+end
+```
+
+```{julia}
+# Loop for em uma tupla
+
+print("\nIteracao em tupla\n") 
+t = ("Do", "Zero", "ao", "Julia") 
+for i in t
+    println(i) 
+end
+```
+
+### Loop `while`
+
+O loop `while` executa repetidamente um bloco de código enquanto uma condição for verdadeira. Da mesma forma que o for, o codigo passa a executar a linha ou o chunk conseguinte do loop. E, caso a condicao inicial for falsa, o chunk apenas sera ignorado.
+
+#### Sintaxe basica:
+
+```         
+while condição
+    # condicao a ser testada
+end
+```
+
+#### Exemplo:
+
+```{julia}
+# Uso do while com a Sequencia de Fibonacci 
+
+len = 10
+
+# Primeiros dois valores
+a = 0
+b = 1
+
+# Valor de iteracao
+itr = 0
+
+while itr < len
+   print(a, ", ")
+  
+   c = a + b
+   
+   global a = b
+   global b = c
+   
+   global itr += 1
+   
+  end
+```
+
+> Use `while` quando não souber exatamente quantas repetições são necessárias, mas souber quando parar.
+>
+> Um `while true` cria um **loop infinito**. Só use se tiver certeza de que haverá uma **condição de parada** interna, como `break`.
+
+## Controlando `for` e `while` com `break` e `continue`
+
+------------------------------------------------------------------------
+
+Julia oferece duas instruções importantes para **controlar o fluxo** dentro de loops: `break` e `continue`.
+
+### Break
+
+A palavra-chave `break` em Julia e usado para parar um loop imediatamente. Quando ele e executado, o compilador encerra o loop imediatamente, executando o chunk fora do loop conseguinte.
+
+#### Sintaxe basica:
+
+```{Loop}
+    # condicao a ser testada
+    break
+    # condicao complementar
+end
+```
+
+#### Exemplo:
+
+```{julia}
+for i in 1:10
+    if i == 5
+        break
+    end
+    println(i)
+end
+```
+
+### Continue
+
+A palavra-chave `continue` em Julia pula o valor declarado imediatamente e pass a iterar para o proximo valor de iteracao no loop. Ou seja, ele pula para a próxima iteração, sem executar o restante do bloco atual.
+
+#### Sintaxe basica:
+
+```         
+Loop
+    # condicao a ser testada
+    continue
+    # condicao complementar
+end
+```
+
+#### Exemplo:
+
+```{julia}
+for i in 1:5
+    if i == 3
+        continue
+    end
+    println(i)
+end
+```
+
+## Iterando sobre múltiplos coletores
+
+A função `zip` é uma ferramenta muito útil em Julia para trabalhar com múltiplos coletores, como listas e vetores, simultaneamente. `zip` cria um iterador que combina múltiplos coletores em paralelo. Em cada iteração, `zip` retorna uma tupla contendo o elemento correspondente de cada coletor.
+
+#### Sintaxe basica:
+
+```         
+{zip(coletor_1, coletor_2, ...)}
+```
+
+Depois, você pode iterar sobre esse `zip` com um `for`.
+
+**Exemplos:**
+
+```{julia}
+nomes = ["Ana", "Bruno", "Carlos"]
+idades = [25, 30, 22]
+
+for (nome, idade) in zip(nomes, idades)
+    println("$nome tem $idade anos")
+end
+
+```
+
+> O `zip` termina na coleção mais curta.
+
+```{julia}
+# Exemplo com listas de tamanhos diferentes
+a = [1, 2, 3, 4]
+b = ["x", "y"]
+
+for (num, letra) in zip(a, b)
+    println("$num => $letra")
+end
+```
+
+# Consideracoes finais
+
+Loops são essenciais para escrever códigos eficientes em Julia. Adequando seu codigo, e possivel eexplorar ao maximo a performance da linguagem em tarefas que exigem muitas repetições, como simulações, análises de dados ou algoritmos numéricos.
+
+> **Explore mais:** `Comprehensions` são uma forma compacta de criar vetores, matrizes e até dicionários. Ele pode ser muito mais rápido que loops utilizando `push!`.
+
+Referências e mais detalhes podem ser encontrados nesses endereços *web*:
+
+-   [Geeks for Geeks](https://www.geeksforgeeks.org/)
+-   [jlHub](https://www.jlhub.com/)
+
+::: {.callout-warning appearance="simple"}
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::
