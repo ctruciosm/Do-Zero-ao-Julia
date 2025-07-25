@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt" xml:lang="pt"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.29">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Arthur Dionizio Martins da Silva">
+<meta name="author" content="Henrique Velloso">
+<meta name="description" content="Tutorial cujo objetivo é apresentar os conceitos e dissecar os passos por trás da instalação e configuração de Julia e Quarto em sua máquina.">
+
+<title>Instalação e Configuração de Julia e Quarto no VS Code – Do Zero ao Julia</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-0815c480559380816a4d1ea211a47e91.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-dfb324f25d9b1687192fa8be62ac8f9c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Nenhum resultado",
+    "search-matching-documents-text": "documentos correspondentes",
+    "search-copy-link-title": "Copiar link para a busca",
+    "search-hide-matches-text": "Esconder correspondências adicionais",
+    "search-more-match-text": "mais correspondência neste documento",
+    "search-more-matches-text": "mais correspondências neste documento",
+    "search-clear-button-title": "Limpar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Procurar"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Do Zero ao Julia</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Procurar"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Alternar de navegação" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../oprojeto.html"> 
+<span class="menu-text">O projeto</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../equipe.html"> 
+<span class="menu-text">Equipe</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../blog.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../tutoriais.html"> 
+<span class="menu-text">Tutoriais</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../meetup.html"> 
+<span class="menu-text">Meetup</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Nesta página</h2>
+   
+  <ul>
+  <li><a href="#introdução" id="toc-introdução" class="nav-link active" data-scroll-target="#introdução">Introdução</a>
+  <ul class="collapse">
+  <li><a href="#o-que-é-julia" id="toc-o-que-é-julia" class="nav-link" data-scroll-target="#o-que-é-julia">O que é Julia?</a></li>
+  <li><a href="#o-que-é-quarto" id="toc-o-que-é-quarto" class="nav-link" data-scroll-target="#o-que-é-quarto">O que é Quarto?</a></li>
+  <li><a href="#como-o-quarto-se-relaciona-com-a-linguagem-julia" id="toc-como-o-quarto-se-relaciona-com-a-linguagem-julia" class="nav-link" data-scroll-target="#como-o-quarto-se-relaciona-com-a-linguagem-julia">Como o Quarto se relaciona com a linguagem Julia?</a></li>
+  <li><a href="#o-ciclo-de-criação-de-conteúdo-com-julia-e-quarto" id="toc-o-ciclo-de-criação-de-conteúdo-com-julia-e-quarto" class="nav-link" data-scroll-target="#o-ciclo-de-criação-de-conteúdo-com-julia-e-quarto">O ciclo de criação de conteúdo com Julia e Quarto</a></li>
+  </ul></li>
+  <li><a href="#etapas-para-o-uso-do-quarto-com-julia" id="toc-etapas-para-o-uso-do-quarto-com-julia" class="nav-link" data-scroll-target="#etapas-para-o-uso-do-quarto-com-julia">Etapas para o uso do Quarto com Julia</a>
+  <ul class="collapse">
+  <li><a href="#etapa-1-instalando-as-ferramentas-necessárias" id="toc-etapa-1-instalando-as-ferramentas-necessárias" class="nav-link" data-scroll-target="#etapa-1-instalando-as-ferramentas-necessárias">Etapa 1 — Instalando as ferramentas necessárias</a></li>
+  <li><a href="#etapa-2-garantindo-que-julia-e-quarto-estão-no-path" id="toc-etapa-2-garantindo-que-julia-e-quarto-estão-no-path" class="nav-link" data-scroll-target="#etapa-2-garantindo-que-julia-e-quarto-estão-no-path">Etapa 2 — Garantindo que Julia e Quarto estão no PATH</a></li>
+  <li><a href="#etapa-3-configurar-julia-no-vs-code" id="toc-etapa-3-configurar-julia-no-vs-code" class="nav-link" data-scroll-target="#etapa-3-configurar-julia-no-vs-code">Etapa 3 — Configurar Julia no VS Code</a></li>
+  <li><a href="#etapa-4-configurar-o-quarto-no-vs-code" id="toc-etapa-4-configurar-o-quarto-no-vs-code" class="nav-link" data-scroll-target="#etapa-4-configurar-o-quarto-no-vs-code">Etapa 4 — Configurar o Quarto no VS Code</a></li>
+  <li><a href="#etapa-5-criar-seu-primeiro-arquivo-.qmd-com-julia" id="toc-etapa-5-criar-seu-primeiro-arquivo-.qmd-com-julia" class="nav-link" data-scroll-target="#etapa-5-criar-seu-primeiro-arquivo-.qmd-com-julia">Etapa 5 — Criar seu primeiro arquivo <code>.qmd</code> com Julia</a></li>
+  <li><a href="#etapa-6-renderizar-o-arquivo-.qmd-para-gerar-html" id="toc-etapa-6-renderizar-o-arquivo-.qmd-para-gerar-html" class="nav-link" data-scroll-target="#etapa-6-renderizar-o-arquivo-.qmd-para-gerar-html">Etapa 6 — Renderizar o arquivo <code>.qmd</code> para gerar HTML</a></li>
+  <li><a href="#etapa-7-publicar-seu-projeto-online" id="toc-etapa-7-publicar-seu-projeto-online" class="nav-link" data-scroll-target="#etapa-7-publicar-seu-projeto-online">Etapa 7 — Publicar seu projeto online</a></li>
+  <li><a href="#opção-3-hospedagem-própria" id="toc-opção-3-hospedagem-própria" class="nav-link" data-scroll-target="#opção-3-hospedagem-própria">Opção 3: Hospedagem própria</a></li>
+  </ul></li>
+  <li><a href="#conclusão" id="toc-conclusão" class="nav-link" data-scroll-target="#conclusão">Conclusão</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Instalação e Configuração de Julia e Quarto no VS Code</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Quarto</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Tutorial cujo objetivo é apresentar os conceitos e dissecar os passos por trás da instalação e configuração de Julia e Quarto em sua máquina.
+  </div>
+</div>
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Autores</div>
+  <div class="quarto-title-meta-heading">Afiliação</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author"><a href="https://github.com/Arthur-Dionizio">Arthur Dionizio Martins da Silva</a> <a href="https://orcid.org/0009-0002-4313-9187" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Universidade Estadual de Campinas
+          </p>
+      </div>
+    <div class="quarto-title-meta-contents">
+    <p class="author"><a href="https://github.com/henriqueavelloso">Henrique Velloso</a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Universidade Estadual de Campinas
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Data de Publicação</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">3 de junho de 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introdução" class="level2">
+<h2 class="anchored" data-anchor-id="introdução">Introdução</h2>
+<section id="o-que-é-julia" class="level3">
+<h3 class="anchored" data-anchor-id="o-que-é-julia">O que é Julia?</h3>
+<p>Julia é uma linguagem de programação moderna, criada com o objetivo de unir alto desempenho computacional com uma sintaxe simples e expressiva. Ela foi desenvolvida para atender às necessidades de cientistas, engenheiros, matemáticos, analistas de dados e outros profissionais que trabalham com cálculos numéricos intensivos ou aplicações técnicas.</p>
+<p>Julia se destaca por oferecer:</p>
+<ul>
+<li><strong>Desempenho comparável ao de linguagens como C ou Fortran</strong>, graças à compilação just-in-time (JIT) com o uso do LLVM.</li>
+<li><strong>Sintaxe de alto nível semelhante à do Python</strong>, tornando-a acessível a iniciantes e familiar a quem já tem experiência com outras linguagens populares.</li>
+<li><strong>Suporte nativo a operações matemáticas vetoriais, álgebra linear, otimização, estatística, machine learning e simulações científicas</strong>.</li>
+</ul>
+<section id="exemplos-de-aplicações-da-linguagem-julia" class="level4">
+<h4 class="anchored" data-anchor-id="exemplos-de-aplicações-da-linguagem-julia">Exemplos de aplicações da linguagem Julia</h4>
+<p>Com Julia, você pode:</p>
+<ul>
+<li>Realizar <strong>cálculos matemáticos complexos e pesados</strong> com alta performance.</li>
+<li>Desenvolver e aplicar <strong>modelos de machine learning e aprendizado estatístico</strong>.</li>
+<li>Criar <strong>visualizações e gráficos interativos</strong> com bibliotecas especializadas.</li>
+<li>Automatizar tarefas e scripts científicos.</li>
+<li>Desenvolver <strong>websites, blogs técnicos e relatórios interativos</strong> com ferramentas como o Quarto.</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="o-que-é-quarto" class="level3">
+<h3 class="anchored" data-anchor-id="o-que-é-quarto">O que é Quarto?</h3>
+<p>Quarto é uma plataforma de publicação científica e técnica, que permite a criação de documentos dinâmicos e reprodutíveis a partir da integração de texto explicativo com blocos de código executável. É especialmente útil para cientistas, analistas de dados, educadores e qualquer pessoa que deseje apresentar resultados computacionais de forma clara e interativa.</p>
+<p>Com Quarto, é possível gerar:</p>
+<ul>
+<li><strong>Relatórios técnicos</strong></li>
+<li><strong>Artigos científicos</strong></li>
+<li><strong>Slides e apresentações</strong></li>
+<li><strong>Blogs e sites</strong></li>
+<li><strong>Livros e PDFs interativos</strong></li>
+</ul>
+<p>Tudo isso é construído a partir de arquivos <code>.qmd</code> (Quarto Markdown), que permitem misturar:</p>
+<ul>
+<li><strong>Texto explicativo</strong> com formatação simples em Markdown.</li>
+<li><strong>Códigos executáveis</strong> escritos em linguagens como Julia, Python, R, Bash, entre outras.</li>
+<li><strong>Resultados embutidos</strong>, como gráficos, tabelas e saídas de código, que são gerados automaticamente no processo de renderização.</li>
+</ul>
+<hr>
+</section>
+<section id="como-o-quarto-se-relaciona-com-a-linguagem-julia" class="level3">
+<h3 class="anchored" data-anchor-id="como-o-quarto-se-relaciona-com-a-linguagem-julia">Como o Quarto se relaciona com a linguagem Julia?</h3>
+<p>O Quarto é projetado para ser compatível com diversas linguagens de programação — entre elas, Julia. Isso significa que é possível escrever blocos de código Julia dentro de um arquivo <code>.qmd</code>, e o Quarto será responsável por executar esse código durante o processo de renderização, integrando automaticamente os resultados ao documento final.</p>
+<p>Por exemplo, você pode inserir um trecho de código que gera um gráfico em Julia, e esse gráfico será exibido diretamente no HTML ou PDF gerado, sem necessidade de inserções manuais.</p>
+<section id="benefícios-dessa-integração" class="level4">
+<h4 class="anchored" data-anchor-id="benefícios-dessa-integração">Benefícios dessa integração:</h4>
+<ul>
+<li><strong>Documentação reprodutível</strong>: os resultados apresentados são gerados no momento da renderização, com base no código que você mesmo escreveu.</li>
+<li><strong>Atualização automática</strong>: se o código for alterado, os resultados são atualizados automaticamente na próxima renderização.</li>
+<li><strong>Organização eficiente</strong>: o conteúdo textual e computacional fica centralizado em um único arquivo, o que facilita a manutenção e a leitura.</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="o-ciclo-de-criação-de-conteúdo-com-julia-e-quarto" class="level3">
+<h3 class="anchored" data-anchor-id="o-ciclo-de-criação-de-conteúdo-com-julia-e-quarto">O ciclo de criação de conteúdo com Julia e Quarto</h3>
+<p>Para aproveitar o melhor das duas ferramentas, siga um fluxo simples de trabalho:</p>
+<ol type="1">
+<li><strong>Instalar as ferramentas necessárias</strong>:
+<ul>
+<li>A linguagem Julia</li>
+<li>A plataforma Quarto</li>
+<li>Alguma IDE (Interface de Desenvolvimento Integrado), como o Visual Studio Code (VS Code)</li>
+</ul></li>
+<li><strong>Criar um novo arquivo <code>.qmd</code></strong>:
+<ul>
+<li>Escreva seu conteúdo explicativo usando Markdown.</li>
+<li>Adicione blocos de código com a linguagem Julia (ou outra de sua preferência).</li>
+</ul></li>
+<li><strong>Renderizar o arquivo com o Quarto</strong>:
+<ul>
+<li>Isso gerará uma saída como um HTML, PDF ou documento Word, com os resultados do código embutidos.</li>
+</ul></li>
+<li><strong>Publicar o conteúdo</strong>:
+<ul>
+<li>Se desejar, é possível publicar online seu blog ou site técnico com ferramentas de deploy, como GitHub Pages ou Quarto Publish.</li>
+</ul></li>
+</ol>
+<hr>
+</section>
+</section>
+<section id="etapas-para-o-uso-do-quarto-com-julia" class="level2">
+<h2 class="anchored" data-anchor-id="etapas-para-o-uso-do-quarto-com-julia">Etapas para o uso do Quarto com Julia</h2>
+<section id="etapa-1-instalando-as-ferramentas-necessárias" class="level3">
+<h3 class="anchored" data-anchor-id="etapa-1-instalando-as-ferramentas-necessárias">Etapa 1 — Instalando as ferramentas necessárias</h3>
+<section id="instalar-a-linguagem-julia" class="level4">
+<h4 class="anchored" data-anchor-id="instalar-a-linguagem-julia">1.1 Instalar a linguagem Julia</h4>
+<p>A linguagem Julia é o motor que vai executar os códigos nos seus arquivos <code>.qmd</code>. Para funcionar corretamente com o Quarto e com sua IDE (como o VS Code), é essencial que Julia esteja instalada e <strong>visível no PATH do sistema</strong>.</p>
+<p>Isso permitirá que outras ferramentas, como o VS Code e o Quarto, encontrem automaticamente o interpretador de Julia. Explicaremos adiante como garantir que todos esses programas estejam no <strong>PATH</strong>.</p>
+<blockquote class="blockquote">
+<p><strong>PATH</strong> é uma configuração do sistema operacional que diz onde estão os programas instalados. Quando um programa está no PATH, ele pode ser acessado de qualquer lugar (por exemplo, ao abrir o terminal e digitar <code>julia</code>).</p>
+</blockquote>
+<p>Você pode baixar o instalador oficial da Julia em: <a href="https://julialang.org/downloads/">https://julialang.org/downloads/</a></p>
+<hr>
+</section>
+<section id="instalar-o-quarto" class="level4">
+<h4 class="anchored" data-anchor-id="instalar-o-quarto">1.2 Instalar o Quarto</h4>
+<p>Faça o download e instale o Quarto a partir de:<br>
+<a href="https://quarto.org/docs/download">https://quarto.org/docs/download</a></p>
+<p>🔎 <strong>Importante</strong>: O Quarto não possui uma linguagem de programação própria — ele depende de encontrar o interpretador da linguagem que você deseja usar, como Julia, Python ou R. Portanto, para usar Julia em arquivos <code>.qmd</code>, o Quarto precisa saber onde está o executável da linguagem. Essa verificação é feita automaticamente se o executável estiver no PATH.</p>
+<hr>
+</section>
+<section id="instalar-uma-ide-interface-de-desenvolvimento-integrado" class="level4">
+<h4 class="anchored" data-anchor-id="instalar-uma-ide-interface-de-desenvolvimento-integrado">1.3 Instalar uma IDE (Interface de Desenvolvimento Integrado)</h4>
+<p>Uma <strong>IDE</strong> é um programa que facilita a escrita de código, oferecendo recursos como: - Realce de sintaxe - Auto-completar - Execução linha a linha - Depuração</p>
+<p>A mais recomendada para trabalhar com Julia + Quarto é o <strong>VS Code (Visual Studio Code)</strong>, pois é uma IDE leve, altamente extensível, com suporte robusto para várias linguagens.</p>
+<blockquote class="blockquote">
+<p>Você pode instalá-lo aqui: <a href="https://code.visualstudio.com/">https://code.visualstudio.com/</a></p>
+</blockquote>
+<p><strong>Importante:</strong> Independentemente de onde você instalar Julia, Quarto ou o VS Code (dentro ou fora da pasta do usuário), o que importa é que <strong>o caminho dos executáveis esteja no PATH</strong>, isto é, seja acessível pelo sistema.</p>
+<hr>
+</section>
+</section>
+<section id="etapa-2-garantindo-que-julia-e-quarto-estão-no-path" class="level3">
+<h3 class="anchored" data-anchor-id="etapa-2-garantindo-que-julia-e-quarto-estão-no-path">Etapa 2 — Garantindo que Julia e Quarto estão no PATH</h3>
+<p>Abra o terminal de seu sistema (Prompt de Comando, Terminal do MacOS ou Shell do Linux) e execute os comandos abaixo:</p>
+<section id="para-verificar-se-quarto-está-no-path" class="level4">
+<h4 class="anchored" data-anchor-id="para-verificar-se-quarto-está-no-path">Para verificar se Quarto está no PATH</h4>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> <span class="at">--version</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Se o retorno for algo como <code>1.7.29</code>, significa que o Quarto está corretamente configurado.</p>
+</section>
+<section id="para-verificar-se-julia-está-no-path" class="level4">
+<h4 class="anchored" data-anchor-id="para-verificar-se-julia-está-no-path">Para verificar se Julia está no PATH:</h4>
+<p>Abra o terminal de sua máquina e digite:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">julia</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Se o terminal abrir o <strong>REPL do Julia</strong> (ambiente interativo), então está tudo certo.</p>
+<hr>
+</section>
+<section id="se-um-dos-comandos-não-for-reconhecido-siga-os-passos" class="level4">
+<h4 class="anchored" data-anchor-id="se-um-dos-comandos-não-for-reconhecido-siga-os-passos">Se um dos comandos não for reconhecido, siga os passos:</h4>
+<ol type="1">
+<li><p>Descubra o local de instalação do programa. Exemplos comuns:</p>
+<pre><code>C:\Program Files\Quarto\bin
+C:\Users\Usuario\AppData\Local\Programs\Julia-1.x.x\bin</code></pre>
+<blockquote class="blockquote">
+<p>Observação: A pasta <code>AppData</code> pode estar oculta. Para revelá-la, no Explorador de Arquivos, vá em “Exibir” &gt; marque “Itens ocultos”.</p>
+</blockquote></li>
+<li><p>No Windows:</p>
+<ul>
+<li>Vá em <strong>Painel de Controle → Sistema → Configurações avançadas do sistema</strong></li>
+<li>Clique em <strong>“Variáveis de Ambiente…”</strong></li>
+<li>Em “Variáveis de sistema”, selecione <code>Path</code> e clique em <strong>Editar</strong></li>
+<li>Clique em <strong>Novo</strong> e adicione o caminho completo da pasta <code>bin</code></li>
+</ul></li>
+<li><p>Repita o processo para <strong>Julia</strong> e para o <strong>Quarto</strong>, se necessário.</p></li>
+<li><p>Reabra o terminal e <strong>refaça os testes</strong>.</p></li>
+</ol>
+<hr>
+</section>
+</section>
+<section id="etapa-3-configurar-julia-no-vs-code" class="level3">
+<h3 class="anchored" data-anchor-id="etapa-3-configurar-julia-no-vs-code">Etapa 3 — Configurar Julia no VS Code</h3>
+<section id="instalar-a-extensão-oficial-julia" class="level4">
+<h4 class="anchored" data-anchor-id="instalar-a-extensão-oficial-julia">3.1 Instalar a extensão oficial “Julia”</h4>
+<p>No VS Code:</p>
+<ul>
+<li>Acesse o menu de extensões (ícone de blocos à esquerda)</li>
+<li>Busque por <strong>“Julia”</strong> e instale <strong>apenas a extensão oficial</strong></li>
+<li>Após instalar, <strong>reinicie o VS Code</strong></li>
+</ul>
+<hr>
+</section>
+<section id="verificar-se-a-extensão-está-funcionando" class="level4">
+<h4 class="anchored" data-anchor-id="verificar-se-a-extensão-está-funcionando">3.2 Verificar se a extensão está funcionando</h4>
+<p>Abra um terminal dentro do próprio VS Code (Ctrl + `) e digite:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>julia</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Depois, no REPL do Julia, execute:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Sys</span>.<span class="cn">BINDIR</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Esse comando mostra o diretório onde o executável da Julia está localizado.</p>
+<hr>
+<p>Alternativamente, você também pode verificar se o VS Code reconheceu corretamente a instalação da Julia da seguinte maneira:</p>
+<ol type="1">
+<li>Crie um arquivo <code>exemplo.jl</code></li>
+<li>Pressione <code>Ctrl+Shift+P</code> e selecione <strong>“File: Copy Path of Active File”</strong></li>
+<li>Cole o caminho em algum editor de texto para confirmar que o VS Code está operando no ambiente certo.</li>
+</ol>
+<hr>
+</section>
+</section>
+<section id="etapa-4-configurar-o-quarto-no-vs-code" class="level3">
+<h3 class="anchored" data-anchor-id="etapa-4-configurar-o-quarto-no-vs-code">Etapa 4 — Configurar o Quarto no VS Code</h3>
+<section id="instalar-a-extensão-oficial-quarto" class="level4">
+<h4 class="anchored" data-anchor-id="instalar-a-extensão-oficial-quarto">4.1 Instalar a extensão oficial “Quarto”</h4>
+<p>No menu de extensões do VS Code:</p>
+<ul>
+<li>Busque por <strong>“Quarto”</strong></li>
+<li>Instale <strong>apenas a extensão oficial</strong></li>
+<li><strong>Reinicie o VS Code</strong>, se necessário</li>
+</ul>
+<blockquote class="blockquote">
+<p>O terminal interno do VS Code pode ser usado com PowerShell ou qualquer terminal de sua preferência, desde que a linguagem Julia esteja acessível a partir dele.</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="etapa-5-criar-seu-primeiro-arquivo-.qmd-com-julia" class="level3">
+<h3 class="anchored" data-anchor-id="etapa-5-criar-seu-primeiro-arquivo-.qmd-com-julia">Etapa 5 — Criar seu primeiro arquivo <code>.qmd</code> com Julia</h3>
+<ol type="1">
+<li><p>No VS Code, crie um novo arquivo chamado <code>exemplo.qmd</code>.</p></li>
+<li><p>Use a seguinte estrutura básica como exemplo:</p></li>
+</ol>
+<div class="sourceCode" id="cb6"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Meu Primeiro Documento"</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> html</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="an">jupyter:</span><span class="co"> julia-1.9</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fu">### Introdução</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>Este é um exemplo de uso do Julia com o Quarto.</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(x)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol start="3" type="1">
+<li>Salve o arquivo normalmente.</li>
+</ol>
+<blockquote class="blockquote">
+<p>A linha <code>jupyter: julia-1.9</code> indica que estamos usando o kernel da Julia versão 1.9 via Jupyter para execução.</p>
+</blockquote>
+<hr>
+</section>
+<section id="etapa-6-renderizar-o-arquivo-.qmd-para-gerar-html" class="level3">
+<h3 class="anchored" data-anchor-id="etapa-6-renderizar-o-arquivo-.qmd-para-gerar-html">Etapa 6 — Renderizar o arquivo <code>.qmd</code> para gerar HTML</h3>
+<section id="opção-1-usando-o-botão-de-renderização-no-vs-code" class="level4">
+<h4 class="anchored" data-anchor-id="opção-1-usando-o-botão-de-renderização-no-vs-code">Opção 1: Usando o botão de renderização no VS Code</h4>
+<p>Se você instalou a extensão do Quarto, verá um botão <strong>Render</strong> no canto superior direito. Clique nele e aguarde o Quarto gerar o HTML.</p>
+</section>
+<section id="opção-2-usando-o-terminal" class="level4">
+<h4 class="anchored" data-anchor-id="opção-2-usando-o-terminal">Opção 2: Usando o terminal</h4>
+<p>Abra o terminal na pasta onde está seu arquivo <code>.qmd</code> e digite:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render exemplo.qmd</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Se tudo estiver certo, será gerado um arquivo <code>exemplo.html</code> na mesma pasta, contendo seu texto e os resultados dos códigos Julia.</p>
+<hr>
+</section>
+</section>
+<section id="etapa-7-publicar-seu-projeto-online" class="level3">
+<h3 class="anchored" data-anchor-id="etapa-7-publicar-seu-projeto-online">Etapa 7 — Publicar seu projeto online</h3>
+<p>Você pode publicar seu blog ou site de várias formas. Aqui estão as mais comuns:</p>
+<section id="opção-1-quarto-pub" class="level4">
+<h4 class="anchored" data-anchor-id="opção-1-quarto-pub">Opção 1: Quarto Pub</h4>
+<p>Plataforma gratuita para publicar documentos criados com Quarto. Para usar:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> publish</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Siga as instruções exibidas no terminal.</p>
+</section>
+<section id="opção-2-github-pages" class="level4">
+<h4 class="anchored" data-anchor-id="opção-2-github-pages">Opção 2: GitHub Pages</h4>
+<ol type="1">
+<li>Crie uma pasta chamada <code>docs</code> no seu projeto e coloque os arquivos <code>.html</code> dentro dela.</li>
+<li>No GitHub, ative o <strong>GitHub Pages</strong> nas configurações do repositório.</li>
+<li>Aponte para a pasta <code>docs</code> como origem do site.</li>
+</ol>
+</section>
+</section>
+<section id="opção-3-hospedagem-própria" class="level3">
+<h3 class="anchored" data-anchor-id="opção-3-hospedagem-própria">Opção 3: Hospedagem própria</h3>
+<p>Você também pode enviar os arquivos para um servidor ou usar serviços como <strong>Netlify</strong> ou <strong>Vercel</strong>.</p>
+<blockquote class="blockquote">
+<p>Dica: Para projetos maiores, use o comando <code>quarto create-project</code> para gerar uma estrutura organizada.</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="conclusão" class="level2">
+<h2 class="anchored" data-anchor-id="conclusão">Conclusão</h2>
+<p>Ao final deste tutorial, você deve estar com o ambiente completo configurado e funcional.</p>
+<p>Com isso, você pode:</p>
+<ul>
+<li><strong>Escrever tutoriais interativos</strong>, misturando texto explicativo com código em Julia</li>
+<li><strong>Gerar automaticamente relatórios, sites e documentos técnicos</strong></li>
+<li><strong>Publicar seu conteúdo</strong> em qualquer lugar da web</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Nota
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.</p>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiada");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiada");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Website feito com <a href="https://quarto.org/">Quarto</a>. License: <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

@@ -6,3 +6,24 @@
 .quarto
 
 /.quarto/
+_site\Blog
+_site\Tutoriais
+
+# Ignorar saída renderizada pelo Quarto
+site_libs/
+#*.html
+#*.pdf
+
+# Ignorar arquivos temporários do VS Code
+.vscode/
+*.code-workspace
+
+# Ignorar arquivos temporários de sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Ignorar caches comuns
+*.log
+_pycache_/
+*.pyc
