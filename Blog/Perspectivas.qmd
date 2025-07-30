@@ -61,4 +61,3 @@ Todo esse crescimento constante e expressivo nos últimos anos revela um futuro 
 * Julia Data Science, [https://juliadatascience.io/pt/julia_accomplish#:~:text=O%20%E2%80%9CProblema%20das%20Duas%20Linguagens%E2%80%9D%20%C3%A9%20bastante%20comum%20na%20computa%C3%A7%C3%A3o,(como%20Python%20ou%20R)](https://juliadatascience.io/pt/julia_accomplish#:~:text=O%20%E2%80%9CProblema%20das%20Duas%20Linguagens%E2%80%9D%20%C3%A9%20bastante%20comum%20na%20computa%C3%A7%C3%A3o,(como%20Python%20ou%20R)), acessado em: 2025-05-20.
 :::
 
-The `echo: false` option disables the printing of code (only output is displayed).
