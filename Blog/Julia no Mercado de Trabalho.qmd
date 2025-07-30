@@ -5,12 +5,7 @@ description: |
 categories:
   - Julia
   - Mercado de Trabalho
-  - Aplicações
 author:
-  - name: Carlos Trucíos
-    affiliation: "Universidade Estadual de Campinas"
-    url: https://ctruciosm.github.io
-    orcid: 0000-0001-8746-8877
   - name: Leonardo dos Santos
     affiliation: "Universidade Estadual de Campinas"
     url: https://linkedin.com/in/leonardo-dos-santoos
@@ -25,13 +20,19 @@ format:
 draft: true
 ---
 
-Você, estudante, formado, profissional ou até interessado na linguagem Julia já pode ter se questionado ou pensando nessa pergunta: qual a relação entre Julia e o mercado de trabalho? Há muito uso? Ela é mais eficiente que outras linguagens? Quais as principais diferenças e por que uma empresa decide ou não utilizar Julia para suas atividades? Aqui, nesse blog, trago para você a resposta para todas essas perguntas, então "segue o fio"!
+Você, seja estudante, profissional formado ou simplesmente alguém curioso sobre a linguagem Julia, talvez já tenha se perguntado: qual é a relação entre Julia e o mercado de trabalho? Será que ela é amplamente usada? É mais eficiente que outras linguagens? Quais são suas principais diferenças e, não menos importante, por que uma empresa optaria (ou não) por adotá-la em seus projetos?
+
+Neste blog, vou abordar todas essas questões e ajudar você a entender melhor o papel da Julia no mundo profissional. Então, vem comigo e segue o fio!
+
+
 
 ## Uso de Julia no mercado de trabalho
 
-Sabemos que Julia não é uma linguagem muito utilizada em comparação a outros como Python, R, Java, entre outras. Quando utilizada, comumente estamos falando da área acadêmica. Entretanto, não se engane, Julia é mais usada no mercado de trabalho do que você pensa! Por ser uma linguagem de alto nível, feita especialmente para cálculos científicos e computacionais de grande porte e complexidade, algumas empresas fazem questão de terem Julia em seu portfólio. Quer um exemplo?
+Sabemos que Julia ainda não é tão popular quanto outras linguagens como Python, R ou Java. Isso, pode levarmos a pensar que, talvez, Julia é apenas utilizada no meio acadêmico, mas, não se engane: Julia já está mais presente no mercado de trabalho do que você imagina!
 
-Aqui embaixo deixo uma lista de algumas empresas/instituições do mercado que você com certeza conhece e, acredite ou não, elas utilizam bastante da linguagem Julia no seu cotidiano!
+Por ser uma linguagem de alto nível, projetada especialmente para cálculos científicos e computacionais de grande porte e alta complexidade, algumas empresas fazem questão de incluí-la em seu portfólio tecnológico.
+
+Quer alguns exemplos? Aqui embaixo deixo uma lista de algumas empresas/instituições do mercado que você com certeza conhece e, acredite ou não, elas utilizam bastante da linguagem Julia no seu cotidiano!
 
 -   **Google**: a linguagem Julia roda em seus TPU’s (chips feitos especificamente para fins de Machine Learning) devido à um projeto chamado “XLA.jl”. Por conta disso, os desenvolvedores da Google podem escrever rápidos códigos de machine learning que rodam dentro do hardware da própria Google, sem a necessidade de alternar entre linguagens.
 
