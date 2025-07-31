@@ -1,23 +1,45 @@
 ---
 title: "Um pouco de SQLite em Julia"
-author: "Gabriel Campovilla"
-format: html
-editor: visual
+description: |
+  Como trabalhar com o SQLite no Julia
+categories:
+  - Tutorial
+author:
+  - name: Gabriel Campovilla
+      affiliation: "Universidade Estadual de Campinas"
+  - name: Esther Cleveston
+    affiliation: "Universidade Estadual de Campinas"
+    orcid: 0009-0008-6612-8417
+date: "2025-07-31"
+image: imagens/sqlite_imagem.jpg
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+draft: false
 ---
 
 # Blog de Leitura: Trabalhando com SQLite em Julia
 
 ## Introdução a SQLite
 
-SQLite é um mecanismo de banco de dados SQL embutido em um processo, conhecido por sua simplicidade e eficiência. Ele é autônomo, não requer servidor e tem configuração zero, sendo ideal para aplicações que precisam de um banco de dados leve e portátil. SQLite é de domínio público e amplamente utilizado em diversas aplicações.
+::: justify
+SQLite é um mecanismo de banco de dados SQL embutido em um processo, conhecido por sua simplicidade e eficiência. Ele é autônomo, não requer servidor e tem configuração zero, sendo ideal para aplicações que precisam de um banco de dados leve e portátil. O SQLite é de domínio público e amplamente utilizado em diversas aplicações.
+:::
 
 ## Principais Características
 
--   **Portabilidade**: O banco de dados é armazenado em um único arquivo no disco, compatível com qualquer plataforma.
--   **Leveza**: A biblioteca tem aproximadamente 600KB.
+::: justify
+-   **Portabilidade**: O banco de dados é armazenado em um único arquivo no disco, compatível com qualquer plataforma;
+-   **Leveza**: A biblioteca tem aproximadamente 600KB;
 -   **Versatilidade**: Suporta múltiplas tabelas, índices, gatilhos e visões.
+:::
 
-Como utilizarei o RStudio, precisamos instalar o pacote do Julia.
+::: justify
+Utilizaremos o RStudio, para isso, precisamos instalar o pacote do Julia.
+:::
 
 ```{r}
 install.packages("JuliaCall")
@@ -29,11 +51,15 @@ Sys.setenv(JULIA_HOME = "")
 julia_setup()
 ```
 
-Caso tenha alguma dúvida neste processo, temos um Blog no qual ajuda neste processo: <https://ime.unicamp.br/julialang/Blog/julia_rstudio.html>
+::: justify
+Caso tenha alguma dúvida neste processo, veja este Blog: <https://ime.unicamp.br/julialang/Blog/julia_rstudio.html>
+:::
 
 ## Acessando SQLite em Julia
 
-Em Julia, podemos interagir com SQLite usando o pacote SQLite.jl. Abaixo está um exemplo básico de como conectar-se a um banco de dados e executar consultas:
+::: justify
+Em Julia, podemos interagir com o SQLite usando o pacote **SQLite.jl**. Abaixo está um exemplo básico de como se conectar a um banco de dados e executar consultas:
+:::
 
 ```{r}
 using Pkg  # Carrega o pacote Pkg, responsável por gerenciar pacotes em Julia.
@@ -48,7 +74,9 @@ using SQLite, CSV, DataFrames  # Carrega os pacotes SQLite, CSV e DataFrames par
 
 ## Operações Básicas
 
+::: justify
 Conectando ao banco
+:::
 
 ```{r}
 bd = "meu_banco.sqlite" # Este vai ser seu caminho para o banco de dados
@@ -57,7 +85,9 @@ db = SQLite.DB(bd) # Conecta ao banco de dados desejado, mas caso necessário cr
 
 ```
 
+::: justify
 Importando o mtcars (exportado previamente do R como CSV)
+:::
 
 ```{r}
 write.csv(mtcars, "mtcars.csv", row.names = FALSE) # Por mais que estamos usando o R, ainda é possível utilizar os bancos de dados que o mesmo possui, assim usaremos o mtcars
@@ -75,7 +105,9 @@ println(SQLite.tables(db)) # Verificamos as tabelas disponíveis
 
 ### Consultas
 
+::: justify
 Podemos usar o comando `SELECT` para recuperar dados, com opções como `WHERE`, `ORDER BY`, e `GROUP BY` para filtrar e organizar os resultados.
+:::
 
 ```{r}
 # Consulta: selecionar carros com "mpg" maior que 20 e ordenar por "hp"
@@ -91,7 +123,9 @@ println(result)
 
 ```
 
+::: justify
 Inserção e Criação de Nova Tabela (exemplo simples)
+:::
 
 ```{r}
 # Criando uma nova tabela chamada "carros"
@@ -112,7 +146,9 @@ INSERT INTO carros VALUES
 
 ```
 
+::: justify
 Atualização e Remoção
+:::
 
 ```{r}
 # Atualizando registro
@@ -129,12 +165,22 @@ SQLite.execute(db, "DROP TABLE IF EXISTS carros")
 
 ## Boas Práticas
 
-1.  **Segurança**: Evite concatenar strings diretamente em consultas SQL para prevenir injeção de SQL. Use parâmetros seguros.
-2.  **Conexões**: Sempre feche a conexão com o banco de dados após o uso para liberar recursos.
+::: justify
+1.  **Segurança**: Evite concatenar strings diretamente em consultas SQL para prevenir injeção de SQL. Use parâmetros seguros;
+2.  **Conexões**: Sempre feche a conexão com o banco de dados após o uso para liberar recursos;
 3.  **Backup**: Faça cópias regulares do arquivo do banco de dados para evitar perda de informações.
+:::
 
 ## Conclusão
 
-SQLite é uma ferramenta poderosa e versátil para armazenar e manipular dados em aplicações Julia. Sua simplicidade e portabilidade o tornam ideal para projetos de pequena a média escala. Com o pacote `SQLite.jl`, é fácil integrar bancos de dados SQLite em seus fluxos de trabalho Julia, permitindo consultas eficientes e manipulação segura de dados.
+::: justify
+SQLite é uma ferramenta poderosa e versátil para armazenar e manipular dados em aplicações Julia. Sua simplicidade e portabilidade o tornam ideal para projetos de pequena e média escala. Com o pacote `SQLite.jl`, é fácil integrar bancos de dados SQLite em seus fluxos de trabalho em Julia, permitindo consultas eficientes e manipulação segura de dados.
+:::
 
+::: justify
 Experimente SQLite em seus próximos projetos e aproveite os benefícios de um banco de dados leve e eficiente!
+:::
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica, aprimoramento do texto e criação de imagens.
+:::
