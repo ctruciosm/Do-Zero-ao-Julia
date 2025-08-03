@@ -1,16 +1,15 @@
 ---
 title: "Um pouco de SQLite em Julia"
-description: |
-  "Como trabalhar com o SQLite no Julia"
+description: "Como trabalhar com o SQLite no Julia"
 categories:
   - Tutorial
 author:
   - name: Gabriel Campovilla
-      affiliation: "Universidade Estadual de Campinas"
+    affiliation: "Universidade Estadual de Campinas"
   - name: Esther Cleveston
     affiliation: "Universidade Estadual de Campinas"
     orcid: 0009-0008-6612-8417
-date: "2025-07-31"
+date: "2025-08-02"
 image: imagens/sqlite_imagem.jpg
 lang: pt
 format:
@@ -21,7 +20,7 @@ format:
 draft: false
 ---
 
-# Blog de Leitura: Trabalhando com SQLite em Julia
+
 
 ## Introdução a SQLite
 
@@ -37,23 +36,6 @@ SQLite é um mecanismo de banco de dados SQL embutido em um processo, conhecido 
 -   **Versatilidade**: Suporta múltiplas tabelas, índices, gatilhos e visões.
 :::
 
-::: justify
-Utilizaremos o RStudio, para isso, precisamos instalar o pacote do Julia.
-:::
-
-```{r}
-install.packages("JuliaCall")
-library(JuliaCall)
-```
-
-```{r}
-Sys.setenv(JULIA_HOME = "")
-julia_setup()
-```
-
-::: justify
-Caso tenha alguma dúvida neste processo, veja este Blog: <https://ime.unicamp.br/julialang/Blog/julia_rstudio.html>
-:::
 
 ## Acessando SQLite em Julia
 
@@ -61,15 +43,14 @@ Caso tenha alguma dúvida neste processo, veja este Blog: <https://ime.unicamp.b
 Em Julia, podemos interagir com o SQLite usando o pacote **SQLite.jl**. Abaixo está um exemplo básico de como se conectar a um banco de dados e executar consultas:
 :::
 
-```{r}
+```{julia}
 using Pkg  # Carrega o pacote Pkg, responsável por gerenciar pacotes em Julia.
 
-Pkg.add("SQLite")  # Instala o pacote SQLite.
-Pkg.add("DataFrames")  # Instala o pacote DataFrames.
-Pkg.add("CSV")  # Instala o pacote CSV.
+Pkg.add("SQLite")       # Instala o pacote SQLite.
+Pkg.add("DataFrames")   # Instala o pacote DataFrames.
+Pkg.add("CSV")           # Instala o pacote CSV.
 
 using SQLite, CSV, DataFrames  # Carrega os pacotes SQLite, CSV e DataFrames para uso no código.
-
 ```
 
 ## Operações Básicas

@@ -10,14 +10,15 @@ author:
     affiliation: "Universidade Estadual de Campinas"
     url: https://linkedin.com/in/leonardo-dos-santoos
     orcid: 0000-0002-3456-7890
-date: "2025-07-02"
+date: "2025-08-02"
+image: imagens/julia.png
 lang: pt
 format:
   html:
     toc: true
     toc-depth: 3
     self-contained: false
-draft: true
+draft: false
 ---
 
 Você, seja estudante, profissional formado ou simplesmente alguém curioso sobre a linguagem Julia, talvez já tenha se perguntado: qual é a relação entre Julia e o mercado de trabalho? Será que ela é amplamente usada? É mais eficiente que outras linguagens? Quais são suas principais diferenças e, não menos importante, por que uma empresa optaria (ou não) por adotá-la em seus projetos?
@@ -46,6 +47,13 @@ Quer alguns exemplos? Aqui embaixo deixo uma lista de algumas empresas/institui�
 
 Alguma dessas empresas te surpreendeu? Você pode encontrar mais empresas que utilizam a linguagem e também casos de estudos em que aplicaram Julia no seguinte link: <https://info.juliahub.com/industries/case-studies>\
 \
+
+
+::: {.callout-note} 
+Ferramentas de IA foram utilizadas para correção ortográfica, aprimoramento do texto e criação de imagens.
+:::
+
+
 
 ## Referências
 
