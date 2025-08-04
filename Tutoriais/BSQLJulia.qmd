@@ -1,6 +1,7 @@
 ---
 title: "Um pouco de SQLite em Julia"
-description: "Como trabalhar com o SQLite no Julia"
+description: |
+  Como trabalhar com o SQLite no Julia
 categories:
   - Tutorial
 author:
@@ -8,6 +9,7 @@ author:
     affiliation: "Universidade Estadual de Campinas"
   - name: Esther Cleveston
     affiliation: "Universidade Estadual de Campinas"
+    url: "https://www.linkedin.com/in/esthercleveston/"
     orcid: 0009-0008-6612-8417
 date: "2025-08-02"
 image: imagens/sqlite_imagem.jpg
@@ -18,9 +20,8 @@ format:
     toc-depth: 3
     self-contained: false
 draft: false
+engine: knitr
 ---
-
-
 
 ## Introdução a SQLite
 
@@ -35,7 +36,6 @@ SQLite é um mecanismo de banco de dados SQL embutido em um processo, conhecido 
 -   **Leveza**: A biblioteca tem aproximadamente 600KB;
 -   **Versatilidade**: Suporta múltiplas tabelas, índices, gatilhos e visões.
 :::
-
 
 ## Acessando SQLite em Julia
 
@@ -59,7 +59,7 @@ using SQLite, CSV, DataFrames  # Carrega os pacotes SQLite, CSV e DataFrames par
 Conectando ao banco
 :::
 
-```{r}
+```{julia}
 bd = "meu_banco.sqlite" # Este vai ser seu caminho para o banco de dados
 
 db = SQLite.DB(bd) # Conecta ao banco de dados desejado, mas caso necessário cria se não existir
@@ -70,12 +70,12 @@ db = SQLite.DB(bd) # Conecta ao banco de dados desejado, mas caso necessário cr
 Importando o mtcars (exportado previamente do R como CSV)
 :::
 
-```{r}
+```{julia}
 write.csv(mtcars, "mtcars.csv", row.names = FALSE) # Por mais que estamos usando o R, ainda é possível utilizar os bancos de dados que o mesmo possui, assim usaremos o mtcars
 
 ```
 
-```{r}
+```{julia}
 mtcars_df = CSV.read("mtcars.csv", DataFrame) # Aqui carregamos os dados do CSV em um DataFrame
 
 SQLite.load!(mtcars_df, db, "mtcars") #Agora estamos carregando os dados no banco SQLite na tabela "mtcars"
@@ -90,7 +90,7 @@ println(SQLite.tables(db)) # Verificamos as tabelas disponíveis
 Podemos usar o comando `SELECT` para recuperar dados, com opções como `WHERE`, `ORDER BY`, e `GROUP BY` para filtrar e organizar os resultados.
 :::
 
-```{r}
+```{julia}
 # Consulta: selecionar carros com "mpg" maior que 20 e ordenar por "hp"
 query = """
 SELECT mpg, cyl, hp, gear
@@ -108,7 +108,7 @@ println(result)
 Inserção e Criação de Nova Tabela (exemplo simples)
 :::
 
-```{r}
+```{julia}
 # Criando uma nova tabela chamada "carros"
 SQLite.execute(db, """
 CREATE TABLE IF NOT EXISTS carros (
@@ -131,7 +131,7 @@ INSERT INTO carros VALUES
 Atualização e Remoção
 :::
 
-```{r}
+```{julia}
 # Atualizando registro
 SQLite.execute(db, """
 UPDATE carros
