@@ -22,6 +22,7 @@
   {
     "listing": "/tutoriais.html",
     "items": [
+      "/Tutoriais/loops_condicionais_julia.html",
       "/Tutoriais/tutorial-eda.html",
       "/Tutoriais/graf_basico.html"
     ]
@@ -29,6 +30,7 @@
   {
     "listing": "/blog.html",
     "items": [
+      "/Blog/Julia no Mercado de Trabalho.html",
       "/Blog/vscode.html",
       "/Blog/markdown_pluto.html",
       "/Blog/tidierdata.html",

@@ -1,0 +1,77 @@
+---
+title: "Como programar em Julia no Positron"
+description: |
+     Aprenda o como utilizar o Julia no Positron, da instalação aos primeiros passos.
+categories:
+  - Instalação
+  - IDE
+author:
+  - name: Vitor Ribas Perrone
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/VitorRibasP
+    orcid: 0009-0009-6923-7712
+date: "2025-08-05"
+image: imagens/positron_logo.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+draft: true
+---
+
+## Introdução
+::: justify
+Ao trabalhar com Estatística, duas linguagens se destacam: R e Python. E, entre as IDEs mais utilizadas, estão o [RStudio](https://ime.unicamp.br/julialang/Blog/julia_rstudio.html) e o [VSCode](https://ime.unicamp.br/julialang/Blog/vscode.html), inclusive, já ensinamos a como configurar ambos para trabalhar com Julia.
+
+Recentemente, uma nova IDE foi lançada com a proposta de unir o melhor desses dois mundos: o Positron. Desenvolvido pela Posit (antiga RStudio), o Positron promete ser a IDE definitiva para cientistas de dados e estatísticos, combinando recursos poderosos com uma interface familiar.
+
+A boa notícia? O Positron é compatível com Julia. Neste post, vamos mostrar o passo a passo para instalar e configurar essa nova ferramenta para programar em Julia de forma simples e eficiente.
+:::
+## Pré-requisitos
+
+-   Ter o [Julia](https://www.ime.unicamp.br/~juliacps/Blog/instalar_julia.html) instalado;
+
+## Instalando o Positron
+::: justify
+A instalação do Positron pode ser feita diretamente pelo [site oficial](https://positron.posit.co/download.html). Basta acessar o link e escolher a versão adequada para o seu sistema.
+:::
+::: callout-note
+No Windows, a versão System level instala o Positron para todos os usuários do computador (requer permissões de administrador), enquanto a User level instala apenas para o usuário atual.
+:::
+
+![Site de instalação do Positron](imagens/positron3.png)
+::: justify
+Após o download, basta seguir os passos tradicionais de instalação.Ao inicializar o Positron pela primeira vez, caso você tenha o VSCode, uma mensagem irá aparecer perguntando se deseja importar todas as suas configurações do VSCode automaticamente para o Positron, já tornando o novo ambiente do jeito que você estava habituado. 
+:::
+![Opção de configuração do Positron](imagens/positron1.png)
+Dessa forma, esta é a tela inicial que estará presente no Positron.
+![Tela inicial do Positron](imagens/positron5.png)
+
+## Instalando a extensão do Julia no Positron
+::: justify
+Com o Positron devidamente instalado, devemos instalar a extensão oficial do Julia. Para isso:
+:::
+-   Abra a aba de extensões (Ctrl + shift + X);
+
+-   Busque por "Julia";
+
+-   Selecione a extensão e clique em "Install".
+
+![Instalando a Extensão de Julia](imagens/positron2.png)
+## Programando em Julia
+::: justify
+Dessa forma, com a extensão instalada, já estamos aptos a utilizar Julia no Positron. Sendo assim, vamos criar um novo arquivo clicando no botão *New File* no canto superior esquerdo da tela e selecionar a opção *Julia File*.
+:::
+![Criando um novo arquivo](imagens/positron6.png)
+::: justify
+Com o arquivo aberto, vamos criar nosso primeiro código (o clássico Hello World!). Para rodar o código, podemos utilizar o atalho *Ctrl+Enter* ou então clicar no botão *Run*, no canto superior esquerdo. 
+:::
+![Rodando Julia no Positron](imagens/positron4.png)
+::: justify
+Pronto! Agora você já pode começar a programar e desenvolver seus projetos em Julia com o Positron, sinta-se livre para explorar todas as funcionalidades disponíveis e aprimorar suas análises! 
+:::
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::

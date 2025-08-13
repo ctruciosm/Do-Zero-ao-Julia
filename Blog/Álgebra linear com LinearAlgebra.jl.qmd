@@ -1,0 +1,174 @@
+---
+title: "Álgebra linear com LinearAlgebra.jl"
+description: "Principais pacotes para acessar diversos bancos de dados para as suas análises estatísticas em Julia."
+categories:
+  - Pacotes
+  - Ferramentas
+  - Manipulação de dados
+author:
+  - name: Sarah Pereira Teixeira Silva
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/astrogenun
+date: "2025-07-24"
+image: imagens/algebralinear.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+draft: true
+---
+
+## Introdução
+
+::: justify
+A Álgebra Linear constitui a espinha dorsal de diversas áreas do conhecimento científico e tecnológico, como análise de dados, processamento de sinais, otimização, estatística multivariada, machine learning e mecânica quântica. Computacionaomente, uma linguagem eficiente como Julia oferece não apenas sintaxe intuitiva, mas também desempenho comparável a linguagens de baixo nível. O pacote `LinearAlgebra.jl`, integrante da biblioteca padrão, disponibiliza uma ampla variedade de funcionalidades para a manipulação eficiente de vetores, matrizes, resolução de sistemas lineares e decomposições matriciais. Neste post, exploraremos o uso do módulo, abordando desde operações elementares até técnicas mais sofisticadas, como decomposições matriciais, projeções e diagonalização.
+:::
+
+## Carregando o pacote
+
+O pacote `LinearAlgebra.jl` já está incluído na instalação padrão do Julia. Para utilizá-lo, basta importá-lo com o comando:
+
+``` julia
+using LinearAlgebra
+```
+
+Utilizaremos também o pacote `Random` para gerar matrizes aleatórias nos exemplos seguintes:
+
+``` julia
+using Random
+```
+
+## Operações elementares com matrizes e vetores
+
+::: justify
+Iniciamos com a criação de vetores e matrizes, bem como a execução de operações fundamentais, como multiplicação, produto escalar e cálculo de normas:
+:::
+
+``` julia
+A = [1 2; 3 4]      # matriz 2x2
+v = [1, 2]          # vetor coluna
+
+A * v               # multiplicação matriz-vetor
+dot(v, v)           # produto escalar
+norm(v)             # norma (magnitude) do vetor
+```
+
+## Propriedades de matrizes
+
+``` julia
+transpose(A)        # transposta
+inv(A)              # inversa
+det(A)              # determinante
+tr(A)               # traço da matriz
+rank(A)             # posto
+```
+
+## Resolvendo sistemas lineares
+
+::: justify
+Em Julia, a forma mais eficiente de resolver um sistema linear (Ax = b) consiste no uso do operador barra invertida `\`, que seleciona automaticamente o algoritmo numérico apropriado com base nas características da matriz:
+:::
+
+``` julia
+A = [3 1; 1 2]
+b = [9, 8]
+x = A \ b           # solução do sistema
+```
+
+## Decomposições matriciais
+
+::: justify
+Decomposições permitem entender a estrutura interna de uma matriz, facilitando a resolução de sistemas, o cálculo de autovalores, compressões e outras aplicações numéricas. A seguir, exploramos as principais disponíveis no `LinearAlgebra.jl`:
+:::
+
+### LU (Fatoração de matrizes quadradas)
+
+``` julia
+lu(A)
+```
+
+### QR (Bastante usada em regressão linear)
+
+``` julia
+qr(A)
+```
+
+### SVD (Decomposição em valores singulares)
+
+``` julia
+svd(A)
+```
+
+### Autovalores e autovetores
+
+``` julia
+eigvals(A)
+eigvecs(A)
+```
+
+## Álgebra linear com matrizes aleatórias usando `random`
+
+::: {style="text-align: justify"}
+A geração de matrizes aleatórias permite simulações e testes práticos. Veja exemplos de operações úteis com matrizes densas:
+:::
+
+``` julia
+Random.seed!(123)
+M = rand(3,3)      # matriz 3x3 com elementos aleatórios
+
+norm(M)            # norma de Frobenius
+I                  # matriz identidade
+M'                 # transposta conjugada
+```
+
+## Diagonalização de matrizes
+
+::: {style="text-align: justify"}
+Uma matriz $A$ é diagonalizável se existe uma matriz invertível $P$ tal que $D = P^{-1} A P$ seja diagonalizável.
+:::
+
+``` julia
+V = eigvecs(A)
+D = Diagonal(eigvals(A))
+P = V
+P_inv = inv(P)
+P_inv * A * P ≈ D   # Verificação
+```
+
+::: {style="text-align: justify"}
+> Obs.: Nem toda matriz é diagonalizável. Em aplicações práticas, a diagonalização é útil, por exemplo, para calcular potências de matrizes com eficiência.
+:::
+
+## Espaços vetorias e projeções ortogonais
+
+::: {style="text-align: justify"}
+Dada uma matriz $A$, seus espaços fundamentais (imagem, núcleo) são essenciais para entender soluções de sistemas e dimensões associadas:
+:::
+
+``` julia
+nullspace = nullspace(A)     # espaço nulo (ker A)
+colspace = A[:, :]           # espaço coluna (imagem)
+```
+
+E para projetar um vetor $b$ no subespaço gerado pelas colunas de $A$:
+
+``` julia
+proj = A * (A \ b)
+```
+
+Essa projeção ortogonal é usada em mínimos quadrados.
+
+## Conclusão
+
+::: {style="text-align: justify"}
+O pacote `LinearAlgebra.jl` oferece ferramentas robustas, rápidas e versáteis para o tratamento de problemas de álgebra linear em Julia. A combinação com bibliotecas de visualização como `Plots.jl`, já mostradas aqui no blog, e outras de aprendizado de máquina torna sua utilização ainda mais poderosa em aplicações científicas e tecnológicas. Sua implementação é baseada em bibliotecas otimizadas como BLAS e LAPACK, garantindo um desempenho extremamente competitivo. O estudo da Álgebra Linear computacionalmente não apenas facilita a resolução de problemas práticos como também aprofunda a intuição matemática sobre transformações lineares, autovalores, espaços vetoriais e estabilidade numérica. Para consolidar seus conhecimentos, recomenda-se também a leitura da documentação oficial e a prática com aplicações reais em modelagem, machine learning e análise de dados.
+:::
+
+-   [Biblioteca padrão de Álgebra Linear numérica em Julia](https://julia-cn.readthedocs.io/pt-br/latest/stdlib/linalg.html)
+-   [Documentação oficial do pacote LinearAlgebra.jl](https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/) :::
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::

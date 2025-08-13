@@ -5,41 +5,64 @@ description: |
 categories:
   - Julia
   - Mercado de Trabalho
-  - Aplicações
 author:
-  - name: Carlos Trucíos
-    affiliation: "Universidade Estadual de Campinas"
-    url: https://ctruciosm.github.io
-    orcid: 0000-0001-8746-8877
   - name: Leonardo dos Santos
     affiliation: "Universidade Estadual de Campinas"
     url: https://linkedin.com/in/leonardo-dos-santoos
     orcid: 0000-0002-3456-7890
-date: "2025-07-02"
+date: "2025-08-02"
+image: imagens/julia.png
 lang: pt
 format:
   html:
     toc: true
     toc-depth: 3
     self-contained: false
-draft: true
+draft: false
 ---
 
-Você, estudante, formado, profissional ou até interessado na linguagem Julia já pode ter se questionado ou pensando nessa pergunta: qual a relação entre Julia e o mercado de trabalho? Há muito uso? Ela é mais eficiente que outras linguagens? Quais as principais diferenças e por que uma empresa decide ou não utilizar Julia para suas atividades? Aqui, nesse blog, trago para você a resposta para todas essas perguntas, então "segue o fio"!
+Você, seja estudante, profissional formado ou simplesmente alguém curioso sobre a linguagem Julia, talvez já tenha se perguntado: qual é a relação entre Julia e o mercado de trabalho? Será que ela é amplamente usada? É mais eficiente que outras linguagens? Quais são suas principais diferenças e, não menos importante, por que uma empresa optaria (ou não) por adotá-la em seus projetos?
+
+Neste blog, vou abordar todas essas questões e ajudar você a entender melhor o papel da Julia no mundo profissional. Então, vem comigo e segue o fio!
+
+
 
 ## Uso de Julia no mercado de trabalho
 
-Sabemos que Julia não é uma linguagem muito utilizada em comparação a outros como Python, R, Java, entre outras. Quando utilizada, comumente estamos falando da área acadêmica. Entretanto, não se engane, Julia é mais usada no mercado de trabalho do que você pensa! Por ser uma linguagem de alto nível, feita especialmente para cálculos científicos e computacionais de grande porte e complexidade, algumas empresas fazem questão de terem Julia em seu portfólio. Quer um exemplo?
+Sabemos que Julia ainda não é tão popular quanto outras linguagens como Python, R ou Java. Isso, pode levarmos a pensar que, talvez, Julia é apenas utilizada no meio acadêmico, mas, não se engane: Julia já está mais presente no mercado de trabalho do que você imagina!
 
-Aqui embaixo deixo uma lista de algumas empresas/instituições do mercado que você com certeza conhece e, acredite ou não, elas utilizam bastante da linguagem Julia no seu cotidiano!
+Por ser uma linguagem de alto nível, projetada especialmente para cálculos científicos e computacionais de grande porte e alta complexidade, algumas empresas fazem questão de incluí-la em seu portfólio tecnológico.
+
+Quer alguns exemplos? Aqui embaixo deixo uma lista de algumas empresas/instituições do mercado que você com certeza conhece e, acredite ou não, elas utilizam bastante da linguagem Julia no seu cotidiano!
 
 -   **Google**: a linguagem Julia roda em seus TPU’s (chips feitos especificamente para fins de Machine Learning) devido à um projeto chamado “XLA.jl”. Por conta disso, os desenvolvedores da Google podem escrever rápidos códigos de machine learning que rodam dentro do hardware da própria Google, sem a necessidade de alternar entre linguagens.
 
--   **NASA**: pense bem, você precisa de uma linguagem que modele diversas questões físicas como a gravidade entre planetas, rotas para satélites e espaçonaves, simular órbitas… e você precisa que todos estes cálculos extremamente complexos sejam feitos rápidos e com precisão. Qual linguagem, que é rápida como C++ ou Fortran, mas que é fácil de escrever e de alterar, você utilizaria? Julia, claro!
+-   **NASA**: pense bem, você precisa de uma linguagem que modele diversas questões físicas como a gravidade entre planetas, rotas para satélites e espaçonaves, simular órbitas… e você precisa que todos estes cálculos extremamente complexos sejam feitos rápidos e com precisão. Qual linguagem, que é rápida como C++ ou Fortran, mas que é fácil de escrever e de alterar, você utilizaria? Julia, claro! Além disso, por meio do pacote [Oceananigans.jl](https://juliapackages.com/p/oceananigans), a NASA simula o comportamento físico dos oceanos com alta precisão e velocidade.
 
--   **Pfizer**: por meio de modelos farmacêuticos, a Pfizer consegue acelerar simulações que antes demoravam dias, até semanas; simular metabolismo e absorção de substâncias no organismo, entre muitos outros. É por meio da plataforma [Pumas.jl](http://pumas.jl) que a empresa consegue fazer todas as simulações que permitem rápidas tomadas de decisões à respeito de seus experimentos.
+-   **Pfizer**: por meio de modelos farmacêuticos, a Pfizer consegue acelerar simulações que antes demoravam dias, até semanas; simular metabolismo e absorção de substâncias no organismo, entre muitos outros. É por meio da plataforma [Pumas.jl](https://juliahub.com/products/pumas) que a empresa consegue fazer todas as simulações que permitem rápidas tomadas de decisões à respeito de seus experimentos.
 
--   **IBM**: a linguagem é muito útil para a IBM dado que tratam muito de séries temporais, IA e machine learning, logo, se torna necessário o uso de uma linguagem que facilite a criação de pipelines para esses processos, e Julia faz justamente isso. Automatizações de fluxo de trabalho de machine learning, especialmente quando os dados variam com o tempo é algo feito pela linguagem, especialmente pelas plataformas produzidas pela empresa, como o [TSLM.jl](http://tslm.jl) e o [AutoMLPipeline.jl](http://automlpipeline.jl).
+-   **IBM**: a linguagem é muito útil para a IBM dado que tratam muito de séries temporais, IA e machine learning, logo, se torna necessário o uso de uma linguagem que facilite a criação de pipelines para esses processos, e Julia faz justamente isso. Automatizações de fluxo de trabalho de machine learning, especialmente quando os dados variam com o tempo é algo feito pela linguagem, especialmente pelas plataformas produzidas pela empresa, como o [TSLM.jl](https://github.com/IBM/TSML.jl) e o [AutoMLPipeline.jl](https://juliapackages.com/p/automlpipeline).
+
+-   **Renault**: a linguagem Julia foi utilizada para resolver um problema logístico: planejar rotas e estoques em toda a Europa para recolher embalagens reutilizáveis. Via métodos tradicionais, as soluções eram lentas e ineficazes, então a empresa implementou um algoritmo em Julia que otimizou todo o processo e reduziu custos logísticos.
 
 Alguma dessas empresas te surpreendeu? Você pode encontrar mais empresas que utilizam a linguagem e também casos de estudos em que aplicaram Julia no seguinte link: <https://info.juliahub.com/industries/case-studies>\
 \
+
+
+::: {.callout-note} 
+Ferramentas de IA foram utilizadas para correção ortográfica, aprimoramento do texto e criação de imagens.
+:::
+
+
+
+## Referências
+
+-   **Nasa**: [Julia Programming Language Benchmark Using a Flight Simulation](https://ntrs.nasa.gov/citations/20200002329); [Here’s how NASA is using Julia to better understand the ocean](https://www.juliabloggers.com/heres-how-nasa-is-using-julia-to-better-understand-the-ocean)
+
+-   **Google**: [Google Cloud TPUs Now Speak Julia](https://syncedreview.com/2018/10/25/google-cloud-tpus-now-speak-julia)
+
+-   **Renault**: [Solving a Continent-Scale Inventory Routing Problem at Renault](https://pubsonline.informs.org/doi/10.1287/trsc.2022.0342)
+
+-   **Pfizer**: [Pfizer uses Julia to accelerate simulations of new therapies for metabolic diseases up to 175x](https://juliahub.com/industries/case-studies/pfizer);
+
+-   **IBM**:  [Designing Machine Learning Pipeline Toolkit for AutoML Surrogate Modeling Optimization](https://research.ibm.com/publications/designing-machine-learning-pipeline-toolkit-for-automl-surrogate-modeling-optimization?utm_source=chatgpt.com)
