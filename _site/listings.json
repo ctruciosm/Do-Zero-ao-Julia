@@ -1,13 +1,5 @@
 [
   {
-    "listing": "/tutoriais.html",
-    "items": [
-      "/Tutoriais/loops_condicionais_julia.html",
-      "/Tutoriais/tutorial-eda.html",
-      "/Tutoriais/graf_basico.html"
-    ]
-  },
-  {
     "listing": "/equipe.html",
     "items": [
       "/Equipe/Atual/Ana_Luisa.html",
@@ -25,6 +17,14 @@
       "/Equipe/Atual/sarah_silva.html",
       "/Equipe/Atual/thiago_paulichen.html",
       "/Equipe/Atual/vitor_ribas.html"
+    ]
+  },
+  {
+    "listing": "/tutoriais.html",
+    "items": [
+      "/Tutoriais/loops_condicionais_julia.html",
+      "/Tutoriais/tutorial-eda.html",
+      "/Tutoriais/graf_basico.html"
     ]
   },
   {
