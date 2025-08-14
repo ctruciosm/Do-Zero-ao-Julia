@@ -16,6 +16,8 @@ website:
         text: Tutoriais
       - href: meetup.qmd
         text: Meetup
+      - icon: instagram
+        href: https://www.instagram.com/dozero_aojulia/
   page-footer: "Website feito com [Quarto](https://quarto.org/). License: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)."
 
 format:

@@ -175,95 +175,165 @@
     "text": "Funções auxiliares\n\nAlém das macros principais como @mutate, @filter e @summarize, o TidierData.jl oferece funções auxiliares que tornam seu código mais expressivo, claro e eficiente. Vamos explorar algumas delas com exemplos práticos:\n\n\nif_else()\n\nLógica condicional simples e vetorizada:\n\n\nusing TidierData, DataFrames\n\nvalores = DataFrame(Nome = [\"A\", \"B\", \"C\"], Salario = [3000, 5000, 4000])\n\n3×2 DataFrame\n Row │ Nome    Salario\n     │ String  Int64\n─────┼─────────────────\n   1 │ A          3000\n   2 │ B          5000\n   3 │ C          4000\n\n\n@chain valores begin\n    @mutate(Status = if_else(`Salario` .&gt; 4000, \"Alto\", \"Médio ou Baixo\"))\nend\n\n3×3 DataFrame\n Row │ Nome    Salario  Status\n     │ String  Int64    String\n─────┼─────────────────────────────────\n   1 │ A          3000  Médio ou Baixo\n   2 │ B          5000  Alto\n   3 │ C          4000  Médio ou Baixo\n\n\n\n\ncase_when()\n\nPara múltiplas condições, substituindo vários if_else():\n\n\nusing TidierData, DataFrames\n\ndf2 = DataFrame(Nota = [10, 2, 6, 4, 7.1, 4.9, 9.7])\n\n7×1 DataFrame\n Row │ Nota\n     │ Float64\n─────┼─────────\n   1 │    10.0\n   2 │     2.0\n   3 │     6.0\n   4 │     4.0\n   5 │     7.1\n   6 │     4.9\n   7 │     9.7\n\n\n@chain df2 begin\n    @mutate(Conceito = case_when(\n        `Nota` .&gt;= 9 =&gt; \"A\",\n        `Nota` .&gt;= 7 =&gt; \"B\",\n        `Nota` .&gt;= 5 =&gt; \"C\",\n        true        =&gt; \"D\"\n    ))\nend\n\n7×2 DataFrame\n Row │ Nota     Conceito\n     │ Float64  String\n─────┼───────────────────\n   1 │    10.0  A\n   2 │     2.0  D\n   3 │     6.0  C\n   4 │     4.0  D\n   5 │     7.1  B\n   6 │     4.9  D\n   7 │     9.7  A\n\n\n\n\nstarts_with(), ends_with()\n\nSelecionando colunas com nomes que seguem um padrão:\n\n\nusing TidierData, DataFrames\n\ndf3 = DataFrame(\n    Nome = [\"José\", \"Carla\", \"Humberto\"],\n    Nota1 = [7, 9, 8],\n    Nota2 = [8, 10, 10],\n    Idade = [20, 22, 24]\n)\n\n3×4 DataFrame\n Row │ Nome      Nota1  Nota2  Idade\n     │ String    Int64  Int64  Int64\n─────┼───────────────────────────────\n   1 │ José          7      8     20\n   2 │ Carla         9     10     22\n   3 │ Humberto      8     10     24\n\n\ncomeca = @chain df3 begin\n    @select(`Nome`, starts_with(\"Nota\"))\nend\n\n3×3 DataFrame\n Row │ Nome      Nota1  Nota2\n     │ String    Int64  Int64\n─────┼────────────────────────\n   1 │ José          7      8\n   2 │ Carla         9     10\n   3 │ Humberto      8     10\n\n\ntermina = @chain df3 begin\n  @select(`Nome`, ends_with(\"ade\"))\nend\n\n3×2 DataFrame\n Row │ Nome      Idade\n     │ String    Int64\n─────┼─────────────────\n   1 │ José         20\n   2 │ Carla        22\n   3 │ Humberto     24\n\n\n\n\nObs.: As funções endswith() da base do julia e ends_with() do pacote TidierData.jl tem uma pequena diferença: a função ends_with() é usada para nomes de colunas, enquanto endswith() é usada para valores dentro das colunas."
   },
   {
-    "objectID": "Blog/as-origens.html",
-    "href": "Blog/as-origens.html",
-    "title": "Do Zero ao Julia: As origens",
+    "objectID": "Blog/pacotes_estatistica.html",
+    "href": "Blog/pacotes_estatistica.html",
+    "title": "Pacotes Essenciais para Trabalhar com Estatística em Julia",
     "section": "",
-    "text": "A primeira vez que ouvi falar da linguagem Julia foi em 2014, quando ainda era estudante de doutorado no IMECC e buscava formas mais rápidas de executar as simulações da minha pesquisa, que já exigia computação intensiva (Bootstrap). Naquela época, pouquíssimas pessoas trabalhavam com Julia, mas as promessas de desempenho comparável ao de linguagens de baixo nível como C++ ou Fortran rapidamente chamaram minha atenção.\nAlguns meses depois, conversando com colegas da Estatística e da Matemática Aplicada, percebi que não era o único interessado. Isso me motivou a criar um Meetup (alias, estamos reativando ele, então inscriva-se para não perder as novidades). No entanto, com a correria do dia a dia, nunca conseguimos realizar um encontro. Por anos, o grupo ficou lá, crescendo aos poucos, mesmo sem atividades — cheguei a pensar em encerrá-lo, mas no fundo sempre mantive a esperança de um dia retomar essa ideia."
+    "text": "Ao falar de Estatística, a primeira linguagem de programação que costuma vir à mente é R. Criada especificamente para análise estatística e ciência de dados, oferece uma ampla gama de ferramentas estatísticas já disponíveis por padrão, além de milhares de pacotes criados para os mais diversos propósitos.\nPara nossa sorte, embora a linguagem Julia não tenha sido projetada exclusivamente para a Estatística, já conta com grande parte das ferramentas essenciais, graças a um ecossistema de pacotes que cresce rapidamente e abrange diversas áreas da análise de dados, da modelagem estatística e do aprendizado de máquina.\nVamos, então, conhecer os principais pacotes para trabalhar com Estatística em Julia, organizados por área de aplicação (desde tarefas básicas até análises mais complexas)."
   },
   {
-    "objectID": "Blog/as-origens.html#o-início",
-    "href": "Blog/as-origens.html#o-início",
-    "title": "Do Zero ao Julia: As origens",
+    "objectID": "Blog/pacotes_estatistica.html#introdução",
+    "href": "Blog/pacotes_estatistica.html#introdução",
+    "title": "Pacotes Essenciais para Trabalhar com Estatística em Julia",
     "section": "",
-    "text": "A primeira vez que ouvi falar da linguagem Julia foi em 2014, quando ainda era estudante de doutorado no IMECC e buscava formas mais rápidas de executar as simulações da minha pesquisa, que já exigia computação intensiva (Bootstrap). Naquela época, pouquíssimas pessoas trabalhavam com Julia, mas as promessas de desempenho comparável ao de linguagens de baixo nível como C++ ou Fortran rapidamente chamaram minha atenção.\nAlguns meses depois, conversando com colegas da Estatística e da Matemática Aplicada, percebi que não era o único interessado. Isso me motivou a criar um Meetup (alias, estamos reativando ele, então inscriva-se para não perder as novidades). No entanto, com a correria do dia a dia, nunca conseguimos realizar um encontro. Por anos, o grupo ficou lá, crescendo aos poucos, mesmo sem atividades — cheguei a pensar em encerrá-lo, mas no fundo sempre mantive a esperança de um dia retomar essa ideia."
+    "text": "Ao falar de Estatística, a primeira linguagem de programação que costuma vir à mente é R. Criada especificamente para análise estatística e ciência de dados, oferece uma ampla gama de ferramentas estatísticas já disponíveis por padrão, além de milhares de pacotes criados para os mais diversos propósitos.\nPara nossa sorte, embora a linguagem Julia não tenha sido projetada exclusivamente para a Estatística, já conta com grande parte das ferramentas essenciais, graças a um ecossistema de pacotes que cresce rapidamente e abrange diversas áreas da análise de dados, da modelagem estatística e do aprendizado de máquina.\nVamos, então, conhecer os principais pacotes para trabalhar com Estatística em Julia, organizados por área de aplicação (desde tarefas básicas até análises mais complexas)."
   },
   {
-    "objectID": "Blog/as-origens.html#o-transcurso",
-    "href": "Blog/as-origens.html#o-transcurso",
-    "title": "Do Zero ao Julia: As origens",
-    "section": "O transcurso",
-    "text": "O transcurso\n\nApós o doutorado, acabei focando em outras prioridades — publicar artigos, trabalhar na indústria, estudar para concursos, preparar aulas… Ainda assim, a vontade de usar Julia permanecia. Com o tempo, fui explorando outras particularidades da linguagem: a possibilidade de escrever símbolos matemáticos diretamente no código (o que facilita absurdamente a implementação de novos métodos propostos na literatura), a programação nativa em paralelo e distribuída, e o fato de Julia resolver o famoso problema das duas linuagens.\nMotivado pelas vantagens da linguagem, quando entrei na UNICAMP como docente resolvi incluir Julia como linguagem a ser utilizada em umas das disciplinas: Econometria. Posteriormente, trabalhando num artigo com alguns colegas (Hotta et al. 2025), resolvi implementar tudo em Julia, do zero, o que acabou sendo um ótima e desafiadora experiência."
+    "objectID": "Blog/pacotes_estatistica.html#manipulação-de-dados-e-estatísticas-sumárias",
+    "href": "Blog/pacotes_estatistica.html#manipulação-de-dados-e-estatísticas-sumárias",
+    "title": "Pacotes Essenciais para Trabalhar com Estatística em Julia",
+    "section": "Manipulação de Dados e Estatísticas Sumárias",
+    "text": "Manipulação de Dados e Estatísticas Sumárias\n\nStatsBase: Ferramentas básicas de estatística descritiva;\nFreqTables: Construção de tabelas de frequências para análise exploratória;\nDataFrames: Importação e manipulação de bases de dados tabulares."
   },
   {
-    "objectID": "Blog/as-origens.html#a-idealização",
-    "href": "Blog/as-origens.html#a-idealização",
-    "title": "Do Zero ao Julia: As origens",
-    "section": "A idealização",
-    "text": "A idealização\n\nApós a curta experiência mão na massa com Julia, entender a importância da extensão e de ver a necessidade dos alunos por se envolverem em atividade de extensão, resolvi unir o útil ao agradável e foi assim que surgiu a primeira ideia do projeto. Ainda no rascunho, perguntei aos meus orientandos o que eles achavam da ideia e alguns deles toparam participar desde o início (alias, foram eles que me ajudaram a escolher o nome). Passaram-se alguns meses e agora com a ideia mais amadurecida, escrevi uma proposta e a submeti à comissão de extensão do IMECC e, após algunas sugestões da comissão, o projeto foi aprovado e lançado oficialmente na sua forma atual.\n\n\n\n\n\nConfesso que, inicialmente, achei que apenas meus orientandos se interessariam. Mas, para minha grata surpresa, o projeto teve uma ótima recepção. Hoje, temos mais de 20 pessoas envolvidas, colaborando com as redes sociais, escrevendo posts, tutoriais, organizando minicursos e cuidando da parte editorial, entre outras atividades que loog logo ficarão sabendo."
+    "objectID": "Blog/pacotes_estatistica.html#variáveis-aleatórias",
+    "href": "Blog/pacotes_estatistica.html#variáveis-aleatórias",
+    "title": "Pacotes Essenciais para Trabalhar com Estatística em Julia",
+    "section": "Variáveis Aleatórias",
+    "text": "Variáveis Aleatórias\n\nDistributions: Definição, manipulação e amostragem de distribuições de probabilidade;\nRandom: Geração de números aleatórios com uso de sementes, garantindo a reprodutibilidade."
   },
   {
-    "objectID": "Blog/as-origens.html#a-meta",
-    "href": "Blog/as-origens.html#a-meta",
-    "title": "Do Zero ao Julia: As origens",
-    "section": "A meta",
-    "text": "A meta\n\nMinha esperança é que o site www.ime.unicamp.br/julialang se torne um ponto de referência para quem quer aprender e explorar a linguagem Julia — oferecendo desde dicas para iniciantes até tutoriais completos e atualizações sobre a linguagem. Mais do que isso, torço para que o projeto ajude os alunos a desenvolverem habilidades valiosas para o mercado e, ao mesmo tempo, inspire a comunidade acadêmica e de ciência de dados a enxergar Julia como um verdadeiro mar de possibilidades.\nEstou longe de ser um expert em Julia, mas espero que em breve tanto você quanto eu saibamos um pouco mais dessa linguagem.\nHappy coding!\n\n\n\n\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto, bem como para a geração de imagens."
+    "objectID": "Blog/pacotes_estatistica.html#visualização-de-dados",
+    "href": "Blog/pacotes_estatistica.html#visualização-de-dados",
+    "title": "Pacotes Essenciais para Trabalhar com Estatística em Julia",
+    "section": "Visualização de Dados",
+    "text": "Visualização de Dados\n\nPlots: Construção de uma ampla variedade de gráficos;\nGadfly: Criação de gráficos com sintaxe semelhante à do pacote ggplot2, do R."
   },
   {
-    "objectID": "Blog/instalar_julia.html",
-    "href": "Blog/instalar_julia.html",
-    "title": "Como instalar Julia?",
+    "objectID": "Blog/pacotes_estatistica.html#modelagem-e-testes-de-hipótese",
+    "href": "Blog/pacotes_estatistica.html#modelagem-e-testes-de-hipótese",
+    "title": "Pacotes Essenciais para Trabalhar com Estatística em Julia",
+    "section": "Modelagem e Testes de Hipótese",
+    "text": "Modelagem e Testes de Hipótese\n\nHypotesisTests: Realização de testes de hipótese frequentistas, incluindo testes paramétricos e não paramétricos;\nGLM: Modelagens de regressões lineares e regressões lineares generalizadas;\nMixedModels: Ajuste de modelos lineares e generalizados com efeitos mistos;\nOptim: Otimização de funções, essencial para maximizar verossimilhanças;\nMultivariateStats: Ferramentas de análise multivariada, como PCA e LDA;\nTimeSeries: Manipulação, visualização e modelagem de séries temporais."
+  },
+  {
+    "objectID": "Blog/pacotes_estatistica.html#inferência-bayesiana",
+    "href": "Blog/pacotes_estatistica.html#inferência-bayesiana",
+    "title": "Pacotes Essenciais para Trabalhar com Estatística em Julia",
+    "section": "Inferência Bayesiana",
+    "text": "Inferência Bayesiana\n\nTuring: Modelagem estatística bayesiana baseada em amostragem;\nMCMCChains: Ferramentas para diagnóstico, resumo e visualização de cadeias de Markov geradas por MCMC."
+  },
+  {
+    "objectID": "Blog/pacotes_estatistica.html#aprendizado-de-máquina",
+    "href": "Blog/pacotes_estatistica.html#aprendizado-de-máquina",
+    "title": "Pacotes Essenciais para Trabalhar com Estatística em Julia",
+    "section": "Aprendizado de Máquina",
+    "text": "Aprendizado de Máquina\n\nDecisionTree: Algoritmos de árvores de decisão, árvores de regressão e florestas aleatórias;\nClustering: Algoritmos de clusterização, voltados para aprendizado de máquina não supervisionado;\nScikitLearn: Diversos algoritmos de machine learning com sintaxe semelhante à da biblioteca do Python, de mesmo nome;\nMLBase: Ferramentas auxiliares para aplicação de modelos de machine learning.\n\n\nAté aqui, temos apresentados apenas alguns exemplos de pacotes que podem ser utilizados em Julia, mas existem muitos outros!. Para explorar mais, acesse o site Julia Packages e descubra todo o potencial que Julia pode lhe oferecer."
+  },
+  {
+    "objectID": "Blog/pacotes_estatistica.html#conclusão",
+    "href": "Blog/pacotes_estatistica.html#conclusão",
+    "title": "Pacotes Essenciais para Trabalhar com Estatística em Julia",
+    "section": "Conclusão",
+    "text": "Conclusão\n\nCom esse conjunto de pacotes, Julia se consolida como uma linguagem útil para análise de dados, modelagem estatística/econometrica e aprendizado de máquina. Embora seu uso ainda esteja em crescimento, já é possível realizar diversas análises envolvendo dados (desde análises descritivas simples até modelagens complexas).\n\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
+  },
+  {
+    "objectID": "Blog/jupytercolab.html",
+    "href": "Blog/jupytercolab.html",
+    "title": "Notebooks em Julia: Jupyter e Colab",
     "section": "",
-    "text": "Há muitas vantagens em usar plataformas integradas para desenvolver seus projetos nas mais diversas linguagens de programação. Mas e se sua internet cair? E se você quiser continuar seu projeto de um lugar com conexão lenta? Ter Julia instalado no seu computador resolve esse problema!\nNeste post, aprenderemos algumas formas de instalar Julia no seu computador."
+    "text": "A linguagem Julia foi projetada para ser ao mesmo tempo rápida e dinâmica. Quando integrada ao ambiente Jupyter, ela se transforma em uma poderosa ferramenta interativa, que permite combinar código, visualizações gráficas e textos em um único documento, criando um ambiente ideal para o ensino e a aprendizagem.\nNeste post, aprenderemos como instalar o Jupyter e adequá-lo ao ambiente da Julia, bem como a utilizar Julia no queridinho Colab"
   },
   {
-    "objectID": "Blog/instalar_julia.html#introdução",
-    "href": "Blog/instalar_julia.html#introdução",
-    "title": "Como instalar Julia?",
+    "objectID": "Blog/jupytercolab.html#introdução",
+    "href": "Blog/jupytercolab.html#introdução",
+    "title": "Notebooks em Julia: Jupyter e Colab",
     "section": "",
-    "text": "Há muitas vantagens em usar plataformas integradas para desenvolver seus projetos nas mais diversas linguagens de programação. Mas e se sua internet cair? E se você quiser continuar seu projeto de um lugar com conexão lenta? Ter Julia instalado no seu computador resolve esse problema!\nNeste post, aprenderemos algumas formas de instalar Julia no seu computador."
+    "text": "A linguagem Julia foi projetada para ser ao mesmo tempo rápida e dinâmica. Quando integrada ao ambiente Jupyter, ela se transforma em uma poderosa ferramenta interativa, que permite combinar código, visualizações gráficas e textos em um único documento, criando um ambiente ideal para o ensino e a aprendizagem.\nNeste post, aprenderemos como instalar o Jupyter e adequá-lo ao ambiente da Julia, bem como a utilizar Julia no queridinho Colab"
   },
   {
-    "objectID": "Blog/instalar_julia.html#pelo-site-oficial",
-    "href": "Blog/instalar_julia.html#pelo-site-oficial",
-    "title": "Como instalar Julia?",
-    "section": "Pelo site oficial",
-    "text": "Pelo site oficial\nClicando em Julia, você será redirecionado para o site oficial de Julia, onde poderá realizar a instalação manual da versão mais recente de Julia apenas baixando um instalador compatível com seu sistema operacional (.exe, .dmg, etc). É importante escolher um instalador compatível com o seu sistema operacional, caso contrário não será possível a instalação.\nCertifique-se de ter pelo menos 0,98 GB livres para armazenar os arquivos em seu computador. Após o término do download, siga as instruções recomendadas de configuração do instalador oficial (clicando em “Próximo” em todas as abas, para o caso da instalação padrao) e aguarde enquanto Julia é instalado.\n\n\n\nAtalho no Desktop\n\n\n\nCriar um atalho na área de trabalho facilitará muito o acesso ao aplicativo no dia a dia, embora essa seleção seja opcional.\n\nUma vez instalado Julia no seu computador, você poderá programar diretamente no terminal de Julia, que deve se parecer com a seguinte imagem:\n\n\n\nTerminal Julia"
+    "objectID": "Blog/jupytercolab.html#instalação-do-jupyter",
+    "href": "Blog/jupytercolab.html#instalação-do-jupyter",
+    "title": "Notebooks em Julia: Jupyter e Colab",
+    "section": "Instalação do Jupyter",
+    "text": "Instalação do Jupyter\n\nPara a baixarmos o Jupyter, temos duas alternativas. A primeira é usando o Python em conjunto com o Julia e a segunda é usando somente o Julia (neste caso pule para a seção: Instalação do Jupyter pelo IJulia).\nUsando as duas linguagens em questão, devemos primeiro instalar o Python. Na página direcionada, você poderá instalar a versão mais nova do Python para o seu sistema operacional (no momento da criação deste post é a versão 3.13).\nCom o arquivo instalado, deveremos deixar habilitado “Add python.exe to PATH” (para permitir usar o comando pip no prompt de comando).\n\n\n\n\nInstalação Python\n\n\n\nEm seguida, abrindo o prompt de comando (coloque “cmd” na barra de procura do Windows), digite pip install jupyter.\n\n\n\n\nInstalando Jupyter\n\n\n\nTendo o Julia e o Jupyter instalados, agora nós instalamos o IJulia. Abrindo o prompt do Julia seguimos com using Pkg e depois Pkg.add(“IJulia”).\n\n\n\n\nTerminal Julia\n\n\n\nFinalmente, abrindo o cmd e digitamos: jupyter notebook. Com o Jupyter aberto, para abrir um notebook, vamos para a barra New e selecionamos o Julia (o número da versão que você instalou). E voilá."
   },
   {
-    "objectID": "Blog/instalar_julia.html#outros-caminhos",
-    "href": "Blog/instalar_julia.html#outros-caminhos",
-    "title": "Como instalar Julia?",
-    "section": "Outros caminhos",
-    "text": "Outros caminhos\nJulia também está disponível para download pela Microsoft Store. Para os usuários de Linux e macOS, essa opção não se encontra disponível por enquanto, mas também é possível instalar e utilizar Julia diretamente do terminal do computador.\nNo Windows, pressione as teclas Windows + R, digite cmd e pressione “Enter” para abrir o terminal. Em seguida, execute o comando abaixo e digite Y quando solicitado pelo sistema:\nwinget install Julia\nQuando a instalação for concluída, você pode digitar where julia para localizar o caminho até o .exe de Julia, ou simplesmente digitar julia no terminal para obter uma interface semelhante à do aplicativo do programa.\nNo macOS ou Linux, abra o terminal e digite\ncurl -fsSL https://install.julialang.org | sh\nQuando a instalação for concluída, você pode digitar which julia para localizar o caminho até o executável de Julia, ou simplesmente digitar julia no terminal para acessar a interface interativa do programa.\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
+    "objectID": "Blog/jupytercolab.html#instalação-do-jupyter-pelo-ijulia",
+    "href": "Blog/jupytercolab.html#instalação-do-jupyter-pelo-ijulia",
+    "title": "Notebooks em Julia: Jupyter e Colab",
+    "section": "Instalação do Jupyter pelo IJulia",
+    "text": "Instalação do Jupyter pelo IJulia\n\nCaso você não queira instalar o Python podemos fazer tudo pelo Julia! Terminando de instalar o IJulia, no terminal, digite using IJulia e em seguida notebook(). Será perguntado se você deseja instalar o Jupyter via Conda, digite y.\n\n\n\n\nInstalando Jupyter (Julia)\n\n\n\nApós esperar o tempo de instalação, temos o Jupyter em mãos!"
   },
   {
-    "objectID": "Blog/markdown_pluto.html",
-    "href": "Blog/markdown_pluto.html",
-    "title": "Como criar relatórios dinâmicos com Julia e Pluto",
+    "objectID": "Blog/jupytercolab.html#julia-no-colab",
+    "href": "Blog/jupytercolab.html#julia-no-colab",
+    "title": "Notebooks em Julia: Jupyter e Colab",
+    "section": "Julia no Colab",
+    "text": "Julia no Colab\n\nEm 5 de março de 2025, o Google Colab, o Jupyter hospedado na nuvem da Google, adicionou outro tipo de ambiente de execução, a linguagem de programação Julia. Divulgado por Eric Johnson em seu GitHub, o mesmo fala em seu post que além de facilitar o acesso à programação na linguagem Julia, sua introdução ao Google Colab é quase uma homenagem ao Jupyter. Isso porque “Jupyter” é nomeado a partir das três linguagens originalmente suportadas: Julia (“Ju”), Python (“Pyt”) e R (“R”). E agora com Julia sendo adicionado, a tríade das linguagens originais do Jupyter está completa.\nComo colocar Julia no Colab? Muito simples!\nApós criar um novo notebook no Colab. Na aba “Ambiente de execução”, selecione “Alterar o tipo de ambiente de execução”. Depois mude o tipo de ambiente para Julia.\n\n\n\n\nPasso a passo no Colab\n\n\nO ambiente no Colab está pronto para ser usado.\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
+  },
+  {
+    "objectID": "Blog/Julia no Mercado de Trabalho.html",
+    "href": "Blog/Julia no Mercado de Trabalho.html",
+    "title": "Julia no Mercado de Trabalho",
     "section": "",
-    "text": "Ao programar, é essencial manter uma documentação clara e com boa visualização, especialmente ao apresentar nosso trabalho para outras pessoas. Para isso, muitas linguagens oferecem compatibilidade com Markdown, uma ferramenta que permite combinar texto e código de maneira dinâmica, tornando a criação de relatórios muito mais prática.\nFelizmente, ao programar em Julia, é possível utilizar Markdown diretamente com o auxílio do pacote Pluto, que integra esses recursos de maneira simples e eficiente."
+    "text": "Você, seja estudante, profissional formado ou simplesmente alguém curioso sobre a linguagem Julia, talvez já tenha se perguntado: qual é a relação entre Julia e o mercado de trabalho? Será que ela é amplamente usada? É mais eficiente que outras linguagens? Quais são suas principais diferenças e, não menos importante, por que uma empresa optaria (ou não) por adotá-la em seus projetos?\nNeste blog, vou abordar todas essas questões e ajudar você a entender melhor o papel da Julia no mundo profissional. Então, vem comigo e segue o fio!"
   },
   {
-    "objectID": "Blog/markdown_pluto.html#introdução",
-    "href": "Blog/markdown_pluto.html#introdução",
-    "title": "Como criar relatórios dinâmicos com Julia e Pluto",
+    "objectID": "Blog/Julia no Mercado de Trabalho.html#uso-de-julia-no-mercado-de-trabalho",
+    "href": "Blog/Julia no Mercado de Trabalho.html#uso-de-julia-no-mercado-de-trabalho",
+    "title": "Julia no Mercado de Trabalho",
+    "section": "Uso de Julia no mercado de trabalho",
+    "text": "Uso de Julia no mercado de trabalho\nSabemos que Julia ainda não é tão popular quanto outras linguagens como Python, R ou Java. Isso, pode levarmos a pensar que, talvez, Julia é apenas utilizada no meio acadêmico, mas, não se engane: Julia já está mais presente no mercado de trabalho do que você imagina!\nPor ser uma linguagem de alto nível, projetada especialmente para cálculos científicos e computacionais de grande porte e alta complexidade, algumas empresas fazem questão de incluí-la em seu portfólio tecnológico.\nQuer alguns exemplos? Aqui embaixo deixo uma lista de algumas empresas/instituições do mercado que você com certeza conhece e, acredite ou não, elas utilizam bastante da linguagem Julia no seu cotidiano!\n\nGoogle: a linguagem Julia roda em seus TPU’s (chips feitos especificamente para fins de Machine Learning) devido à um projeto chamado “XLA.jl”. Por conta disso, os desenvolvedores da Google podem escrever rápidos códigos de machine learning que rodam dentro do hardware da própria Google, sem a necessidade de alternar entre linguagens.\nNASA: pense bem, você precisa de uma linguagem que modele diversas questões físicas como a gravidade entre planetas, rotas para satélites e espaçonaves, simular órbitas… e você precisa que todos estes cálculos extremamente complexos sejam feitos rápidos e com precisão. Qual linguagem, que é rápida como C++ ou Fortran, mas que é fácil de escrever e de alterar, você utilizaria? Julia, claro! Além disso, por meio do pacote Oceananigans.jl, a NASA simula o comportamento físico dos oceanos com alta precisão e velocidade.\nPfizer: por meio de modelos farmacêuticos, a Pfizer consegue acelerar simulações que antes demoravam dias, até semanas; simular metabolismo e absorção de substâncias no organismo, entre muitos outros. É por meio da plataforma Pumas.jl que a empresa consegue fazer todas as simulações que permitem rápidas tomadas de decisões à respeito de seus experimentos.\nIBM: a linguagem é muito útil para a IBM dado que tratam muito de séries temporais, IA e machine learning, logo, se torna necessário o uso de uma linguagem que facilite a criação de pipelines para esses processos, e Julia faz justamente isso. Automatizações de fluxo de trabalho de machine learning, especialmente quando os dados variam com o tempo é algo feito pela linguagem, especialmente pelas plataformas produzidas pela empresa, como o TSLM.jl e o AutoMLPipeline.jl.\nRenault: a linguagem Julia foi utilizada para resolver um problema logístico: planejar rotas e estoques em toda a Europa para recolher embalagens reutilizáveis. Via métodos tradicionais, as soluções eram lentas e ineficazes, então a empresa implementou um algoritmo em Julia que otimizou todo o processo e reduziu custos logísticos.\n\nAlguma dessas empresas te surpreendeu? Você pode encontrar mais empresas que utilizam a linguagem e também casos de estudos em que aplicaram Julia no seguinte link: https://info.juliahub.com/industries/case-studies\n\n\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica, aprimoramento do texto e criação de imagens."
+  },
+  {
+    "objectID": "Blog/Julia no Mercado de Trabalho.html#referências",
+    "href": "Blog/Julia no Mercado de Trabalho.html#referências",
+    "title": "Julia no Mercado de Trabalho",
+    "section": "Referências",
+    "text": "Referências\n\nNasa: Julia Programming Language Benchmark Using a Flight Simulation; Here’s how NASA is using Julia to better understand the ocean\nGoogle: Google Cloud TPUs Now Speak Julia\nRenault: Solving a Continent-Scale Inventory Routing Problem at Renault\nPfizer: Pfizer uses Julia to accelerate simulations of new therapies for metabolic diseases up to 175x;\nIBM: Designing Machine Learning Pipeline Toolkit for AutoML Surrogate Modeling Optimization"
+  },
+  {
+    "objectID": "Blog/vscode.html",
+    "href": "Blog/vscode.html",
+    "title": "Como programar em Julia no Vscode",
     "section": "",
-    "text": "Ao programar, é essencial manter uma documentação clara e com boa visualização, especialmente ao apresentar nosso trabalho para outras pessoas. Para isso, muitas linguagens oferecem compatibilidade com Markdown, uma ferramenta que permite combinar texto e código de maneira dinâmica, tornando a criação de relatórios muito mais prática.\nFelizmente, ao programar em Julia, é possível utilizar Markdown diretamente com o auxílio do pacote Pluto, que integra esses recursos de maneira simples e eficiente."
+    "text": "A linguagem Julia tem ganhado cada vez mais espaço entre cientistas de dados, estatísticos, economistas, engenheiros e matemáticos. Isto, graças à sua velocidade de processamento e sintaxe simples. Uma das formas mais práticas de programar em Julia é por meio do Visual Studio Code (VS Code), um editor leve, moderno e altamente extensível.\nNeste post, mostraremos como configurar e usar o Julia no VS Code (ideal para quem está começando do zero)."
   },
   {
-    "objectID": "Blog/markdown_pluto.html#instalação-do-pluto",
-    "href": "Blog/markdown_pluto.html#instalação-do-pluto",
-    "title": "Como criar relatórios dinâmicos com Julia e Pluto",
-    "section": "Instalação do Pluto",
-    "text": "Instalação do Pluto\nEm primeiro lugar, é necessário que o Julia esteja instalado. A partir disso, é necessário abrir o programa e digitar o seguinte código:\nusing Pkg\nPkg.add(\"Pluto\")"
+    "objectID": "Blog/vscode.html#introdução",
+    "href": "Blog/vscode.html#introdução",
+    "title": "Como programar em Julia no Vscode",
+    "section": "",
+    "text": "A linguagem Julia tem ganhado cada vez mais espaço entre cientistas de dados, estatísticos, economistas, engenheiros e matemáticos. Isto, graças à sua velocidade de processamento e sintaxe simples. Uma das formas mais práticas de programar em Julia é por meio do Visual Studio Code (VS Code), um editor leve, moderno e altamente extensível.\nNeste post, mostraremos como configurar e usar o Julia no VS Code (ideal para quem está começando do zero)."
   },
   {
-    "objectID": "Blog/markdown_pluto.html#conhecendo-o-pluto",
-    "href": "Blog/markdown_pluto.html#conhecendo-o-pluto",
-    "title": "Como criar relatórios dinâmicos com Julia e Pluto",
-    "section": "Conhecendo o Pluto",
-    "text": "Conhecendo o Pluto\nCom o pacote instalado, já podemos começar a usar o Pluto. Para isso, abrimos o Julia e digitamos o seguinte código, que será utilizado todas as vezes que quisermos acessá-lo.\nusing Pluto\nPluto.run()\nApós rodar o código, o Pluto será carregado e a seguinte tela estará aberta no seu navegador padrão:\n\n\n\nTela Inicial Pluto\n\n\nEstarão destacados os últimos arquivos acessados e, caso seja a primeira vez, constarão alguns exemplos. A partir de Open a notebook, podemos acessar as pastas do nosso computador e escolher o arquivo que desejamos abrir.\nNo caso, vamos criar um arquivo do zero clicando em Create a new notebook. Após a criação, esta é a tela inicial que será aberta:\n\n\n\nAqruivo Vazio no Pluto\n\n\nCom isso, a partir dessa página, podemos adicionar os textos e códigos utilizando os cell code (célula de código), os quais podemos adicionar clicando nos “mais” que aparecem ao aproximar o cursor. Para ser um código, basta programar de forma normal, mas para inserir textos, é necessário que esteja no formato md”seu_texto”.\nPara ilustrar o básico do Pluto, vamos realizar algumas simples tarefas:\n\nAdicionar o título “Aprendendo Julia Markdown” (Para aumentar o tamanho do texto, utilizaremos #);\nInserir o texto: “O código abaixo cria uma função que, dados dois números reais, computa a soma deles:”;\nInserir o código da função;\nInserir o texto: “Para testar a função, vamos utilizar como argumentos 2 e 3.”;\nAvaliar nossa função com os valores determinados.\n\nPortanto, agora nós temos:\n\n\n\nAqruivo no Pluto com Tarefas Propostas\n\n\nVale destacar que as saídas de cada célula aparecem logo acima dela. Além disso, podemos ocultar os códigos que não queremos, a fim de deixar a visualização mais limpa, clicando no ícone de olho que aparece ao passar o cursor em um cell code. Assim, obtemos por fim:\n\n\n\nVersão Final do Código com Pluto\n\n\nPortanto, utilizando o Pluto, conseguimos criar relatórios dinâmicos combinando texto e código de forma muito prática. Essa integração facilita tanto o desenvolvimento quanto a apresentação dos conteúdos, tornando o processo mais claro, organizado e interativo. Além disso, é possível explorar uma variedade de recursos adicionais, como tabelas, imagens, fórmulas matemáticas em LaTeX, gráficos, e muito mais.\nCom essas possibilidades, o Pluto se torna uma ferramenta extremamente útil para documentação de projetos, produção de material didático, análise de dados e compartilhamento de ideias de forma acessível e visualmente atrativa.\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
+    "objectID": "Blog/vscode.html#pré-requisitos",
+    "href": "Blog/vscode.html#pré-requisitos",
+    "title": "Como programar em Julia no Vscode",
+    "section": "Pré-requisitos",
+    "text": "Pré-requisitos\n\nTer o Julia instalado;\nTer o VS Code instalado."
+  },
+  {
+    "objectID": "Blog/vscode.html#instalando-o-vs-code",
+    "href": "Blog/vscode.html#instalando-o-vs-code",
+    "title": "Como programar em Julia no Vscode",
+    "section": "Instalando o VS Code",
+    "text": "Instalando o VS Code\nSe ainda não instalou o VS Code, clique no link no tópico anterior para ser direcionado à página de download. Ao chegar lá, baixe o arquivo de acordo com o seu sistema operacional.\nApós baixar o arquivo, deixe marcado as seguintes opções durante a instalação:\n\n\n\nInstalação do VS Code"
+  },
+  {
+    "objectID": "Blog/vscode.html#instalando-a-extensão-do-julia-no-vs-code",
+    "href": "Blog/vscode.html#instalando-a-extensão-do-julia-no-vs-code",
+    "title": "Como programar em Julia no Vscode",
+    "section": "Instalando a extensão do Julia no VS Code",
+    "text": "Instalando a extensão do Julia no VS Code\nCom o VS Code devidamente instalado, devemos instalar a extensão oficial do Julia. Para isso:\n\nAbra a aba de extensões (Ctrl + shift + X);\nBusque por “Julia”;\nSelecione a extensão e clique em “Install”.\n\n\n\n\nExtensão do Julia"
+  },
+  {
+    "objectID": "Blog/vscode.html#programando-em-julia",
+    "href": "Blog/vscode.html#programando-em-julia",
+    "title": "Como programar em Julia no Vscode",
+    "section": "Programando em Julia",
+    "text": "Programando em Julia\nCom a extensão do Julia instalada, chegou a hora de pôr a mão na massa. Para escrever seu primeiro código em Julia no VS Code, crie um novo arquivo do tipo .jl. Para executar determinadas linhas de código, selecione-as e use o atalho Ctrl + Enter. Se preferir, clique no botão “Run”, no canto superior direito, para rodar o arquivo inteiro.\n\n\n\nOlá Mundo!\n\n\nPronto! Agora você já pode começar a programar e desenvolver seus projetos em Julia com o VS Code!\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
   },
   {
     "objectID": "Blog/HistoriaJulia.html",
@@ -348,69 +418,6 @@
     "title": "Loops e Condicionais em Julia",
     "section": "Considerações finais",
     "text": "Considerações finais\nVerificamos, portanto, que tanto os loops quanto as condicionais são componentes essenciais para o desenvolvimento de códigos eficientes em Julia. Enquanto as condicionais permitem que seu programa tome decisões com base em regras lógicas, os loops possibilitam repetir ações automaticamente, reduzindo redundância e aumentando a performance em tarefas como simulações, análises de dados ou algoritmos numéricos.\n\nExplore mais: Comprehensions são uma forma compacta de criar vetores, matrizes e até dicionários. Elas podem ser muito mais rápidas que loops utilizando push!.\n\nReferências e mais detalhes podem ser encontrados nesses endereços web:\n\nGeeks for Geeks\njlHub\n\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
-  },
-  {
-    "objectID": "Tutoriais/graf_basico.html",
-    "href": "Tutoriais/graf_basico.html",
-    "title": "Gráficos em Julia: primeiros passos",
-    "section": "",
-    "text": "Lidar com diferentes linguagens de programação faz parte do dia a dia de pesquisadores, desenvolvedores e usuários finais nas áreas de STEM (Science, Technology, Engineering and Mathematics). No entanto, tão importante quanto desenvolver, implementar e aplicar modelos ou metodologias é saber comunicar os resultados de forma clara e acessível ao público-alvo. E nada melhor para isso do que visualizações didáticas e informativas.\nEmbora existam excelentes ferramentas para visualização de dados, como o ggplot2 do R e o seaborn do Python, é sempre útil saber como produzir gráficos, mesmo que básicos, diretamente na linguagem em que o código principal está sendo desenvolvido.\nNeste tutorial, você aprenderá a criar visualizações básicas em Julia utilizando o pacote Plots.jl, além de conhecer algumas bibliotecas auxiliares que tornam esse processo mais eficiente e versátil."
-  },
-  {
-    "objectID": "Tutoriais/graf_basico.html#introdução",
-    "href": "Tutoriais/graf_basico.html#introdução",
-    "title": "Gráficos em Julia: primeiros passos",
-    "section": "",
-    "text": "Lidar com diferentes linguagens de programação faz parte do dia a dia de pesquisadores, desenvolvedores e usuários finais nas áreas de STEM (Science, Technology, Engineering and Mathematics). No entanto, tão importante quanto desenvolver, implementar e aplicar modelos ou metodologias é saber comunicar os resultados de forma clara e acessível ao público-alvo. E nada melhor para isso do que visualizações didáticas e informativas.\nEmbora existam excelentes ferramentas para visualização de dados, como o ggplot2 do R e o seaborn do Python, é sempre útil saber como produzir gráficos, mesmo que básicos, diretamente na linguagem em que o código principal está sendo desenvolvido.\nNeste tutorial, você aprenderá a criar visualizações básicas em Julia utilizando o pacote Plots.jl, além de conhecer algumas bibliotecas auxiliares que tornam esse processo mais eficiente e versátil."
-  },
-  {
-    "objectID": "Tutoriais/graf_basico.html#como-criar-os-gráficos",
-    "href": "Tutoriais/graf_basico.html#como-criar-os-gráficos",
-    "title": "Gráficos em Julia: primeiros passos",
-    "section": "Como criar os gráficos?",
-    "text": "Como criar os gráficos?\nPara instalar o pacote principal e carregar seus comandos no ambiente, execute as seguintes linhas de código:\n\nPkg.add(\"Plots\")\nusing Plots\n\n\nLembre-se que precisamos apenas instalar o pacote uma única vez, mas chamá-lo em cada sessão que formos utilizá-lo.\n\n\nTambém utilizaremos os pacotes Distributions.jl e StatsPlots.jl para permitir a criação de gráficos com dados simulados e utilizar algumas distribuições de probabilidade. Para instalá-los e carregá-los, use:\n\n\nPkg.add(\"Distributions\")\nusing Distributions\n\nPkg.add(\"StatsPlots\")\nusing StatsPlots\n\n\nObservação: Uma boa prática em Julia é carregar os pacotes um por um, logo no início do script, seguindo a ordem alfabética. Isso torna o código mais organizado, facilita a leitura e a identificação de dependências. Por exemplo:\n\n\nusing Distributions\nusing Plots\nusing StatsPlots\n\n\nGráfico de Densidades\n\nUm dos gráficos mais básicos (e úteis) para visualização de dados é o gráfico de densidades. Vamos gerando um gráfico de densidade da distribuição Normal com média 0 e variância 1. Para isso, execute:\n\n\nplot(Normal(0,1), title = \"Distribuição Normal\", size = (800, 500))\n\n\n\n\n\n\n\n\nOutras distribuições contidas no pacote:\n\nBernoulli(\\(p\\))\nBeta(\\(\\alpha\\), \\(\\beta\\))\nBinomial(n, p)\nCauchy(\\(\\mu\\), \\(\\sigma\\))\nExponential(\\(\\theta\\))\nGamma(\\(\\alpha\\), \\(\\gamma\\))\nPoisson(\\(\\lambda\\))\nUniform(\\(a\\), \\(b\\))\nTDist(\\(\\nu\\))\n\n\nVocê pode conferir a documentação completa das funções no site oficial de Julia.\nA função plot() também pode ser utilizada para criar gráficos de linha ou de sequência:\n\n\nplot(randn(10), title = \"Gráfico de linha ou de sequência\", size = (800, 500))\n\n\n\n\n\n\n\n\n\n\nGráfico de Dispersão\n\nTambém é possível fazer um gráfico de dispersão (scatterplot) com o código abaixo. Neste exemplo, geramos valores em x de 0 a 10 com um espaçamento de 0,5 entre eles e calculamos y como o logaritmo de cada valor de x. Além de personalizar o título e o nome dos eixos, é possível controlar a exibição da legenda — o padrão é mostrar legend = auto, mas você pode ocultá-la com legend = false.\n\n\nx = 0:0.5:10\n\n0.0:0.5:10.0\n\ny = log.(x);\nscatter(x, y, title = \"Gráfico de Dispersão\", xlabel = \"x\", ylabel = \"log(x)\", legend = false)\n\n\n\n\n\n\n\n\n\nObservação: o operador \\(\\cdot\\) (dot), aplica a função \\(\\log()\\) a cada elemento do vetor x. O “;” evita que a variável y seja impressa (como aconteceu com a variável x).\n\n\n\nHistograma\n\nOutro recurso valioso na visualização de dados é o histograma, ideal para visualizar a distribuição de uma variável. Vamos construí-lo a partir da criação de uma variável x equivalente a 1000 números aleatórios de uma distribuição Normal(0, 1), executando o seguinte bloco:\n\n\nx = randn(1000);\nhistogram(x, title = \"Histograma\", color = :purple)\n\n\n\n\n\n\n\n\n\nNote que é possível customizar o número de intervalos (bins = 100, por exemplo) do seu histograma e modificar sua cor base. No exemplo abaixo, a cor é definida por nome (:purple), mas você também pode usar códigos hexadecimais — por exemplo, color = \"#800080\" produz o mesmo tom de roxo.\n\n\nhistogram(x, title = \"Histograma\", bins = 10, color = \"#111080\")\n\n\n\n\n\n\n\n\n\n\nBoxplot\n\nPara os estatísticos e cientistas de dados, o pacote Plots.jl oferece suporte ao conhecido boxplot, uma ferramenta eficaz para resumir estatísticas, ver assimetrias e identificar outliers. Ao executar o código abaixo, estaremos gerando dois vetores de 50 números aleatórios cada que, multiplicadas por 5, vão compor o conjunto de dados y.\n\n\ny = 5 * rand(50, 2);\nsize(y)\n\n(50, 2)\n\nboxplot(y, title = \"Boxplot\", color = [:darkorchid :darkorange])\n\n\n\n\n\n\n\n\n\nNote que para especificar cores manualmente, basta listar os nomes sem vírgula entre eles, tal qual no bloco acima. Esse detalhe é importante quando seus dados estão organizados em colunas no mesmo array. Abaixo veremos quando devemos incluir a vírgula.\n\n\n\nGráfico de Pizza\n\nTudo bem se você preferir os gráficos de pizza, eles ainda têm seu charme! 🎂 O bloco a seguir cria um gráfico de pizza utilizando a paleta de cores :tab10, que já vem disponível por padrão no pacote Plots.jl.\nVamos supor que os institutos IMECC, IG, IFGW e IFCH tenham, respectivamente, 700, 600, 500 e 470 alunos. Nosso objetivo é representar essas quantidades como porcentagens em um gráfico de pizza, considerando o total de alunos dos quatro institutos como 100%.\n\n\nz = [\"IMECC\", \"IG\", \"IFGW\", \"IFCH\"]\n\n4-element Vector{String}:\n \"IMECC\"\n \"IG\"\n \"IFGW\"\n \"IFCH\"\n\nalunos = [700, 600, 500, 470];\nw = 100 .* alunos ./ sum(alunos)\n\n4-element Vector{Float64}:\n 30.837004405286343\n 26.431718061674008\n 22.026431718061673\n 20.704845814977972\n\npie(z, w, title = \"Quantidade de alunos por instituto\", palette = :tab10)\n\n\n\n\n\n\n\n\nPara escolher manualmente as cores de cada fatia do gráfico de pizza, você pode usar uma lista de cores assim como no boxplot. Mas cuidado! Aqui os dados não foram gerados em conjunto, mas sim em dois vetores separados. Assim, para substituir o argumento palette, a vígula entre os nomes é necessária.\n\ncolor = [:darkorchid, :darkorange, :purple, :blue]\n\n\nLembre-se de definir uma cor para cada categoria presente no seu conjunto de dados, para evitar que as cores se repitam no gráfico.\n\n\n\nGráfico de Barras\nPara comparar valores entre diferentes grupos e categorias, podemos construir um gráfico de barras de estrutura semelhante ao seguinte:\n\nnum = [\"A\", \"B\", \"C\", \"D\", \"E\"]\n\n5-element Vector{String}:\n \"A\"\n \"B\"\n \"C\"\n \"D\"\n \"E\"\n\nqnt = [100; 70; 100; 80; 60]\n\n5-element Vector{Int64}:\n 100\n  70\n 100\n  80\n  60\n\nbar(num, qnt, color = :seagreen)"
-  },
-  {
-    "objectID": "Tutoriais/graf_basico.html#grids-e-combinações",
-    "href": "Tutoriais/graf_basico.html#grids-e-combinações",
-    "title": "Gráficos em Julia: primeiros passos",
-    "section": "Grids e Combinações",
-    "text": "Grids e Combinações\n\nUma ferramenta bastante utilizada na visualização de dados é a junção de gráficos distintos na mesma imagem para facilitar a comparação, ou sobrepor múltiplas curvas em um único gráfico para contrastá-las no mesmo plano. Se você deseja criar o famoso grid (também chamado de malha gráfica), Julia oferece soluções práticas.\n\n\nh = range(0, 10, length = 100);\nk = @. log(h);\nj = @. exp(h);\nplot(h, [k j], layout = (2, 1), legend = false, color = :green)\n\n\n\n\n\n\n\n\n\nNa figura acima criamos um vetor h com 100 valores uniformemente espaçados entre 0 e 10, um vetor k correspondente ao logaritmo dos elementos de h, e j ao exponencial dos mesmos elementos. O argumento layout define a disposição dos gráficos na figura, no qual o primeiro número indica o número de linhas e o segundo o número de colunas do grid. Agora, vamos combinar essas mesmas informações em um único gráfico, ajustando j para que sua escala fique mais próxima à de k.\n\n\nj2 = @. exp(h)/5000;\n\nplot(h, k, label = \"log\", color = :green)\n\n\n\n\n\n\n\nplot!(h, j2, label = \"exp/5000\", color = :steelblue, ls = :dash)\n\n\n\n\n\n\n\n\n\nNote que além de ocultar ou exibir a legenda, é possível personalizar os rótulos (labels) do seu gráfico e escolher diferentes estilos para as linhas das curvas."
-  },
-  {
-    "objectID": "Tutoriais/graf_basico.html#personalização-de-atributos",
-    "href": "Tutoriais/graf_basico.html#personalização-de-atributos",
-    "title": "Gráficos em Julia: primeiros passos",
-    "section": "Personalização de atributos",
-    "text": "Personalização de atributos\n\nCaso nenhuma das customizações mostradas até agora seja suficiente para ilustrar seus dados de forma adequada, segue-se uma gama de opções adicionais para ajustar os atributos visuais do gráfico.\n\n\nCores e Paletas\n\nPara explorar as cores nomeadas disponíveis na base do Julia e seus códigos RGB (uma tripla que representa a composição de vermelho, verde e azul), você pode acessar a lista oficial clicando em cores. Se você quiser diversificar as opções de paletas disponíveis, o pacote ColorSchemes pode ser adicionado à sua biblioteca:\n\n\nPkg.add(\"ColorSchemes\")\nusing ColorSchemes\n\n\nO pacote conta com opções de paletas para usuários com Deficiência de Visão de Cores!\n\n\n\nEstilo da linha\nOs seguintes estilos podem ser determinados no argumento ls (line style) para customizar as curvas do gráfico:\n\n:solid      #linha sólida\n:dash       #tracejado\n:dot        #pontos\n:dashdot    #tracejado seguido de um ponto\n:dashdotdot #tracejado seguido de dois pontos"
-  },
-  {
-    "objectID": "Tutoriais/graf_basico.html#como-salvar-o-gráfico",
-    "href": "Tutoriais/graf_basico.html#como-salvar-o-gráfico",
-    "title": "Gráficos em Julia: primeiros passos",
-    "section": "Como salvar o gráfico?",
-    "text": "Como salvar o gráfico?\nPor fim, você pode salvar o gráfico no diretório do seu projeto utilizando o seguinte comando:\n\np = plot(x, y)\nsavefig(p,\"nome.png\")\n\nCaso você não tenha atribuído o gráfico a um objeto p, é possível salvar a figura imediatamente após a criação do gráfico, omitindo o objeto.\n\nplot(x, y)\nsavefig(\"meu_gráfico.png\")\n\nSe fizer alterações no gráfico e quiser atualizar a imagem salva, basta executar novamente o comando savefig com o mesmo nome. A figura anterior será substituída pela versão atualizada no seu diretório.\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
-  },
-  {
-    "objectID": "equipe.html",
-    "href": "equipe.html",
-    "title": "Do Zero ao Julia",
-    "section": "",
-    "text": "Graduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Matemática Aplicada e Computacional\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCoordenador\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDoutorando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Matemática Aplicada e Computacional\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDoutorando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\nNenhum item correspondente"
-  },
-  {
-    "objectID": "equipe.html#equipe",
-    "href": "equipe.html#equipe",
-    "title": "Do Zero ao Julia",
-    "section": "",
-    "text": "Graduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Matemática Aplicada e Computacional\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCoordenador\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDoutorando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Matemática Aplicada e Computacional\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDoutorando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\nNenhum item correspondente"
-  },
-  {
-    "objectID": "tutoriais.html",
-    "href": "tutoriais.html",
-    "title": "Tutoriais",
-    "section": "",
-    "text": "Loops e Condicionais em Julia\n\n\n\nAplicação\n\n\nVisualização de Dados\n\n\n\nCondicionais e loops são estruturas fundamentais para o controle de fluxo em Julia. Enquanto as primeiras (if, elseif, else) permitem tomar decisões com base em condições…\n\n\n\nSarah Teixeira, Arthur Dionizio Martins da Silva\n\n\n30 de jul. de 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nIntrodução à Análise Exploratória de Dados (EDA) em Julia\n\n\n\nAplicação\n\n\nVisualização de Dados\n\n\n\nUm guia completo e prático sobre como realizar Análise Exploratória de Dados (EDA) em Julia. Explore desde estatísticas descritivas, manipulação de dados, visualizações com…\n\n\n\nArthur Dionizio, Henrique Velloso\n\n\n23 de mai. de 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGráficos em Julia: primeiros passos\n\n\n\nGráficos\n\n\n\nTão importante quanto desenvolver, implementar e aplicar modelos/metodologías é saber comunicar os resultados de forma clara e acessível para o público-alvo. E que melhor…\n\n\n\nNicole Fredericci, Carlos Trucíos\n\n\n23 de mai. de 2025\n\n\n\n\n\n\n\n\nNenhum item correspondente"
   },
   {
     "objectID": "Tutoriais/tutorial-eda.html",
@@ -511,6 +518,69 @@
     "text": "Série Temporal\nPor último, criamos uma série temporal simulada para ilustrar como visualizar dados ao longo do tempo. A função cumsum() é usada para calcular a soma acumulada (no nosso caso, acumular número aleatório de uma distribuição Normal padrão), e o gráfico mostra a evolução dos valores ao longo do ano.\n\nusing Dates\n\n# Gerando uma série temporal simulada\n\ndatas = Date(2024,1,1):Day(1):Date(2024,12,31)\n\nDate(\"2024-01-01\"):Day(1):Date(\"2024-12-31\")\n\nvalores = cumsum(randn(length(datas))) .+ 100\n\n366-element Vector{Float64}:\n  99.93356752809319\n 100.68920283747816\n 101.60107790420861\n 100.80867532750842\n 100.22443383684116\n  98.5038393366958\n  98.73218906091287\n  99.46750522556687\n  97.83974470691781\n  96.0199549308198\n   ⋮\n 101.50097700552809\n 100.33548507315055\n 100.31383058790584\n 101.02944569713357\n 101.40802609294452\n 100.68350893826006\n  99.82193264955082\n  97.79657769045133\n  97.80224894941702\n\n\n# Plotando a série temporal\n\nplot(datas, valores,\n     xlabel=\"Data\", ylabel=\"Valor\",\n     title=\"Série Temporal Simulada\",\n     linewidth=2, label=\"\")"
   },
   {
+    "objectID": "tutoriais.html",
+    "href": "tutoriais.html",
+    "title": "Tutoriais",
+    "section": "",
+    "text": "Loops e Condicionais em Julia\n\n\n\nAplicação\n\n\nVisualização de Dados\n\n\n\nCondicionais e loops são estruturas fundamentais para o controle de fluxo em Julia. Enquanto as primeiras (if, elseif, else) permitem tomar decisões com base em condições…\n\n\n\nSarah Teixeira, Arthur Dionizio Martins da Silva\n\n\n30 de jul. de 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nIntrodução à Análise Exploratória de Dados (EDA) em Julia\n\n\n\nAplicação\n\n\nVisualização de Dados\n\n\n\nUm guia completo e prático sobre como realizar Análise Exploratória de Dados (EDA) em Julia. Explore desde estatísticas descritivas, manipulação de dados, visualizações com…\n\n\n\nArthur Dionizio, Henrique Velloso\n\n\n23 de mai. de 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGráficos em Julia: primeiros passos\n\n\n\nGráficos\n\n\n\nTão importante quanto desenvolver, implementar e aplicar modelos/metodologías é saber comunicar os resultados de forma clara e acessível para o público-alvo. E que melhor…\n\n\n\nNicole Fredericci, Carlos Trucíos\n\n\n23 de mai. de 2025\n\n\n\n\n\n\n\n\nNenhum item correspondente"
+  },
+  {
+    "objectID": "equipe.html",
+    "href": "equipe.html",
+    "title": "Do Zero ao Julia",
+    "section": "",
+    "text": "Graduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Matemática Aplicada e Computacional\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCoordenador\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDoutorando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Matemática Aplicada e Computacional\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDoutorando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\nNenhum item correspondente"
+  },
+  {
+    "objectID": "equipe.html#equipe",
+    "href": "equipe.html#equipe",
+    "title": "Do Zero ao Julia",
+    "section": "",
+    "text": "Graduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Matemática Aplicada e Computacional\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCoordenador\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDoutorando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduanda em Matemática Aplicada e Computacional\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDoutorando em Estatística\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGraduando em Estatística\n\n\n\n\n\n\n\nNenhum item correspondente"
+  },
+  {
+    "objectID": "Tutoriais/graf_basico.html",
+    "href": "Tutoriais/graf_basico.html",
+    "title": "Gráficos em Julia: primeiros passos",
+    "section": "",
+    "text": "Lidar com diferentes linguagens de programação faz parte do dia a dia de pesquisadores, desenvolvedores e usuários finais nas áreas de STEM (Science, Technology, Engineering and Mathematics). No entanto, tão importante quanto desenvolver, implementar e aplicar modelos ou metodologias é saber comunicar os resultados de forma clara e acessível ao público-alvo. E nada melhor para isso do que visualizações didáticas e informativas.\nEmbora existam excelentes ferramentas para visualização de dados, como o ggplot2 do R e o seaborn do Python, é sempre útil saber como produzir gráficos, mesmo que básicos, diretamente na linguagem em que o código principal está sendo desenvolvido.\nNeste tutorial, você aprenderá a criar visualizações básicas em Julia utilizando o pacote Plots.jl, além de conhecer algumas bibliotecas auxiliares que tornam esse processo mais eficiente e versátil."
+  },
+  {
+    "objectID": "Tutoriais/graf_basico.html#introdução",
+    "href": "Tutoriais/graf_basico.html#introdução",
+    "title": "Gráficos em Julia: primeiros passos",
+    "section": "",
+    "text": "Lidar com diferentes linguagens de programação faz parte do dia a dia de pesquisadores, desenvolvedores e usuários finais nas áreas de STEM (Science, Technology, Engineering and Mathematics). No entanto, tão importante quanto desenvolver, implementar e aplicar modelos ou metodologias é saber comunicar os resultados de forma clara e acessível ao público-alvo. E nada melhor para isso do que visualizações didáticas e informativas.\nEmbora existam excelentes ferramentas para visualização de dados, como o ggplot2 do R e o seaborn do Python, é sempre útil saber como produzir gráficos, mesmo que básicos, diretamente na linguagem em que o código principal está sendo desenvolvido.\nNeste tutorial, você aprenderá a criar visualizações básicas em Julia utilizando o pacote Plots.jl, além de conhecer algumas bibliotecas auxiliares que tornam esse processo mais eficiente e versátil."
+  },
+  {
+    "objectID": "Tutoriais/graf_basico.html#como-criar-os-gráficos",
+    "href": "Tutoriais/graf_basico.html#como-criar-os-gráficos",
+    "title": "Gráficos em Julia: primeiros passos",
+    "section": "Como criar os gráficos?",
+    "text": "Como criar os gráficos?\nPara instalar o pacote principal e carregar seus comandos no ambiente, execute as seguintes linhas de código:\n\nPkg.add(\"Plots\")\nusing Plots\n\n\nLembre-se que precisamos apenas instalar o pacote uma única vez, mas chamá-lo em cada sessão que formos utilizá-lo.\n\n\nTambém utilizaremos os pacotes Distributions.jl e StatsPlots.jl para permitir a criação de gráficos com dados simulados e utilizar algumas distribuições de probabilidade. Para instalá-los e carregá-los, use:\n\n\nPkg.add(\"Distributions\")\nusing Distributions\n\nPkg.add(\"StatsPlots\")\nusing StatsPlots\n\n\nObservação: Uma boa prática em Julia é carregar os pacotes um por um, logo no início do script, seguindo a ordem alfabética. Isso torna o código mais organizado, facilita a leitura e a identificação de dependências. Por exemplo:\n\n\nusing Distributions\nusing Plots\nusing StatsPlots\n\n\nGráfico de Densidades\n\nUm dos gráficos mais básicos (e úteis) para visualização de dados é o gráfico de densidades. Vamos gerando um gráfico de densidade da distribuição Normal com média 0 e variância 1. Para isso, execute:\n\n\nplot(Normal(0,1), title = \"Distribuição Normal\", size = (800, 500))\n\n\n\n\n\n\n\n\nOutras distribuições contidas no pacote:\n\nBernoulli(\\(p\\))\nBeta(\\(\\alpha\\), \\(\\beta\\))\nBinomial(n, p)\nCauchy(\\(\\mu\\), \\(\\sigma\\))\nExponential(\\(\\theta\\))\nGamma(\\(\\alpha\\), \\(\\gamma\\))\nPoisson(\\(\\lambda\\))\nUniform(\\(a\\), \\(b\\))\nTDist(\\(\\nu\\))\n\n\nVocê pode conferir a documentação completa das funções no site oficial de Julia.\nA função plot() também pode ser utilizada para criar gráficos de linha ou de sequência:\n\n\nplot(randn(10), title = \"Gráfico de linha ou de sequência\", size = (800, 500))\n\n\n\n\n\n\n\n\n\n\nGráfico de Dispersão\n\nTambém é possível fazer um gráfico de dispersão (scatterplot) com o código abaixo. Neste exemplo, geramos valores em x de 0 a 10 com um espaçamento de 0,5 entre eles e calculamos y como o logaritmo de cada valor de x. Além de personalizar o título e o nome dos eixos, é possível controlar a exibição da legenda — o padrão é mostrar legend = auto, mas você pode ocultá-la com legend = false.\n\n\nx = 0:0.5:10\n\n0.0:0.5:10.0\n\ny = log.(x);\nscatter(x, y, title = \"Gráfico de Dispersão\", xlabel = \"x\", ylabel = \"log(x)\", legend = false)\n\n\n\n\n\n\n\n\n\nObservação: o operador \\(\\cdot\\) (dot), aplica a função \\(\\log()\\) a cada elemento do vetor x. O “;” evita que a variável y seja impressa (como aconteceu com a variável x).\n\n\n\nHistograma\n\nOutro recurso valioso na visualização de dados é o histograma, ideal para visualizar a distribuição de uma variável. Vamos construí-lo a partir da criação de uma variável x equivalente a 1000 números aleatórios de uma distribuição Normal(0, 1), executando o seguinte bloco:\n\n\nx = randn(1000);\nhistogram(x, title = \"Histograma\", color = :purple)\n\n\n\n\n\n\n\n\n\nNote que é possível customizar o número de intervalos (bins = 100, por exemplo) do seu histograma e modificar sua cor base. No exemplo abaixo, a cor é definida por nome (:purple), mas você também pode usar códigos hexadecimais — por exemplo, color = \"#800080\" produz o mesmo tom de roxo.\n\n\nhistogram(x, title = \"Histograma\", bins = 10, color = \"#111080\")\n\n\n\n\n\n\n\n\n\n\nBoxplot\n\nPara os estatísticos e cientistas de dados, o pacote Plots.jl oferece suporte ao conhecido boxplot, uma ferramenta eficaz para resumir estatísticas, ver assimetrias e identificar outliers. Ao executar o código abaixo, estaremos gerando dois vetores de 50 números aleatórios cada que, multiplicadas por 5, vão compor o conjunto de dados y.\n\n\ny = 5 * rand(50, 2);\nsize(y)\n\n(50, 2)\n\nboxplot(y, title = \"Boxplot\", color = [:darkorchid :darkorange])\n\n\n\n\n\n\n\n\n\nNote que para especificar cores manualmente, basta listar os nomes sem vírgula entre eles, tal qual no bloco acima. Esse detalhe é importante quando seus dados estão organizados em colunas no mesmo array. Abaixo veremos quando devemos incluir a vírgula.\n\n\n\nGráfico de Pizza\n\nTudo bem se você preferir os gráficos de pizza, eles ainda têm seu charme! 🎈 O bloco a seguir cria um gráfico de pizza utilizando a paleta de cores :tab10, que já vem disponível por padrão no pacote Plots.jl.\nVamos supor que os institutos IMECC, IG, IFGW e IFCH tenham, respectivamente, 700, 600, 500 e 470 alunos. Nosso objetivo é representar essas quantidades como porcentagens em um gráfico de pizza, considerando o total de alunos dos quatro institutos como 100%.\n\n\nz = [\"IMECC\", \"IG\", \"IFGW\", \"IFCH\"]\n\n4-element Vector{String}:\n \"IMECC\"\n \"IG\"\n \"IFGW\"\n \"IFCH\"\n\nalunos = [700, 600, 500, 470];\nw = 100 .* alunos ./ sum(alunos)\n\n4-element Vector{Float64}:\n 30.837004405286343\n 26.431718061674008\n 22.026431718061673\n 20.704845814977972\n\npie(z, w, title = \"Quantidade de alunos por instituto\", palette = :tab10)\n\n\n\n\n\n\n\n\nPara escolher manualmente as cores de cada fatia do gráfico de pizza, você pode usar uma lista de cores assim como no boxplot. Mas cuidado! Aqui os dados não foram gerados em conjunto, mas sim em dois vetores separados. Assim, para substituir o argumento palette, a vígula entre os nomes é necessária.\n\ncolor = [:darkorchid, :darkorange, :purple, :blue]\n\n\nLembre-se de definir uma cor para cada categoria presente no seu conjunto de dados, para evitar que as cores se repitam no gráfico.\n\n\n\nGráfico de Barras\nPara comparar valores entre diferentes grupos e categorias, podemos construir um gráfico de barras de estrutura semelhante ao seguinte:\n\nnum = [\"A\", \"B\", \"C\", \"D\", \"E\"]\n\n5-element Vector{String}:\n \"A\"\n \"B\"\n \"C\"\n \"D\"\n \"E\"\n\nqnt = [100; 70; 100; 80; 60]\n\n5-element Vector{Int64}:\n 100\n  70\n 100\n  80\n  60\n\nbar(num, qnt, color = :seagreen)"
+  },
+  {
+    "objectID": "Tutoriais/graf_basico.html#grids-e-combinações",
+    "href": "Tutoriais/graf_basico.html#grids-e-combinações",
+    "title": "Gráficos em Julia: primeiros passos",
+    "section": "Grids e Combinações",
+    "text": "Grids e Combinações\n\nUma ferramenta bastante utilizada na visualização de dados é a junção de gráficos distintos na mesma imagem para facilitar a comparação, ou sobrepor múltiplas curvas em um único gráfico para contrastá-las no mesmo plano. Se você deseja criar o famoso grid (também chamado de malha gráfica), Julia oferece soluções práticas.\n\n\nh = range(0, 10, length = 100);\nk = @. log(h);\nj = @. exp(h);\nplot(h, [k j], layout = (2, 1), legend = false, color = :green)\n\n\n\n\n\n\n\n\n\nNa figura acima criamos um vetor h com 100 valores uniformemente espaçados entre 0 e 10, um vetor k correspondente ao logaritmo dos elementos de h, e j ao exponencial dos mesmos elementos. O argumento layout define a disposição dos gráficos na figura, no qual o primeiro número indica o número de linhas e o segundo o número de colunas do grid. Agora, vamos combinar essas mesmas informações em um único gráfico, ajustando j para que sua escala fique mais próxima à de k.\n\n\nj2 = @. exp(h)/5000;\n\nplot(h, k, label = \"log\", color = :green)\n\n\n\n\n\n\n\nplot!(h, j2, label = \"exp/5000\", color = :steelblue, ls = :dash)\n\n\n\n\n\n\n\n\n\nNote que além de ocultar ou exibir a legenda, é possível personalizar os rótulos (labels) do seu gráfico e escolher diferentes estilos para as linhas das curvas."
+  },
+  {
+    "objectID": "Tutoriais/graf_basico.html#personalização-de-atributos",
+    "href": "Tutoriais/graf_basico.html#personalização-de-atributos",
+    "title": "Gráficos em Julia: primeiros passos",
+    "section": "Personalização de atributos",
+    "text": "Personalização de atributos\n\nCaso nenhuma das customizações mostradas até agora seja suficiente para ilustrar seus dados de forma adequada, segue-se uma gama de opções adicionais para ajustar os atributos visuais do gráfico.\n\n\nCores e Paletas\n\nPara explorar as cores nomeadas disponíveis na base do Julia e seus códigos RGB (uma tripla que representa a composição de vermelho, verde e azul), você pode acessar a lista oficial clicando em cores. Se você quiser diversificar as opções de paletas disponíveis, o pacote ColorSchemes pode ser adicionado à sua biblioteca:\n\n\nPkg.add(\"ColorSchemes\")\nusing ColorSchemes\n\n\nO pacote conta com opções de paletas para usuários com Deficiência de Visão de Cores!\n\n\n\nEstilo da linha\nOs seguintes estilos podem ser determinados no argumento ls (line style) para customizar as curvas do gráfico:\n\n:solid      #linha sólida\n:dash       #tracejado\n:dot        #pontos\n:dashdot    #tracejado seguido de um ponto\n:dashdotdot #tracejado seguido de dois pontos"
+  },
+  {
+    "objectID": "Tutoriais/graf_basico.html#como-salvar-o-gráfico",
+    "href": "Tutoriais/graf_basico.html#como-salvar-o-gráfico",
+    "title": "Gráficos em Julia: primeiros passos",
+    "section": "Como salvar o gráfico?",
+    "text": "Como salvar o gráfico?\nPor fim, você pode salvar o gráfico no diretório do seu projeto utilizando o seguinte comando:\n\np = plot(x, y)\nsavefig(p,\"nome.png\")\n\nCaso você não tenha atribuído o gráfico a um objeto p, é possível salvar a figura imediatamente após a criação do gráfico, omitindo o objeto.\n\nplot(x, y)\nsavefig(\"meu_gráfico.png\")\n\nSe fizer alterações no gráfico e quiser atualizar a imagem salva, basta executar novamente o comando savefig com o mesmo nome. A figura anterior será substituída pela versão atualizada no seu diretório.\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
+  },
+  {
     "objectID": "meetup.html",
     "href": "meetup.html",
     "title": "Meetup",
@@ -525,165 +595,221 @@
     "text": "Descubra e explore as vantagens da linguagem de programação Julia: uma poderosa ferramenta para o ensino, a implementação e o desenvolvimento de métodos estatísticos e de ciência de dados.\n\n\n\n\n\n\n\n\n\n\n\nDescubra as vantagens e dicas de Julia\n\nBlog\n\n\n\n\n\n\n\n\n\nExplore diversos tópicos em Julia\n\nTutoriais\n\n\n\n\n\n\n\n\n\nConheça casos de sucesso e amplie seu networking.\n\nMeetup"
   },
   {
-    "objectID": "Blog/vscode.html",
-    "href": "Blog/vscode.html",
-    "title": "Como programar em Julia no Vscode",
+    "objectID": "Blog/Álgebra linear com LinearAlgebra.jl.html",
+    "href": "Blog/Álgebra linear com LinearAlgebra.jl.html",
+    "title": "Álgebra linear com LinearAlgebra.jl",
     "section": "",
-    "text": "A linguagem Julia tem ganhado cada vez mais espaço entre cientistas de dados, estatísticos, economistas, engenheiros e matemáticos. Isto, graças à sua velocidade de processamento e sintaxe simples. Uma das formas mais práticas de programar em Julia é por meio do Visual Studio Code (VS Code), um editor leve, moderno e altamente extensível.\nNeste post, mostraremos como configurar e usar o Julia no VS Code (ideal para quem está começando do zero)."
+    "text": "A Álgebra Linear constitui a espinha dorsal de diversas áreas do conhecimento científico e tecnológico, como análise de dados, processamento de sinais, otimização, estatística multivariada, machine learning e mecânica quântica. Computacionaomente, uma linguagem eficiente como Julia oferece não apenas sintaxe intuitiva, mas também desempenho comparável a linguagens de baixo nível. O pacote LinearAlgebra.jl, integrante da biblioteca padrão, disponibiliza uma ampla variedade de funcionalidades para a manipulação eficiente de vetores, matrizes, resolução de sistemas lineares e decomposições matriciais. Neste post, exploraremos o uso do módulo, abordando desde operações elementares até técnicas mais sofisticadas, como decomposições matriciais, projeções e diagonalização."
   },
   {
-    "objectID": "Blog/vscode.html#introdução",
-    "href": "Blog/vscode.html#introdução",
-    "title": "Como programar em Julia no Vscode",
+    "objectID": "Blog/Álgebra linear com LinearAlgebra.jl.html#introdução",
+    "href": "Blog/Álgebra linear com LinearAlgebra.jl.html#introdução",
+    "title": "Álgebra linear com LinearAlgebra.jl",
     "section": "",
-    "text": "A linguagem Julia tem ganhado cada vez mais espaço entre cientistas de dados, estatísticos, economistas, engenheiros e matemáticos. Isto, graças à sua velocidade de processamento e sintaxe simples. Uma das formas mais práticas de programar em Julia é por meio do Visual Studio Code (VS Code), um editor leve, moderno e altamente extensível.\nNeste post, mostraremos como configurar e usar o Julia no VS Code (ideal para quem está começando do zero)."
+    "text": "A Álgebra Linear constitui a espinha dorsal de diversas áreas do conhecimento científico e tecnológico, como análise de dados, processamento de sinais, otimização, estatística multivariada, machine learning e mecânica quântica. Computacionaomente, uma linguagem eficiente como Julia oferece não apenas sintaxe intuitiva, mas também desempenho comparável a linguagens de baixo nível. O pacote LinearAlgebra.jl, integrante da biblioteca padrão, disponibiliza uma ampla variedade de funcionalidades para a manipulação eficiente de vetores, matrizes, resolução de sistemas lineares e decomposições matriciais. Neste post, exploraremos o uso do módulo, abordando desde operações elementares até técnicas mais sofisticadas, como decomposições matriciais, projeções e diagonalização."
   },
   {
-    "objectID": "Blog/vscode.html#pré-requisitos",
-    "href": "Blog/vscode.html#pré-requisitos",
-    "title": "Como programar em Julia no Vscode",
-    "section": "Pré-requisitos",
-    "text": "Pré-requisitos\n\nTer o Julia instalado;\nTer o VS Code instalado."
+    "objectID": "Blog/Álgebra linear com LinearAlgebra.jl.html#carregando-o-pacote",
+    "href": "Blog/Álgebra linear com LinearAlgebra.jl.html#carregando-o-pacote",
+    "title": "Álgebra linear com LinearAlgebra.jl",
+    "section": "Carregando o pacote",
+    "text": "Carregando o pacote\nO pacote LinearAlgebra.jl já está incluído na instalação padrão do Julia. Para utilizá-lo, basta importá-lo com o comando:\n\nusing LinearAlgebra\n\nUtilizaremos também o pacote Random para gerar matrizes aleatórias nos exemplos seguintes:\n\nusing Random"
   },
   {
-    "objectID": "Blog/vscode.html#instalando-o-vs-code",
-    "href": "Blog/vscode.html#instalando-o-vs-code",
-    "title": "Como programar em Julia no Vscode",
-    "section": "Instalando o VS Code",
-    "text": "Instalando o VS Code\nSe ainda não instalou o VS Code, clique no link no tópico anterior para ser direcionado à página de download. Ao chegar lá, baixe o arquivo de acordo com o seu sistema operacional.\nApós baixar o arquivo, deixe marcado as seguintes opções durante a instalação:\n\n\n\nInstalação do VS Code"
+    "objectID": "Blog/Álgebra linear com LinearAlgebra.jl.html#operações-elementares-com-matrizes-e-vetores",
+    "href": "Blog/Álgebra linear com LinearAlgebra.jl.html#operações-elementares-com-matrizes-e-vetores",
+    "title": "Álgebra linear com LinearAlgebra.jl",
+    "section": "Operações elementares com matrizes e vetores",
+    "text": "Operações elementares com matrizes e vetores\n\nIniciamos com a criação de vetores e matrizes, bem como a execução de operações fundamentais, como multiplicação, produto escalar e cálculo de normas:\n\n\nA = [1 2; 3 4]      # matriz 2x2\n\n2×2 Matrix{Int64}:\n 1  2\n 3  4\n\nv = [1, 2]          # vetor coluna\n\n2-element Vector{Int64}:\n 1\n 2\n\n\nA * v               # multiplicação matriz-vetor\n\n2-element Vector{Int64}:\n  5\n 11\n\ndot(v, v)           # produto escalar\n\n5\n\nnorm(v)             # norma (magnitude) do vetor\n\n2.23606797749979"
   },
   {
-    "objectID": "Blog/vscode.html#instalando-a-extensão-do-julia-no-vs-code",
-    "href": "Blog/vscode.html#instalando-a-extensão-do-julia-no-vs-code",
-    "title": "Como programar em Julia no Vscode",
-    "section": "Instalando a extensão do Julia no VS Code",
-    "text": "Instalando a extensão do Julia no VS Code\nCom o VS Code devidamente instalado, devemos instalar a extensão oficial do Julia. Para isso:\n\nAbra a aba de extensões (Ctrl + shift + X);\nBusque por “Julia”;\nSelecione a extensão e clique em “Install”.\n\n\n\n\nExtensão do Julia"
+    "objectID": "Blog/Álgebra linear com LinearAlgebra.jl.html#operações-com-matrizes",
+    "href": "Blog/Álgebra linear com LinearAlgebra.jl.html#operações-com-matrizes",
+    "title": "Álgebra linear com LinearAlgebra.jl",
+    "section": "Operações com matrizes",
+    "text": "Operações com matrizes\n\ntranspose(A)        # transposta\n\n2×2 transpose(::Matrix{Int64}) with eltype Int64:\n 1  3\n 2  4\n\ninv(A)              # inversa\n\n2×2 Matrix{Float64}:\n -2.0   1.0\n  1.5  -0.5\n\ndet(A)              # determinante\n\n-2.0\n\ntr(A)               # traço da matriz\n\n5\n\nrank(A)             # posto\n\n2"
   },
   {
-    "objectID": "Blog/vscode.html#programando-em-julia",
-    "href": "Blog/vscode.html#programando-em-julia",
-    "title": "Como programar em Julia no Vscode",
-    "section": "Programando em Julia",
-    "text": "Programando em Julia\nCom a extensão do Julia instalada, chegou a hora de pôr a mão na massa. Para escrever seu primeiro código em Julia no VS Code, crie um novo arquivo do tipo .jl. Para executar determinadas linhas de código, selecione-as e use o atalho Ctrl + Enter. Se preferir, clique no botão “Run”, no canto superior direito, para rodar o arquivo inteiro.\n\n\n\nOlá Mundo!\n\n\nPronto! Agora você já pode começar a programar e desenvolver seus projetos em Julia com o VS Code!\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
+    "objectID": "Blog/Álgebra linear com LinearAlgebra.jl.html#resolvendo-sistemas-lineares",
+    "href": "Blog/Álgebra linear com LinearAlgebra.jl.html#resolvendo-sistemas-lineares",
+    "title": "Álgebra linear com LinearAlgebra.jl",
+    "section": "Resolvendo sistemas lineares",
+    "text": "Resolvendo sistemas lineares\n\nEm Julia, a forma mais eficiente de resolver um sistema linear (Ax = b) consiste no uso do operador barra invertida \\, que seleciona automaticamente o algoritmo numérico apropriado com base nas características da matriz:\n\n\nA = [3 1; 1 2]\n\n2×2 Matrix{Int64}:\n 3  1\n 1  2\n\nb = [9, 8]\n\n2-element Vector{Int64}:\n 9\n 8\n\nx = A \\ b           # solução do sistema\n\n2-element Vector{Float64}:\n 2.0\n 3.0"
   },
   {
-    "objectID": "Blog/Julia no Mercado de Trabalho.html",
-    "href": "Blog/Julia no Mercado de Trabalho.html",
-    "title": "Julia no Mercado de Trabalho",
-    "section": "",
-    "text": "Você, seja estudante, profissional formado ou simplesmente alguém curioso sobre a linguagem Julia, talvez já tenha se perguntado: qual é a relação entre Julia e o mercado de trabalho? Será que ela é amplamente usada? É mais eficiente que outras linguagens? Quais são suas principais diferenças e, não menos importante, por que uma empresa optaria (ou não) por adotá-la em seus projetos?\nNeste blog, vou abordar todas essas questões e ajudar você a entender melhor o papel da Julia no mundo profissional. Então, vem comigo e segue o fio!"
+    "objectID": "Blog/Álgebra linear com LinearAlgebra.jl.html#decomposições-matriciais",
+    "href": "Blog/Álgebra linear com LinearAlgebra.jl.html#decomposições-matriciais",
+    "title": "Álgebra linear com LinearAlgebra.jl",
+    "section": "Decomposições matriciais",
+    "text": "Decomposições matriciais\n\nDecomposições permitem entender a estrutura interna de uma matriz, facilitando a resolução de sistemas, o cálculo de autovalores, compressões e outras aplicações numéricas. A seguir, exploramos as principais disponíveis no LinearAlgebra.jl:\n\n\nLU (Fatoração de matrizes quadradas)\n\nlu(A)\n\nLU{Float64, Matrix{Float64}, Vector{Int64}}\nL factor:\n2×2 Matrix{Float64}:\n 1.0       0.0\n 0.333333  1.0\nU factor:\n2×2 Matrix{Float64}:\n 3.0  1.0\n 0.0  1.66667\n\n\n\n\nQR (Bastante usada em regressão linear)\n\nqr(A)\n\nLinearAlgebra.QRCompactWY{Float64, Matrix{Float64}, Matrix{Float64}}\nQ factor: 2×2 LinearAlgebra.QRCompactWYQ{Float64, Matrix{Float64}, Matrix{Float64}}\nR factor:\n2×2 Matrix{Float64}:\n -3.16228  -1.58114\n  0.0       1.58114\n\n\n\n\nSVD (Decomposição em valores singulares)\n\nsvd(A)\n\nSVD{Float64, Float64, Matrix{Float64}, Vector{Float64}}\nU factor:\n2×2 Matrix{Float64}:\n -0.850651  -0.525731\n -0.525731   0.850651\nsingular values:\n2-element Vector{Float64}:\n 3.6180339887498953\n 1.3819660112501049\nVt factor:\n2×2 Matrix{Float64}:\n -0.850651  -0.525731\n -0.525731   0.850651\n\n\n\n\nAutovalores e autovetores\n\neigvals(A)\n\n2-element Vector{Float64}:\n 1.381966011250105\n 3.618033988749895\n\neigvecs(A)\n\n2×2 Matrix{Float64}:\n  0.525731  -0.850651\n -0.850651  -0.525731"
   },
   {
-    "objectID": "Blog/Julia no Mercado de Trabalho.html#uso-de-julia-no-mercado-de-trabalho",
-    "href": "Blog/Julia no Mercado de Trabalho.html#uso-de-julia-no-mercado-de-trabalho",
-    "title": "Julia no Mercado de Trabalho",
-    "section": "Uso de Julia no mercado de trabalho",
-    "text": "Uso de Julia no mercado de trabalho\nSabemos que Julia ainda não é tão popular quanto outras linguagens como Python, R ou Java. Isso, pode levarmos a pensar que, talvez, Julia é apenas utilizada no meio acadêmico, mas, não se engane: Julia já está mais presente no mercado de trabalho do que você imagina!\nPor ser uma linguagem de alto nível, projetada especialmente para cálculos científicos e computacionais de grande porte e alta complexidade, algumas empresas fazem questão de incluí-la em seu portfólio tecnológico.\nQuer alguns exemplos? Aqui embaixo deixo uma lista de algumas empresas/instituições do mercado que você com certeza conhece e, acredite ou não, elas utilizam bastante da linguagem Julia no seu cotidiano!\n\nGoogle: a linguagem Julia roda em seus TPU’s (chips feitos especificamente para fins de Machine Learning) devido à um projeto chamado “XLA.jl”. Por conta disso, os desenvolvedores da Google podem escrever rápidos códigos de machine learning que rodam dentro do hardware da própria Google, sem a necessidade de alternar entre linguagens.\nNASA: pense bem, você precisa de uma linguagem que modele diversas questões físicas como a gravidade entre planetas, rotas para satélites e espaçonaves, simular órbitas… e você precisa que todos estes cálculos extremamente complexos sejam feitos rápidos e com precisão. Qual linguagem, que é rápida como C++ ou Fortran, mas que é fácil de escrever e de alterar, você utilizaria? Julia, claro! Além disso, por meio do pacote Oceananigans.jl, a NASA simula o comportamento físico dos oceanos com alta precisão e velocidade.\nPfizer: por meio de modelos farmacêuticos, a Pfizer consegue acelerar simulações que antes demoravam dias, até semanas; simular metabolismo e absorção de substâncias no organismo, entre muitos outros. É por meio da plataforma Pumas.jl que a empresa consegue fazer todas as simulações que permitem rápidas tomadas de decisões à respeito de seus experimentos.\nIBM: a linguagem é muito útil para a IBM dado que tratam muito de séries temporais, IA e machine learning, logo, se torna necessário o uso de uma linguagem que facilite a criação de pipelines para esses processos, e Julia faz justamente isso. Automatizações de fluxo de trabalho de machine learning, especialmente quando os dados variam com o tempo é algo feito pela linguagem, especialmente pelas plataformas produzidas pela empresa, como o TSLM.jl e o AutoMLPipeline.jl.\nRenault: a linguagem Julia foi utilizada para resolver um problema logístico: planejar rotas e estoques em toda a Europa para recolher embalagens reutilizáveis. Via métodos tradicionais, as soluções eram lentas e ineficazes, então a empresa implementou um algoritmo em Julia que otimizou todo o processo e reduziu custos logísticos.\n\nAlguma dessas empresas te surpreendeu? Você pode encontrar mais empresas que utilizam a linguagem e também casos de estudos em que aplicaram Julia no seguinte link: https://info.juliahub.com/industries/case-studies\n\n\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica, aprimoramento do texto e criação de imagens."
+    "objectID": "Blog/Álgebra linear com LinearAlgebra.jl.html#álgebra-linear-com-matrizes-aleatórias-usando-random",
+    "href": "Blog/Álgebra linear com LinearAlgebra.jl.html#álgebra-linear-com-matrizes-aleatórias-usando-random",
+    "title": "Álgebra linear com LinearAlgebra.jl",
+    "section": "Álgebra linear com matrizes aleatórias usando random",
+    "text": "Álgebra linear com matrizes aleatórias usando random\n\nA geração de matrizes aleatórias permite simulações e testes práticos. Veja exemplos de operações úteis com matrizes densas:\n\n\nRandom.seed!(123)\n\nTaskLocalRNG()\n\nM = rand(3,3)      # matriz 3x3 com elementos aleatórios\n\n3×3 Matrix{Float64}:\n 0.9063    0.512083  0.427328\n 0.443494  0.253849  0.867547\n 0.745673  0.334152  0.581912\n\n\nnorm(M)            # norma de Frobenius\n\n1.8128125670179398\n\nI                  # matriz identidade\n\nUniformScaling{Bool}\ntrue*I\n\nM'                 # transposta conjugada\n\n3×3 adjoint(::Matrix{Float64}) with eltype Float64:\n 0.9063    0.443494  0.745673\n 0.512083  0.253849  0.334152\n 0.427328  0.867547  0.581912"
   },
   {
-    "objectID": "Blog/Julia no Mercado de Trabalho.html#referências",
-    "href": "Blog/Julia no Mercado de Trabalho.html#referências",
-    "title": "Julia no Mercado de Trabalho",
-    "section": "Referências",
-    "text": "Referências\n\nNasa: Julia Programming Language Benchmark Using a Flight Simulation; Here’s how NASA is using Julia to better understand the ocean\nGoogle: Google Cloud TPUs Now Speak Julia\nRenault: Solving a Continent-Scale Inventory Routing Problem at Renault\nPfizer: Pfizer uses Julia to accelerate simulations of new therapies for metabolic diseases up to 175x;\nIBM: Designing Machine Learning Pipeline Toolkit for AutoML Surrogate Modeling Optimization"
+    "objectID": "Blog/Álgebra linear com LinearAlgebra.jl.html#diagonalização-de-matrizes",
+    "href": "Blog/Álgebra linear com LinearAlgebra.jl.html#diagonalização-de-matrizes",
+    "title": "Álgebra linear com LinearAlgebra.jl",
+    "section": "Diagonalização de matrizes",
+    "text": "Diagonalização de matrizes\n\nUma matriz \\(A\\) é diagonalizável se existe uma matriz invertível \\(P\\) tal que \\(D = P^{-1} A P\\) seja diagonalizável.\n\n\nV = eigvecs(A)\n\n2×2 Matrix{Float64}:\n  0.525731  -0.850651\n -0.850651  -0.525731\n\nD = Diagonal(eigvals(A))\n\n2×2 Diagonal{Float64, Vector{Float64}}:\n 1.38197   ⋅ \n  ⋅       3.61803\n\nP = V\n\n2×2 Matrix{Float64}:\n  0.525731  -0.850651\n -0.850651  -0.525731\n\nP_inv = inv(P)\n\n2×2 Matrix{Float64}:\n  0.525731  -0.850651\n -0.850651  -0.525731\n\nP_inv * A * P ≈ D   # Verificação\n\ntrue\n\n\n\n\nObs.: Nem toda matriz é diagonalizável. Em aplicações práticas, a diagonalização é útil, por exemplo, para calcular potências de matrizes com eficiência."
   },
   {
-    "objectID": "Blog/jupytercolab.html",
-    "href": "Blog/jupytercolab.html",
-    "title": "Notebooks em Julia: Jupyter e Colab",
-    "section": "",
-    "text": "A linguagem Julia foi projetada para ser ao mesmo tempo rápida e dinâmica. Quando integrada ao ambiente Jupyter, ela se transforma em uma poderosa ferramenta interativa, que permite combinar código, visualizações gráficas e textos em um único documento, criando um ambiente ideal para o ensino e a aprendizagem.\nNeste post, aprenderemos como instalar o Jupyter e adequá-lo ao ambiente da Julia, bem como a utilizar Julia no queridinho Colab"
+    "objectID": "Blog/Álgebra linear com LinearAlgebra.jl.html#espaços-vetorias-e-projeções-ortogonais",
+    "href": "Blog/Álgebra linear com LinearAlgebra.jl.html#espaços-vetorias-e-projeções-ortogonais",
+    "title": "Álgebra linear com LinearAlgebra.jl",
+    "section": "Espaços vetorias e projeções ortogonais",
+    "text": "Espaços vetorias e projeções ortogonais\n\nDada uma matriz \\(A\\), seus espaços fundamentais (imagem, núcleo) são essenciais para entender soluções de sistemas e dimensões associadas:\n\n\nnullspace(A)                 # espaço nulo (ker A)\n\n2×0 Matrix{Float64}\n\ncolspace = A[:, :]           # espaço coluna (imagem)\n\n2×2 Matrix{Int64}:\n 3  1\n 1  2\n\n\nnullspace([1 2 3; 2 4 6] )   # Base não trivial\n\n3×2 Matrix{Float64}:\n -0.935937   -0.229334\n  0.342011   -0.772861\n  0.0839716   0.591685\n\n\nE para projetar um vetor \\(b\\) no subespaço gerado pelas colunas de \\(A\\):\n\nproj = A * (A \\ b)\n\n2-element Vector{Float64}:\n 9.0\n 8.0\n\n\nEssa projeção ortogonal é usada em mínimos quadrados."
   },
   {
-    "objectID": "Blog/jupytercolab.html#introdução",
-    "href": "Blog/jupytercolab.html#introdução",
-    "title": "Notebooks em Julia: Jupyter e Colab",
-    "section": "",
-    "text": "A linguagem Julia foi projetada para ser ao mesmo tempo rápida e dinâmica. Quando integrada ao ambiente Jupyter, ela se transforma em uma poderosa ferramenta interativa, que permite combinar código, visualizações gráficas e textos em um único documento, criando um ambiente ideal para o ensino e a aprendizagem.\nNeste post, aprenderemos como instalar o Jupyter e adequá-lo ao ambiente da Julia, bem como a utilizar Julia no queridinho Colab"
-  },
-  {
-    "objectID": "Blog/jupytercolab.html#instalação-do-jupyter",
-    "href": "Blog/jupytercolab.html#instalação-do-jupyter",
-    "title": "Notebooks em Julia: Jupyter e Colab",
-    "section": "Instalação do Jupyter",
-    "text": "Instalação do Jupyter\n\nPara a baixarmos o Jupyter, temos duas alternativas. A primeira é usando o Python em conjunto com o Julia e a segunda é usando somente o Julia (neste caso pule para a seção: Instalação do Jupyter pelo IJulia).\nUsando as duas linguagens em questão, devemos primeiro instalar o Python. Na página direcionada, você poderá instalar a versão mais nova do Python para o seu sistema operacional (no momento da criação deste post é a versão 3.13).\nCom o arquivo instalado, deveremos deixar habilitado “Add python.exe to PATH” (para permitir usar o comando pip no prompt de comando).\n\n\n\n\nInstalação Python\n\n\n\nEm seguida, abrindo o prompt de comando (coloque “cmd” na barra de procura do Windows), digite pip install jupyter.\n\n\n\n\nInstalando Jupyter\n\n\n\nTendo o Julia e o Jupyter instalados, agora nós instalamos o IJulia. Abrindo o prompt do Julia seguimos com using Pkg e depois Pkg.add(“IJulia”).\n\n\n\n\nTerminal Julia\n\n\n\nFinalmente, abrindo o cmd e digitamos: jupyter notebook. Com o Jupyter aberto, para abrir um notebook, vamos para a barra New e selecionamos o Julia (o número da versão que você instalou). E voilá."
-  },
-  {
-    "objectID": "Blog/jupytercolab.html#instalação-do-jupyter-pelo-ijulia",
-    "href": "Blog/jupytercolab.html#instalação-do-jupyter-pelo-ijulia",
-    "title": "Notebooks em Julia: Jupyter e Colab",
-    "section": "Instalação do Jupyter pelo IJulia",
-    "text": "Instalação do Jupyter pelo IJulia\n\nCaso você não queira instalar o Python podemos fazer tudo pelo Julia! Terminando de instalar o IJulia, no terminal, digite using IJulia e em seguida notebook(). Será perguntado se você deseja instalar o Jupyter via Conda, digite y.\n\n\n\n\nInstalando Jupyter (Julia)\n\n\n\nApós esperar o tempo de instalação, temos o Jupyter em mãos!"
-  },
-  {
-    "objectID": "Blog/jupytercolab.html#julia-no-colab",
-    "href": "Blog/jupytercolab.html#julia-no-colab",
-    "title": "Notebooks em Julia: Jupyter e Colab",
-    "section": "Julia no Colab",
-    "text": "Julia no Colab\n\nEm 5 de março de 2025, o Google Colab, o Jupyter hospedado na nuvem da Google, adicionou outro tipo de ambiente de execução, a linguagem de programação Julia. Divulgado por Eric Johnson em seu GitHub, o mesmo fala em seu post que além de facilitar o acesso à programação na linguagem Julia, sua introdução ao Google Colab é quase uma homenagem ao Jupyter. Isso porque “Jupyter” é nomeado a partir das três linguagens originalmente suportadas: Julia (“Ju”), Python (“Pyt”) e R (“R”). E agora com Julia sendo adicionado, a tríade das linguagens originais do Jupyter está completa.\nComo colocar Julia no Colab? Muito simples!\nApós criar um novo notebook no Colab. Na aba “Ambiente de execução”, selecione “Alterar o tipo de ambiente de execução”. Depois mude o tipo de ambiente para Julia.\n\n\n\n\nPasso a passo no Colab\n\n\nO ambiente no Colab está pronto para ser usado.\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
-  },
-  {
-    "objectID": "Blog/pacotes_estatistica.html",
-    "href": "Blog/pacotes_estatistica.html",
-    "title": "Pacotes Essenciais para Trabalhar com Estatística em Julia",
-    "section": "",
-    "text": "Ao falar de Estatística, a primeira linguagem de programação que costuma vir à mente é R. Criada especificamente para análise estatística e ciência de dados, oferece uma ampla gama de ferramentas estatísticas já disponíveis por padrão, além de milhares de pacotes criados para os mais diversos propósitos.\nPara nossa sorte, embora a linguagem Julia não tenha sido projetada exclusivamente para a Estatística, já conta com grande parte das ferramentas essenciais, graças a um ecossistema de pacotes que cresce rapidamente e abrange diversas áreas da análise de dados, da modelagem estatística e do aprendizado de máquina.\nVamos, então, conhecer os principais pacotes para trabalhar com Estatística em Julia, organizados por área de aplicação (desde tarefas básicas até análises mais complexas)."
-  },
-  {
-    "objectID": "Blog/pacotes_estatistica.html#introdução",
-    "href": "Blog/pacotes_estatistica.html#introdução",
-    "title": "Pacotes Essenciais para Trabalhar com Estatística em Julia",
-    "section": "",
-    "text": "Ao falar de Estatística, a primeira linguagem de programação que costuma vir à mente é R. Criada especificamente para análise estatística e ciência de dados, oferece uma ampla gama de ferramentas estatísticas já disponíveis por padrão, além de milhares de pacotes criados para os mais diversos propósitos.\nPara nossa sorte, embora a linguagem Julia não tenha sido projetada exclusivamente para a Estatística, já conta com grande parte das ferramentas essenciais, graças a um ecossistema de pacotes que cresce rapidamente e abrange diversas áreas da análise de dados, da modelagem estatística e do aprendizado de máquina.\nVamos, então, conhecer os principais pacotes para trabalhar com Estatística em Julia, organizados por área de aplicação (desde tarefas básicas até análises mais complexas)."
-  },
-  {
-    "objectID": "Blog/pacotes_estatistica.html#manipulação-de-dados-e-estatísticas-sumárias",
-    "href": "Blog/pacotes_estatistica.html#manipulação-de-dados-e-estatísticas-sumárias",
-    "title": "Pacotes Essenciais para Trabalhar com Estatística em Julia",
-    "section": "Manipulação de Dados e Estatísticas Sumárias",
-    "text": "Manipulação de Dados e Estatísticas Sumárias\n\nStatsBase: Ferramentas básicas de estatística descritiva;\nFreqTables: Construção de tabelas de frequências para análise exploratória;\nDataFrames: Importação e manipulação de bases de dados tabulares."
-  },
-  {
-    "objectID": "Blog/pacotes_estatistica.html#variáveis-aleatórias",
-    "href": "Blog/pacotes_estatistica.html#variáveis-aleatórias",
-    "title": "Pacotes Essenciais para Trabalhar com Estatística em Julia",
-    "section": "Variáveis Aleatórias",
-    "text": "Variáveis Aleatórias\n\nDistributions: Definição, manipulação e amostragem de distribuições de probabilidade;\nRandom: Geração de números aleatórios com uso de sementes, garantindo a reprodutibilidade."
-  },
-  {
-    "objectID": "Blog/pacotes_estatistica.html#visualização-de-dados",
-    "href": "Blog/pacotes_estatistica.html#visualização-de-dados",
-    "title": "Pacotes Essenciais para Trabalhar com Estatística em Julia",
-    "section": "Visualização de Dados",
-    "text": "Visualização de Dados\n\nPlots: Construção de uma ampla variedade de gráficos;\nGadfly: Criação de gráficos com sintaxe semelhante à do pacote ggplot2, do R."
-  },
-  {
-    "objectID": "Blog/pacotes_estatistica.html#modelagem-e-testes-de-hipótese",
-    "href": "Blog/pacotes_estatistica.html#modelagem-e-testes-de-hipótese",
-    "title": "Pacotes Essenciais para Trabalhar com Estatística em Julia",
-    "section": "Modelagem e Testes de Hipótese",
-    "text": "Modelagem e Testes de Hipótese\n\nHypotesisTests: Realização de testes de hipótese frequentistas, incluindo testes paramétricos e não paramétricos;\nGLM: Modelagens de regressões lineares e regressões lineares generalizadas;\nMixedModels: Ajuste de modelos lineares e generalizados com efeitos mistos;\nOptim: Otimização de funções, essencial para maximizar verossimilhanças;\nMultivariateStats: Ferramentas de análise multivariada, como PCA e LDA;\nTimeSeries: Manipulação, visualização e modelagem de séries temporais."
-  },
-  {
-    "objectID": "Blog/pacotes_estatistica.html#inferência-bayesiana",
-    "href": "Blog/pacotes_estatistica.html#inferência-bayesiana",
-    "title": "Pacotes Essenciais para Trabalhar com Estatística em Julia",
-    "section": "Inferência Bayesiana",
-    "text": "Inferência Bayesiana\n\nTuring: Modelagem estatística bayesiana baseada em amostragem;\nMCMCChains: Ferramentas para diagnóstico, resumo e visualização de cadeias de Markov geradas por MCMC."
-  },
-  {
-    "objectID": "Blog/pacotes_estatistica.html#aprendizado-de-máquina",
-    "href": "Blog/pacotes_estatistica.html#aprendizado-de-máquina",
-    "title": "Pacotes Essenciais para Trabalhar com Estatística em Julia",
-    "section": "Aprendizado de Máquina",
-    "text": "Aprendizado de Máquina\n\nDecisionTree: Algoritmos de árvores de decisão, árvores de regressão e florestas aleatórias;\nClustering: Algoritmos de clusterização, voltados para aprendizado de máquina não supervisionado;\nScikitLearn: Diversos algoritmos de machine learning com sintaxe semelhante à da biblioteca do Python, de mesmo nome;\nMLBase: Ferramentas auxiliares para aplicação de modelos de machine learning.\n\n\nAté aqui, temos apresentados apenas alguns exemplos de pacotes que podem ser utilizados em Julia, mas existem muitos outros!. Para explorar mais, acesse o site Julia Packages e descubra todo o potencial que Julia pode lhe oferecer."
-  },
-  {
-    "objectID": "Blog/pacotes_estatistica.html#conclusão",
-    "href": "Blog/pacotes_estatistica.html#conclusão",
-    "title": "Pacotes Essenciais para Trabalhar com Estatística em Julia",
+    "objectID": "Blog/Álgebra linear com LinearAlgebra.jl.html#conclusão",
+    "href": "Blog/Álgebra linear com LinearAlgebra.jl.html#conclusão",
+    "title": "Álgebra linear com LinearAlgebra.jl",
     "section": "Conclusão",
-    "text": "Conclusão\n\nCom esse conjunto de pacotes, Julia se consolida como uma linguagem útil para análise de dados, modelagem estatística/econometrica e aprendizado de máquina. Embora seu uso ainda esteja em crescimento, já é possível realizar diversas análises envolvendo dados (desde análises descritivas simples até modelagens complexas).\n\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
+    "text": "Conclusão\n\nO pacote LinearAlgebra.jl oferece ferramentas robustas, rápidas e versáteis para o tratamento de problemas de álgebra linear em Julia. A combinação com bibliotecas de visualização como Plots.jl, já mostradas aqui no blog, e outras de aprendizado de máquina torna sua utilização ainda mais poderosa em aplicações científicas e tecnológicas. Sua implementação é baseada em bibliotecas otimizadas como BLAS e LAPACK, garantindo um desempenho extremamente competitivo. O estudo da Álgebra Linear computacionalmente não apenas facilita a resolução de problemas práticos como também aprofunda a intuição matemática sobre transformações lineares, autovalores, espaços vetoriais e estabilidade numérica. Para consolidar seus conhecimentos, recomenda-se também a leitura da documentação oficial e a prática com aplicações reais em modelagem, machine learning e análise de dados.\n\n\nBiblioteca padrão de Álgebra Linear numérica em Julia\nDocumentação oficial do pacote LinearAlgebra.jl :::\n\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
+  },
+  {
+    "objectID": "Blog/markdown_pluto.html",
+    "href": "Blog/markdown_pluto.html",
+    "title": "Como criar relatórios dinâmicos com Julia e Pluto",
+    "section": "",
+    "text": "Ao programar, é essencial manter uma documentação clara e com boa visualização, especialmente ao apresentar nosso trabalho para outras pessoas. Para isso, muitas linguagens oferecem compatibilidade com Markdown, uma ferramenta que permite combinar texto e código de maneira dinâmica, tornando a criação de relatórios muito mais prática.\nFelizmente, ao programar em Julia, é possível utilizar Markdown diretamente com o auxílio do pacote Pluto, que integra esses recursos de maneira simples e eficiente."
+  },
+  {
+    "objectID": "Blog/markdown_pluto.html#introdução",
+    "href": "Blog/markdown_pluto.html#introdução",
+    "title": "Como criar relatórios dinâmicos com Julia e Pluto",
+    "section": "",
+    "text": "Ao programar, é essencial manter uma documentação clara e com boa visualização, especialmente ao apresentar nosso trabalho para outras pessoas. Para isso, muitas linguagens oferecem compatibilidade com Markdown, uma ferramenta que permite combinar texto e código de maneira dinâmica, tornando a criação de relatórios muito mais prática.\nFelizmente, ao programar em Julia, é possível utilizar Markdown diretamente com o auxílio do pacote Pluto, que integra esses recursos de maneira simples e eficiente."
+  },
+  {
+    "objectID": "Blog/markdown_pluto.html#instalação-do-pluto",
+    "href": "Blog/markdown_pluto.html#instalação-do-pluto",
+    "title": "Como criar relatórios dinâmicos com Julia e Pluto",
+    "section": "Instalação do Pluto",
+    "text": "Instalação do Pluto\nEm primeiro lugar, é necessário que o Julia esteja instalado. A partir disso, é necessário abrir o programa e digitar o seguinte código:\nusing Pkg\nPkg.add(\"Pluto\")"
+  },
+  {
+    "objectID": "Blog/markdown_pluto.html#conhecendo-o-pluto",
+    "href": "Blog/markdown_pluto.html#conhecendo-o-pluto",
+    "title": "Como criar relatórios dinâmicos com Julia e Pluto",
+    "section": "Conhecendo o Pluto",
+    "text": "Conhecendo o Pluto\nCom o pacote instalado, já podemos começar a usar o Pluto. Para isso, abrimos o Julia e digitamos o seguinte código, que será utilizado todas as vezes que quisermos acessá-lo.\nusing Pluto\nPluto.run()\nApós rodar o código, o Pluto será carregado e a seguinte tela estará aberta no seu navegador padrão:\n\n\n\nTela Inicial Pluto\n\n\nEstarão destacados os últimos arquivos acessados e, caso seja a primeira vez, constarão alguns exemplos. A partir de Open a notebook, podemos acessar as pastas do nosso computador e escolher o arquivo que desejamos abrir.\nNo caso, vamos criar um arquivo do zero clicando em Create a new notebook. Após a criação, esta é a tela inicial que será aberta:\n\n\n\nAqruivo Vazio no Pluto\n\n\nCom isso, a partir dessa página, podemos adicionar os textos e códigos utilizando os cell code (célula de código), os quais podemos adicionar clicando nos “mais” que aparecem ao aproximar o cursor. Para ser um código, basta programar de forma normal, mas para inserir textos, é necessário que esteja no formato md”seu_texto”.\nPara ilustrar o básico do Pluto, vamos realizar algumas simples tarefas:\n\nAdicionar o título “Aprendendo Julia Markdown” (Para aumentar o tamanho do texto, utilizaremos #);\nInserir o texto: “O código abaixo cria uma função que, dados dois números reais, computa a soma deles:”;\nInserir o código da função;\nInserir o texto: “Para testar a função, vamos utilizar como argumentos 2 e 3.”;\nAvaliar nossa função com os valores determinados.\n\nPortanto, agora nós temos:\n\n\n\nAqruivo no Pluto com Tarefas Propostas\n\n\nVale destacar que as saídas de cada célula aparecem logo acima dela. Além disso, podemos ocultar os códigos que não queremos, a fim de deixar a visualização mais limpa, clicando no ícone de olho que aparece ao passar o cursor em um cell code. Assim, obtemos por fim:\n\n\n\nVersão Final do Código com Pluto\n\n\nPortanto, utilizando o Pluto, conseguimos criar relatórios dinâmicos combinando texto e código de forma muito prática. Essa integração facilita tanto o desenvolvimento quanto a apresentação dos conteúdos, tornando o processo mais claro, organizado e interativo. Além disso, é possível explorar uma variedade de recursos adicionais, como tabelas, imagens, fórmulas matemáticas em LaTeX, gráficos, e muito mais.\nCom essas possibilidades, o Pluto se torna uma ferramenta extremamente útil para documentação de projetos, produção de material didático, análise de dados e compartilhamento de ideias de forma acessível e visualmente atrativa.\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
+  },
+  {
+    "objectID": "Blog/instalar_julia.html",
+    "href": "Blog/instalar_julia.html",
+    "title": "Como instalar Julia?",
+    "section": "",
+    "text": "Há muitas vantagens em usar plataformas integradas para desenvolver seus projetos nas mais diversas linguagens de programação. Mas e se sua internet cair? E se você quiser continuar seu projeto de um lugar com conexão lenta? Ter Julia instalado no seu computador resolve esse problema!\nNeste post, aprenderemos algumas formas de instalar Julia no seu computador."
+  },
+  {
+    "objectID": "Blog/instalar_julia.html#introdução",
+    "href": "Blog/instalar_julia.html#introdução",
+    "title": "Como instalar Julia?",
+    "section": "",
+    "text": "Há muitas vantagens em usar plataformas integradas para desenvolver seus projetos nas mais diversas linguagens de programação. Mas e se sua internet cair? E se você quiser continuar seu projeto de um lugar com conexão lenta? Ter Julia instalado no seu computador resolve esse problema!\nNeste post, aprenderemos algumas formas de instalar Julia no seu computador."
+  },
+  {
+    "objectID": "Blog/instalar_julia.html#pelo-site-oficial",
+    "href": "Blog/instalar_julia.html#pelo-site-oficial",
+    "title": "Como instalar Julia?",
+    "section": "Pelo site oficial",
+    "text": "Pelo site oficial\nClicando em Julia, você será redirecionado para o site oficial de Julia, onde poderá realizar a instalação manual da versão mais recente de Julia apenas baixando um instalador compatível com seu sistema operacional (.exe, .dmg, etc). É importante escolher um instalador compatível com o seu sistema operacional, caso contrário não será possível a instalação.\nCertifique-se de ter pelo menos 0,98 GB livres para armazenar os arquivos em seu computador. Após o término do download, siga as instruções recomendadas de configuração do instalador oficial (clicando em “Próximo” em todas as abas, para o caso da instalação padrao) e aguarde enquanto Julia é instalado.\n\n\n\nAtalho no Desktop\n\n\n\nCriar um atalho na área de trabalho facilitará muito o acesso ao aplicativo no dia a dia, embora essa seleção seja opcional.\n\nUma vez instalado Julia no seu computador, você poderá programar diretamente no terminal de Julia, que deve se parecer com a seguinte imagem:\n\n\n\nTerminal Julia"
+  },
+  {
+    "objectID": "Blog/instalar_julia.html#outros-caminhos",
+    "href": "Blog/instalar_julia.html#outros-caminhos",
+    "title": "Como instalar Julia?",
+    "section": "Outros caminhos",
+    "text": "Outros caminhos\nJulia também está disponível para download pela Microsoft Store. Para os usuários de Linux e macOS, essa opção não se encontra disponível por enquanto, mas também é possível instalar e utilizar Julia diretamente do terminal do computador.\nNo Windows, pressione as teclas Windows + R, digite cmd e pressione “Enter” para abrir o terminal. Em seguida, execute o comando abaixo e digite Y quando solicitado pelo sistema:\nwinget install Julia\nQuando a instalação for concluída, você pode digitar where julia para localizar o caminho até o .exe de Julia, ou simplesmente digitar julia no terminal para obter uma interface semelhante à do aplicativo do programa.\nNo macOS ou Linux, abra o terminal e digite\ncurl -fsSL https://install.julialang.org | sh\nQuando a instalação for concluída, você pode digitar which julia para localizar o caminho até o executável de Julia, ou simplesmente digitar julia no terminal para acessar a interface interativa do programa.\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
+  },
+  {
+    "objectID": "Blog/as-origens.html",
+    "href": "Blog/as-origens.html",
+    "title": "Do Zero ao Julia: As origens",
+    "section": "",
+    "text": "A primeira vez que ouvi falar da linguagem Julia foi em 2014, quando ainda era estudante de doutorado no IMECC e buscava formas mais rápidas de executar as simulações da minha pesquisa, que já exigia computação intensiva (Bootstrap). Naquela época, pouquíssimas pessoas trabalhavam com Julia, mas as promessas de desempenho comparável ao de linguagens de baixo nível como C++ ou Fortran rapidamente chamaram minha atenção.\nAlguns meses depois, conversando com colegas da Estatística e da Matemática Aplicada, percebi que não era o único interessado. Isso me motivou a criar um Meetup (alias, estamos reativando ele, então inscriva-se para não perder as novidades). No entanto, com a correria do dia a dia, nunca conseguimos realizar um encontro. Por anos, o grupo ficou lá, crescendo aos poucos, mesmo sem atividades — cheguei a pensar em encerrá-lo, mas no fundo sempre mantive a esperança de um dia retomar essa ideia."
+  },
+  {
+    "objectID": "Blog/as-origens.html#o-início",
+    "href": "Blog/as-origens.html#o-início",
+    "title": "Do Zero ao Julia: As origens",
+    "section": "",
+    "text": "A primeira vez que ouvi falar da linguagem Julia foi em 2014, quando ainda era estudante de doutorado no IMECC e buscava formas mais rápidas de executar as simulações da minha pesquisa, que já exigia computação intensiva (Bootstrap). Naquela época, pouquíssimas pessoas trabalhavam com Julia, mas as promessas de desempenho comparável ao de linguagens de baixo nível como C++ ou Fortran rapidamente chamaram minha atenção.\nAlguns meses depois, conversando com colegas da Estatística e da Matemática Aplicada, percebi que não era o único interessado. Isso me motivou a criar um Meetup (alias, estamos reativando ele, então inscriva-se para não perder as novidades). No entanto, com a correria do dia a dia, nunca conseguimos realizar um encontro. Por anos, o grupo ficou lá, crescendo aos poucos, mesmo sem atividades — cheguei a pensar em encerrá-lo, mas no fundo sempre mantive a esperança de um dia retomar essa ideia."
+  },
+  {
+    "objectID": "Blog/as-origens.html#o-transcurso",
+    "href": "Blog/as-origens.html#o-transcurso",
+    "title": "Do Zero ao Julia: As origens",
+    "section": "O transcurso",
+    "text": "O transcurso\n\nApós o doutorado, acabei focando em outras prioridades — publicar artigos, trabalhar na indústria, estudar para concursos, preparar aulas… Ainda assim, a vontade de usar Julia permanecia. Com o tempo, fui explorando outras particularidades da linguagem: a possibilidade de escrever símbolos matemáticos diretamente no código (o que facilita absurdamente a implementação de novos métodos propostos na literatura), a programação nativa em paralelo e distribuída, e o fato de Julia resolver o famoso problema das duas linuagens.\nMotivado pelas vantagens da linguagem, quando entrei na UNICAMP como docente resolvi incluir Julia como linguagem a ser utilizada em umas das disciplinas: Econometria. Posteriormente, trabalhando num artigo com alguns colegas (Hotta et al. 2025), resolvi implementar tudo em Julia, do zero, o que acabou sendo um ótima e desafiadora experiência."
+  },
+  {
+    "objectID": "Blog/as-origens.html#a-idealização",
+    "href": "Blog/as-origens.html#a-idealização",
+    "title": "Do Zero ao Julia: As origens",
+    "section": "A idealização",
+    "text": "A idealização\n\nApós a curta experiência mão na massa com Julia, entender a importância da extensão e de ver a necessidade dos alunos por se envolverem em atividade de extensão, resolvi unir o útil ao agradável e foi assim que surgiu a primeira ideia do projeto. Ainda no rascunho, perguntei aos meus orientandos o que eles achavam da ideia e alguns deles toparam participar desde o início (alias, foram eles que me ajudaram a escolher o nome). Passaram-se alguns meses e agora com a ideia mais amadurecida, escrevi uma proposta e a submeti à comissão de extensão do IMECC e, após algunas sugestões da comissão, o projeto foi aprovado e lançado oficialmente na sua forma atual.\n\n\n\n\n\nConfesso que, inicialmente, achei que apenas meus orientandos se interessariam. Mas, para minha grata surpresa, o projeto teve uma ótima recepção. Hoje, temos mais de 20 pessoas envolvidas, colaborando com as redes sociais, escrevendo posts, tutoriais, organizando minicursos e cuidando da parte editorial, entre outras atividades que loog logo ficarão sabendo."
+  },
+  {
+    "objectID": "Blog/as-origens.html#a-meta",
+    "href": "Blog/as-origens.html#a-meta",
+    "title": "Do Zero ao Julia: As origens",
+    "section": "A meta",
+    "text": "A meta\n\nMinha esperança é que o site www.ime.unicamp.br/julialang se torne um ponto de referência para quem quer aprender e explorar a linguagem Julia — oferecendo desde dicas para iniciantes até tutoriais completos e atualizações sobre a linguagem. Mais do que isso, torço para que o projeto ajude os alunos a desenvolverem habilidades valiosas para o mercado e, ao mesmo tempo, inspire a comunidade acadêmica e de ciência de dados a enxergar Julia como um verdadeiro mar de possibilidades.\nEstou longe de ser um expert em Julia, mas espero que em breve tanto você quanto eu saibamos um pouco mais dessa linguagem.\nHappy coding!\n\n\n\n\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto, bem como para a geração de imagens."
+  },
+  {
+    "objectID": "Blog/juliahub.html",
+    "href": "Blog/juliahub.html",
+    "title": "Para que serve o JuliaHub?",
+    "section": "",
+    "text": "A denominação “Hub”, tanto em JuliaHub quanto em GitHub, refere-se ao termo em inglês que significa “o centro efetivo de uma atividade, região ou rede (de contatos, trabalhos)”. Assim, fica claro que essas redes funcionam como centros de compartilhamento de código em Julia — no caso do JuliaHub, voltado à linguagem Julia; e no caso do GitHub, com foco no controle de versões e ramificações de projetos por meio do Git.\nPlataformas colaborativas de programação são fundamentais para o progresso dos projetos de ciência de dados, computação científica, estatística, etc. Isto, pois facilitam a globalização da informação entre desenvolvedores. Diferentemente de aplicações que hospedam arquivos colaborativos, como o Google Colab ou o Posit Cloud, o JuliaHub permite a criação simultânea de conteúdo pelos participantes do projeto, além de oferecer outras funcionalidades extremamente úteis.\nEntretanto, parte dos recursos da plataforma requer liberação mediante pagamento, que é uma escolha dos desenvolvedores para manter a aplicação ativa e sustentável. Neste tutorial, você aprenderá a utilizar as funções gratuitas do JuliaHub e acessar os recursos pagos, compreendendo suas finalidades."
+  },
+  {
+    "objectID": "Blog/juliahub.html#introdução",
+    "href": "Blog/juliahub.html#introdução",
+    "title": "Para que serve o JuliaHub?",
+    "section": "",
+    "text": "A denominação “Hub”, tanto em JuliaHub quanto em GitHub, refere-se ao termo em inglês que significa “o centro efetivo de uma atividade, região ou rede (de contatos, trabalhos)”. Assim, fica claro que essas redes funcionam como centros de compartilhamento de código em Julia — no caso do JuliaHub, voltado à linguagem Julia; e no caso do GitHub, com foco no controle de versões e ramificações de projetos por meio do Git.\nPlataformas colaborativas de programação são fundamentais para o progresso dos projetos de ciência de dados, computação científica, estatística, etc. Isto, pois facilitam a globalização da informação entre desenvolvedores. Diferentemente de aplicações que hospedam arquivos colaborativos, como o Google Colab ou o Posit Cloud, o JuliaHub permite a criação simultânea de conteúdo pelos participantes do projeto, além de oferecer outras funcionalidades extremamente úteis.\nEntretanto, parte dos recursos da plataforma requer liberação mediante pagamento, que é uma escolha dos desenvolvedores para manter a aplicação ativa e sustentável. Neste tutorial, você aprenderá a utilizar as funções gratuitas do JuliaHub e acessar os recursos pagos, compreendendo suas finalidades."
+  },
+  {
+    "objectID": "Blog/juliahub.html#criando-uma-conta",
+    "href": "Blog/juliahub.html#criando-uma-conta",
+    "title": "Para que serve o JuliaHub?",
+    "section": "Criando uma conta",
+    "text": "Criando uma conta\n\nAo acessar o site oficial do JuliaHub, a seleção do ícone de usuário o redirecionará para uma página com seis opções de login: por e-mail, GitHub, GitLab, Google e Linkedin. Após escolher uma das alternativas e acessar com sua conta, será necessário preencher os seguintes dados:\n\n\n\n\n\n\n\nO título a ser preenchido corresponde ao seu cargo ou função dentro da organização mencionada.\n\n\n\n\n\n\n\nApós completar as informações e selecionar “enviar”, você será direcionado para a página inicial da plataforma, onde encontrará seis funções principais disponíveis para acesso:\n\nAplicações\nNotebooks\nProjetos\nPergunte à IA\nPacotes\nRecursos"
+  },
+  {
+    "objectID": "Blog/juliahub.html#aplicações-notebook-e-projetos",
+    "href": "Blog/juliahub.html#aplicações-notebook-e-projetos",
+    "title": "Para que serve o JuliaHub?",
+    "section": "Aplicações, Notebook e Projetos",
+    "text": "Aplicações, Notebook e Projetos\n\nNa aba Aplicações, é possível carregar Pluto Notebooks na nuvem, que são os alternativas em Julia aos Jupyter Notebooks (comoo os criados no Google Colab, por exemplo). Além disso, há a opção de carregar um ambiente de desenvolvimento completo com o Julia IDE, também em nuvem. Por fim, o Dyad Studio (antigo JuliaSim) consiste em uma plataforma avançada para desenvolvimento, refinamento, análise e implantação de modelos, e pode ser utilizado diretamente a partir do JuliaHub.\nApesar da grande utilidade para o público geral, o uso dessas funções exige o pagamento de USD 1,40 por hora de atividade (valores de jul. 2025), o que as torna inacessíveis para uma grande parte dos usuários — especialmente estudantes, que podem emular os códigos em outras plataformas colaborativas, ou que atuam com linguagens de programação já consolidadas no meio acadêmico, mas que ainda não incluem Julia de forma significativa."
+  },
+  {
+    "objectID": "Blog/juliahub.html#julia-e-ia",
+    "href": "Blog/juliahub.html#julia-e-ia",
+    "title": "Para que serve o JuliaHub?",
+    "section": "Julia e IA",
+    "text": "Julia e IA\n\nEm parceria com a OpenAI, a plataforma oferece seu próprio acesso à Inteligência Artificial, voltado para perguntas específicas sobre a linguagem Julia. Ainda em versão Beta no momento da redação desta postagem, as respostas são geradas a partir do banco de dados interno do JuliaHub. A seguir, apresenta-se um teste realizado para avaliar a qualidade e a precisão das respostas fornecidas pela IA:\n\n\n\n\n\n\n\n\n\n\n\n\nDe forma rápida e eficiente, a IA retorna instruções claras e exemplificadas sobre o que foi perguntado, além de incluir extensões consideradas relevantes pelo sistema que a opera. No teste apresentado acima, além de responder diretamente à questão sobre a variância clássica, a IA também trouxe informações complementares sobre a variância ponderada, os pacotes necessários para usar as funções mencionadas, como criar o vetor de dados na linguagem Julia e como exibir a saída de forma personalizada."
+  },
+  {
+    "objectID": "Blog/juliahub.html#pacotes",
+    "href": "Blog/juliahub.html#pacotes",
+    "title": "Para que serve o JuliaHub?",
+    "section": "Pacotes",
+    "text": "Pacotes\n\nNa sessão Pacotes, o usuário tem acesso a 1248 páginas de pacotes em Julia criados por colaboradores da plataforma. É possível buscar pacotes por categoria, utilizando o filtro em “Tópicos”, ou procurar por pacotes específicos digitando o nome (ou parte dele) na lupa no canto superior direito.\nOutro filtro disponível é o de “Licenças”, que são os documentos que definem como um pacote pode ser usado, modificado e distribuído. Dependendo da licença, o pacote pode ser limitado, por exemplo, apenas para fins pessoais, não permitindo o uso comercial. A licença também pode permitir ou proibir modificações no código-fonte, a redistribuição do pacote (ou de versões modificadas), além de estabelecer condições específicas de uso — como a obrigatoriedade de creditar o autor original.\nAo selecionar a pasta da “Fonte” do pacote desejado, a plataforma redireciona o usuário para a página correspondente no GitHub, onde é possível fazer o download do pacote compilado ou copiar o link para instalá-lo em seu ambiente de desenvolvimento.\n\n\n\n\n\n\n\nAtualmente, a plataforma conta com 12.399 pacotes ativos, e você também pode colaborar com a comunidade de Julia registrando suas criações! A opção de registrar um novo pacote é gratuita e está disponível para todos os usuários. Para isso, é necessário fornecer as seguintes informações sobre o pacote que será compartilhado:"
+  },
+  {
+    "objectID": "Blog/juliahub.html#recursos",
+    "href": "Blog/juliahub.html#recursos",
+    "title": "Para que serve o JuliaHub?",
+    "section": "Recursos",
+    "text": "Recursos\n\nAo selecionar a opção Recursos, você terá acesso à documentação oficial do JuliaHub, ao contato do suporte e à seção de feedback, onde é possível avaliar sua experiência na plataforma e sugerir melhorias aos desenvolvedores.\nAlém disso, em Julia Binaries, é possível baixar os arquivos executáveis de Julia prontos para instalação — ou seja, pacotes compilados para diferentes sistemas operacionais e em diversas versões. Para aprender como baixar e configurar Julia direto na sua máquina, basta acessar os tutoriais já publicados no Blog!\nPor último, a ferramenta “Explorar Webinars” redireciona o usuário para uma página com todos os Seminários Online, tanto os já realizados quanto os que ainda vão acontecer, organizados pela plataforma e seus parceiros. Para se inscrever para o próximo evento ou acessar um já ocorrido, selecione o seminário desejado e os dados da sua conta no JuliaHub serão automaticamente preenchidos no formulário. Caso o evento já tiver ocorrido, ao clicar em “Registre-se” (ou “Enviar”, no caso de seminários mais antigos) a gravação ficará instantaneamente disponível na própria página. Caso o seminário ainda vá acontecer, um convite do Zoom será enviado automaticamente para o e-mail associado à sua conta.\nAs informações exibidas na página principal de cada evento incluem a identificação dos oradores responsáveis pelo seminário, um resumo do tema abordado e sua motivação, além dos principais destaques que serão apresentados ao longo da sessão.\n\n\n\n\n\n\n\nNota\n\n\n\nFerramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto."
   },
   {
     "objectID": "Blog/julia_rstudio.html",
@@ -795,6 +921,6 @@
     "href": "blog.html",
     "title": "Blog",
     "section": "",
-    "text": "Julia no Mercado de Trabalho\n\n\n\n\n\n\nJulia\n\n\nMercado de Trabalho\n\n\n\nComo a linguagem Julia, comumente vista no meio acadêmico, é utilizada pelas grandes empresas no mercado de trabalho? \n\n\n\n\n\n2 de ago. de 2025\n\n\nLeonardo dos Santos\n\n\n\n\n\n\n\n\n\n\n\n\nComo programar em Julia no Vscode\n\n\n\n\n\n\nIDE\n\n\n\nAprenda o como utilizar o Julia no Vscode, da configuração aos primeiros passos. \n\n\n\n\n\n5 de jul. de 2025\n\n\nGuilherme Duarte, Pedro H. G. Elias\n\n\n\n\n\n\n\n\n\n\n\n\nComo criar relatórios dinâmicos com Julia e Pluto\n\n\n\n\n\n\nMarkdown\n\n\n\nCriação de relatórios dinâmicos em Julia com Pluto.jl: um ambiente de notebooks reativo e fácil de usar, feito sob medida para a linguagem \n\n\n\n\n\n1 de jul. de 2025\n\n\nVitor Ribas Perrone, Guilherme Duarte Alves Basso\n\n\n\n\n\n\n\n\n\n\n\n\nIntrodução ao pacote TidierData.jl\n\n\n\n\n\n\nManipulação de Dados\n\n\nTidy Data\n\n\nFerramentas\n\n\nPacotes\n\n\n\nUm guia introdutório sobre o pacote TidierData.jl! Entenda como aplicar a gramática tidy para manipulação de dados de forma intuitiva, utilizando funções familiares para quem vem do tidyverse em R. \n\n\n\n\n\n14 de jun. de 2025\n\n\nHenrique Anunciação Velloso Silva, Arthur Dionizio Martins da Silva\n\n\n\n\n\n\n\n\n\n\n\n\nPacotes Essenciais para Trabalhar com Estatística em Julia\n\n\n\n\n\n\nPacotes\n\n\nPrimeiros Passos\n\n\n\nPrincipais pacotes para realizar as mais diversas análises estatísticas em Julia.\n\n\n\n\n\n13 de jun. de 2025\n\n\nVitor Ribas Perrone, Arthur Dionizio Martins da Silva\n\n\n\n\n\n\n\n\n\n\n\n\nEntenda a História da Linguagem que une Simplicidade e Desempenho\n\n\n\n\n\n\nHistória\n\n\n\nConheça a história do Julia, que surgiu com a proposta de unir o desempenho e a simplicidade em uma só linguagem. \n\n\n\n\n\n12 de jun. de 2025\n\n\nEsther Cleveston, Pedro H. G. Elias\n\n\n\n\n\n\n\n\n\n\n\n\nComo utilizar Julia no RStudio no Windows\n\n\n\n\n\n\nInstalação\n\n\nIDE\n\n\n\nPasso a passo para configurar Julia no Rstudio\n\n\n\n\n\n18 de mai. de 2025\n\n\nVitor Ribas Perrone, Carlos Trucíos\n\n\n\n\n\n\n\n\n\n\n\n\nNotebooks em Julia: Jupyter e Colab\n\n\n\n\n\n\nInstalação\n\n\n\nAprenda passo a passo como instalar e utilizar os ambientes Jupyter e Colab integrados à linguagem Julia. \n\n\n\n\n\n13 de mai. de 2025\n\n\nGabriel Cardoso, Carlos Trucíos\n\n\n\n\n\n\n\n\n\n\n\n\nComo instalar Julia?\n\n\n\n\n\n\nInstalação\n\n\n\nPasso a passo para instalar e configurar Julia no seu computador. \n\n\n\n\n\n2 de mai. de 2025\n\n\nNicole Fredericci, Carlos Trucíos\n\n\n\n\n\n\n\n\n\n\n\n\nDo Zero ao Julia: As origens\n\n\n\n\n\n\nHistória\n\n\n\nFicou curioso sobre como tudo começou? Descubra, de forma leve e descontraída, como o projeto foi idealizado, planejado e finalmente lançado ao público. \n\n\n\n\n\n24 de abr. de 2025\n\n\nCarlos Trucíos\n\n\n\n\n\n\nNenhum item correspondente"
+    "text": "Álgebra linear com LinearAlgebra.jl\n\n\n\n\n\n\nPacotes\n\n\nFerramentas\n\n\nManipulação de dados\n\n\n\nAprenda e utilize álgebra linear com LinearAlgebra.jl. \n\n\n\n\n\n3 de ago. de 2025\n\n\nSarah Pereira Teixeira Silva\n\n\n\n\n\n\n\n\n\n\n\n\nPara que serve o JuliaHub?\n\n\n\n\n\n\nFerramentas\n\n\nOnline\n\n\n\nPlataformas colaborativas de programação são fundamentais para o avanço dos projetos de ciência de dados, computação científica, estatística, etc. Itso, pois facilitam a globalização da informação entre desenvolvedores. Se você deseja compartilhar projetos em Julia e se manter atualizado sobre as novidades da linguagem, aprenda neste tutorial como utilizar o JuliaHub. \n\n\n\n\n\n3 de ago. de 2025\n\n\nNicole Fredericci\n\n\n\n\n\n\n\n\n\n\n\n\nJulia no Mercado de Trabalho\n\n\n\n\n\n\nJulia\n\n\nMercado de Trabalho\n\n\n\nComo a linguagem Julia, comumente vista no meio acadêmico, é utilizada pelas grandes empresas no mercado de trabalho? \n\n\n\n\n\n2 de ago. de 2025\n\n\nLeonardo dos Santos\n\n\n\n\n\n\n\n\n\n\n\n\nComo programar em Julia no Vscode\n\n\n\n\n\n\nIDE\n\n\n\nAprenda o como utilizar o Julia no Vscode, da configuração aos primeiros passos. \n\n\n\n\n\n5 de jul. de 2025\n\n\nGuilherme Duarte, Pedro H. G. Elias\n\n\n\n\n\n\n\n\n\n\n\n\nComo criar relatórios dinâmicos com Julia e Pluto\n\n\n\n\n\n\nMarkdown\n\n\n\nCriação de relatórios dinâmicos em Julia com Pluto.jl: um ambiente de notebooks reativo e fácil de usar, feito sob medida para a linguagem \n\n\n\n\n\n1 de jul. de 2025\n\n\nVitor Ribas Perrone, Guilherme Duarte Alves Basso\n\n\n\n\n\n\n\n\n\n\n\n\nIntrodução ao pacote TidierData.jl\n\n\n\n\n\n\nManipulação de Dados\n\n\nTidy Data\n\n\nFerramentas\n\n\nPacotes\n\n\n\nUm guia introdutório sobre o pacote TidierData.jl! Entenda como aplicar a gramática tidy para manipulação de dados de forma intuitiva, utilizando funções familiares para quem vem do tidyverse em R. \n\n\n\n\n\n14 de jun. de 2025\n\n\nHenrique Anunciação Velloso Silva, Arthur Dionizio Martins da Silva\n\n\n\n\n\n\n\n\n\n\n\n\nPacotes Essenciais para Trabalhar com Estatística em Julia\n\n\n\n\n\n\nPacotes\n\n\nPrimeiros Passos\n\n\n\nPrincipais pacotes para realizar as mais diversas análises estatísticas em Julia.\n\n\n\n\n\n13 de jun. de 2025\n\n\nVitor Ribas Perrone, Arthur Dionizio Martins da Silva\n\n\n\n\n\n\n\n\n\n\n\n\nEntenda a História da Linguagem que une Simplicidade e Desempenho\n\n\n\n\n\n\nHistória\n\n\n\nConheça a história do Julia, que surgiu com a proposta de unir o desempenho e a simplicidade em uma só linguagem. \n\n\n\n\n\n12 de jun. de 2025\n\n\nEsther Cleveston, Pedro H. G. Elias\n\n\n\n\n\n\n\n\n\n\n\n\nComo utilizar Julia no RStudio no Windows\n\n\n\n\n\n\nInstalação\n\n\nIDE\n\n\n\nPasso a passo para configurar Julia no Rstudio\n\n\n\n\n\n18 de mai. de 2025\n\n\nVitor Ribas Perrone, Carlos Trucíos\n\n\n\n\n\n\n\n\n\n\n\n\nNotebooks em Julia: Jupyter e Colab\n\n\n\n\n\n\nInstalação\n\n\n\nAprenda passo a passo como instalar e utilizar os ambientes Jupyter e Colab integrados à linguagem Julia. \n\n\n\n\n\n13 de mai. de 2025\n\n\nGabriel Cardoso, Carlos Trucíos\n\n\n\n\n\n\n\n\n\n\n\n\nComo instalar Julia?\n\n\n\n\n\n\nInstalação\n\n\n\nPasso a passo para instalar e configurar Julia no seu computador. \n\n\n\n\n\n2 de mai. de 2025\n\n\nNicole Fredericci, Carlos Trucíos\n\n\n\n\n\n\n\n\n\n\n\n\nDo Zero ao Julia: As origens\n\n\n\n\n\n\nHistória\n\n\n\nFicou curioso sobre como tudo começou? Descubra, de forma leve e descontraída, como o projeto foi idealizado, planejado e finalmente lançado ao público. \n\n\n\n\n\n24 de abr. de 2025\n\n\nCarlos Trucíos\n\n\n\n\n\n\nNenhum item correspondente"
   }
 ]

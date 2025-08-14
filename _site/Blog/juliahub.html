@@ -7,10 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Nicole Fredericci">
-<meta name="author" content="Carlos Trucíos">
-<meta name="description" content="Passo a passo para instalar e configurar Julia no seu computador.">
+<meta name="description" content="Plataformas colaborativas de programação são fundamentais para o avanço dos projetos de ciência de dados, computação científica, estatística, etc. Itso, pois facilitam a globalização da informação entre desenvolvedores. Se você deseja compartilhar projetos em Julia e se manter atualizado sobre as novidades da linguagem, aprenda neste tutorial como utilizar o JuliaHub.">
 
-<title>Como instalar Julia? – Do Zero ao Julia</title>
+<title>Para que serve o JuliaHub? – Do Zero ao Julia</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,40 +21,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -167,8 +132,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#introdução" id="toc-introdução" class="nav-link active" data-scroll-target="#introdução">Introdução</a></li>
-  <li><a href="#pelo-site-oficial" id="toc-pelo-site-oficial" class="nav-link" data-scroll-target="#pelo-site-oficial">Pelo site oficial</a></li>
-  <li><a href="#outros-caminhos" id="toc-outros-caminhos" class="nav-link" data-scroll-target="#outros-caminhos">Outros caminhos</a></li>
+  <li><a href="#criando-uma-conta" id="toc-criando-uma-conta" class="nav-link" data-scroll-target="#criando-uma-conta">Criando uma conta</a></li>
+  <li><a href="#aplicações-notebook-e-projetos" id="toc-aplicações-notebook-e-projetos" class="nav-link" data-scroll-target="#aplicações-notebook-e-projetos">Aplicações, Notebook e Projetos</a></li>
+  <li><a href="#julia-e-ia" id="toc-julia-e-ia" class="nav-link" data-scroll-target="#julia-e-ia">Julia e IA</a></li>
+  <li><a href="#pacotes" id="toc-pacotes" class="nav-link" data-scroll-target="#pacotes">Pacotes</a></li>
+  <li><a href="#recursos" id="toc-recursos" class="nav-link" data-scroll-target="#recursos">Recursos</a></li>
   </ul>
 </nav>
     </div>
@@ -177,32 +145,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Como instalar Julia?</h1>
+<h1 class="title">Para que serve o JuliaHub?</h1>
   <div class="quarto-categories">
-    <div class="quarto-category">Instalação</div>
+    <div class="quarto-category">Ferramentas</div>
+    <div class="quarto-category">Online</div>
   </div>
   </div>
 
 <div>
   <div class="description">
-    <p>Passo a passo para instalar e configurar Julia no seu computador.</p>
+    <p>Plataformas colaborativas de programação são fundamentais para o avanço dos projetos de ciência de dados, computação científica, estatística, etc. Itso, pois facilitam a globalização da informação entre desenvolvedores. Se você deseja compartilhar projetos em <code>Julia</code> e se manter atualizado sobre as novidades da linguagem, aprenda neste tutorial como utilizar o JuliaHub.</p>
   </div>
 </div>
 
 <div class="quarto-title-meta-author">
-  <div class="quarto-title-meta-heading">Autores</div>
+  <div class="quarto-title-meta-heading">Autor</div>
   <div class="quarto-title-meta-heading">Afiliação</div>
   
     <div class="quarto-title-meta-contents">
     <p class="author"><a href="https://github.com/NFredericci">Nicole Fredericci</a> </p>
-  </div>
-  <div class="quarto-title-meta-contents">
-        <p class="affiliation">
-            Universidade Estadual de Campinas
-          </p>
-      </div>
-    <div class="quarto-title-meta-contents">
-    <p class="author"><a href="https://ctruciosm.github.io">Carlos Trucíos</a> <a href="https://orcid.org/0000-0001-8746-8877" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
   </div>
   <div class="quarto-title-meta-contents">
         <p class="affiliation">
@@ -217,7 +178,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Data de Publicação</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">2 de maio de 2025</p>
+      <p class="date">3 de agosto de 2025</p>
     </div>
   </div>
   
@@ -231,39 +192,97 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="introdução" class="level2">
 <h2 class="anchored" data-anchor-id="introdução">Introdução</h2>
-<p>Há muitas vantagens em usar plataformas integradas para desenvolver seus projetos nas mais diversas linguagens de programação. Mas e se sua internet cair? E se você quiser continuar seu projeto de um lugar com conexão lenta? Ter <code>Julia</code> instalado no seu computador resolve esse problema!</p>
-<p>Neste post, aprenderemos algumas formas de instalar <code>Julia</code> no seu computador.</p>
-</section>
-<section id="pelo-site-oficial" class="level2">
-<h2 class="anchored" data-anchor-id="pelo-site-oficial">Pelo site oficial</h2>
-<p>Clicando em <a href="https://julialang.org/downloads/#manual_downloads">Julia</a>, você será redirecionado para o site oficial de <code>Julia</code>, onde poderá realizar a instalação manual da versão mais recente de <code>Julia</code> apenas baixando um instalador compatível com seu sistema operacional <code>(.exe, .dmg, etc)</code>. É importante escolher um instalador compatível com o seu sistema operacional, caso contrário não será possível a instalação.</p>
-<p>Certifique-se de ter pelo menos <strong>0,98 GB</strong> livres para armazenar os arquivos em seu computador. Após o término do download, siga as instruções recomendadas de configuração do instalador oficial (clicando em “Próximo” em todas as abas, para o caso da instalação padrao) e aguarde enquanto Julia é instalado.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="imagens/installer_app.png" class="img-fluid figure-img"></p>
-<figcaption>Atalho no Desktop</figcaption>
-</figure>
-</div>
-<blockquote class="blockquote">
-<p>Criar um atalho na área de trabalho facilitará muito o acesso ao aplicativo no dia a dia, embora essa seleção seja opcional.</p>
-</blockquote>
-<p>Uma vez instalado <code>Julia</code> no seu computador, você poderá programar diretamente no terminal de Julia, que deve se parecer com a seguinte imagem:</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="imagens/terminal_app.png" class="img-fluid figure-img"></p>
-<figcaption>Terminal Julia</figcaption>
-</figure>
+<div class="justify">
+<p>A denominação “Hub”, tanto em <em>JuliaHub</em> quanto em <em>GitHub</em>, refere-se ao termo em inglês que significa <strong>“o centro efetivo de uma atividade, região ou rede (de contatos, trabalhos)”</strong>. Assim, fica claro que essas redes funcionam como centros de compartilhamento de código em <code>Julia</code> — no caso do <em>JuliaHub</em>, voltado à linguagem Julia; e no caso do <em>GitHub</em>, com foco no controle de versões e ramificações de projetos por meio do <em>Git</em>.</p>
+<p>Plataformas colaborativas de programação são fundamentais para o progresso dos projetos de ciência de dados, computação científica, estatística, etc. Isto, pois facilitam a globalização da informação entre desenvolvedores. Diferentemente de aplicações que hospedam arquivos colaborativos, como o Google Colab ou o Posit Cloud, o <code>JuliaHub</code> permite a criação simultânea de conteúdo pelos participantes do projeto, além de oferecer outras funcionalidades extremamente úteis.</p>
+<p>Entretanto, parte dos recursos da plataforma requer liberação mediante pagamento, que é uma escolha dos desenvolvedores para manter a aplicação ativa e sustentável. Neste tutorial, você aprenderá a utilizar as funções gratuitas do <code>JuliaHub</code> e acessar os recursos pagos, compreendendo suas finalidades.</p>
 </div>
 </section>
-<section id="outros-caminhos" class="level2">
-<h2 class="anchored" data-anchor-id="outros-caminhos">Outros caminhos</h2>
-<p><code>Julia</code> também está disponível para download pela <a href="https://apps.microsoft.com/detail/9njnww8pvkmn?hl=pt-BR&amp;gl=BR">Microsoft Store</a>. Para os usuários de Linux e macOS, essa opção não se encontra disponível por enquanto, mas também é possível instalar e utilizar Julia diretamente do terminal do computador.</p>
-<p>No Windows, pressione as teclas Windows + R, digite <code>cmd</code> e pressione “Enter” para abrir o terminal. Em seguida, execute o comando abaixo e digite <code>Y</code> quando solicitado pelo sistema:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>winget install Julia</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Quando a instalação for concluída, você pode digitar <code>where julia</code> para localizar o caminho até o <code>.exe</code> de <code>Julia</code>, ou simplesmente digitar <code>julia</code> no terminal para obter uma interface semelhante à do aplicativo do programa.</p>
-<p>No macOS ou Linux, abra o terminal e digite</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>curl -fsSL https://install.julialang.org | sh</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Quando a instalação for concluída, você pode digitar <code>which julia</code> para localizar o caminho até o executável de Julia, ou simplesmente digitar <code>julia</code> no terminal para acessar a interface interativa do programa.</p>
+<section id="criando-uma-conta" class="level2">
+<h2 class="anchored" data-anchor-id="criando-uma-conta">Criando uma conta</h2>
+<div class="justify">
+<p>Ao acessar o site oficial do <a href="https://juliahub.com/">JuliaHub</a>, a seleção do ícone de usuário o redirecionará para uma página com seis opções de login: por e-mail, GitHub, GitLab, Google e Linkedin. Após escolher uma das alternativas e acessar com sua conta, será necessário preencher os seguintes dados:</p>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="imagens/fill_1.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<div class="justify">
+<p>O título a ser preenchido corresponde ao seu cargo ou função dentro da organização mencionada.</p>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="imagens/fill_2.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<div class="justify">
+<p>Após completar as informações e selecionar “enviar”, você será direcionado para a página inicial da plataforma, onde encontrará seis funções principais disponíveis para acesso:</p>
+<ul>
+<li>Aplicações</li>
+<li>Notebooks</li>
+<li>Projetos</li>
+<li>Pergunte à IA</li>
+<li>Pacotes</li>
+<li>Recursos</li>
+</ul>
+</div>
+</section>
+<section id="aplicações-notebook-e-projetos" class="level2">
+<h2 class="anchored" data-anchor-id="aplicações-notebook-e-projetos">Aplicações, Notebook e Projetos</h2>
+<div class="justify">
+<p>Na aba <strong>Aplicações</strong>, é possível carregar <em>Pluto Notebooks</em> na nuvem, que são os alternativas em <code>Julia</code> aos <em>Jupyter Notebooks</em> (comoo os criados no Google Colab, por exemplo). Além disso, há a opção de carregar um ambiente de desenvolvimento completo com o <em>Julia IDE</em>, também em nuvem. Por fim, o <em>Dyad Studio</em> (antigo <em>JuliaSim</em>) consiste em uma plataforma avançada para desenvolvimento, refinamento, análise e implantação de modelos, e pode ser utilizado diretamente a partir do <code>JuliaHub</code>.</p>
+<p>Apesar da grande utilidade para o público geral, o uso dessas funções exige o pagamento de USD 1,40 por hora de atividade (valores de jul. 2025), o que as torna inacessíveis para uma grande parte dos usuários — especialmente estudantes, que podem emular os códigos em outras plataformas colaborativas, ou que atuam com linguagens de programação já consolidadas no meio acadêmico, mas que <strong>ainda</strong> não incluem <code>Julia</code> de forma significativa.</p>
+</div>
+</section>
+<section id="julia-e-ia" class="level2">
+<h2 class="anchored" data-anchor-id="julia-e-ia">Julia e IA</h2>
+<div class="justify">
+<p>Em parceria com a <code>OpenAI</code>, a plataforma oferece seu próprio acesso à <strong>Inteligência Artificial</strong>, voltado para perguntas específicas sobre a linguagem <code>Julia</code>. Ainda em versão <em>Beta</em> no momento da redação desta postagem, as respostas são geradas a partir do banco de dados interno do <code>JuliaHub</code>. A seguir, apresenta-se um teste realizado para avaliar a qualidade e a precisão das respostas fornecidas pela IA:</p>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="imagens/var1.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="imagens/var2.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<div class="justify">
+<p>De forma rápida e eficiente, a IA retorna instruções claras e exemplificadas sobre o que foi perguntado, além de incluir extensões consideradas relevantes pelo sistema que a opera. No teste apresentado acima, além de responder diretamente à questão sobre a variância clássica, a IA também trouxe informações complementares sobre a variância ponderada, os pacotes necessários para usar as funções mencionadas, como criar o vetor de dados na linguagem <code>Julia</code> e como exibir a saída de forma personalizada.</p>
+</div>
+</section>
+<section id="pacotes" class="level2">
+<h2 class="anchored" data-anchor-id="pacotes">Pacotes</h2>
+<div class="justify">
+<p>Na sessão <strong>Pacotes</strong>, o usuário tem acesso a 1248 páginas de pacotes em <code>Julia</code> criados por colaboradores da plataforma. É possível buscar pacotes por categoria, utilizando o filtro em “Tópicos”, ou procurar por pacotes específicos digitando o nome (ou parte dele) na lupa no canto superior direito.</p>
+<p>Outro filtro disponível é o de “Licenças”, que são os documentos que definem como um pacote pode ser usado, modificado e distribuído. Dependendo da licença, o pacote pode ser limitado, por exemplo, apenas para fins pessoais, não permitindo o uso comercial. A licença também pode permitir ou proibir modificações no código-fonte, a redistribuição do pacote (ou de versões modificadas), além de estabelecer condições específicas de uso — como a obrigatoriedade de creditar o autor original.</p>
+<p>Ao selecionar a pasta da “Fonte” do pacote desejado, a plataforma redireciona o usuário para a página correspondente no <em>GitHub</em>, onde é possível fazer o download do pacote compilado ou copiar o link para instalá-lo em seu ambiente de desenvolvimento.</p>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="imagens/pacotes.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<div class="justify">
+<p>Atualmente, a plataforma conta com 12.399 pacotes ativos, e você também pode colaborar com a comunidade de <code>Julia</code> registrando suas criações! A opção de registrar um novo pacote é gratuita e está disponível para todos os usuários. Para isso, é necessário fornecer as seguintes informações sobre o pacote que será compartilhado:</p>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="imagens/registro.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</section>
+<section id="recursos" class="level2">
+<h2 class="anchored" data-anchor-id="recursos">Recursos</h2>
+<div class="justify">
+<p>Ao selecionar a opção <strong>Recursos</strong>, você terá acesso à documentação oficial do <code>JuliaHub</code>, ao contato do suporte e à seção de feedback, onde é possível avaliar sua experiência na plataforma e sugerir melhorias aos desenvolvedores.</p>
+<p>Além disso, em <em>Julia Binaries</em>, é possível baixar os arquivos executáveis de <code>Julia</code> prontos para instalação — ou seja, pacotes compilados para diferentes sistemas operacionais e em diversas versões. Para aprender como baixar e configurar <code>Julia</code> direto na sua máquina, basta acessar os tutoriais já publicados no Blog!</p>
+<p>Por último, a ferramenta “Explorar Webinars” redireciona o usuário para uma página com todos os <a href="https://info.juliahub.com/company/resources">Seminários Online</a>, tanto os já realizados quanto os que ainda vão acontecer, organizados pela plataforma e seus parceiros. Para se inscrever para o próximo evento ou acessar um já ocorrido, selecione o seminário desejado e os dados da sua conta no <code>JuliaHub</code> serão automaticamente preenchidos no formulário. Caso o evento já tiver ocorrido, ao clicar em “Registre-se” (ou “Enviar”, no caso de seminários mais antigos) a gravação ficará instantaneamente disponível na própria página. Caso o seminário ainda vá acontecer, um convite do <em>Zoom</em> será enviado automaticamente para o e-mail associado à sua conta.</p>
+<p>As informações exibidas na página principal de cada evento incluem a identificação dos oradores responsáveis pelo seminário, um resumo do tema abordado e sua motivação, além dos principais destaques que serão apresentados ao longo da sessão.</p>
+</div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
