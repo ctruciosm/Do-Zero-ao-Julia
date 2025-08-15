@@ -1,0 +1,92 @@
+---
+title: "Baixando dados com GoogleDrive.jl"
+description: |
+  Um breve guia  em Julia para o download de dados diretamente do GoogleDrive apenas pela URL do arquivo.
+categories:
+  - Guia
+author:
+  - name: Caio Frare
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/caiofrare
+  - name: Carlos Trucíos
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://ctruciosm.github.io
+    orcid: 0000-0001-8746-8877
+date: "2025-08-12"
+image: imagens/googledrive.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+draft: true
+---
+
+## O que é o GoogleDrive.jl?
+
+O GoogleDrive.jl é um pacote Julia que facilita o download de arquivos hospedados no Google Drive a partir de seus links.
+Ele é útil quando você precisa automatizar a obtenção de dados de forma direta, sem precisar acessar o navegador manualmente.
+
+## Instalação
+
+Para instalar o pacote, basta rodar no REPL do Julia:
+
+```{julia}
+
+using Pkg
+
+Pkg.add("GoogleDrive")
+
+```
+
+## Baixando um arquivo
+
+A função principal utilizada é google_download(), que recebe dois argumentos:
+
+1. URL do arquivo no Google Drive
+
+2. Nome (e opcionalmente o caminho) do arquivo de destino
+
+```{julia}
+using GoogleDrive: google_download
+
+url = "https://drive.google.com/file/d/1GqmszfSB_LHGQEQpSjoiPyDROZ5a8Ls4"
+google_download(url, "arquivo_destino.txt")
+pwd()
+
+```
+
+## Onde o arquivo é salvo?
+
+Se você passar apenas o nome, como no exemplo acima, o arquivo será salvo no diretório de trabalho atual do Julia — que pode ser consultado com:
+
+```{julia}
+
+pwd()
+
+```
+
+Para salvar em outro local, use o caminho completo:
+
+```{julia}
+
+google_download(url, "/caminho/para/pasta/arquivo_destino.txt")
+
+
+```
+
+## Dicas de Uso
+
+- O pacote não faz upload, apenas download de arquivos.
+
+- Ele é ideal para integrar em pipelines de ETL ou scripts de automação.
+
+## Conclusão
+
+O GoogleDrive.jl é simples, mas eficiente para automatizar o download de arquivos hospedados no Google Drive.
+Com poucas linhas de código, você pode incorporar dados externos diretamente no seu fluxo de trabalho em Julia.
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::
