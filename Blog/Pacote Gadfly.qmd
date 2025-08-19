@@ -1,0 +1,168 @@
+---
+title: "Pacote Gadfly - Como produzir gráficos interativos em Julia"
+description: |
+  Neste blog, te mostramos como utilizar o pacote Gadfly, explicando sua sintaxe e trazendo exemplos de gráficos interativos!
+categories:
+  - Julia
+  - Gráficos
+  - Análise de Dados
+author:
+  - name: Carlos Trucíos
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://ctruciosm.github.io
+    orcid: 0000-0001-8746-8877
+  - name: Leonardo dos Santos
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://linkedin.com/in/leonardo-dos-santoos
+    orcid: 0009-0008-8927-1507
+---
+
+## Introdução
+
+Voce já se perguntou em como fazer gráficos manipuláveis em Julia? Nesse blog, utilizando bases de dados clássicas da linguagem R, vamos te mostrar exatamente como produzir diferentes tipos de gráficos e como salvá-los em diferentes tipos de formatação!
+
+## Gadfly
+
+### Pacotes Necessários
+
+Vamos adicionar alguns pacotes essenciais para nossa análise:
+
+```{julia}
+# Leitura de pacotes essenciais
+using Pkg
+Pkg.add("Gadfly") # Pacote principal para gráficos
+Pkg.add("RDatasets") # Pacote de datasets clássicos do R que utilizaremos
+Pkg.add("DataFrames") # para manipulação de data frames
+Pkg.add("Statistics") # permite uso de funções estatísticas como a média
+Pkg.add("Measures") # para que possamos usar medidas como "cm"
+Pkg.add("Dates") # para manipularmos vetores para que sigam o formato de Data
+Pkg.add("Random") # para reprodutibilidade de alguns códigos
+```
+
+### Argumentos da Função plot() do Gadfly
+
+Para criar gráficos pelo pacote Gadfly, utilizaremos o comando plot(), que possui os seguintes argumentos:
+
+plot(
+    BaseDeDados,
+    x     = :ColunaX,
+    y     = :ColunaY,
+    color = :FatorAgrupamento,
+    shape = :FormatoDosPontos,
+    size  = :TamanhoDosPontos,
+    Geom.point
+    Geom.line <- você pode agrupar dois tipos diferentes de gráficos!
+    Theme(...) <- mudar tema do gráfico (cores, formato, etc)
+)
+
+### Gráficos Básicos
+
+#### Gráfico via Vetores
+
+Vamos rodar um gráfico bem simples, definindo dois vetores X e Y.
+
+```{julia}
+using Gadfly
+
+plot(x = [1,2,3], y = [1,2,5])
+```
+
+
+#### Gráfico de Pontos
+
+Agora, vamos usar o dataset "iris" do RDatasets para analisar a Largura x Comprimento de sépalas, organizadas por Espécie. Veja que, por meio dessa simples análise, podemos concluir que sépalas do tipo Setosa são mais largas e menos compridas do que sépalas de outras espécies.
+
+```{julia}
+using Gadfly, RDatasets
+
+iris = dataset("datasets","iris") #definição da base de dados
+
+plot(iris,
+    x=:SepalLength,
+    y=:SepalWidth,
+    color=:Species,
+    Geom.point)
+```
+
+#### Gráfico de Barras
+
+Agora, digamos que nosso objetivo é fazer uma análise mais simples da base de dados: queremos analisar a média do comprimento de cada espécie. Para isso, precisaremos criar um novo banco que possua as informações necessárias (Espécie e Média do comprimento) para, então, produzir um gráfico de barras, que seria o mais ideal para mostrar essa informação. Veja o código abaixo!
+
+```{julia}
+using Gadfly, RDatasets, DataFrames, Statistics, Measures
+
+iris = dataset("datasets","iris") # definição da base de dados
+
+mean_df = combine(
+    groupby(iris, :Species), #agrupando por espécie, no dataframe iris
+:SepalLength => mean => :MeanSepalLength # selecionando o comprimento da sépala, tomando a média e nomeando a média como MeanSepalLength
+)
+
+plot(mean_df, 
+    x = :Species, 
+    y = :MeanSepalLength,
+    Geom.bar,
+    Theme(bar_spacing=0.5cm) # adiçao de um espaçamento entre as barras de 0.5cm
+)
+```
+
+#### Gráficos de Caixa (Boxplots)
+
+Também podemos produzir boxplots (gráficos de caixa) para analisar a distribuição do comprimento de sépala Veja o seguinte gráfico:
+
+```{julia}
+using Gadfly, RDatasets
+
+iris = dataset("datasets","iris") # definição da base de dados
+
+plot(iris, 
+    x = :Species,
+    y = :SepalLength,
+    color = :Species, #adição de cor por estética
+    Geom.boxplot # gráfico boxplot
+)
+```
+
+#### Gráfico de 
+
+Agora, vamos criar um banco fictício que imita uma série temporal (um conjunto de observações medidos por tempo, como valor de uma bolsa a cada dia). Seguindo o código abaixo, definimos uma base de dados com valores para 3 bolsas de valores fictícias durante 50 dias a partir de 1 de Janeiro de 2020. Definiremos a Bolsa A com uma tendência crescente (valores crescem a cada dia); a Bolsa B com uma tendência descrescente (valores decaem a cada dia); e a Bolsa C sem tendência (valores são, em média, os mesmos).
+
+```{julia}
+using DataFrames, Dates, Random
+
+# CRIAÇÃO DA BASE DE DADOS
+
+Random.seed!(123) # reprodutibilidade
+
+n = 50  # número de pontos
+start_date = Date(2020, 1, 1) # data inicial (1/1/2020)
+dates = [start_date + Day(i) for i in 0:n-1] #vetor de datas
+
+types = ["Bolsa A", "Bolsa B", "Bolsa C"] #bolsas fictícias
+
+# definição das colunas do nosso banco de dados fictício
+date_col = repeat(dates, inner=length(types)) #data
+type_col = repeat(types, outer=n) # tipo da bolsa
+
+index_col = repeat(1:n, inner=length(types))
+trend_map = Dict("Bolsa A" => 0.1, "Bolsa B" => -0.09, "Bolsa C" => 0.01)
+value_col = 10 .+ [trend_map[t] for t in type_col] .* index_col .+ randn(length(date_col)) .* 0.5 #criação de um vetor de valores de cada bolsa em que há uma tendência de crescimento/estagnação/descrescimento a cada tempo
+
+# definição de um dataframe com nossas colunas
+serie_temporal = DataFrame(Data =date_col, Bolsa =type_col, Valores =value_col)
+
+
+first(serie_temporal,10) # glimpse do banco de dados
+```
+
+Com essa base de dados, podemos aplicar uma função muito interessante do Gadfly: a possibilidade de utilizar dois tipos de gráficos em um só, como fazemos nesse seguinte bloco, utilizando tanto um gráfico de pontos como um de linhas. Veja abaixo!
+
+```{julia}
+using Gadfly
+
+plot(serie_temporal,
+    x = :Data,
+    y = :Valores,
+    color = :Bolsa,
+    Geom.point,
+    Geom.line)
