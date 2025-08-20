@@ -30,6 +30,8 @@
   {
     "listing": "/blog.html",
     "items": [
+      "/Blog/Álgebra linear com LinearAlgebra.jl.html",
+      "/Blog/juliahub.html",
       "/Blog/Julia no Mercado de Trabalho.html",
       "/Blog/vscode.html",
       "/Blog/markdown_pluto.html",
