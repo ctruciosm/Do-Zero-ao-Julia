@@ -10,7 +10,7 @@ author:
     url: https://github.com/VitorRibasP
     orcid: 0009-0009-6923-7712
 date: "2025-08-14"
-image: imagens/juliaintegraisnumericas.png
+image: imagens/integraisnumericas.png
 lang: pt
 format:
   html:
@@ -27,38 +27,50 @@ Sendo assim, neste post, vamos aprender a realizar integrais numéricas em Julia
 :::
 
 ## Funções de uma variável
+::: justify
 Para realizar integração numérica de funções de uma variável, utilizaremos o pacote `QuadGK`. Vamos instalá-lo e carregá-lo:
+:::
 ```{julia}
 Pkg.add("QuadGK")
 using QuadGK
 ```
+::: justify
 O `QuadGK` implementa o método de quadratura adaptativa Gauss–Kronrod, cujos detalhes podem ser encontrados [neste link](https://en.wikipedia.org/wiki/Gauss%E2%80%93Kronrod_quadrature_formula).
 O uso é simples: definimos a função que desejamos integrar e utilizamos `quadgk`, inserindo como argumentos a função e o intervalo de integração. A função retorna a estimativa da integral e uma estimativa do erro numérico.
+:::
 ```{julia}
 f(x) = x^2 * exp(-x)
 quadgk(f, 0, 5)
 ```
 
-## Funções de várias variáveis 
+## Funções de várias variáveis
+::: justify
 Para integrais envolvendo funções de múltiplas variáveis, vamos utilizar o pacote Cubature:
+:::
 ```{julia}
 Pkg.add("Cubature")
 using Cubature 
 ```
+::: justify
 O `Cubature` oferece dois métodos principais: h-adaptativo e p-adaptativo, descritos na [documentação oficial](https://github.com/JuliaMath/Cubature.jl). 
 O método h-adaptativo pode ser utilizado com a função `hcubature`, que recebe a função de interesse e vetores com os limites inferiores e superiores de integração. Também obtemos a estimativa da integral e do erro.
+:::
 ```{julia}
 f(v) = v[1]^2 + v[2]^2
 hcubature(f, [0.0, 0.0], [1.0, 1.0])
 ```
+::: justify
 O método p-adaptativo é muito semelhante, mas utiliza a função `pcubature`:
+:::
 ```{julia}
 f(v) = v[1]^2 + v[2]^2
 pcubature(f, [0.0, 0.0], [1.0, 1.0])
 ```
 
 ## Densidade da Normal
+::: justify
 Como exemplo de aplicação estatística, podemos calcular a integral da função densidade de probabilidade de uma distribuição Normal padrão, "verificando" que sua área é igual a 1:
+:::
 ```{julia}
 f(x) = 1/(sqrt(2*pi))*exp(-x^2/2)
 quadgk(f, -Inf, Inf)
