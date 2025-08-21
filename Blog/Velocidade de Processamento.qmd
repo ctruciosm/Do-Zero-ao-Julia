@@ -1,0 +1,97 @@
+---
+title: "Velocidade de Processamento: R vs Julia vs Pythin"
+author: "Gabriel Campovilla"
+format: html
+editor: visual
+---
+
+# **Velocidade de Processamento: R vs Julia vs Python**
+
+## **Introdução**
+
+Quando escolhemos uma linguagem de programação para análise de dados ou computação científica, a velocidade de processamento é um fator crucial. Neste artigo, compararemos três linguagens populares: R, Julia e Python, analisando seu desempenho em tarefas computacionais intensivas.
+
+## **Por que a velocidade difere?**
+
+-   **Python**: Linguagem interpretada e dinâmica, o que geralmente a torna mais lenta. Porém, bibliotecas como NumPy usam código compilado em C por baixo dos panos para operações numéricas.
+
+-   **R**: Também é interpretada e focada em estatística. Pode ser lenta em loops, mas funções vetorizadas e pacotes como data.table oferecem bom desempenho.
+
+-   **Julia**: Foi projetada desde o início para desempenho, com um JIT (Just-In-Time) compiler que aproxima sua velocidade de linguagens como C.
+
+## **Exemplo Prático: Cálculo de Fibonacci**
+
+Vamos implementar um cálculo recursivo de Fibonacci (ineficiente propositalmente para testar o desempenho bruto) nas três linguagens rodando no google colab, pois como o mesmo usa uma máquina virtual, remove o quesito da qualidade de computador.  E estamos calculando para um “n” igual a 50.
+
+**R**
+
+```{r}
+fib <- function(n) {
+    if (n <= 1) {
+        return(n)
+    } else {
+        return(fib(n-1) + fib(n-2))
+    }
+}
+
+start <- Sys.time()
+result <- fib(50)
+end <- Sys.time()
+
+print(paste("Resultado:", result))
+print(paste("Tempo R:", end - start))
+```
+
+**Julia**
+
+```{julia}
+function fib(n)
+    if n <= 1
+        return n
+    else
+        return fib(n-1) + fib(n-2)
+    end
+end
+
+start_time = time()
+result = fib(50)
+end_time = time()
+
+println("Resultado: $result")
+println("Tempo Julia: $(end_time - start_time) segundos")
+```
+
+**Python**
+
+```{Python}
+import time
+
+def fib(n):
+    if n <= 1:
+        return n
+    else:
+        return fib(n-1) + fib(n-2)
+
+start = time.time()
+result = fib(50)
+end = time.time()
+
+print(f"Resultado: {result}")
+print(f"Tempo Python: {end - start:.4f} segundos")
+```
+
+## **Resultados Esperados**
+
+Em testes típicos (para fib(50)):
+
+-   **Julia**: \~ 113.031 segundos 
+
+-   **Python**: \~ 2711.653 segundos
+
+-   **R**: \~ 19417,81segundos
+
+\
+
+## **Conclusão**
+
+Julia geralmente vence em benchmarks brutos, mas a escolha deve considerar também o ecossistema e familiaridade. Para muitos usuários, Python oferece o melhor balanço entre desempenho e usabilidade. R permanece imbatível para análises estatísticas específicas com sintaxe concisa.

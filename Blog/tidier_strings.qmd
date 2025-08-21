@@ -12,7 +12,7 @@ author:
     affiliation: "Universidade Estadual de Campinas"
     url: https://github.com/NFredericci
 date: "2025-08-07"
-image: tidierstrings_logo.png
+image: imagens/tidierstrings_logo.png
 lang: pt
 format:
   html:
@@ -171,4 +171,5 @@ Este post foi elaborado a partir da [documentação oficial](https://tidierorg.g
 ::: callout-note
 Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
 :::
+
 

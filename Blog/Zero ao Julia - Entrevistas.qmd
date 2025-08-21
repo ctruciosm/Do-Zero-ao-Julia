@@ -8,10 +8,6 @@ categories:
   - Mercado de Trabalho
   - Meio Acadêmico
 author:
-  - name: Carlos Trucíos
-    affiliation: "Universidade Estadual de Campinas"
-    url: https://ctruciosm.github.io
-    orcid: 0000-0001-8746-8877
   - name: Leonardo dos Santos
     affiliation: "Universidade Estadual de Campinas"
     url: https://linkedin.com/in/leonardo-dos-santoos
@@ -19,7 +15,7 @@ author:
   - name: Ana Luisa Pereira da Silva Rodrigues
     affiliation: "Universidade Estadual de Campinas"
     url: https://www.linkedin.com/in/ana-luisa-rodrigues20042906/
-    orcid: 0009-0008-8927-1507
+    orcid: 0009-0009-7988-4243
 date: "2025-07-02"
 lang: pt
 format:
