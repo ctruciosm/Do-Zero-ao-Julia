@@ -26,6 +26,11 @@ draft: false
 engine: knitr
 ---
 
+
+```{r, echo=FALSE}
+Sys.setenv(JULIA_HOME = "/Users/ctrucios/.juliaup/bin/")
+```
+
 ## Introdução
 
 ::: {.justify}

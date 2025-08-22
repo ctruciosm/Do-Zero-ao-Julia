@@ -11,7 +11,7 @@ author:
   - name: Nicole Fredericci
     affiliation: "Universidade Estadual de Campinas"
     url: https://github.com/NFredericci
-date: "2025-05-08"
+date: "2025-21-08"
 image: imagens/Perspectivas.png
 lang: pt
 format:
@@ -19,7 +19,7 @@ format:
     toc: true
     toc-depth: 3
     self-contained: false
-draft: true
+draft: false
 ---
 
 ## A linguagem
@@ -36,9 +36,9 @@ Mas qual será o alcance dessa linguagem nos próximos anos? Quais são as persp
 
 
 ::: {.justify}
-O crescimento da linguagem `Julia` tem sido constante ao longo dos anos, impulsionado pela criação de um número cada vez maior de pacotes e bibliotecas, bem como pelo aumento de fóruns e comunidades. Atualmente, o software de `Julia` já foi baixado mais de **40 milhões** de vezes, ocupando, em 2022, as posições 25ª e 21ª nos índices PYPL e TIOBE, respectivamente. 
+O crescimento da linguagem `Julia` tem sido constante ao longo dos anos, impulsionado pela criação de um número cada vez maior de pacotes (bibliotecas), bem como pelo aumento de fóruns e comunidades. Atualmente, o software de `Julia` já foi baixado mais de **40 milhões** de vezes, ocupando, em 2022, as posições 25ª e 21ª nos índices PYPL e TIOBE, respectivamente. 
 
-Além disso, a linguagem tem ganhado destaque em pesquisas científicas, principalmente nas áreas de engenharia e ciências exatas — resultado combinado à criação de cerca de **8.000 pacotes** para a linguagem, disponíveis para a comunidade.
+Além disso, a linguagem tem ganhado destaque em pesquisas científicas, principalmente nas áreas de engenharia e ciências exatas, resultado combinado à criação de cerca de **8.000 pacotes** para a linguagem, disponíveis para a comunidade.
 :::
 
 
@@ -55,7 +55,7 @@ Apesar dos avanços, como ocorre em toda linguagem de programação, `Julia` ain
 
 
 ::: {.justify}
-Todo esse crescimento constante e expressivo nos últimos anos aponta para um futuro promissor para a linguagem, com um grande potencial para o desenvolvimento de ferramentas, pacotes e bibliotecas. Embora existam desafios para sua integração em diferentes áreas, o ritmo acelerado de desenvolvimento mostra que `Julia` não é apenas uma tendência passageira — a linguagem tem tudo para conquistar cada vez mais espaço e popularidade no cenário da programação.
+Todo esse crescimento constante e expressivo nos últimos anos aponta para um futuro promissor para a linguagem, com um grande potencial para o desenvolvimento de ferramentas e pacotes. Embora existam desafios para sua integração em diferentes áreas, o ritmo acelerado de desenvolvimento mostra que `Julia` não é apenas uma tendência passageira — a linguagem tem tudo para conquistar cada vez mais espaço e popularidade no cenário da programação.
 :::
 
 ## Referências utilizadas para a construção do texto
