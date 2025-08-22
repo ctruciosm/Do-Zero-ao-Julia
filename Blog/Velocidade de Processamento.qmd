@@ -1,8 +1,29 @@
 ---
-title: "Velocidade de Processamento: R vs Julia vs Pythin"
-author: "Gabriel Campovilla"
-format: html
-editor: visual
+title: Velocidade de Processamento: R vs Julia vs Python
+description: O texto compara a velocidade de processamento de R, Julia e Python usando o cálculo ineficiente de Fibonacci, mostrando que Julia é significativamente mais rápida, seguida por Python e depois R.
+
+categories:
+  -  Linguagens de Programação 
+  -  Desempenho Computacional
+author:
+  - name: Gabriel Campovilla da Silva
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/C4mpovill4
+
+  - name: 
+    affiliation: 
+    url: 
+    orcid: 
+
+date: "2025-07-30"
+image: imagens/loops_condic.png
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+draft: false
+engine: knitrNet
 ---
 
 # **Velocidade de Processamento: R vs Julia vs Python**
