@@ -1,7 +1,29 @@
 ---
 title: "Um pouco mais sobre SQLite em Julia"
-format: html
-editor: visual
+description: O texto é um tutorial prático que ensina a usar o SQLite com a linguagem Julia dentro do RStudio. Ele mostra desde a instalação dos pacotes até a execução de consultas SQL para manipular e analisar dados, usando o dataset iris como exemplo
+ 
+categories:
+  - SQLite
+  -   Manipulação de dados
+author:
+  - name: Gabriel Campovilla da Silva
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/C4mpovill4
+
+  - name: 
+    affiliation: 
+    url: 
+    orcid: 
+
+date: "2025-07-30"
+image: imagens/loops_condic.png
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+draft: false
+engine: knitrNet
 ---
 
 # QLite: Uma Solução de Banco de Dados Leve e Versátil
@@ -18,12 +40,12 @@ SQLite é um mecanismo de banco de dados SQL embutido em um processo, conhecido 
 
 Como utilizarei o RStudio, precisamos instalar o pacote do Julia.
 
-```{r}
+```{Julia}
 install.packages("JuliaCall")
 library(JuliaCall)
 ```
 
-```{r}
+```{Julia}
 Sys.setenv(JULIA_HOME = "")
 julia_setup()
 ```
@@ -34,7 +56,7 @@ Caso tenha alguma dúvida neste processo, temos um Blog no qual ajuda neste proc
 
 Julia possui um pacote chamado SQLite.jl; SQLite.jl oferece todos os recursos do SQLite diretamente dentro do Julia. Apesar de, neste caso, estarmos dentro do Julia, os comandos são passados diretamente para o motor do SQLite, que é instalado automaticamente quando o pacote SQLite.jl é adicionado ao ambiente.
 
-```{r}
+```{Julia}
 using Pkg  # Carrega o pacote Pkg, responsável por gerenciar pacotes em Julia.
 
 Pkg.add("SQLite")  # Instala o pacote SQLite.
@@ -51,14 +73,14 @@ Vamos agora utilizar o famoso conjunto de dados `iris` do R, mas com consultas S
 
 ### Etapa 1: Exportar `iris` do R para CSV
 
-```{r}
+```{Julia}
 write.csv(iris, "iris.csv", row.names = FALSE)
 
 ```
 
 Importar esse CSV no banco SQLite via Julia e visualizar suas tabelas e colunas
 
-```{r}
+```{Julia}
 using SQLite, CSV, DataFrames
 
 # Conectar ao banco de dados SQLite
@@ -96,7 +118,7 @@ Essa etapa transforma os dados do R em uma base SQL pronta para consultas, combi
 -   A sintaxe é dbGetQuery(conexao, chamada SQL);
 -   Extraia da tabela albums todas as colunas e todas as linhas e armazene-os em um objeto chamado album_db:
 
-```{r}
+```{Julia}
 # Consulta SQL para selecionar todas as colunas e linhas da tabela 'iris'
 query = "SELECT * FROM iris"
 
@@ -128,7 +150,7 @@ Explicando o código acima: Para extrair todos os dados da tabela iris no SQLite
 
     ## ORDER BY: ordenar os resultados
 
-```{r}
+```{Julia}
   query = """
 SELECT *
 FROM iris
@@ -143,7 +165,7 @@ Ordena os dados da tabela iris do maior para o menor valor de SepalLength.
 
 ## DISTINCT: valores únicos
 
-```{r}
+```{Julia}
 query = """
 SELECT DISTINCT Species
 FROM iris
@@ -157,7 +179,7 @@ Retorna as espécies únicas presentes no conjunto iris.
 
 ## WHERE: filtrar linhas
 
-```{r}
+```{Julia}
 query = """
 SELECT *
 FROM iris
@@ -172,7 +194,7 @@ Filtra apenas as linhas onde a espécie é setosa.
 
 ## LIMIT: limitar o número de resultados
 
-```{r}
+```{Julia}
 query = """
 SELECT *
 FROM iris
@@ -187,7 +209,7 @@ Mostra apenas as 10 primeiras linhas da tabela.
 
 ## GROUP BY e HAVING: agrupar e filtrar grupos
 
-```{r}
+```{Julia}
 query = """
 SELECT Species, AVG(SepalLength) as MediaSepal
 FROM iris
@@ -229,7 +251,7 @@ Embora estejamos utilizando Julia, o conceito permanece o mesmo: evite construir
 
 O que não fazer
 
-```{r}
+```{Julia}
 # NÃO FAÇA: Inserindo valor diretamente na string SQL
 nome_especie = "setosa"
 query = "SELECT * FROM iris WHERE Species = '$nome_especie'"
@@ -240,7 +262,7 @@ Isso pode parecer inofensivo, mas abre espaço para manipulação maliciosa se o
 
 o que fazer de boa prática alternativa (em R com RSQLite):
 
-```{r}
+```{Julia}
 # Em R, utilizando dbBind para evitar injeção
 stmt <- dbSendQuery(conexao, "SELECT * FROM iris WHERE Species = ?")
 dbBind(stmt, list("setosa"))
@@ -262,7 +284,7 @@ No Julia, para fechar a conexão com o banco de dados SQLite, você usa a funç�
 
 # Exemplo de código no RStudio usando JuliaCall:
 
-```{r}
+```{Julia}
 using SQLite
 using DataFrames
 
