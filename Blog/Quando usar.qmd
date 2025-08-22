@@ -1,8 +1,26 @@
 ---
 title: "Julia, Python, R e Outras: Quando Usar Cada Linguagem?"
-author: "Gabriel Campovilla"
-format: html
-editor: visual
+description: O texto compara Julia, Python e R em análise de dados e computação científica, destacando Julia como a melhor opção para cálculos de alta performance, com sintaxe simples e velocidade comparável a C. Inclui tabela comparativa e casos de uso ideais para cada linguagem.
+
+author:
+  - name: Gabriel Campovilla da Silva
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/C4mpovill4
+
+  - name: 
+    affiliation: 
+    url: 
+    orcid: 
+
+date: "2025-08-22"
+image: imagens/loops_condic.png
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+draft: false
+engine: knitrNet
 ---
 
 ## Julia, Python, R e Outras: Quando Usar Cada Linguagem
