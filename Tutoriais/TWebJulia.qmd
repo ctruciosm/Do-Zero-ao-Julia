@@ -1,8 +1,29 @@
 ---
-title: "webscraping"
-author: "Gabriel Campovilla"
-format: html
-editor: visual
+title: Webscraping em Julia
+description: O texto compara as linguagens Python, R e Julia para Web Scraping, destacando suas vantagens, bibliotecas principais e casos de uso ideais. Inclui regras éticas, boas práticas e um exemplo prático de extração de dados da Wikipedia em Julia, com comparações em R e Python.
+
+categories:
+  -  Webscraping
+  -  Banco de dados
+author:
+  - name: Gabriel Campovilla da Silva
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/C4mpovill4
+
+  - name: 
+    affiliation: 
+    url: 
+    orcid: 
+
+date: "2025-07-30"
+image: imagens/loops_condic.png
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+draft: false
+engine: knitrNet
 ---
 
 # O que veremos?
