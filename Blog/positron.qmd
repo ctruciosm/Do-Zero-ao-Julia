@@ -1,7 +1,7 @@
 ---
-title: "Como programar em Julia no Positron"
+title: "Programando em Julia com o Positron"
 description: |
-     Aprenda o como utilizar o Julia no Positron, da instalação aos primeiros passos.
+     Guia prático para instalar e começar a usar Julia na IDE Positron
 categories:
   - Instalação
   - IDE
@@ -25,10 +25,12 @@ draft: true
 ::: justify
 Ao trabalhar com Estatística, duas linguagens se destacam: R e Python. E, entre as IDEs mais utilizadas, estão o [RStudio](https://ime.unicamp.br/julialang/Blog/julia_rstudio.html) e o [VSCode](https://ime.unicamp.br/julialang/Blog/vscode.html), inclusive, já ensinamos a como configurar ambos para trabalhar com Julia.
 
-Recentemente, uma nova IDE foi lançada com a proposta de unir o melhor desses dois mundos: o Positron. Desenvolvido pela Posit (antiga RStudio), o Positron promete ser a IDE definitiva para cientistas de dados e estatísticos, combinando recursos poderosos com uma interface familiar.
+Recentemente, a Posit (antiga RStudio) lançou o **Positron**, uma nova IDE em desenvolvimento que busca oferecer um ambiente moderno e integrado para cientistas de dados e estatísticos. O Positron combina recursos avançados com uma interface familiar, trazendo suporte nativo a R e Python.
 
-A boa notícia? O Positron é compatível com Julia. Neste post, vamos mostrar o passo a passo para instalar e configurar essa nova ferramenta para programar em Julia de forma simples e eficiente.
+A boa notícia é de que além do suporte nativo em R e Python, o Positron é compatível com Julia. Neste post, vamos mostrar o passo a passo para instalar e configurar essa nova ferramenta para programar em Julia de forma simples e eficiente.
 :::
+
+
 ## Pré-requisitos
 
 -   Ter o [Julia](https://www.ime.unicamp.br/~juliacps/Blog/instalar_julia.html) instalado;
