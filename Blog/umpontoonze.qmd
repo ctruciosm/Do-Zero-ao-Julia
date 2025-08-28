@@ -1,8 +1,29 @@
 ---
-title: "Julia 1.11.6: Conheça as Melhorias da Última Atualização da Linguagem"
-author: "Gabriel Campovilla"
-format: html
-editor: visual
+title: Julia 1.11.6: Conheça as Melhorias da Última Atualização da Linguagem
+description: O texto apresenta as principais melhorias da Julia 1.11.6, lançada em julho de 2025, destacando otimizações no compilador, sistema de tipos, paralelização e correções de bugs, mantendo compatibilidade com versões anteriores.
+
+categories:
+  -  Atualizações de Software
+  -  Computação Técnica
+author:
+  - name: Gabriel Campovilla da Silva
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/C4mpovill4
+
+  - name: 
+    affiliation: 
+    url: 
+    orcid: 
+
+date: "2025-08-22"
+image: imagens/loops_condic.png
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+draft: false
+engine: knitrNet
 ---
 
 ## Julia 1.11.6: Conheça as Melhorias da Última Atualização da Linguagem

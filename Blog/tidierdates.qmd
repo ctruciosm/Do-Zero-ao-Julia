@@ -1,0 +1,201 @@
+---
+title: "Introdução ao pacote TidierDates.jl"
+description: |
+  Um guia introdutório sobre o pacote TidierDates.jl! Aprenda a manipular datas e horários em Julia com uma gramática inspirada no lubridate (R), integrada ao ecossistema Tidier.jl.
+categories:
+  - Manipulação de Dados
+  - Datas e Horas
+  - Pacotes
+author:
+  - name: Henrique Anunciação Velloso Silva
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/henriqueavelloso
+    orcid: 0009-0002-8262-031X
+date: "2025-08-26"
+image: imagens/tidierdates.png
+lang: pt
+format:
+  html:
+    toc: true
+    self-contained: false
+engine: knitr
+draft: true
+---
+
+# Introdução
+
+::: {.justify}
+O `TidierDates.jl` é um pacote da linguagem `Julia`, integrante da biblioteca `Tidier.jl`, que fornece funções no estilo **tidyverse** para lidar com **datas** e **tempos**.
+
+Ele facilita operações comuns como extração de componentes de datas (ano, mês, dia, hora, etc.), operações com períodos, criação de sequências temporais e muito mais.
+
+Inspirado na sintaxe do **R** (`lubridate` + `dplyr`), o pacote torna a manipulação de datas clara, expressiva e consistente.
+
+Além disso, este pacote foi projetado para funcionar com o `TidierData.jl`, mas também pode funcionar de forma independente. Caso ainda não saiba como usar o pacote `TidierData.jl`, [clique aqui](https://www.ime.unicamp.br/~juliacps/Blog/tidierdata.html) para acessar o nosso blog!
+:::
+
+# Carregando pacotes
+
+```{julia}
+import Pkg
+
+redirect_stdout(devnull) do
+    redirect_stderr(devnull) do
+        Pkg.add("TidierDates")
+        Pkg.add("DataFrames")
+        Pkg.add("TidierData")
+        Pkg.add("Dates")
+    end
+end
+```
+
+```{julia}
+using TidierDates, DataFrames, TidierData, Dates
+```
+
+# Criando datas
+
+::: {.justify}
+O `TidierDates.jl` oferece funções que reconhecem diferentes formatos de datas em texto e os convertem para objetos `Date` ou `DateTime`.
+São extremamente flexíveis, aceitando formatos mistos como `"4th of July, 2005"` ou `"08092019"`.
+:::
+
+```{julia}
+
+df = DataFrame(Texto = ["01-02-2020", "15/03/2021", "2022-07-30"])
+
+@chain df begin
+    @mutate(
+        Data1 = dmy(Texto),   # dia-mês-ano
+        Data2 = mdy("July 4, 2005"),  # mês-dia-ano
+        Data3 = ymd("2019-08-09")     # ano-mês-dia
+    )
+end
+
+```
+
+::: {.justify}
+Neste exemplo, utilizamos as funções `dmy()`, `mdy()` e `ymd()` do pacote `TidierDates.jl` para converter **strings de datas** em objetos `Date` do Julia, seguindo diferentes ordens de componentes:
+
+- `dmy(Texto)` → interpreta a string como **dia-mês-ano** (ex.: `"01-02-2020"` vira `1 de fevereiro de 2020`).
+- `mdy("July 4, 2005")` → interpreta como **mês-dia-ano** (ex.: `"July 4, 2005"` vira `4 de julho de 2005`).
+- `ymd("2019-08-09")` → interpreta como **ano-mês-dia** (ex.: `"2019-08-09"` vira `9 de agosto de 2019`).
+
+O uso dessas funções garante que datas escritas em diferentes formatos sejam convertidas de forma consistente em objetos `Date`, permitindo cálculos e manipulações temporais precisas no Julia.
+:::
+
+## Incluindo hora, minuto e segundo
+
+```{julia}
+df_horas = DataFrame(Evento = ["A", "B"],
+                     Texto = ["2023-03-15 10:45:32", "15/04/2024 22:10:05"])
+
+@chain df_horas begin
+    @mutate(
+        DataHora1 = ymd_hms("2023-03-15 10:45:32"),
+        DataHora2 = dmy_hms("15/04/2024 22:10:05")
+    )
+end
+```
+
+::: {.justify}
+Aqui usamos as funções `*_hms()` (`ymd_hms`, `dmy_hms`, `mdy_hms`) para converter strings em objetos `DateTime`, incluindo hora, minuto e segundo.
+:::
+
+## Arredondando datas
+
+```{julia}
+using DataFrames, TidierData, TidierDates, Dates
+
+df2 = DataFrame(DataHora = [DateTime("2023-03-15T10:45:32"),
+                            DateTime("2023-03-15T22:17:05")])
+
+@chain df2 begin
+    @mutate(
+        Aprox_Hora = floor_date(DataHora, "hour"),
+        Aprox_Dia = floor_date(DataHora, "day"),
+        
+        Arredonda_5min = @. DateTime(
+            year(DataHora),
+            month(DataHora),
+            day(DataHora),
+            hour(DataHora),
+            round(minute(DataHora)/5)*5,
+            0
+        )
+    )
+end
+```
+
+::: {.justify}
+
+- `floor_date()` → arredonda para baixo (ex.: hora cheia, dia, mês).
+
+- `round_date()` → arredonda para o mais próximo múltiplo de tempo (ex.: 5 minutos, 1 hora, etc.).
+
+:::
+
+## Diferença entre datas
+
+```{julia}
+df3 = DataFrame(
+    Inicio = [Date("2023-01-01"), Date("2023-05-15")],
+    Fim    = [Date("2023-01-20"), Date("2023-06-01")]
+)
+
+@chain df3 begin
+    @mutate(
+        Diferenca = Fim - Inicio
+    )
+end
+
+```
+
+::: {.justify}
+A subtração direta entre objetos `Date` retorna um número de dias (`Day`).
+O `TidierDates.jl` também disponibiliza funções auxiliares como `difftime()` para cálculos mais explícitos de diferenças em segundos, minutos, horas ou dias.
+:::
+
+## Manipulando apenas tempo (h:m:s)
+
+```{julia}
+df4 = DataFrame(Horario = ["10:15:30", "23:59:59"])
+
+@chain df4 begin
+    @mutate(
+        Tempo = hms(Horario)
+    )
+end
+```
+
+::: {.justify}
+A função `hms()` converte strings de horários em objetos de tempo (hora, minuto, segundo), úteis em análises de logs ou séries temporais com granularidade horária.
+:::
+
+# Considerações finais
+
+::: {.justify}
+O **TidierDates.jl** é um pacote essencial para trabalhar com datas e horários em `Julia`.
+
+Com ele, é possível:
+
+- Converter strings em datas/horas (`ymd`, `dmy_hms`, etc.);
+
+- Arredondar datas para diferentes granularidades (`floor_date`, `round_date`);
+
+- Calcular diferenças entre datas (`difftime`, operadores diretos);
+
+- Trabalhar diretamente com horários (`hms`).
+
+Tudo isso de forma **consistente**, **legível** e **integrada** ao fluxo do **TidierData.jl**.
+:::
+
+# Referências
+
+::: {.justify}
+Blog inspirado na documentação disponibilizada pelos autores do pacote, a qual pode ser acessada pelo link [https://tidierorg.github.io/TidierDates.jl/dev/](https://tidierorg.github.io/TidierDates.jl/dev/).
+:::
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::
