@@ -1,0 +1,91 @@
+---
+title: "Introdução ao MongoDB com Julia"
+description: MongoDB: banco de dados NoSQL flexível, rápido e escalável. Ideal para dados semiestruturados e em evolução. Usa documentos tipo JSON (BSON). Mostra como usar com Julia e quando é a melhor escolha.
+
+categories:
+  -  Análise de dados
+  -  Banco de dados
+author:
+  - name: Gabriel Campovilla da Silva
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/C4mpovill4
+
+  - name: 
+    affiliation: 
+    url: 
+    orcid: 
+
+date: "2025-08-28"
+image: imagens/loops_condic.png
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+draft: false
+engine: knitrNet
+---
+
+## Por que MongoDB?
+
+O MongoDB é um banco de dados NoSQL orientado a documentos que se tornou extremamente popular, especialmente para aplicações modernas que lidam com dados semi-estruturados ou não estruturados. Diferente dos bancos de dados relacionais tradicionais, o MongoDB armazena dados em documentos JSON-like (BSON), oferecendo flexibilidade e escalabilidade.
+
+### Principais características:
+
+-   **Código aberto e gratuito**
+
+-   **Alta performance** para operações de leitura e escrita
+
+-   **Orientado a documentos** (armazena dados em formato BSON, similar ao JSON)
+
+-   **Escalonamento horizontal** fácil via sharding
+
+-   **Sem esquema fixo**, ideal para dados que evoluem rapidamente
+
+## MongoDB vs Bancos Relacionais
+
+Enquanto bancos relacionais como MySQL ou PostgreSQL organizam dados em tabelas com esquemas rígidos, o MongoDB usa coleções de documentos flexíveis. Cada documento é autossuficiente, contendo todos os dados necessários para representar uma entidade, minimizando a necessidade de JOINs complexos.
+
+## MongoDB em Julia
+
+### Conexão com MongoDB
+
+Em Julia, como em outras linguagens de programação também podemos usar o pacote para interagir com bancos MongoDB.
+
+### Operações de Agregação
+
+O MongoDB oferece poderosas operações de agregação. Em Julia:Quando usar MongoDB?
+
+-   **Aplicações web modernas** onde os requisitos de dados mudam frequentemente
+
+-   **Sistemas de comércio eletrônico** com produtos com atributos variáveis
+
+-   **Big Data** e análise de dados semi-estruturados
+
+-   **Aplicações em tempo real** que exigem alta velocidade de escrita
+
+## Quando evitar MongoDB?
+
+-   Quando seu aplicativo requer **transações complexas** com múltiplas operações atômicas
+
+-   Se seus dados são **altamente relacionais** com muitas junções necessárias
+
+-   Quando você precisa de **integridade referencial** estrita entre entidades
+
+## Configurando um Cluster MongoDB Atlas
+
+1.  Acesse [MongoDB Atlas](https://www.mongodb.com/atlas)
+
+2.  Crie uma conta gratuita
+
+3.  Siga o assistente para criar um cluster gratuito
+
+4.  Configure a segurança (usuários e IPs permitidos)
+
+5.  Obtenha a string de conexão para usar em sua aplicação Julia
+
+## Conclusão
+
+MongoDB oferece uma abordagem flexível e poderosa para armazenamento de dados, especialmente adequada para aplicações modernas que lidam com dados complexos e em evolução. Com Julia e o pacote Mongo.jl, você pode facilmente integrar o MongoDB em seus projetos científicos ou aplicações de produção.
+
+Para mais informações, consulte a [documentação oficial do MongoDB](https://docs.mongodb.com/) e a [documentação do Mongo.jl](https://github.com/JuliaComputing/Mongo.jl).
