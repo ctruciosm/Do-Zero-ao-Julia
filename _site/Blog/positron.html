@@ -6,8 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Vitor Ribas Perrone">
+<meta name="author" content="Nicole Fredericci">
+<meta name="description" content="Guia prático para instalar e começar a usar Julia na IDE Positron">
 
-<title>Tutoriais – Do Zero ao Julia</title>
+<title>Programando em Julia com o Positron – Do Zero ao Julia</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,24 +26,22 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-6bd9cfa162949bde0a231f530c97869d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-6bd9cfa162949bde0a231f530c97869d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -68,77 +69,19 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Procurar"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
 
-    const options = {
-      valueNames: ['listing-title','listing-author','listing-date','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+  <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">Do Zero ao Julia</span>
     </a>
   </div>
@@ -149,23 +92,23 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./oprojeto.html"> 
+    <a class="nav-link" href="../oprojeto.html"> 
 <span class="menu-text">O projeto</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./equipe.html"> 
+    <a class="nav-link" href="../equipe.html"> 
 <span class="menu-text">Equipe</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./blog.html"> 
+    <a class="nav-link" href="../blog.html"> 
 <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./tutoriais.html" aria-current="page"> 
+    <a class="nav-link" href="../tutoriais.html"> 
 <span class="menu-text">Tutoriais</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./meetup.html"> 
+    <a class="nav-link" href="../meetup.html"> 
 <span class="menu-text">Meetup</span></a>
   </li>  
   <li class="nav-item compact">
@@ -181,141 +124,195 @@ window.Quarto = {
     </nav>
 </header>
 <!-- content -->
-<header id="title-block-header" class="quarto-title-block default page-columns page-full">
-  <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-page-left">
-      <h1 class="title">Tutoriais</h1>
-                      </div>
-  </div>
-    
-  
-  <div class="quarto-title-meta column-page-left">
-
-      
-    
-      
-    </div>
-    
-  
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-    <h5 class="quarto-listing-category-title">Categorias</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">Tudo <span class="quarto-category-count">(3)</span></div><div class="category" data-category="QXBsaWNhJUMzJUE3JUMzJUEzbw==">Aplicação <span class="quarto-category-count">(2)</span></div><div class="category" data-category="R3IlQzMlQTFmaWNvcw==">Gráficos <span class="quarto-category-count">(1)</span></div><div class="category" data-category="VmlzdWFsaXphJUMzJUE3JUMzJUEzbyUyMGRlJTIwRGFkb3M=">Visualização de Dados <span class="quarto-category-count">(2)</span></div></div></div>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Nesta página</h2>
+   
+  <ul>
+  <li><a href="#introdução" id="toc-introdução" class="nav-link active" data-scroll-target="#introdução">Introdução</a></li>
+  <li><a href="#pré-requisitos" id="toc-pré-requisitos" class="nav-link" data-scroll-target="#pré-requisitos">Pré-requisitos</a></li>
+  <li><a href="#instalando-o-positron" id="toc-instalando-o-positron" class="nav-link" data-scroll-target="#instalando-o-positron">Instalando o Positron</a></li>
+  <li><a href="#instalando-a-extensão-de-julia-no-positron" id="toc-instalando-a-extensão-de-julia-no-positron" class="nav-link" data-scroll-target="#instalando-a-extensão-de-julia-no-positron">Instalando a extensão de Julia no Positron</a></li>
+  <li><a href="#programando-em-julia" id="toc-programando-em-julia" class="nav-link" data-scroll-target="#programando-em-julia">Programando em Julia</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
-<main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Programando em Julia com o Positron</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Instalação</div>
+    <div class="quarto-category">IDE</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    <p>Guia prático para instalar e começar a usar Julia na IDE Positron</p>
+  </div>
+</div>
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Autores</div>
+  <div class="quarto-title-meta-heading">Afiliação</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author"><a href="https://github.com/VitorRibasP">Vitor Ribas Perrone</a> <a href="https://orcid.org/0009-0009-6923-7712" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Universidade Estadual de Campinas
+          </p>
+      </div>
+    <div class="quarto-title-meta-contents">
+    <p class="author"><a href="https://github.com/NFredericci">Nicole Fredericci</a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Universidade Estadual de Campinas
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Data de Publicação</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">28 de agosto de 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
 
 
+</header>
 
 
+<section id="introdução" class="level2">
+<h2 class="anchored" data-anchor-id="introdução">Introdução</h2>
+<div class="justify">
+<p>Ao trabalhar com estatística e ciência de dados, duas linguagens costumam se destacar: <code>R</code> e <code>Python</code>. Entre as IDEs mais utilizadas, estão o <a href="https://ime.unicamp.br/julialang/Blog/julia_rstudio.html">RStudio</a> e o <a href="https://ime.unicamp.br/julialang/Blog/vscode.html">VSCode</a> — inclusive, já mostramos aqui como configurar ambos para programar em <code>Julia</code>.</p>
+<p>Recentemente, uma nova IDE chamada <code>Positron</code> foi lançada com a proposta de reunir o melhor desses dois ambientes. Desenvolvido pela Posit (antiga RStudio), o <code>Positron</code> pretende se consolidar como a IDE de referência para cientistas e analistas de dados, econometristas e estatísticos, oferecendo recursos avançados em uma interface já familiar.</p>
+<p>Embora o Positron ofereça apenas suporte nativo apenas para <code>R</code> e <code>Python</code>, é possível configurá-lo para trabalhar também com <code>Julia</code>. Neste post, apresentamos o passo a passo para instalar e preparar a IDE de modo a escrever código em <code>Julia</code>.</p>
+</div>
+</section>
+<section id="pré-requisitos" class="level2">
+<h2 class="anchored" data-anchor-id="pré-requisitos">Pré-requisitos</h2>
+<ul>
+<li>Ter o <a href="https://www.ime.unicamp.br/~juliacps/Blog/instalar_julia.html">Julia</a> instalado no seu computador.</li>
+</ul>
+</section>
+<section id="instalando-o-positron" class="level2">
+<h2 class="anchored" data-anchor-id="instalando-o-positron">Instalando o Positron</h2>
+<div class="justify">
+<p>A instalação do <code>Positron</code> pode ser feita diretamente pelo <a href="https://positron.posit.co/download.html">site oficial</a>. Basta acessar o link e escolher a versão compatível com o seu sistema operacional.</p>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Atenção!">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Atenção!
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>No <strong>Windows</strong>, a versão <em>System level</em> instala o Positron para todos os usuários do computador (requer permissões de administrador), enquanto a <em>User level</em> instala apenas para o usuário atual.</p>
+</div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="imagens/positron3.png" class="img-fluid figure-img"></p>
+<figcaption>Site de instalação do Positron</figcaption>
+</figure>
+</div>
+<div class="justify">
+<p>Após o download, basta seguir os passos tradicionais de instalação. Ao inicializar o Positron pela primeira vez, se você tiver o VSCode instalado, uma mensagem aparecerá perguntando se deseja importar automaticamente todas as suas configurações do <code>VSCode</code> para o <code>Positron</code>. Assim, seu novo ambiente já ficará configurado do jeito que você estava acostumado.</p>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="imagens/positron1.png" class="img-fluid figure-img"></p>
+<figcaption>Opção de configuração do Positron</figcaption>
+</figure>
+</div>
+<div class="justify">
+<p>Esta é a tela inicial que você verá ao abrir o <code>Positron</code>.</p>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="imagens/positron5.png" class="img-fluid figure-img"></p>
+<figcaption>Tela inicial do Positron</figcaption>
+</figure>
+</div>
+</section>
+<section id="instalando-a-extensão-de-julia-no-positron" class="level2">
+<h2 class="anchored" data-anchor-id="instalando-a-extensão-de-julia-no-positron">Instalando a extensão de Julia no Positron</h2>
+<div class="justify">
+<p>Com o Positron devidamente instalado, o próximo passo é instalar a extensão oficial de Julia. Para isso, siga as etapas abaixo:</p>
+<ul>
+<li><p>Abra a aba de extensões usando o atalho <code>Ctrl + shift + X</code>;</p></li>
+<li><p>Na barra de busca, digite “<strong>Julia</strong>”;</p></li>
+<li><p>Selecione a extensão oficial e clique em “<strong>Install</strong>”.</p></li>
+</ul>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="imagens/positron2.png" class="img-fluid figure-img"></p>
+<figcaption>Instalando a extensão de Julia</figcaption>
+</figure>
+</div>
+</section>
+<section id="programando-em-julia" class="level2">
+<h2 class="anchored" data-anchor-id="programando-em-julia">Programando em Julia</h2>
+<div class="justify">
+<p>Com a extensão instalada, já podemos utilizar <code>Julia</code> no <code>Positron</code>. Agora, vamos criar um novo arquivo clicando no botão <em>New File</em>, localizado no canto superior esquerdo da tela, e selecionando a opção <em>Julia File</em>.</p>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="imagens/positron6.png" class="img-fluid figure-img"></p>
+<figcaption>Criando um novo arquivo</figcaption>
+</figure>
+</div>
+<div class="justify">
+<p>Com o arquivo aberto, vamos criar nosso primeiro código — o clássico “Hello World!”. Para executá-lo, use o atalho <em>Ctrl+Enter</em> ou então clique no botão <em>Run</em>, localizado no canto superior esquerdo.</p>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="imagens/positron4.png" class="img-fluid figure-img"></p>
+<figcaption>Rodando Julia no Positron</figcaption>
+</figure>
+</div>
+<div class="justify">
+<p>Pronto! Agora você já pode começar a programar e desenvolver seus projetos em Julia com o Positron. Sinta-se livre para explorar todas as funcionalidades disponíveis e aprimorar suas análises!</p>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Nota
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.</p>
+</div>
+</div>
 
 
+</section>
 
-
-
-<div class="quarto-listing quarto-listing-container-grid" id="listing-listing">
-<div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-categories="QXBsaWNhJUMzJUE3JUMzJUEzbyUyQ1Zpc3VhbGl6YSVDMyVBNyVDMyVBM28lMjBkZSUyMERhZG9z" data-listing-date-sort="1753844400000" data-listing-file-modified-sort="1755827549496" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1242">
-<a href="./Tutoriais/loops_condicionais_julia.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="./Tutoriais/imagens/loops_condic.png" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Loops e Condicionais em Julia
-</h5>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('QXBsaWNhJUMzJUE3JUMzJUEzbw=='); return false;">
-Aplicação
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('VmlzdWFsaXphJUMzJUE3JUMzJUEzbyUyMGRlJTIwRGFkb3M='); return false;">
-Visualização de Dados
-</div>
-</div>
-<div class="card-text listing-description">
-Condicionais e loops são estruturas fundamentais para o controle de fluxo em Julia. Enquanto as primeiras (if, elseif, else) permitem tomar decisões com base em condições…
-</div>
-<div class="card-attribution card-text-small justify">
-<div class="listing-author">
-Sarah Teixeira, Arthur Dionizio Martins da Silva
-</div>
-<div class="listing-date">
-30 de jul. de 2025
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="1" data-categories="QXBsaWNhJUMzJUE3JUMzJUEzbyUyQ1Zpc3VhbGl6YSVDMyVBNyVDMyVBM28lMjBkZSUyMERhZG9z" data-listing-date-sort="1747969200000" data-listing-file-modified-sort="1755827387065" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1622">
-<a href="./Tutoriais/tutorial-eda.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="./Tutoriais/imagens/eda-em-julia.png" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Introdução à Análise Exploratória de Dados (EDA) em Julia
-</h5>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('QXBsaWNhJUMzJUE3JUMzJUEzbw=='); return false;">
-Aplicação
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('VmlzdWFsaXphJUMzJUE3JUMzJUEzbyUyMGRlJTIwRGFkb3M='); return false;">
-Visualização de Dados
-</div>
-</div>
-<div class="card-text listing-description">
-Um guia completo e prático sobre como realizar Análise Exploratória de Dados (EDA) em Julia. Explore desde estatísticas descritivas, manipulação de dados, visualizações com…
-</div>
-<div class="card-attribution card-text-small justify">
-<div class="listing-author">
-Arthur Dionizio, Henrique Velloso
-</div>
-<div class="listing-date">
-23 de mai. de 2025
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="2" data-categories="R3IlQzMlQTFmaWNvcw==" data-listing-date-sort="1747969200000" data-listing-file-modified-sort="1755827477802" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1394">
-<a href="./Tutoriais/graf_basico.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="./Tutoriais/imagens/graf_tutorial.png" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Gráficos em Julia: primeiros passos
-</h5>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('R3IlQzMlQTFmaWNvcw=='); return false;">
-Gráficos
-</div>
-</div>
-<div class="card-text listing-description">
-Tão importante quanto desenvolver, implementar e aplicar modelos/metodologías é saber comunicar os resultados de forma clara e acessível para o público-alvo. E que melhor…
-</div>
-<div class="card-attribution card-text-small justify">
-<div class="listing-author">
-Nicole Fredericci, Carlos Trucíos
-</div>
-<div class="listing-date">
-23 de mai. de 2025
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-Nenhum item correspondente
-</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

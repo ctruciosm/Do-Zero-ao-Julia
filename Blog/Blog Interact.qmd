@@ -1,0 +1,103 @@
+---
+title: "Interact"
+description: O texto apresenta o pacote Interact.jl para Julia, explicando sua utilidade na criação de interfaces interativas em notebooks Jupyter, VS Code e aplicações web, com widgets intuitivos para ajuste de parâmetros e visualização dinâmica de dados.
+
+categories:
+  -  Visualização de Dados
+  -  Ferramentas Interativas
+author:
+  - name: Gabriel Campovilla da Silva
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/C4mpovill4
+
+  - name: 
+    affiliation: 
+    url: 
+    orcid: 
+
+date: "2025-08-26"
+image: imagens/loops_condic.png
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+draft: false
+engine: knitrNet
+---
+
+# **Interact.jl: Criando Aplicações Interativas no Julia com Facilidade**
+
+## **O Que é o Interact.jl?**
+
+O **Interact.jl** é um pacote para a linguagem de programação Julia que permite criar **interfaces interativas** de forma extremamente simples e intuitiva. Ele transforma scripts estáticos em experiências dinâmicas onde você pode ajustar parâmetros, visualizar dados em tempo real e explorar resultados sem precisar recodificar.
+
+É construído sobre a infraestrutura de **IJulia** (Jupyter notebooks para Julia) e **WebIO**, permitindo que os widgets interativos funcionem perfeitamente em notebooks Jupyter, IDEs como VS Code, e até em aplicações web standalone.
+
+## **Para Que Serve o Interact.jl?**
+
+O principal propósito do Interact.jl é **acelerar a exploração de dados e modelos**. Imagine estas situações:
+
+-   Ajustar um parâmetro de uma função matemática e ver instantaneamente como o gráfico muda
+
+-   Explorar como diferentes hiperparâmetros afetam o desempenho de um modelo de machine learning
+
+-   Criar dashboards simples para visualização de dados sem precisar de HTML/JavaScript
+
+-   Desenvolver material educacional interativo para ensinar conceitos complexos
+
+## **Principais Características**
+
+### **Widgets Intuitivos**
+
+O pacote oferece uma variedade de widgets prontos para uso:
+
+-   **Sliders** (slider): para valores numéricos contínuos ou discretos
+
+-   **Botões** (button): para acionar ações
+
+-   **Menus dropdown** (dropdown): para seleção entre opções
+
+-   **Caixas de seleção** (checkbox): para valores booleanos
+
+-   **Campos de texto** (textbox): para entrada de strings
+
+## **Onde Posso Usar?**
+
+### **1. Jupyter Notebooks**
+
+A integração mais comum é com Jupyter notebooks, perfeita para:
+
+-   Análise exploratória de dados
+
+-   Prototipagem rápida de modelos
+
+-   Apresentações interativas
+
+### **2. VS Code**
+
+A extensão Julia para VS Code suporta totalmente o Interact.jl, oferecendo uma experiência de desenvolvimento integrada.
+
+### **3. Aplicações Web Standalone**
+
+Com **WebIO.jl**, você pode embutir suas interações em páginas web ou dashboards.
+
+## **Vantagens do Interact.jl**
+
+1.  **Simplicidade**: Sintaxe intuitiva mesmo para iniciantes
+
+2.  **Produtividade**: Iteração rápida sem reexecutar código manualmente
+
+3.  **Integração**: Funciona com todo o ecossistema Julia (Plots.jl, Makie.jl, etc.)
+
+4.  **Flexibilidade**: Do protótipo à aplicação web completa
+
+## **Limitações e Considerações**
+
+-   Para aplicações muito complexas, você pode precisar de frameworks mais robustos como **Dash.jl** ou **Stipple.jl**
+
+-   O desempenho pode ser afetado para atualizações muito frequentes de grandes conjuntos de dados
+
+## **Conclusão**
+
+O Interact.jl facilita a criação de interfaces interativas no Julia, tornando-a acessível para qualquer pessoa que queira explorar dados e modelos de forma mais dinâmica.

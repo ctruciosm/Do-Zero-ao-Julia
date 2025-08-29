@@ -1,8 +1,35 @@
 ---
 title: "Introdução ao MongoDB com Julia"
+<<<<<<< HEAD
 author: "Gabriel Campovilla"
 format: html
 editor: visual
+=======
+description: MongoDB: banco de dados NoSQL flexível, rápido e escalável. Ideal para dados semiestruturados e em evolução. Usa documentos tipo JSON (BSON). Mostra como usar com Julia e quando é a melhor escolha.
+
+categories:
+  -  Análise de dados
+  -  Banco de dados
+author:
+  - name: Gabriel Campovilla da Silva
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/C4mpovill4
+
+  - name: 
+    affiliation: 
+    url: 
+    orcid: 
+
+date: "2025-08-28"
+image: imagens/loops_condic.png
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+draft: false
+engine: knitrNet
+>>>>>>> efd2e2f4acf274a23e5a60507b7003c3112e4b24
 ---
 
 ## Por que MongoDB?

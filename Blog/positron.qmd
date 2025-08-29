@@ -21,7 +21,7 @@ format:
     toc: true
     toc-depth: 3
     self-contained: false
-draft: true
+draft: false
 ---
 
 ## Introdução
@@ -30,10 +30,10 @@ draft: true
 ::: {.justify}
 Ao trabalhar com estatística e ciência de dados, duas linguagens costumam se destacar: `R` e `Python`. Entre as IDEs mais utilizadas, estão o [RStudio](https://ime.unicamp.br/julialang/Blog/julia_rstudio.html) e o [VSCode](https://ime.unicamp.br/julialang/Blog/vscode.html) — inclusive, já mostramos aqui como configurar ambos para programar em `Julia`.
 
-Recentemente, uma nova IDE chamada `Positron` foi lançada com a proposta de unir o melhor desses dois mundos. Desenvolvido pela *Posit* (antiga RStudio), o Positron promete ser a IDE definitiva para cientistas de dados e estatísticos, combinando recursos avançados com uma interface familiar.
+Recentemente, uma nova IDE chamada `Positron` foi lançada com a proposta de reunir o melhor desses dois ambientes. Desenvolvido pela Posit (antiga RStudio), o `Positron` pretende se consolidar como a IDE de referência para cientistas e analistas de dados, econometristas e estatísticos, oferecendo recursos avançados em uma interface já familiar.
 
+Embora o Positron ofereça apenas suporte nativo apenas para `R` e `Python`, é possível configurá-lo para trabalhar também com `Julia`. Neste post, apresentamos o passo a passo para instalar e preparar a IDE de modo a escrever código em `Julia`.
 
-Apesar de que `Positron` posui suporte natico para `R` e `Python`, é possível configurá-lo para utilizar `Julia`!. Neste post, vamos mostrar o passo a passo para instalar e configurar a nova IDE para escrever código em `Julia`.
 :::
 
 ## Pré-requisitos

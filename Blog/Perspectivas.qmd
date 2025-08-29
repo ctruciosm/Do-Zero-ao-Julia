@@ -11,7 +11,7 @@ author:
   - name: Nicole Fredericci
     affiliation: "Universidade Estadual de Campinas"
     url: https://github.com/NFredericci
-date: "2025-21-08"
+date: "2025-08-21"
 image: imagens/Perspectivas.png
 lang: pt
 format:
