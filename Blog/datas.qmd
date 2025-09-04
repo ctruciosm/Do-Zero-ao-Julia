@@ -1,7 +1,7 @@
 ---
 title: "Manipulação de datas em Julia"
 description: |
-     Aprenda a manipular datas em Julia, desde a criação de objetos até operações aritméticas.
+     Aprenda a criar, acessar e manipular datas em *Julia*, incluindo operações aritméticas e comparações entre períodos de tempo.
 categories:
   - Primeiros passos
   - Ferramentas
@@ -10,7 +10,10 @@ author:
     affiliation: "Universidade Estadual de Campinas"
     url: https://github.com/VitorRibasP
     orcid: 0009-0009-6923-7712
-date: "2025-08-06"
+  - name: Nicole Fredericci
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/NFredericci
+date: "2025-09-03"
 image: imagens/juliadatas.png
 lang: pt
 format:
@@ -18,85 +21,114 @@ format:
     toc: true
     toc-depth: 3
     self-contained: false
+engine: knitr
 draft: true
 ---
 
 ## Introdução
-::: justify
-Manipular datas é uma tarefa essencial em diversas áreas da Estatística aplicada, desde a análise de séries temporais, análise de sobrevivência, entre outras. Sendo asism, Julia nos fornece diversas ferramentas para trabalhar com datas. 
 
-Neste post, vamos explorar como trabalhar com datas e horários em Julia utilizando o módulo `Dates`, que já faz parte da biblioteca padrão da linguagem. Você aprenderá a criar, manipular, extrair informações e realizar operações com objetos de data.
+::: {.justify}
+Manipular datas é essencial em diversas áreas da Estatística aplicada, como análise de séries temporais e estudos de sobrevivência, entre outras. Para isso, *Julia* oferece diversas ferramentas para trabalhar com datas de forma eficiente.
+
+Neste post, vamos explorar como trabalhar com datas e horários em *Julia* utilizando o módulo `Dates`, que já faz parte da biblioteca padrão da linguagem. Você aprenderá a criar, manipular, extrair informações e realizar operações com objetos do tipo data.
 :::
 
 ## Criação de objetos de data
-Em primeiro lugar, é necessário carregar o módulo `Dates`, já presente no Julia base.
+
+::: {.justify}
+Em primeiro lugar, é necessário carregar o módulo `Dates`, que já está presente na instalação padrão do *Julia*.
+:::
+
 ```{julia}
 using Dates
 ```
-Existem duas principais estruturas para representar datas em Julia:
-- `Date`: representa apenas ano, mês e dia.
-- `DateTime`: inclui também hora, minuto, segundo, etc.
+
+::: {.justify}
+Existem duas principais estruturas para representar datas em *Julia*:
+
+- `Date`: representa apenas a data (ano, mês e dia).
+- `DateTime`: representa data e hora, incluindo minutos, segundos, etc.
+
 Podemos criar cada uma dessas estruturas por meio de funções de mesmo nome.
+:::
+
 ```{julia}
 Date(2013,3,25)
 DateTime(2013,3,25)
 ```
-::: justify
-Você também pode criar esses objetos a partir de uma `String` com o formato correspondente:
+
+:::{.justify}
+Você também pode criar esses objetos a partir de uma `String` que siga o formato correspondente:
 :::
+
 ```{julia}
 Date("2015-03-25", dateformat"y-m-d")
 DateTime("2015/03/25 14:30", dateformat"y/m/d HH:MM")
 ```
-::: justify
+
+:::{.justify}
 Para obter a data e hora atual do sistema, podemos utilizar as funções `today` e `now`.
 :::
+
 ```{julia}
-today()
-now()
+today() # Retorna apenas a data atual
+now()   # Retorna data e hora completas
 ```
+
 ## Acessar partes específicas da data
-::: justify
-Também existem algumas funções para extrair informações a partir de uma data. Para exemplificar, vamos criar um objeto chamado `data`.
+
+:::{.justify}
+Existem funções que permitem extrair partes específicas de uma data. Para exemplificar, vamos criar um objeto chamado `data`.
 :::
+
 ```{julia}
 data = Date("2015-03-25", dateformat"y-m-d")
 ```
-::: justify
-É possível extrair diretamente partes específicas das datas por meio de funções com o nome dessas partes, como `year` e `month`.
+
+:::{.justify}
+É possível extrair partes específicas de uma data utilizando funções que têm o mesmo nome dessas partes, como `year` e `month`.
 :::
+
 ```{julia}
-year(data)
-month(data)
+year(data)  # Retorna o ano
+month(data) # Retorna o mês
 ```
-::: justify
-Também existem funções que retornam múltiplos componentes ao mesmo tempo, como `yearmonth` e `yearmonthday`.
+
+:::{.justify}
+Também existem funções que retornam múltiplos componentes de uma vez, como `yearmonth` e `yearmonthday`.
 :::
+
 ```{julia}
-yearmonth(data)
-yearmonthday(data)
+yearmonth(data)     # Retorna ano e mês
+yearmonthday(data)  # Retorna ano, mês e dia
 ```
-::: justify
-Além de extrair elementos da numeração da data, também é possível obter informações em texto, como o nome do dia da semana e o nome do mês.
+
+:::{.justify}
+Além de extrair elementos numéricos da data, também é possível obter informações em texto, como o nome do dia da semana e o nome do mês.
 :::
+
 ```{julia}
 dayname(data)
 monthname(data)
 ```
 
 ## Informações de calendário
-::: justify
-Também existem algumas funções para verificações de fatos relacionados ao calendário, como `isleapyear`, que indica se o ano é bissexto e `daysinmonth`, que retorna o número de dias que aquele mês possui.
+
+:::{.justify}
+Também existem funções para verificar informações relacionadas ao calendário, como `isleapyear`, que indica se o ano é bissexto, e `daysinmonth`, que retorna o número de dias que aquele mês possui.
 :::
+
 ```{julia}
 isleapyear(data) 
 daysinmonth(data)
 ```
 
-## Quantias de tempo
-::: justify
-Também é possível criar objetos que representam quantias de tempo, que posteriormente serão utilizadas para algumas operações e manipulações. 
+## Períodos de tempo
+
+:::{.justify}
+Além disso, é possível criar objetos que representam períodos de tempo, os quais podem ser usados posteriormente em operações e manipulações com datas. 
 :::
+
 ```{julia}
 Year(5)
 Day(7)
@@ -104,46 +136,59 @@ Nanosecond(200)
 ```
 
 ## Operações com datas
-::: justify
-Existem diversas operações que são possíveis com datas. Para exemplificá-las, usaremos as seguintes datas. 
+
+:::{.justify}
+Existem diversas operações que podem ser realizadas com datas. Para ilustrar, utilizaremos os seguintes exemplos:
 :::
+
 ```{julia}
 data1 = Date(2010, 11, 30) 
 data2 = Date(2011, 12, 25)
 ```
-Podemos calcular a diferença em dias de duas datas distintas. 
+
+:::{.justify}
+Podemos calcular a diferença, em dias, entre duas datas distintas.
+:::
+
 ```{julia}
 data2 - data1
 data1 - data2
 ```
-::: justify
-Também podemos utilizar aqueles objetos de quantia de tempo para somar ou subtrair às datas de interesse. 
+
+:::{.justify}
+Também podemos utilizar aqueles objetos que representam períodos de tempo para somar ou subtrair valores diretamente das datas.
 :::
+
 ```{julia}
 data1
 data1 + Day(7)
 data1 - Year(2)
 ```
-::: justify
-Além disso, é possível realizar a comparação direta entre duas datas, verificando se uma desigualdade é verdadeira ou não.
+
+:::{.justify}
+Ainda, é possível realizar a comparação direta entre duas datas, verificando se uma desigualdade é verdadeira ou não.
 :::
+
 ```{julia}
 data1 < data2
 ```
-::: justify
-Também é possível criar intervalos entre duas datas, especificando a unidade de incremento, como dias ou anos.
+
+:::{.justify}
+Por fim, também é possível criar intervalos entre duas datas, especificando a unidade de incremento, como dias ou anos.
 :::
+
 ```{julia}
-collect(Date(2020, 03, 02):Day(1):Date(2020, 03, 10))
+collect(Date(2020, 03, 02):Day(1):Date(2020, 03, 10))  # Intervalo diário
 ```
 
 ```{julia}
-collect(Date(2020, 03, 02):Year(1):Date(2025, 03, 02))
+collect(Date(2020, 03, 02):Year(1):Date(2025, 03, 02)) # Intervalo anual
 ```
 
 ## Conclusão
-::: justify
-Portanto, você já sabe como criar, acessar, manipular e operar com datas em Julia! Esse conhecimento é essencial para análises estatísticas que envolvem o fator tempo, como séries temporais.
+
+:::{.justify}
+Agora você já sabe como criar, acessar, manipular e realizar operações com datas em *Julia*! Esse conhecimento é fundamental para análises estatísticas que envolvem o fator tempo, como, por exemplo, o estudo de **séries temporais**.
 :::
 
 ::: callout-note
