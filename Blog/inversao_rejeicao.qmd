@@ -1,0 +1,121 @@
+---
+title: "Amostra de Variáveis Aleatórias com métodos de Inversão e Rejeição em Julia"
+description: |
+     Veja a implementação dos Métodos de Rejeição e Inversão em Julia, ferramentas poderosas para amostras diversas distribuições de probabilidade. 
+categories:
+  - Ferramentas 
+author:
+  - name: Vitor Ribas Perrone
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/VitorRibasP
+    orcid: 0009-0009-6923-7712
+date: "2025-08-14"
+image: imagens/rejeicao_inversao.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+draft: true
+---
+
+## Introdução
+::: justify
+Em muitos problemas de Estatística e Simulação, surge a necessidade de gerar amostras de distribuições de probabilidade que não estão diretamente implementadas em pacotes prontos. Nesse contexto, os Métodos da Inversão e da Rejeição são ferramentas fundamentais, pois permitem construir algoritmos simples e eficientes para esse fim.
+
+Apesar de sua importância, ainda não existe em Julia um pacote dedicado que forneça funções prontas para esses métodos de forma genérica. Por isso, neste post vamos implementar ambos os métodos do zero e mostrar, com exemplos práticos, como eles podem ser aplicados.
+:::
+
+## Método da Inversão
+::: justify
+Em primeiro lugar, vamos carregar os pacotes que serão utilizados:
+:::
+```{julia}
+Pkg.add("Distributions")
+using Distributions
+Pkg.add("StatsPlots")
+using StatsPlots
+```
+::: justify
+O Método da Inversão consiste, basicamente, em aplicar a inversa da função de distribuição acumulada sobre uma amostra de variáveis aleatórias uniformes. Mais detalhes podem ser encontrados [neste link](https://pt.wikipedia.org/wiki/M%C3%A9todo_da_transforma%C3%A7%C3%A3o_inversa).
+
+Podemos definir uma função `amostra_inversao` que automatize esse processo. Essa função recebe como argumentos:
+
+- `n`: Tamanho da amostra desejada;
+- `inv_acumulada`: Inversa da função de distribuição acumulada da distribuição de interesse.
+:::
+```{julia}
+function amostra_inversao(n, inv_acumulada)
+  return amostras = inv_acumulada.(rand(Uniform(0,1), n))
+end
+```
+::: justify
+Para exemplificar, vamos obter uma amostra de tamanho 1000 da distribuição Exponencial(2). Basta definirmos a inversa da sua acumulada e utilizar a função criada:
+:::
+```{julia}
+inv_exp(x) = log(1 - x)/(-2)
+amostras_exponencial = amostra_inversao(1000, inv_exp)
+```
+::: justify
+Para verificar que de fato obtivemos uma amostra da distribuição correta, podemos comparar o histograma das amostras com a densidade teórica: 
+:::
+```{julia}
+densidade_exponencial(x) = 2*exp(-2*x)
+x = range(0, maximum(amostras_exponencial), length = 1000)
+histogram(amostras_exponencial, normalize=:pdf, label= "Amostra")
+plot!(x, densidade_exponencial.(x), color=:red, label= "Distribuição")
+```
+
+## Método da Rejeição
+::: justify
+O Método da Rejeição consiste em escolher uma distribuição auxiliar cuja densidade, multiplicada por uma constante `C`, seja sempre maior ou igual à densidade da distribuição de interesse. Uma explicação detalhada pode ser encontrada [neste link](https://en.wikipedia.org/wiki/Rejection_sampling).
+
+Podemos definir uma função `amostra_rejeicao` para esse procedimento. Ela recebe os seguintes argumentos:
+
+- `n`: Tamanho da amostra desejada;
+- `f`: Densidade da distribuição de interesse;
+- `g`: Densidade da distribuição auxiliar;
+- `amostra_g`: Função que gera uma observação da distribuição auxiliar;
+- `C`: Constante a ser utilizada.
+:::
+```{julia}
+function amostra_rejeicao(n, f, g, amostra_g, C)
+  amostras = Vector{Float64}(undef, n)
+  n_amostras = 1
+  while n_amostras <= n
+    Y = amostra_g()
+    U = rand()
+    if U <= f(Y)/(C*g(Y))
+      amostras[n_amostras] = Y
+      n_amostras = n_amostras + 1
+    end
+  end
+  return amostras
+end
+```
+::: justify
+Para exemplificar, vamos obter uma amostra de tamanho 1000 da distribuição Beta(2,2) utilizando como distribuição auxiliar a Uniforme(0,1).Após fazer as contas, a constante C necessária é 3/2. 
+:::
+```{julia}
+densidade_beta(x) = 6*(x - x^2)
+densidade_uniforme(x) = 1 
+amostras_beta = amostra_rejeicao(1000, densidade_beta, densidade_uniforme, rand, 3/2)
+```
+::: justify
+Assim como no caso anterior, para verificar que de fato obtivemos uma amostra da distribuição correta, podemos comparar o histograma das amostras com a densidade teórica: 
+:::
+```{julia}
+x = range(0, 1, length = 1000)
+histogram(amostras_beta, normalize=:pdf, label= "Amostra")
+plot!(x, densidade_beta.(x), color=:red, label= "Distribuição")
+```
+
+## Conclusão
+::: justify
+Os métodos da Inversão e da Rejeição são estratégias fundamentais para gerar amostras de distribuições arbitrárias quando não dispomos de funções prontas em pacotes estatísticos. Portanto, com essas implementações, passamos a ter ferramentas práticas e flexíveis para simulação, reforçando o poder do Julia como linguagem para Estatística Computacional.
+:::
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::  
