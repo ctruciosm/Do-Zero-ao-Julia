@@ -1,7 +1,7 @@
 ---
-title: "Pacotes com Bancos de Dados para Trabalhar em Julia"
+title: "Pacotes com Bancos de Dados para trabalhar em Julia"
 description: |
-  Principais pacotes para acessar conjuntos de dados em Julia e utilizá-los em suas análises estatísticas.
+  Os dados são a matéria-prima do nosso trabalho. Pensando nisso, hoje vamos apresentar alguns pacotes em Julia que permitem acessar conjuntos de dados prontos para uso. Eles são ótimos para colocar em prática o que você vem aprendendo ao longo da jornada, testar novas ideias de análise ou até mesmo enriquecer o seu portfólio com projetos reais.
 categories:
   - Pacotes
   - Primeiros Passos
@@ -13,7 +13,7 @@ author:
   - name: Nicole Fredericci
     affiliation: "Universidade Estadual de Campinas"
     url: https://github.com/NFredericci
-date: "2025-08-27"
+date: "2025-09-05"
 image: imagens/pacotes_datasets.png
 lang: pt
 format:
@@ -22,15 +22,22 @@ format:
     toc-depth: 3
     self-contained: false
 engine: knitr
-draft: true
+draft: false
 ---
+
+```{r}
+#| echo: false
+Sys.setenv(JULIA_HOME = "/Users/ctrucios/.juliaup/bin")
+```
+
+
 
 ## Introdução
 
 ::: {.justify}
-Ao trabalhar com Estatística, é fundamental ter conjuntos de dados à disposição, seja para testar funções, praticar análises aprendidas ou realizar simulações. No `R`, diversos bancos de dados já vêm carregados por padrão, o que facilita bastante esse processo. Felizmente, `Julia` também oferece vários pacotes que contêm conjuntos de dados prontos para utilizarmos em nossas análises. 
+Ao trabalhar com Estatística e Ciência de Dadps, é fundamental ter conjuntos de dados à disposição, seja para testar funções, praticar análises aprendidas ou realizar simulações com caracteristicas semelhantes às observadas em dados reais. No `R`, diversos bancos de dados já vêm carregados por padrão ou vem incorporados em diversos pacotes, o que torna o processo bem mais simples. Felizmente, `Julia` oferece vários pacotes que contêm conjuntos de dados prontos para utilizarmos em nossas análises. 
 
-Neste post, vamos conhecer os principais pacotes para acessar diversos bancos de dados úteis em análises estatísticas.
+Neste post, conheceremos alguns dos principais pacotes para acessar diversos bancos de dados úteis em análises estatísticas, econométricas e aprendizado de máquina.
 :::
 
 ## Instalando e Carregando os Pacotes Necessários
@@ -40,6 +47,7 @@ Primeiro, vamos instalar e carregar os pacotes que serão utilizados. Para isso,
 ::: 
 
 ```{julia}
+# Instalando os pacotes
 Pkg.add([
     "DataFrames",
     "RDatasets",
@@ -51,13 +59,16 @@ Pkg.add([
 # Aceita automaticamente os termos do MLDatasets
 ENV["DATADEPS_ALWAYS_ACCEPT"] = "true";
 
+# Carregando os pacotes
 using DataFrames, RDatasets, MLDatasets, WorldBankData, YFinance
 ```
 
 ## RDatasets.jl
 
 ::: justify
-O pacote [RDatasets.jl](https://github.com/JuliaStats/RDatasets.jl) faz exatamente o que o nome sugere: disponibiliza os bancos de dados presentes na base do *R* e em diversos de seus pacotes, prontos para uso em *Julia*. Assim, todos os conjuntos de dados tradicionais, como `iris` e `mtcars`, ficam acessíveis no ambiente. Para carregá-los, utilizamos a função `dataset`.
+O pacote [RDatasets.jl](https://github.com/JuliaStats/RDatasets.jl) faz exatamente o que o nome indica: disponibiliza em `Julia` os bancos de dados presentes no `R` e em muitos de seus pacotes. Dessa forma, conjuntos clássicos como `iris`, `mtcars` e vários outros ficam prontos para uso no ambiente.  
+
+Para acessá-los, basta utilizar a função `dataset`:
 :::
 
 ```{julia}
@@ -87,21 +98,30 @@ RDatasets.datasets("datasets")
 ## MLDatasets.jl
 
 ::: justify
-O pacote [MLDatasets.jl](https://juliaml.github.io/MLDatasets.jl/stable/) possui inúmeros bancos de dados com foco em *Machine Learning*, abrangendo tarefas que vão desde detecção de imagens até treinamento de modelos de linguagem. Como exemplo, vamos acessar o clássico conjunto de dados `MNIST`.
+O pacote [MLDatasets.jl](https://juliaml.github.io/MLDatasets.jl/stable/) possui inúmeros bancos de dados com foco em *Machine Learning*, abrangendo tarefas que vão desde classificação de imagens até treinamento de modelos de linguagem natural. Como exemplo, vamos acessar o clássico conjunto de dados `MNIST`.
 :::
 
 ```{julia}
 MNIST(:train)
 ```
 
+Para saber quais _datasets_ estão disponíveis no pacote, verifique a [documentação oficial](https://juliaml.github.io/MLDatasets.jl/stable/) ou utilize `names(MLDatasets)`.
+
+```{julia}
+names(MLDatasets)
+```
+
+
 ## WorldBankData.jl
 
 ::: justify
-O pacote [WorldBankData.jl](https://github.com/4gh/WorldBankData.jl) permite acessar diretamente os dados do [Banco Mundial](https://data.worldbank.org/). Sua função principal, `wdi`, possibilita consultar uma grande variedade de indicadores para diferentes países. Por exemplo, podemos usar essa função para obter a população total do Brasil ao longo dos anos.
+O pacote [WorldBankData.jl](https://github.com/4gh/WorldBankData.jl) permite acessar diretamente os dados do [Banco Mundial](https://data.worldbank.org/). Sua função principal, `wdi()`, possibilita consultar uma grande variedade de indicadores para diferentes países. Por exemplo, podemos usar essa função para obter a população total do Brasil ao longo dos anos.
 :::
 
+
+
 ```{julia}
-wdi("SP.POP.TOTL", "BR")
+wdi("SP.POP.TOTL", "BR", 1990, 2010)
 ```
 
 ::: justify
@@ -115,7 +135,7 @@ search_wdi("indicators", "name", r"." )
 ## YFinance.jl
 
 ::: justify
-O pacote [YFinance.jl](https://eohne.github.io/YFinance.jl/dev/) oferece uma maneira prática de acessar dados de ações, embora apresente algumas limitações de uso. Para carregar os dados, utilizamos a função `get_prices`, na qual podemos especificar o ativo desejado, o intervalo total e a frequência das observações.
+O pacote [YFinance.jl](https://eohne.github.io/YFinance.jl/dev/) oferece uma maneira prática de acessar dados de ações, embora apresente algumas limitações de uso. Para carregar os dados, utilizamos a função `get_prices()`, na qual podemos especificar o ativo desejado, o intervalo total e a frequência das observações.
 :::
 
 ```{julia}

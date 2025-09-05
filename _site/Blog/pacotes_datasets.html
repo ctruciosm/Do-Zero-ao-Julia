@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt" xml:lang="pt"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.39">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Vitor Ribas Perrone">
+<meta name="author" content="Nicole Fredericci">
+<meta name="description" content="Os dados são a matéria-prima do nosso trabalho. Pensando nisso, hoje vamos apresentar alguns pacotes em Julia que permitem acessar conjuntos de dados prontos para uso. Eles são ótimos para colocar em prática o que você vem aprendendo ao longo da jornada, testar novas ideias de análise ou até mesmo enriquecer o seu portfólio com projetos reais.">
+
+<title>Pacotes com Bancos de Dados para trabalhar em Julia – Do Zero ao Julia</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-6bd9cfa162949bde0a231f530c97869d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Nenhum resultado",
+    "search-matching-documents-text": "documentos correspondentes",
+    "search-copy-link-title": "Copiar link para a busca",
+    "search-hide-matches-text": "Esconder correspondências adicionais",
+    "search-more-match-text": "mais correspondência neste documento",
+    "search-more-matches-text": "mais correspondências neste documento",
+    "search-clear-button-title": "Limpar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Procurar"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Do Zero ao Julia</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Procurar"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Alternar de navegação" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../oprojeto.html"> 
+<span class="menu-text">O projeto</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../equipe.html"> 
+<span class="menu-text">Equipe</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../blog.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../tutoriais.html"> 
+<span class="menu-text">Tutoriais</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../meetup.html"> 
+<span class="menu-text">Meetup</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.instagram.com/dozero_aojulia/"> <i class="bi bi-instagram" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Nesta página</h2>
+   
+  <ul>
+  <li><a href="#introdução" id="toc-introdução" class="nav-link active" data-scroll-target="#introdução">Introdução</a></li>
+  <li><a href="#instalando-e-carregando-os-pacotes-necessários" id="toc-instalando-e-carregando-os-pacotes-necessários" class="nav-link" data-scroll-target="#instalando-e-carregando-os-pacotes-necessários">Instalando e Carregando os Pacotes Necessários</a></li>
+  <li><a href="#rdatasets.jl" id="toc-rdatasets.jl" class="nav-link" data-scroll-target="#rdatasets.jl">RDatasets.jl</a></li>
+  <li><a href="#mldatasets.jl" id="toc-mldatasets.jl" class="nav-link" data-scroll-target="#mldatasets.jl">MLDatasets.jl</a></li>
+  <li><a href="#worldbankdata.jl" id="toc-worldbankdata.jl" class="nav-link" data-scroll-target="#worldbankdata.jl">WorldBankData.jl</a></li>
+  <li><a href="#yfinance.jl" id="toc-yfinance.jl" class="nav-link" data-scroll-target="#yfinance.jl">YFinance.jl</a></li>
+  <li><a href="#conclusão" id="toc-conclusão" class="nav-link" data-scroll-target="#conclusão">Conclusão</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Pacotes com Bancos de Dados para trabalhar em Julia</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Pacotes</div>
+    <div class="quarto-category">Primeiros Passos</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    <p>Os dados são a matéria-prima do nosso trabalho. Pensando nisso, hoje vamos apresentar alguns pacotes em Julia que permitem acessar conjuntos de dados prontos para uso. Eles são ótimos para colocar em prática o que você vem aprendendo ao longo da jornada, testar novas ideias de análise ou até mesmo enriquecer o seu portfólio com projetos reais.</p>
+  </div>
+</div>
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Autores</div>
+  <div class="quarto-title-meta-heading">Afiliação</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author"><a href="https://github.com/VitorRibasP">Vitor Ribas Perrone</a> <a href="https://orcid.org/0009-0009-6923-7712" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Universidade Estadual de Campinas
+          </p>
+      </div>
+    <div class="quarto-title-meta-contents">
+    <p class="author"><a href="https://github.com/NFredericci">Nicole Fredericci</a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Universidade Estadual de Campinas
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Data de Publicação</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">5 de setembro de 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introdução" class="level2">
+<h2 class="anchored" data-anchor-id="introdução">Introdução</h2>
+<div class="justify">
+<p>Ao trabalhar com Estatística e Ciência de Dadps, é fundamental ter conjuntos de dados à disposição, seja para testar funções, praticar análises aprendidas ou realizar simulações com caracteristicas semelhantes às observadas em dados reais. No <code>R</code>, diversos bancos de dados já vêm carregados por padrão ou vem incorporados em diversos pacotes, o que torna o processo bem mais simples. Felizmente, <code>Julia</code> oferece vários pacotes que contêm conjuntos de dados prontos para utilizarmos em nossas análises.</p>
+<p>Neste post, conheceremos alguns dos principais pacotes para acessar diversos bancos de dados úteis em análises estatísticas, econométricas e aprendizado de máquina.</p>
+</div>
+</section>
+<section id="instalando-e-carregando-os-pacotes-necessários" class="level2">
+<h2 class="anchored" data-anchor-id="instalando-e-carregando-os-pacotes-necessários">Instalando e Carregando os Pacotes Necessários</h2>
+<div class="justify">
+<p>Primeiro, vamos instalar e carregar os pacotes que serão utilizados. Para isso, basta executar o código abaixo no seu ambiente:</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Instalando os pacotes</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">Pkg</span>.<span class="fu">add</span>([</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"DataFrames"</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"RDatasets"</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"MLDatasets"</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"WorldBankData"</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"YFinance"</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Aceita automaticamente os termos do MLDatasets</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="cn">ENV</span>[<span class="st">"DATADEPS_ALWAYS_ACCEPT"</span>] <span class="op">=</span> <span class="st">"true"</span>;</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Carregando os pacotes</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">DataFrames</span>, <span class="bu">RDatasets</span>, <span class="bu">MLDatasets</span>, <span class="bu">WorldBankData</span>, <span class="bu">YFinance</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="rdatasets.jl" class="level2">
+<h2 class="anchored" data-anchor-id="rdatasets.jl">RDatasets.jl</h2>
+<div class="justify">
+<p>O pacote <a href="https://github.com/JuliaStats/RDatasets.jl">RDatasets.jl</a> faz exatamente o que o nome indica: disponibiliza em <code>Julia</code> os bancos de dados presentes no <code>R</code> e em muitos de seus pacotes. Dessa forma, conjuntos clássicos como <code>iris</code>, <code>mtcars</code> e vários outros ficam prontos para uso no ambiente.</p>
+<p>Para acessá-los, basta utilizar a função <code>dataset</code>:</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>iris <span class="op">=</span> <span class="fu">dataset</span>(<span class="st">"datasets"</span>, <span class="st">"iris"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>150×5 DataFrame
+ Row │ SepalLength  SepalWidth  PetalLength  PetalWidth  Species
+     │ Float64      Float64     Float64      Float64     Cat…
+─────┼─────────────────────────────────────────────────────────────
+   1 │         5.1         3.5          1.4         0.2  setosa
+   2 │         4.9         3.0          1.4         0.2  setosa
+   3 │         4.7         3.2          1.3         0.2  setosa
+   4 │         4.6         3.1          1.5         0.2  setosa
+   5 │         5.0         3.6          1.4         0.2  setosa
+   6 │         5.4         3.9          1.7         0.4  setosa
+   7 │         4.6         3.4          1.4         0.3  setosa
+   8 │         5.0         3.4          1.5         0.2  setosa
+  ⋮  │      ⋮           ⋮            ⋮           ⋮           ⋮
+ 144 │         6.8         3.2          5.9         2.3  virginica
+ 145 │         6.7         3.3          5.7         2.5  virginica
+ 146 │         6.7         3.0          5.2         2.3  virginica
+ 147 │         6.3         2.5          5.0         1.9  virginica
+ 148 │         6.5         3.0          5.2         2.0  virginica
+ 149 │         6.2         3.4          5.4         2.3  virginica
+ 150 │         5.9         3.0          5.1         1.8  virginica
+                                                   135 rows omitted</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>mtcars <span class="op">=</span> <span class="fu">dataset</span>(<span class="st">"datasets"</span>, <span class="st">"mtcars"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>32×12 DataFrame
+ Row │ Model              MPG      Cyl    Disp     HP     DRat     WT       QS ⋯
+     │ String31           Float64  Int64  Float64  Int64  Float64  Float64  Fl ⋯
+─────┼──────────────────────────────────────────────────────────────────────────
+   1 │ Mazda RX4             21.0      6    160.0    110     3.9     2.62      ⋯
+   2 │ Mazda RX4 Wag         21.0      6    160.0    110     3.9     2.875
+   3 │ Datsun 710            22.8      4    108.0     93     3.85    2.32
+   4 │ Hornet 4 Drive        21.4      6    258.0    110     3.08    3.215
+   5 │ Hornet Sportabout     18.7      8    360.0    175     3.15    3.44      ⋯
+   6 │ Valiant               18.1      6    225.0    105     2.76    3.46
+   7 │ Duster 360            14.3      8    360.0    245     3.21    3.57
+   8 │ Merc 240D             24.4      4    146.7     62     3.69    3.19
+  ⋮  │         ⋮             ⋮       ⋮       ⋮       ⋮       ⋮        ⋮        ⋱
+  26 │ Fiat X1-9             27.3      4     79.0     66     4.08    1.935     ⋯
+  27 │ Porsche 914-2         26.0      4    120.3     91     4.43    2.14
+  28 │ Lotus Europa          30.4      4     95.1    113     3.77    1.513
+  29 │ Ford Pantera L        15.8      8    351.0    264     4.22    3.17
+  30 │ Ferrari Dino          19.7      6    145.0    175     3.62    2.77      ⋯
+  31 │ Maserati Bora         15.0      8    301.0    335     3.54    3.57
+  32 │ Volvo 142E            21.4      4    121.0    109     4.11    2.78
+                                                   5 columns and 17 rows omitted</code></pre>
+</div>
+</div>
+<div class="justify">
+<p>Para verificar quais pacotes do R possuem bancos de dados disponíveis, usamos a função <code>RDatasets.packages</code>.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>RDatasets.<span class="fu">packages</span>()</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>34×2 DataFrame
+ Row │ Package       Title
+     │ String15      String
+─────┼─────────────────────────────────────────────────
+   1 │ COUNT         Functions, data and code for cou…
+   2 │ Ecdat         Data sets for econometrics
+   3 │ HSAUR         A Handbook of Statistical Analys…
+   4 │ HistData      Data sets from the history of st…
+   5 │ ISLR          Data for An Introduction to Stat…
+   6 │ KMsurv        Data sets from Klein and Moeschb…
+   7 │ MASS          Support Functions and Datasets f…
+   8 │ SASmixed      Data sets from "SAS System for M…
+  ⋮  │      ⋮                        ⋮
+  28 │ reshape2      Flexibly Reshape Data: A Reboot …
+  29 │ robustbase    Basic Robust Statistics
+  30 │ rpart         Recursive Partitioning and Regre…
+  31 │ sandwich      Robust Covariance Matrix Estimat…
+  32 │ sem           Structural Equation Models
+  33 │ survival      Survival Analysis
+  34 │ vcd           Visualizing Categorical Data
+                                        19 rows omitted</code></pre>
+</div>
+</div>
+<div class="justify">
+<p>E para verificar quais bancos de dados estão disponíveis em cada pacote, utilizamos a função <code>RDatasets.datasets</code> (onde <code>datasets</code> se refere aos conjuntos de dados do R base).</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>RDatasets.<span class="fu">datasets</span>(<span class="st">"datasets"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>50×5 DataFrame
+ Row │ Package   Dataset           Title                              Rows   C ⋯
+     │ String15  String31          String                             Int64  I ⋯
+─────┼──────────────────────────────────────────────────────────────────────────
+   1 │ datasets  BOD               Biochemical Oxygen Demand              6    ⋯
+   2 │ datasets  CO2               Carbon Dioxide Uptake in Grass P…     84
+   3 │ datasets  Formaldehyde      Determination of Formaldehyde          6
+   4 │ datasets  HairEyeColor      Hair and Eye Color of Statistics…     32
+   5 │ datasets  InsectSprays      Effectiveness of Insect Sprays        72    ⋯
+   6 │ datasets  LifeCycleSavings  Intercountry Life-Cycle Savings …     50
+   7 │ datasets  Loblolly          Growth of Loblolly pine trees         84
+   8 │ datasets  OrchardSprays     Potency of Orchard Sprays             64
+  ⋮  │    ⋮             ⋮                          ⋮                    ⋮      ⋱
+  44 │ datasets  sleep             Student's Sleep Data                  20    ⋯
+  45 │ datasets  stackloss         Brownlee's Stack Loss Plant Data      21
+  46 │ datasets  swiss             Swiss Fertility and Socioeconomi…     47
+  47 │ datasets  trees             Girth, Height and Volume for Bla…     31
+  48 │ datasets  volcano           Topographic Information on Auckl…     87    ⋯
+  49 │ datasets  warpbreaks        The Number of Breaks in Yarn dur…     54
+  50 │ datasets  women             Average Heights and Weights for …     15
+                                                    1 column and 35 rows omitted</code></pre>
+</div>
+</div>
+</section>
+<section id="mldatasets.jl" class="level2">
+<h2 class="anchored" data-anchor-id="mldatasets.jl">MLDatasets.jl</h2>
+<div class="justify">
+<p>O pacote <a href="https://juliaml.github.io/MLDatasets.jl/stable/">MLDatasets.jl</a> possui inúmeros bancos de dados com foco em <em>Machine Learning</em>, abrangendo tarefas que vão desde classificação de imagens até treinamento de modelos de linguagem natural. Como exemplo, vamos acessar o clássico conjunto de dados <code>MNIST</code>.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">MNIST</span>(<span class="op">:</span>train)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>dataset MNIST:
+  metadata  =&gt;    Dict{String, Any} with 3 entries
+  split     =&gt;    :train
+  features  =&gt;    28×28×60000 Array{Float32, 3}
+  targets   =&gt;    60000-element Vector{Int64}</code></pre>
+</div>
+</div>
+<p>Para saber quais <em>datasets</em> estão disponíveis no pacote, verifique a <a href="https://juliaml.github.io/MLDatasets.jl/stable/">documentação oficial</a> ou utilize <code>names(MLDatasets)</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(MLDatasets)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>38-element Vector{Symbol}:
+ :AQSOL
+ :BostonHousing
+ :CIFAR10
+ :CIFAR100
+ :CachedDataset
+ :ChickenPox
+ :CiteSeer
+ :Cora
+ :EMNIST
+ :FAUST
+ ⋮
+ :TUDataset
+ :TemporalBrains
+ :Titanic
+ :UD_English
+ :WindMillEnergy
+ :Wine
+ :convert2image
+ :getobs
+ :numobs</code></pre>
+</div>
+</div>
+</section>
+<section id="worldbankdata.jl" class="level2">
+<h2 class="anchored" data-anchor-id="worldbankdata.jl">WorldBankData.jl</h2>
+<div class="justify">
+<p>O pacote <a href="https://github.com/4gh/WorldBankData.jl">WorldBankData.jl</a> permite acessar diretamente os dados do <a href="https://data.worldbank.org/">Banco Mundial</a>. Sua função principal, <code>wdi()</code>, possibilita consultar uma grande variedade de indicadores para diferentes países. Por exemplo, podemos usar essa função para obter a população total do Brasil ao longo dos anos.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wdi</span>(<span class="st">"SP.POP.TOTL"</span>, <span class="st">"BR"</span>, <span class="fl">1990</span>, <span class="fl">2010</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>21×4 DataFrame
+ Row │ iso2c   country  year     SP_POP_TOTL
+     │ String  String   Float64  Float64?
+─────┼───────────────────────────────────────
+   1 │ BR      Brazil    1990.0    1.49143e8
+   2 │ BR      Brazil    1991.0    1.51724e8
+   3 │ BR      Brazil    1992.0    1.54275e8
+   4 │ BR      Brazil    1993.0    1.56795e8
+   5 │ BR      Brazil    1994.0    1.59265e8
+   6 │ BR      Brazil    1995.0    1.61735e8
+   7 │ BR      Brazil    1996.0    1.64203e8
+   8 │ BR      Brazil    1997.0    1.66662e8
+  ⋮  │   ⋮        ⋮        ⋮          ⋮
+  15 │ BR      Brazil    2004.0    1.82675e8
+  16 │ BR      Brazil    2005.0    1.84688e8
+  17 │ BR      Brazil    2006.0    1.86653e8
+  18 │ BR      Brazil    2007.0    1.88552e8
+  19 │ BR      Brazil    2008.0    1.90367e8
+  20 │ BR      Brazil    2009.0    1.9208e8
+  21 │ BR      Brazil    2010.0    1.93702e8
+                               6 rows omitted</code></pre>
+</div>
+</div>
+<div class="justify">
+<p>Para visualizar a lista de indicadores disponíveis, podemos utilizar a função <code>search_wdi</code>.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">search_wdi</span>(<span class="st">"indicators"</span>, <span class="st">"name"</span>, <span class="st">r"</span><span class="sc">.</span><span class="st">"</span> )</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>25000×5 DataFrame
+   Row │ indicator             name                               description  ⋯
+       │ String                String                             String       ⋯
+───────┼────────────────────────────────────────────────────────────────────────
+     1 │ 1.0.HCount.1.90usd    Poverty Headcount ($1.90 a day)    The poverty  ⋯
+     2 │ 1.0.HCount.2.5usd     Poverty Headcount ($2.50 a day)    The poverty
+     3 │ 1.0.HCount.Mid10to50  Middle Class ($10-50 a day) Head…  The poverty
+     4 │ 1.0.HCount.Ofcl       Official Moderate Poverty Rate-N…  The poverty
+     5 │ 1.0.HCount.Poor4uds   Poverty Headcount ($4 a day)       The poverty  ⋯
+     6 │ 1.0.HCount.Vul4to10   Vulnerable ($4-10 a day) Headcou…  The poverty
+     7 │ 1.0.PGap.1.90usd      Poverty Gap ($1.90 a day)          The poverty
+     8 │ 1.0.PGap.2.5usd       Poverty Gap ($2.50 a day)          The poverty
+   ⋮   │          ⋮                            ⋮                               ⋱
+ 24994 │ UIS.NART.1.Q5.F       Total net attendance rate, prima…  Total number ⋯
+ 24995 │ UIS.NART.1.Q5.F.LPIA  Total net attendance rate, prima…  The Adjusted
+ 24996 │ UIS.NART.1.Q5.GPIA    Total net attendance rate, prima…  The Adjusted
+ 24997 │ UIS.NART.1.Q5.LPIA    Total net attendance rate, prima…  The Adjusted
+ 24998 │ UIS.NART.1.Q5.M       Total net attendance rate, prima…  Total number ⋯
+ 24999 │ UIS.NART.1.Q5.M.LPIA  Total net attendance rate, prima…  The Adjusted
+ 25000 │ UIS.NART.1.RUR        Total net attendance rate, prima…  Total number
+                                                3 columns and 24985 rows omitted</code></pre>
+</div>
+</div>
+</section>
+<section id="yfinance.jl" class="level2">
+<h2 class="anchored" data-anchor-id="yfinance.jl">YFinance.jl</h2>
+<div class="justify">
+<p>O pacote <a href="https://eohne.github.io/YFinance.jl/dev/">YFinance.jl</a> oferece uma maneira prática de acessar dados de ações, embora apresente algumas limitações de uso. Para carregar os dados, utilizamos a função <code>get_prices()</code>, na qual podemos especificar o ativo desejado, o intervalo total e a frequência das observações.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_prices</span>(<span class="st">"AAPL"</span>, range<span class="op">=</span><span class="st">"1y"</span>, interval<span class="op">=</span><span class="st">"1d"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>OrderedCollections.OrderedDict{String, Union{Vector{Float64}, Vector{Dates.DateTime}, String}} with 8 entries:
+  "ticker"    =&gt; "AAPL"
+  "timestamp" =&gt; [DateTime("2024-09-05T13:30:00"), DateTime("2024-09-06T13:30:0…
+  "open"      =&gt; [220.603, 222.913, 219.797, 217.906, 220.434, 221.469, 222.544…
+  "high"      =&gt; [224.435, 224.197, 220.245, 220.454, 222.057, 222.514, 223.002…
+  "low"       =&gt; [220.494, 218.752, 215.706, 215.726, 216.881, 218.802, 220.882…
+  "close"     =&gt; [222.38, 220.82, 220.91, 220.11, 222.66, 222.77, 222.5, 216.32…
+  "adjclose"  =&gt; [221.35, 219.797, 219.887, 219.09, 221.629, 221.738, 221.469, …
+  "vol"       =&gt; [3.64458e7, 4.81987e7, 6.68688e7, 5.1352e7, 4.43806e7, 3.72821…</code></pre>
+</div>
+</div>
+</section>
+<section id="conclusão" class="level2">
+<h2 class="anchored" data-anchor-id="conclusão">Conclusão</h2>
+<div class="justify">
+<p>Portanto, agora você já sabe como acessar diversos conjuntos de dados em <code>Julia</code> para suas análises estatísticas. Para continuar aprendendo, escolha um dos pacotes apresentados, explore os dados disponíveis e tente realizar uma análise completa.</p>
+<p>Para auxiliar nesse processo, recomendamos os tutoriais <a href="https://ime.unicamp.br/julialang/Tutoriais/tutorial-eda.html">Introdução à Análise Exploratória de Dados (EDA) em Julia</a> e <a href="https://ime.unicamp.br/julialang/Tutoriais/graf_basico.html">Gráficos em Julia: primeiros passos</a>, publicados aqui no <strong>Do Zero ao Julia</strong>.</p>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Nota
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.</p>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copiada");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copiada");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Website feito com <a href="https://quarto.org/">Quarto</a>. License: <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
