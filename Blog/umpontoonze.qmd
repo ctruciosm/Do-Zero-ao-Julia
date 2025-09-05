@@ -16,7 +16,7 @@ author:
     orcid: 
 
 date: "2025-08-22"
-image: imagens/loops_condic.png
+image: imagens/umpontoonze.jpeg
 lang: "pt"
 format:
   html:
