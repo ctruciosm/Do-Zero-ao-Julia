@@ -16,7 +16,7 @@ author:
     orcid: 
 
 date: "2025-07-30"
-image: imagens/loops_condic.png
+image: imagens/velo.jpeg
 lang: "pt"
 format:
   html:
