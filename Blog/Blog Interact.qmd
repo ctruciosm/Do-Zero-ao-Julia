@@ -16,7 +16,7 @@ author:
     orcid: 
 
 date: "2025-08-26"
-image: imagens/loops_condic.png
+image: imagens/Interact.jpeg
 lang: "pt"
 format:
   html:
