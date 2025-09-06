@@ -1,7 +1,7 @@
 ---
 title: "Manipulação de strings em Julia"
 description: |
-     Aprenda a manipular strings em Julia, desde a criação de objetos até diversas operações e formatações.
+     Aprender a manipular strings em *Julia* é essencial para transformar dados brutos em informações úteis. Neste post, você vai conhecer desde os conceitos básicos até operações e formatações mais avançadas, aprendendo a organizar, padronizar e preparar seus dados de forma eficiente para qualquer análise.
 categories:
   - Primeiros passos
   - Ferramentas
@@ -10,7 +10,10 @@ author:
     affiliation: "Universidade Estadual de Campinas"
     url: https://github.com/VitorRibasP
     orcid: 0009-0009-6923-7712
-date: "2025-08-07"
+  - name: Nicole Fredericci
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/NFredericci
+date: "2025-09-05"
 image: imagens/juliastrings.png
 lang: pt
 format:
@@ -18,137 +21,212 @@ format:
     toc: true
     toc-depth: 3
     self-contained: false
+engine: knitr
 draft: true
 ---
 
 ## Introdução
-::: justify
-Manipular strings é essencial mesmo em análises estatísticas, seja para organizar nomes de variáveis, limpar bancos de dados ou gerar relatórios automatizados. No Julia, a manipulação de strings é simples e poderosa, permitindo desde operações básicas até buscas complexas usando expressões regulares. Neste post, vamos explorar como criar, modificar e formatar strings no Julia base.
+
+
+::: {.justify}
+Manipular strings é uma habilidade essencial em análise de dados, seja para organizar nomes de variáveis, corrigir e padronizar informações textuais ou gerar relatórios automatizados. Em *Julia*, essa tarefa é simples e poderosa, permitindo desde operações básicas até buscas complexas com expressões regulares. 
+
+Neste post, exploraremos como criar, modificar e formatar strings utilizando apenas recursos do *Julia* base.
 :::
 
 ## Criação de strings
-No Julia, criamos um objeto do tipo `String` colocando o texto entre aspas duplas (") ou três aspas duplas (""").
+
+::: {.justify}
+Em *Julia*, criamos um objeto do tipo `String` colocando o texto entre aspas duplas (`"`) ou três aspas duplas (`"""`). As duas maneiras de criar o objeto são equivalentes, então sinta-se à vontade para usar a que preferir.
+:::
+
 ```{julia}
 "a"
 """a"""
-```
-As duas maneiras de criar o objeto são equivalentes, então se sinta livre para usar o que preferir.
-```{julia}
 "a" == """a"""
 ```
-Além disso, é interessante estar atento que alguns comandos são especiais, como o `\n`, que representa uma quebra de linha.
+
+::: {.justify}
+Além disso, é importante estar atento a comandos especiais, como o `\n`, que representa uma quebra de linha. Para criar um objeto que ignore qualquer caractere especial, ou seja, que contenha apenas o texto literal, basta prefixar a string com `raw` antes das aspas.
+:::
+
 ```{julia}
 "a
 b"
-"a\nb"
+print("a\nb")
+print(raw"a\nb")
 ```
-Para criar o objeto ignorando qualquer caractere especial, ou seja, apenas o texto bruto, basta inserir `raw` antes das aspas.
-```{julia}
-raw"a\nb"
-```
+
 ## Caracteres
-Um detalhe importante que Julia possui é a distinção entre dois tipos de objeto, `String` e `Char`, que também representam textos, mas possuem apenas um caractere e são criados com aspas simples (') ao invés das duplas. 
+
+::: {.justify}
+Um detalhe importante em *Julia* é a distinção entre dois tipos de objetos: `String` e `Char`. Ambos representam textos, mas `Char` contém apenas um caractere e é criado com aspas simples (`'`) em vez de aspas duplas.
+:::
+
 ```{julia}
 typeof("a")
 typeof('a')
 ```
-Objetos do tipo `Char` possuem algumas particularidades interessantes. Por exemplo, são compatíveis com somas e subtrações, em que a diferença entre os respectivos códigos dos caracteres é calculada.
+
+::: {.justify}
+Objetos do tipo `Char` possuem algumas particularidades interessantes. Por exemplo, eles são compatíveis com operações de soma e subtração, nas quais a diferença entre os códigos *Unicode* dos caracteres é calculada.
+:::
+
 ```{julia}
 'A' + 1
 'E' - 'C'
 ```
-Toda essa questão dos caracteres está relacionada com *Unicode/UTF-8*, uma codficação de caracteres que inclui as letras tradicionais e diversos caracteres especiais. Para ver todos os códigos disponíveis, basta acessar [este link](https://www.charset.org/utf-8). Para utilizar um caractere por meio do código *UTF-8*, basta utilizar `\u` e em seguida o respectivo código.
+
+::: {.justify}
+O funcionamento dos caracteres está relacionado ao *Unicode/UTF-8*, uma codificação de caracteres que inclui letras tradicionais e caracteres especiais. Para conferir todos os códigos disponíveis, basta acessar [este link](https://www.charset.org/utf-8). Para utilizar um caractere por meio do código *UTF-8*, basta utilizar `\u` seguido do respectivo código.
+:::
+
 ```{julia}
 '\u2200'
 ```
-## Junção e separação de strings
-A maneira mais elementar para unificar strings em uma é por meio do operador `*`, como se fosse realizado um produto entre as strings.
+
+## Junção e separação 
+
+::: {.justify}
+A maneira mais básica de unir strings é por meio do operador `*`, que combina os textos em uma única string.
+:::
+
 ```{julia}
 "banana" * " " * "pera"
 ```
-Para unificar todas as strings dentro de um mesmo vetor, basta utilizar a função `join` e então especificar qual será o separador para os elementos.
+
+::: {.justify}
+Para unificar todas as strings contidas em um vetor, basta utilizar a função `join` e especificar qual será o separador entre os elementos. E para realizar o processo inverso, ou seja, separar uma string em um vetor, utiliza-se a função `split`, especificando o ponto em que os cortes devem ser feitos.
+:::
+
 ```{julia}
 frutas = ["banana", "pera", "morango"]
 join(frutas, ", ")
 join(frutas, "-")
+split("banana-pera-morango", "-")
 ```
-Já para realizar o processo inverso, isto é, separar uma string em um vetor, utiliza-se a função `split`, e então se especifica qual o ponto para os cortes.
-```{julia}
-split("banana-pera-morando", "-")
-```
-Também é possível copiar uma string diversas vezes por meio da função `repeat`, que retorna uma string com o respectivo texto copiado o número de vezes que for especificado.
+
+::: {.justify}
+Também é possível copiar uma string várias vezes por meio da função `repeat`, que retorna uma nova string com o texto replicado pelo número de vezes especificado.
+:::
+
 ```{julia}
 repeat("ba", 5)
 ```
+
 ## Busca e substituição
-Para acessar partes da string, é como se fosse acessar um vetor em que cada caractere é um elemento. Podemos tanto selecionar tanto uma só posição, tornando a saída um caractere quanto selecionar uma sequência de letras, tornando a saída uma string.  
+
+::: {.justify}
+Para acessar partes de uma string, o processo é semelhante ao acesso a um vetor, em que cada caractere é tratado como um elemento. Podemos tanto selecionar uma única posição, obtendo um `Char`, ou uma sequência de caracteres, resultando em uma nova string. 
+:::
+
 ```{julia}
-"abcd"[1]
-"abcd"[end]
-"abcd"[2:end]
+"abcd"[1]     # Primeiro elemento
+"abcd"[end]   # Último elemento
+"abcd"[2:end] # Do segundo ao último elemento
 ```
+
 ::: {.callout-note icon=false}
 ### Observação
-Ao extrair somente um caractere de uma stirng, a depender de como realizamos isso, a saída é um tipo diferente de objeto.
+
+Ao extrair apenas um caractere de uma string, o tipo de objeto retornado pode variar a depender da forma como a extração é realizada.
+
 ```{julia}
-"abcd"[1]
-"abcd"[1:1]
+"abcd"[1]   # Char
+"abcd"[1:1] # String
 ```
 :::
-A seguir, veremos algumas funções que realizam buscas dentro de strings para efetuar alguns procedimentos. Para isso, uma possibilidade é a utilização de expressões regulares. Para conhecer em detalhes a sintaxe das expressões regulares, basta acessar [este link](https://pt.wikipedia.org/wiki/Express%C3%A3o_regular). Em Julia, é possível criar uma string como sendo uma expressão regular inserindo um `r` antes das aspas.
+
+::: {.justify}
+Em *Julia*, é possível realizar buscas dentro de strings de diferentes maneiras. Uma abordagem mais avançada é o uso de expressões regulares, que permitem buscar padrões complexos de texto. Podemos criar uma expressão regular prefixando a string com a letra `r`.
+:::
+
 ```{julia}
-r"."
+r"." # Metacaractere que corresponde a qualquer caractere
 ```
-3 funções muito úteis na detecção de elementos dentro de strings são:
-- `occursin`: verifica se determinado texto está dentro da string;
-- `findfirst`: extrai a posição da primeira vez que o texto aparece na string;
-- `findlast`: extrai a posição da última vez que o texto aparece na string.
+
+::: {.justify}
+Para aprender mais sobre a sintaxe completa de expressões regulares, você pode acessar [este link](https://pt.wikipedia.org/wiki/Express%C3%A3o_regular). No entanto, Julia também oferece funções simples para buscar texto diretamente, sem precisar de regex:
+
+- `occursin`: verifica se determinado texto está presente na string.
+- `findfirst`: retorna a posição da primeira ocorrência do texto na string.
+- `findlast`: retorna a posição da última ocorrência do texto na string.
+:::
+
 ```{julia}
 texto = "Zero ao Julia"
 occursin("Julia", texto)   
 findfirst("a", texto)  
 findlast("a", texto)       
 ```
-As funções `startswith` e `endswith` verificam se uma determinada string começa ou termina, respectivamente, com determinado texto. 
+
+::: {.justify}
+As funções `startswith` e `endswith` verificam, respectivamente, se uma string começa ou termina com um determinado texto.
+:::
+
 ```{julia}
 texto = "Julia"
 startswith(texto, "j")
 endswith(texto, "ia")
 ```
-Também é possível substituir trechos de texto usando a função `replace`.
+
+::: {.justify}
+Também é possível substituir trechos de texto em uma string utilizando a função `replace`.
+:::
+
 ```{julia}
 replace("banana", "a" => "o")
 ```
 
 ## Formatações
-Para alternar as letras de uma string ente maiúsculas e minúsculas, existem 3 principais funções:
-- `uppercase`: torna todas as letras maiúsculas;
-- `lowercase`: torna todas as letras minúsculas;
-- `titlecase`: torna a primeira letra de cada palavra maiúscula e as demais minúsculas.
+
+::: {.justify}
+Para alternar as letras de uma string entre maiúsculas e minúsculas, existem três funções principais:
+
+- `uppercase`: converte todas as letras para maiúsculas.
+- `lowercase`: converte todas as letras para minúsculas.
+- `titlecase`: converte a primeira letra de cada palavra para maiúscula e as demais para minúscula.
+:::
+
 ```{julia}
 texto = "ZERO ao julia"
 uppercase(texto)
 lowercase(texto)
 titlecase(texto)
 ```
-Como não existe uma função específica para deixar apenas a primeira letra da primeira palavra maiúscula e as demais minúsculas, para realizar esse processo precisamos combinar `uppercase` com `lowercase`. 
+
+::: {.justify}
+Como não existe uma função específica para capitalizar apenas a primeira letra da string (deixando as demais minúsculas), é necessário combinar `uppercase` com `lowercase` para realizar esse processo. 
+:::
+
 ```{julia}
 uppercase(texto[1]) * lowercase(texto[2:end])
 ```
 
-Com a função `reverse`, é possível obter uma string de trás para frente.
+::: {.justify}
+Além disso, com a função `reverse`, é possível obter os caracteres de uma string em ordem inversa.
+:::
+
 ```{julia}
 reverse("abcde")
 ```
-Existe uma forma bem direta de remover espaços nos começos e finais das strings. Para remover na esquerda, utiliza-se `lstrip`; na direita, `rstrip`; e nas duas direções ao mesmo tempo, `strip`.
+
+::: {.justify}
+Também é possível remover espaços em branco de uma string de maneira simples. Para eliminar espaços apenas no início, utiliza-se `lstrip`; apenas no final, `rstrip`; e em ambas as extremidades, `strip`.
+:::
+
 ```{julia}
 lstrip("  julia  ")
 rstrip("  julia  ")
 strip("  julia  ")
 ```
 
-## Operações numéricas e uso de variáveis dentro de strings
-Por fim, é possível utilizar operações e valores de variáveis dentro das strings, isso é feito inserindo o que é de interesse entre um `$()`. 
+## Interpolação com variáveis e números
+
+::: {.justify}
+Por fim, é possível inserir expressões e valores de variáveis diretamente dentro de strings usando a sintaxe `$()`. 
+:::
+
 ```{julia}
 a = 2
 b = 5
@@ -156,8 +234,9 @@ b = 5
 ``` 
 
 ## Conclusão
-::: justify
-Portanto, manipular strings com eficiência no Julia é fundamental para análises estatísticas, pois dados reais raramente chegam prontos para análise. Ao dominar essas técnicas, você estará mais preparado para limpar, formatar e organizar informações textuais em seus projetos, integrando-as sem esforço com o restante do seu fluxo de trabalho estatístico.
+
+::: {.justify}
+Portanto, manipular strings com eficiência em *Julia* é essencial, já que dados raramente chegam prontos para análise. Ao dominar essas técnicas, você poderá limpar, formatar e organizar informações textuais com facilidade, utilizando-as de forma natural em seus projetos.
 :::
 
 ::: callout-note
