@@ -9,13 +9,14 @@ author:
     affiliation: "Universidade Estadual de Campinas"
     orcid: 0009-0008-6612-8417
 date: "2025-07-23"
-image: imagens/pacote_makie_capa.png ALTERARRR
+image: imagens/pacote_makie_capa.png
 lang: pt
 format:
   html:
     toc: true
     toc-depth: 3
     self-contained: false
+engine: knitr
 draft: true
 ---
 
@@ -32,13 +33,15 @@ Neste tutorial, vamos mostrar alguns exemplos que ajudam a entender como o Makie
 ::: justify
 Para instalar os pacotes que serão utilizados, execute as seguintes linhas de código:
 :::
-
-```{julia, eval = FALSE}
-pkg.add("Makie") 
+```{julia, eval = TRUE}
+using Pkg
+Pkg.add("Makie") 
+Pkg.add("CairoMakie") 
+Pkg.add("GLMakie")
+```
+```{julia, eval = TRUE}
 using Makie 
-pkg.add("CairoMakie") 
 using CairoMakie
-pkg.add("GLMakie")
 using GLMakie
 ```
 
@@ -48,7 +51,7 @@ using GLMakie
 Podemos fazer um scatterplot (Gráfico de Dispersão) com o código abaixo. Neste caso, para o eixo X utilizamos valores de 1 até 10 e para o eixo Y geramos aleatoriamente 10 números entre 0 e 1.
 :::
 
-```{julia, eval = FALSE}
+```{julia, eval = TRUE}
 x = 1:10 
 y = rand(10)
 
@@ -63,10 +66,9 @@ fig = scatter(x, y,
     )
 )
 fig
-save("makie_dispersao.png", fig)
 ```
 ::: justify
-A função save será utilizada em todos os gráficos deste tutorial, mas apenas mostraremos ela neste código.
+Caso queira salvar o gráfico, a função save pode ser utilizada.
 :::
 
 ![](imagens/makie_dispersao.png){fig-align="center" width="50%"}
@@ -78,7 +80,7 @@ Iremos fazer gráfico de barras lado a lado, empilhadas e empilhadas lado a lado
 Para o primeiro caso, iremos utilizar o código abaixo. Primeiro criamos uma tabela com as categorias gato indo de 1 até 3, a altura será gerada de 0.1 até 0.9 com incremento de 0.1 e, por fim, a categoria grupo contendo 3 tipos.
 :::
 
-```{julia, eval = FALSE}
+```{julia, eval = TRUE}
 tabela = (gato = [1, 1, 1, 2, 2, 2, 3, 3, 3],
        altura = 0.1:0.1:0.9,
        grupo = [1, 2, 3, 1, 2, 3, 1, 2, 3]
@@ -97,7 +99,7 @@ barplot(tabela.gato, tabela.altura,
 Para fazermos o gráfico das barras empilhadas iremos utilizar a mesma tabela feita anteriormente e mudaremos o argumento dodge para stack.
 :::
 
-```{julia, eval = FALSE}
+```{julia, eval = TRUE}
 tabela = (gato = [1, 1, 1, 2, 2, 2, 3, 3, 3],
        altura = 0.1:0.1:0.9,
        grupo = [1, 2, 3, 1, 2, 3, 1, 2, 3]
@@ -116,7 +118,7 @@ barplot(tabela.gato, tabela.altura,
 Por fim, iremos fazer uma combinação dos dois últimos gráficos. Para isso, vamos adicionar na tabela duas categorias extras, grupo1 e grupo2, os quais serão utilizados respectivamente nos argumentos dodge e stack.
 :::
 
-```{julia, eval = FALSE}
+```{julia, eval = TRUE}
 tabela = (gato = [1, 1, 1, 2, 2, 2, 3, 3, 3],
        altura = 0.1:0.1:0.9,
        grupo = [1, 2, 3, 1, 2, 3, 1, 2, 3],
@@ -141,7 +143,7 @@ barplot(tabela.gato, tabela.altura,
 Para a construção do BoxPlot utilizamos o código abaixo. Para o eixo X iremos gerar 1000 valores aleatórios entre 1 e 3 e para o eixo Y iremos gerar 1000 valores aleatórios de uma distribuição normal padrão.
 :::
 
-```{julia, eval = FALSE}
+```{julia, eval = TRUE}
 x = rand(1:3, 1000)
 y = randn(1000)
 
@@ -163,7 +165,7 @@ boxplot(x, y,
 Para a construção do Gráfico de Densidade iremos gerar uma curva de densidade de 300 valores aleatórios da normal padrão e atribuir a variável densidade, após isso o ! é utilizado para adicionar a densidade a um gráfico já existente. Por meio dele iremos gerar 300 valores aleatórios e deslocar para a direita, somando 2. O alpha irá definir a transparência da curva.
 :::
 
-```{julia, eval = FALSE}
+```{julia, eval = TRUE}
 densidade = density(randn(300))
 density!(randn(300) .+ 3, alpha = 0.8)
 
@@ -178,7 +180,7 @@ densidade
 Podemos fazer um Histograma com o código abaixo. Primeiro geramos 1000 amostras aleatórias de uma normal padrão e depois geramos o histograma com 30 colunas.
 :::
 
-```{julia, eval = FALSE}
+```{julia, eval = TRUE}
 dados = randn(1000)
 hist(dados, bins = 30, color = :green)
 ```
@@ -191,7 +193,7 @@ hist(dados, bins = 30, color = :green)
 O Gráfico de Linhas pode ser feito com o código abaixo. Para o eixo X utilizamos valores de 1 até 10 e para o Eixo Y utilizamos uma lista de valores aleatórios.
 :::
 
-```{julia, eval = FALSE}
+```{julia, eval = TRUE}
 x = 1:10
 y = [2, 4, 3, 6, 7, 8, 7, 9, 10, 12]
 
