@@ -12,7 +12,7 @@ author:
   - name: Nicole Fredericci
     affiliation: "Universidade Estadual de Campinas"
     url: https://github.com/NFredericci
-date: "2025-08-28"
+date: "2025-09-08"
 image: imagens/capa_mongoDB.png
 lang: "pt"
 format:
@@ -26,20 +26,16 @@ draft: false
 ## O que é o MongoDB?
 
 :::{justify}
-O *MongoDB* é um banco de dados *NoSQL* orientado a documentos que se tornou extremamente popular, especialmente em aplicações modernas que lidam com dados semiestruturados ou não estruturados. Diferentemente dos bancos de dados relacionais tradicionais, o *MongoDB* armazena as informações em documentos no formato *JSON-like* (*BSON*), oferecendo maior flexibilidade e alta escalabilidade.
+O `MongoDB` é um banco de dados _NoSQL_ orientado a documentos amplamente utilizado em sistemas distribuídos e aplicações de grande escala. Ele armazena dados em documentos no formato `JSON-like`, permitindo esquemas flexíveis e consultas complexas. Além disso, oferece recursos avançados como replicação automática, particionamento horizontal (sharding), índices secundários e agregações eficientes, garantindo alto desempenho, disponibilidade e escalabilidade em ambientes modernos.
 :::
 
 ### Principais características:
 
 :::{justify}
 -   **Código aberto e gratuito** – disponível para uso sem custos, com forte suporte da comunidade.
-
 -   **Alta performance** – otimizado para operações rápidas de leitura e escrita.
-
 -   **Orientado a documentos** – utiliza o formato *BSON* (similar ao *JSON*) para armazenar dados de forma flexível.
-
 -   **Escalonamento horizontal** – permite distribuir dados facilmente entre múltiplos servidores por meio de sharding.
-
 -   **Esquema dinâmico** – dispensa um modelo de dados fixo, sendo ideal para informações que evoluem rapidamente.
 :::
 
@@ -54,31 +50,26 @@ Essa abordagem permite que o *MongoDB* seja especialmente vantajoso em cenários
 ## MongoDB em Julia
 
 :::{justify}
-Em *Julia*, assim como em outras linguagens de programação, é possível interagir com bancos de dados *MongoDB* por meio de pacotes específicos. Dois dos mais utilizados são o [Mongo.jl](https://github.com/ScottPJones/Mongo.jl) e o [Mongoc.jl](https://github.com/JuliaDatabases/Mongoc.jl), que oferecem interfaces para conectar, consultar, inserir e manipular documentos diretamente do código em *Julia*.
+Em `Julia`, assim como em outras linguagens de programação, é possível interagir com bancos de dados *MongoDB* por meio de pacotes específicos. Dois dos mais utilizados são o [Mongo.jl](https://github.com/ScottPJones/Mongo.jl) e o [Mongoc.jl](https://github.com/JuliaDatabases/Mongoc.jl), que oferecem interfaces para conectar, consultar, inserir e manipular documentos diretamente do código em `Julia`.
 
-O *MongoDB* oferece poderosas operações de agregação, permitindo processar, transformar e combinar dados de forma eficiente, mesmo em grandes volumes. Mas quando usá-lo em *Julia*?
+O *MongoDB* oferece poderosas operações de agregação, permitindo processar, transformar e combinar dados de forma eficiente, mesmo em grandes volumes. Mas quando usá-lo em `Julia`?
 
 -   **Aplicações web modernas** – quando os requisitos de dados mudam frequentemente.
-
 -   **Sistemas de comércio eletrônico** – para produtos com atributos variáveis.
-
 -   **Big Data** e análise de dados semiestruturados – quando há grandes volumes de informação diversa.
-
 -   **Aplicações em tempo real** – que exigem alta velocidade de escrita e leitura.
 
-Entretanto, existem situações em que é recomendável **evitar** usar *MongoDB* em *Julia*:
+Entretanto, existem situações em que é recomendável **evitar** usar *MongoDB* em `Julia`:
 
 -   **Transações complexas** – quando o aplicativo exige múltiplas operações atômicas.
-
 -   **Dados altamente relacionais** – se há muitas junções necessárias entre tabelas ou documentos.
-
 -   **Integridade referencial estrita** – quando é fundamental manter relacionamentos rigorosos entre entidades.
 :::
 
 ## Configurando um Cluster MongoDB Atlas
 
 :::{justify}
-Para começar a trabalhar com *MongoDB* em *Julia*, é necessário ter um banco de dados acessível na nuvem. O *MongoDB Atlas* oferece clusters gratuitos que permitem criar, gerenciar e conectar seu banco de dados de forma simples e segura.
+Para começar a trabalhar com *MongoDB* em `Julia`, é necessário ter um banco de dados acessível na nuvem. O *MongoDB Atlas* oferece clusters gratuitos que permitem criar, gerenciar e conectar seu banco de dados de forma simples e segura.
 
 **Passo a passo:**
 
@@ -90,13 +81,13 @@ Para começar a trabalhar com *MongoDB* em *Julia*, é necessário ter um banco 
 
 4.  Configure as regras de segurança, incluindo usuários e IPs permitidos.
 
-5.  Obtenha a string de conexão para utilizá-la em sua aplicação em *Julia*.
+5.  Obtenha a string de conexão para utilizá-la em sua aplicação em `Julia`.
 :::
 
 ## Conclusão
 
 :::{justify}
-O *MongoDB* oferece uma abordagem flexível e poderosa para armazenamento de informações, sendo especialmente adequado para aplicações modernas que lidam com dados complexos e em constante evolução. Com *Julia* e pacotes como `Mongo.jl` ou `Mongoc.jl`, você pode facilmente integrar o *MongoDB* em seus projetos científicos ou aplicações de produção.
+O *MongoDB* oferece uma abordagem flexível e poderosa para armazenamento de informações, sendo especialmente adequado para aplicações modernas que lidam com dados complexos e em constante evolução. Com `Julia` e pacotes como `Mongo.jl` ou `Mongoc.jl`, você pode facilmente integrar o *MongoDB* em seus projetos científicos ou aplicações de produção.
 
 Para mais informações, você pode consultar a [documentação oficial](https://docs.mongodb.com/) do *MongoDB* e os repositórios dos pacotes mencionados anteriormente, cujos links já foram apresentados.
 :::
