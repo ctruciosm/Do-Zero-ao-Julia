@@ -1,7 +1,7 @@
 ---
-title: Velocidade de Processamento: R vs Julia vs Python
-description: O texto compara a velocidade de processamento de R, Julia e Python usando o cálculo ineficiente de Fibonacci, mostrando que Julia é significativamente mais rápida, seguida por Python e depois R.
-
+title: "Velocidade de Processamento: R vs Julia vs Python"
+description: |
+   Para quem lida com grandes volumes de dados ou cálculos complexos, conhecer a velocidade de execução das linguagens é fundamental. Neste post, comparamos `R`, `Julia` e `Python` por meio de uma função de Fibonacci, mostrando como a escolha da linguagem pode fazer diferença significativa no tempo de processamento e na produtividade.
 categories:
   -  Linguagens de Programação 
   -  Desempenho Computacional
@@ -9,13 +9,10 @@ author:
   - name: Gabriel Campovilla da Silva
     affiliation: "Universidade Estadual de Campinas"
     url: https://github.com/C4mpovill4
-
-  - name: 
-    affiliation: 
-    url: 
-    orcid: 
-
-date: "2025-07-30"
+  - name: Nicole Fredericci
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/NFredericci
+date: "2025-09-12"
 image: imagens/velo.jpeg
 lang: "pt"
 format:
@@ -23,30 +20,36 @@ format:
     toc: true
     self-contained: false
 draft: false
-engine: knitrNet
+engine: knitr
 ---
 
-# **Velocidade de Processamento: R vs Julia vs Python**
+## Introdução
 
-## **Introdução**
+:::{.justify}
+Em uma linguagem interpretada, o código é lido e executado linha a linha por um interpretador, o que facilita a execução de trechos de código fora do contexto do projeto, mas reduz a velocidade em operações intensivas. Já em linguagens com compilação _Just-In-Time (JIT)_, trechos do código são transformados em linguagem de máquina na hora da execução, permitindo um desempenho próximo a linguagens compiladas.
 
-Quando escolhemos uma linguagem de programação para análise de dados ou computação científica, a velocidade de processamento é um fator crucial. Neste artigo, compararemos três linguagens populares: R, Julia e Python, analisando seu desempenho em tarefas computacionais intensivas.
+E quando se procura uma linguagem de programação para análise de dados ou computação científica, a velocidade de processamento pode influenciar bastante a escolha. Neste post, comparamos três linguagens populares — `R`, `Julia` e `Python` — analisando seu desempenho em uma tarefa computacionalmente intensiva.
+:::
 
-## **Por que a velocidade difere?**
+## Por que a velocidade difere?
 
--   **Python**: Linguagem interpretada e dinâmica, o que geralmente a torna mais lenta. Porém, bibliotecas como NumPy usam código compilado em C por baixo dos panos para operações numéricas.
+:::{.justify}
+-   **Python**: Linguagem interpretada e dinâmica, o que geralmente a torna mais lenta. No entanto, bibliotecas como `NumPy` e `Pandas` usam implementações em `C` e `Fortran`, permitindo um bom desempenho em operações numéricas.
 
--   **R**: Também é interpretada e focada em estatística. Pode ser lenta em loops, mas funções vetorizadas e pacotes como data.table oferecem bom desempenho.
+-   **R**: Também é interpretada e foi criada para atender ao público da estatística. Loops puros são lentos, mas funções vetorizadas e pacotes como `data.table` e `dplyr` oferecem bom desempenho.
 
--   **Julia**: Foi projetada desde o início para desempenho, com um JIT (Just-In-Time) compiler que aproxima sua velocidade de linguagens como C.
+-   **Julia**: Projetada para alta performance, atinge velocidades próximas às de `C` e `Fortran` sem depender de bibliotecas externas, graças à sua compilação _JIT_. Vale notar que `Python` e `R` também podem alcançar desempenho semelhante usando ferramentas que compilam partes do código em `C`, como `Cython` (uma extensão para Python) e `Rcpp` (um pacote para R).
+:::
 
-## **Exemplo Prático: Cálculo de Fibonacci**
+## Exemplo Prático: Cálculo de Fibonacci
 
-Vamos implementar um cálculo recursivo de Fibonacci (ineficiente propositalmente para testar o desempenho bruto) nas três linguagens rodando no google colab, pois como o mesmo usa uma máquina virtual, remove o quesito da qualidade de computador.  E estamos calculando para um “n” igual a 50.
+:::{.justify}
+Para ilustrar a diferença de desempenho bruto entre as três linguagens, implementamos uma função recursiva de Fibonacci, propositalmente ineficiente, para testar a velocidade de processamento. O cálculo foi realizado no **Google Colab**, um ambiente padronizado na nuvem, para que as diferenças de hardware não influenciassem os resultados. Para padronizar a comparação, consideramos $n = 40$.  
+:::
 
 **R**
 
-```{r}
+```{r, eval=FALSE}
 fib <- function(n) {
     if (n <= 1) {
         return(n)
@@ -56,7 +59,7 @@ fib <- function(n) {
 }
 
 start <- Sys.time()
-result <- fib(50)
+result <- fib(40)
 end <- Sys.time()
 
 print(paste("Resultado:", result))
@@ -65,7 +68,7 @@ print(paste("Tempo R:", end - start))
 
 **Julia**
 
-```{julia}
+```{julia, eval=FALSE}
 function fib(n)
     if n <= 1
         return n
@@ -75,7 +78,7 @@ function fib(n)
 end
 
 start_time = time()
-result = fib(50)
+result = fib(40)
 end_time = time()
 
 println("Resultado: $result")
@@ -84,7 +87,7 @@ println("Tempo Julia: $(end_time - start_time) segundos")
 
 **Python**
 
-```{Python}
+```{python, eval=FALSE}
 import time
 
 def fib(n):
@@ -94,25 +97,33 @@ def fib(n):
         return fib(n-1) + fib(n-2)
 
 start = time.time()
-result = fib(50)
+result = fib(40)
 end = time.time()
 
 print(f"Resultado: {result}")
 print(f"Tempo Python: {end - start:.4f} segundos")
 ```
 
-## **Resultados Esperados**
+## Resultados Esperados
 
-Em testes típicos (para fib(50)):
+:::{.justify}
+Os tempos de execução podem variar de execução para execução, mas em testes típicos para `fib(40)` a média encontrada costuma ser aproximadamente:
 
--   **Julia**: \~ 113.031 segundos 
+-   **Julia**: 1,45 segundos.
 
--   **Python**: \~ 2711.653 segundos
+-   **Python**: 23,13 segundos.
 
--   **R**: \~ 19417,81segundos
+-   **R**: 159,51 segundos.
+:::
 
-\
+## Conclusão
 
-## **Conclusão**
+:::{.justify}
+Os testes com a função recursiva de Fibonacci ilustram claramente as diferenças de desempenho entre as linguagens. Embora `Julia` se destaque em cálculos computacionalmente intensivos devido à sua compilação _JIT_, a escolha da linguagem deve levar em conta também o ecossistema, a familiaridade do usuário e o tipo de análise a ser realizada. 
 
-Julia geralmente vence em benchmarks brutos, mas a escolha deve considerar também o ecossistema e familiaridade. Para muitos usuários, Python oferece o melhor balanço entre desempenho e usabilidade. R permanece imbatível para análises estatísticas específicas com sintaxe concisa.
+`Python` oferece equilíbrio entre desempenho e facilidade de uso, enquanto `R` continua sendo a opção ideal para análises estatísticas específicas, com sintaxe concisa e pacotes robustos, apesar de mais lento em cálculos brutos. 
+:::
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::
