@@ -1,7 +1,7 @@
 ---
 title: "Entrevistas - Abel Soares Siqueira e Paulo José da Silva e Silva"
 description: |
-  Neste blog, entrevistamos dois profissionais que utilizam Julia no seu dia a dia, venha ver o que eles nos falaram sobre a linguagem!
+  Neste blog, entrevistamos dois profissionais que utilizam `Julia` no seu dia a dia. Venha ver o que eles nos falaram sobre a linguagem!
 categories:
   - Julia
   - Entrevistas
@@ -16,69 +16,105 @@ author:
     affiliation: "Universidade Estadual de Campinas"
     url: https://www.linkedin.com/in/ana-luisa-rodrigues20042906/
     orcid: 0009-0009-7988-4243
-date: "2025-07-02"
+date: "2025-09-15"
+image: imagens/entrevistas_capa.png 
 lang: pt
 format:
   html:
     toc: true
     toc-depth: 3
     self-contained: false
-draft: true
+draft: false
 ---
 
-Você já se perguntou sobre como usuários de **Julia** a utilizam em seu dia a dia? Nosso time **entrevistou** um professor da UNICAMP e um profissional do mercado em que perguntamos sobre suas **histórias, rotinas e conselhos** sobre Julia! Rola pra baixo e vem ver!
+:::{.justify}
+Você já se perguntou sobre como usuários de `Julia` a utilizam em seu dia a dia? Nosso time **entrevistou** um professor da UNICAMP e um profissional do mercado, e perguntamos sobre suas **histórias, rotinas e conselhos** sobre `Julia`. Confira abaixo o que eles nos contaram!
+:::
 
 ## Entrevistados
 
-**Abel Soares Siqueira:** Se formou em Matemática Aplicada na Unicamp e seguiu na universidade até seu Doutorado até virar professor, em que foi para a UFPR (Universidade Federal do Paraná). Em sua rotina, usava Matlab, C++ e alguns pacotes em Fortran. Após sugestão de um amigo, no Doutorado, conheceu Julia em 2015 e a utiliza desde então. Atualmente, está nos Países Baixos (Holanda) atuando como Engenheiro de Software.
+:::{.justify}
+**Abel Soares Siqueira:** Formou-se em Matemática Aplicada na Unicamp e seguiu na universidade até o doutorado, quando se tornou professor, e depois foi para a UFPR (Universidade Federal do Paraná). Em sua rotina, usava Matlab, C++ e alguns pacotes em Fortran. Após sugestão de um amigo, durante o doutorado, conheceu `Julia` em 2015 e a utiliza desde então. Atualmente, está nos Países Baixos (Holanda) atuando como Engenheiro de Software.
 
-**Profº Paulo José da Silva e Silva:** Paulo J. S. Silva é formado em Ciência da Computação pela USP (IME) e tem mestrado de doutorado em Matemática Aplicada pela mesma instituição. Foi professor da USP de 2001 a 2012 e em 2012 transferiu-se para o departamento de Matemática Aplicada da Unicamp, onde é, atualmente, professor titular. Trabalha com Otimização Contínua focando em seus aspectos teóricos e computacionais e interface com áreas de aplicação como Ciência de Dados.
+**Prof. Paulo José da Silva e Silva:** Formou-se em Ciência da Computação pela USP (IME) e tem mestrado e doutorado em Matemática Aplicada pela mesma instituição. Foi professor da USP de 2001 a 2012 e, em 2012, transferiu-se para o Departamento de Matemática Aplicada da UNICAMP, onde atualmente é professor titular. Trabalha com Otimização Contínua, focando em seus aspectos teóricos e computacionais e na interface com áreas de aplicação, como Ciência de Dados.
+:::
 
 ## Perguntas e Respostas
 
 ### Pergunta 1: Você se lembra de como foi seu primeiro contato com Julia?
 
-**Abel:** No início, achei uma linguagem bem tranquila e rápida, com uma sintaxe parecida com MatLab. Uma questão que considero importante hoje, pensando no meu primeiro contato, é sobre a “responsabilidade” que criei no que faço em Julia, como os produtos finais que entrego, reprodutibilidade, entre outros.\
-**Paulo:** Comprei um livro chamado Seven More Languages in Seven Weeks e uma das linguagens de programação ensinadas no livro era Julia. Na época, não aprendi a linguagem tão profundamente, até que notei que em otimização numérica, minha área de pesquisa, Julia era muito eficaz, então me aprofundei nela desde então.
+:::{.justify}
+**Abel:** No início, achei uma linguagem bem tranquila e rápida, com uma sintaxe parecida com Matlab. Uma questão que considero importante hoje, pensando no meu primeiro contato, é sobre a “responsabilidade” que criei no que faço em Julia — os produtos finais que entrego, reprodutibilidade, entre outros.
 
-### Pergunta 2: O que te motivou a começar a utilizar Julia ao invés de outras linguagens?
+**Paulo:** Comprei um livro chamado _Seven More Languages in Seven Weeks_ e uma das linguagens de programação ensinadas no livro era Julia. Na época, não aprendi a linguagem tão profundamente, até que notei que em otimização numérica, minha área de pesquisa, Julia era muito eficaz. Desde então, me aprofundei nela.
+:::
 
-**Abel:** Considero Julia muito mais fácil de utilizar do que outras linguagens. Ela entrega exatamente o que preciso, e é uma linguagem muito boa para isso. Por ser de alto nível, ela permite que questões de matemática avançada possam ser implementadas facilmente em comparação a outras linguagens de programação.\
-**Paulo:** Julia possui uma série de características interessantes para quem faz computação científica: linguagem dinâmica, inferência e geração de códigos rápidos compilados, diferenciação automática (otimização contínua), uma sintática interessante para matemática, como um operador bolinha para tratar de funções compostas e uma facilidade na leitura de números (1 bilhão = 1_000_000_000 em Julia).
+### Pergunta 2: O que te motivou a começar a utilizar Julia em vez de outras linguagens?
+
+:::{.justify}
+**Abel:** Considero Julia muito mais fácil de utilizar do que outras linguagens. Ela entrega exatamente o que preciso e é uma linguagem muito boa para isso. Por ser de alto nível, ela permite que questões de matemática avançada possam ser implementadas facilmente em comparação a outras linguagens de programação.
+
+**Paulo:** Julia possui uma série de características interessantes para quem faz computação científica: linguagem dinâmica, inferência e geração de códigos rápidos compilados, diferenciação automática (otimização contínua) e uma sintaxe interessante para matemática — como um operador bolinha para tratar de funções compostas e uma facilidade na leitura de números (1 bilhão = 1_000_000_000 em Julia).
+:::
 
 ### Pergunta 3: Como você costuma utilizá-la no seu dia a dia?
 
-**Abel:** Em meu trabalho, utilizo Julia para fins de criação de softwares de pesquisa, assim como garanto que esse software seja sustentável para outras pessoas / usuários, como falei sobre a reprodutibilidade, que é muito importante.\
-**Paulo:** Como professor da UNICAMP, utilizo linguagem para suas matérias, como Cálculo Numérico, em que já fiz notas de aula utilizando Julia. Além disso, criei uma nova disciplina obrigatória no curso d Matemática Aplicada da Unicamp chamada de Laboratório da Computação Científica. Ela está focada em aumentar a proficiência dos alunos em programação no contexto da área. Todo o material que uso na disciplina está escrito em cadernos Pluto em Julia e foi adaptado do curso "Introduction to Computational Thinking" do MIT com autorização dos autores. Também já criei e estou criando atualmente um pacote em Julia que trata de escrever e desenvolver modelos não lineares.
+:::{.justify}
+**Abel:** Em meu trabalho, utilizo Julia para fins de criação de softwares de pesquisa, assim como garanto que esse software seja sustentável para outras pessoas/usuários (como falei sobre a reprodutibilidade, que é muito importante).
+
+**Paulo:** Como professor da UNICAMP, utilizo linguagens para lecionar matérias, como Cálculo Numérico, em que já fiz notas de aula utilizando Julia. Além disso, criei uma nova disciplina obrigatória no curso de Matemática Aplicada da UNICAMP, chamada de Laboratório da Computação Científica. Ela está focada em aumentar a proficiência dos alunos em programação no contexto da área. Todo o material que uso na disciplina está escrito em cadernos Pluto em Julia e foi adaptado do curso _Introduction to Computational Thinking_, do MIT, com autorização dos autores. Também já criei e estou criando atualmente um pacote em Julia que trata de escrever e desenvolver modelos não lineares.
+:::
 
 ### Pergunta 4: Se tivesse que parar de usar Julia hoje, como isso impactaria sua rotina?
 
-**Abel:** Eu saberia fazer o que preciso fazer fora de Julia, pois antes programava em C, C++ e especialmente Python. Entretanto, Julia unifica todo o processo da minha rotina, então é ideal para o que faço.\
-**Paulo:** A linguagem Julia acaba unificando meu trabalho, dado minha área de pesquisa, devido à sua interface, pacotes existentes, sua compilação, entre outros. Embora Python seja também uma linguagem dinâmica, ele não possui uma boa biblioteca de diferenciação automática, então eu precisaria migrar entre diferentes linguagens / ambientes de trabalho para tratar de um único problema.
+:::{.justify}
+**Abel:** Eu saberia fazer o que preciso fazer fora de Julia, pois antes programava em C, C++ e, especialmente, Python. Entretanto, Julia unifica todo o processo da minha rotina, então é ideal para o que faço.
+
+**Paulo:** A linguagem Julia acaba unificando meu trabalho, dado a minha área de pesquisa, devido à sua interface, pacotes existentes, sua compilação, entre outros. Embora Python seja também uma linguagem dinâmica, ele não possui uma boa biblioteca de diferenciação automática. Então, eu precisaria migrar entre diferentes linguagens/ambientes de trabalho para tratar de um único problema.
+:::
 
 ### Pergunta 5: Quais principais diferenças/dificuldades/facilidades você vê entre Julia e outras linguagens de programação?
 
-**Abel:** Uma facilidade é que Julia, na primeira vez que você roda o código, ele compila e aí roda o código. Nas seguintes vezes que você rodar o mesmo código, ele já roda todo o código sem nenhuma espera. Além disso, você pode entender o código como lógica matemática e também conectar diferentes pacotes. Algumas desvantagens são o startup time do código, ou o TTFX (Time to First Execution).\
-**Paulo:** De maneira geral, Julia resolve bem os problemas que tenho, devido às suas muitas características. Se escrevesse um protótipo de código em Python, precisaria re-escrever ele em C++, por exemplo, para deixá-lo mais eficiente / veloz. Se preciso de uma linguagem específica compilada e também dinâmica para processamento, Julia faz essas duas partes muito bem. Entretanto, considero que Python é mais fácil de ler/entender do que Julia, por ter códigos mais claros. Não quero dizer, entretanto, que exista uma linguagem unificada, melhor que todas as outras, apenas que Julia é a linguagem que mais se adequa à minha rotina e problemas computacionais. A seleção de linguagem utilizada depende do problema ser solucionado (otimização, análise de dados, machine learning, etc.)
+:::{.justify}
+**Abel:** Uma facilidade é que Julia, na primeira vez que você roda o código, compila e depois roda o código. Nas seguintes vezes que você rodar o mesmo código, ele já roda todo o código sem nenhuma espera. Além disso, você pode entender o código como lógica matemática e também conectar diferentes pacotes. Uma desvantagem é o _startup time_ do código, ou o _TTFX (Time to First Execution)_.
+
+**Paulo:** De maneira geral, Julia resolve bem os problemas que tenho, devido às suas muitas características. Se escrevesse um protótipo de código em Python, precisaria reescrevê-lo em C++, por exemplo, para deixá-lo mais eficiente/veloz. Se preciso de uma linguagem específica, compilada e também dinâmica para processamento, Julia faz essas duas partes muito bem. Entretanto, considero que Python é mais fácil de ler/entender do que Julia, por ter códigos mais claros. Não quero dizer, entretanto, que exista uma linguagem unificada, melhor que todas as outras; apenas que Julia é a linguagem que mais se adequa à minha rotina e problemas computacionais. A seleção de linguagem utilizada depende do problema a ser solucionado (otimização, análise de dados, _machine learning_, etc.).
+:::
 
 ### Pergunta 6: Você acredita que o ensinamento de Julia deveria ser mais incentivado no mercado trabalho ou no meio acadêmico?
 
-**Abel:** Na faculdade, há fáceis razões de utilizar Julia, como Cálculo Numérico e Álgebra Linear, pois é fácil de escrever as expressões matemáticas e os algoritmos iterativos**.** No mercado, entretanto, o uso de Julia é mais focado em pesquisas que envolvem matemática avançada, então é um nicho mais específico. Acredito e espero que o Julia tome o lugar do MatLab, principalmente no meio acadêmico. Existe também uma possibilidade de Julia também assuma o lugar de principal linguagem para data science, mas não tão cedo, pois Julia não tem os pacotes necessários para que os profissionais sintam a necessidade de fazer essa migração de linguagens.\
-**Paulo:** Se a sua área envolve otimização, diferenciação, e outros temas relacionados, é imprescindível saber sobre Julia. Além disso, acredito que, no meio acadêmico, Julia poderia, em um futuro próximo, substituir ou se juntar ao MatLab ou Python como linguagem ensinada à graduandos/as, por ser melhor em algumas questões. Também vejo muitos cursos / materiais em que Julia poderia ser incluída, mas por “inércia” linguagens como MatLab ou Python são utilizadas.
+:::{.justify}
+**Abel:** Na faculdade, há fáceis razões de utilizar Julia, como em Cálculo Numérico e Álgebra Linear, pois é fácil de escrever as expressões matemáticas e os algoritmos iterativos. No mercado, entretanto, o uso de Julia é mais focado em pesquisas que envolvem matemática avançada, então é um nicho mais específico. Acredito e espero que Julia tome o lugar do Matlab, principalmente no meio acadêmico. Existe também uma possibilidade de que Julia assuma o lugar de principal linguagem para _Data Science_. Mas não tão cedo, pois Julia não tem os pacotes necessários para que os profissionais sintam a necessidade de fazer essa migração de linguagens.
+
+**Paulo:** Se a sua área envolve otimização, diferenciação e outros temas relacionados, é imprescindível saber sobre Julia. Além disso, acredito que, no meio acadêmico, Julia poderia, em um futuro próximo, substituir ou se juntar ao Matlab ou Python como linguagem ensinada a graduandos/as por ser melhor em algumas questões. Também vejo muitos cursos/materiais em que Julia poderia ser incluída, mas por “inércia”, linguagens como Matlab ou Python são utilizadas.
+:::
 
 ### Pergunta 7: Que conselhos você daria a quem está pensando em aprender ou começar a utilizar Julia?
 
-**Abel:** Recomendo dar uma olhada no meu canal do Youtube (link), em que falo sobre minha área e aplicações. Além disso, a maneira mais fácil de não desanimar enquanto aprende Julia, ou qualquer outra linguagem, é procurar um projeto prático fácil, seja disciplinas, matérias, cursos, entre outros, para que você não foque somente na teoria. Recomendo também as seguintes referências: Pense em Julia (livro) e [github.com/JuliaLang](github.com/JuliaLang) (comunidade).\
-**Paulo:** Não aprenda Julia apenas para resolver um problema específico que você tem interesse. Se for para aprender Julia, ou qualquer outra linguagem, aprenda com calma, leia materiais, documentações, artigos, procure entender aquela linguagem o mais profundamente possível, especialmente num caso em que você pode precisar utilizar aquela linguagem mais vezes, pois assim você realmente aprende aquela linguagem e o que você está fazendo com ela. Um exemplo bom é o LaTex. Muitos alunos da área de exatas acabam precisando utilizar LaTex para produzir relatórios durante sua graduação ou até uma pós-graduação, entretanto é preferível aprender a linguagem quando você percebe que fará parte da sua rotina do que escrever nessa linguagem apenas baseado na necessidade, pois em alguns anos, quando você precisar escrever um relatório, você vai saber muito bem como escrevê-lo.
+:::{.justify}
+**Abel:** Recomendo dar uma olhada no meu [canal do YouTube](https://www.youtube.com/@abelsiqueira), em que falo sobre minha área e aplicações. Além disso, a maneira mais fácil de não desanimar enquanto aprende Julia, ou qualquer outra linguagem, é procurar um projeto prático fácil — seja disciplinas, matérias, cursos, entre outros — para que você não foque somente na teoria. Recomendo também as seguintes referências: _Pense em Julia_ (livro) e [github.com/JuliaLang](https://github.com/JuliaLang) (comunidade).
+
+> _Pense em Julia_ está disponível de forma gratuita no [Github](https://github.com/phrb/PenseJulia) ou pode ser encomendado pela [Amazon](https://www.amazon.com.br/Think-Julia-Ben-Lauwens/dp/1492045039).
+
+**Paulo:** Não aprenda Julia apenas para resolver um problema específico que você tem interesse. Se for para aprender Julia, ou qualquer outra linguagem, aprenda com calma: leia materiais, documentações e artigos, e procure entender aquela linguagem o mais profundamente possível — especialmente num caso em que você pode precisar utilizar aquela linguagem mais vezes. Assim, você realmente aprende aquela linguagem e o que você está fazendo com ela. Um exemplo bom é o _LaTeX_. Muitos alunos da área de exatas acabam precisando utilizar _LaTeX_ para produzir relatórios durante sua graduação ou até uma pós-graduação. Entretanto, é preferível aprender a linguagem quando você percebe que fará parte da sua rotina do que escrever nessa linguagem apenas baseado na necessidade. Pois em alguns anos, quando você precisar fazer um relatório, você vai saber muito bem como escrevê-lo.
+:::
 
 ### Pergunta 8: Você é desenvolvedor de um pacote de Julia, certo? Pode nos contar mais um pouco sobre?
 
-**Abel:** Desde que comecei a usar Julia, trabalhei com vários pacotes de otimização e álgebra linear, além de criar um site que auxilia na criação de pacotes do zero. Vejo que a criação de pacotes em Julia não é complicada, pois existem até pacotes que te ajudam a criar pacotes, além de possuir uma maior padronização nos pacotes a depender do problema a ser resolvido, enquanto em outras linguagens um único problema pode ser resolvido por diferentes pacotes existentes.\
-**Paulo:** Criar um pacote em Julia é muito fácil. Você precisa deu um repositório em sua máquina e seguir convenções para criação de pacotes na linguagem. Se isso está feito, basta “avisar” a linguagem que aquilo que está ali é um pacote, e pronto. A divulgação desse pacote também é bem facilitada. Basta fazer, por exemplo, um commit no github, que o pacote é testado, atualizado e disponibilizado de forma pública, caso prefira. Em geral, Julia é bem estruturada para criação de pacotes. Por meio do site oficial de Julia, uma busca de palavras chaves retorna pacotes que se relacionam com aquela palavra / tema. Em meu uso de Julia, criei um pacote chamado “[NLPModelsAlgencan.JL](http://nlpmodelsalgencan.jl)”, uma junção de dois pacotes que faz manipulações não lineares; e estou criando um pacote para projetar o simplexo, que, em suma, é o conjunto todos os números que somam 1 em uma dimensão N.
+:::{.justify}
+**Abel:** Desde que comecei a usar Julia, trabalhei com vários pacotes de otimização e álgebra linear, além de criar um site que auxilia na criação de pacotes do zero. Vejo que a criação de pacotes em Julia não é complicada, pois existem até pacotes que te ajudam a criar outros pacotes — além de possuir uma maior padronização nos pacotes dependendo do problema a ser resolvido. Em outras linguagens, um único problema pode ser resolvido por diferentes pacotes existentes.
 
-### Pergunta 9: Quer deixar algum recado para o pessoal da Unicamp ou do Brasil em geral?
+**Paulo:** Criar um pacote em Julia é muito fácil. Você precisa de um repositório em sua máquina e seguir convenções para criação de pacotes na linguagem. Se isso está feito, basta “avisar” a linguagem que aquilo que está ali é um pacote, e pronto. A divulgação desse pacote também é bem facilitada. Basta fazer, por exemplo, um commit no GitHub, que o pacote é testado, atualizado e disponibilizado de forma pública, caso prefira. Em geral, Julia é bem estruturada para criação de pacotes. Por meio do site oficial de Julia, uma busca de palavras-chave retorna pacotes que se relacionam com aquela palavra/tema. Em meu uso de Julia, criei um pacote chamado [*NLPModelsAlgencan.JL*](https://juliapackages.com/p/nlpmodelsalgencan), uma junção de dois pacotes que faz manipulações não lineares. Estou criando também um pacote para projetar o simplexo que, em suma, é o conjunto de todos os números que somam 1 em uma dimensão N.
+:::
 
-**Abel:** Aqui nos Países Baixos, existe uma conferência de Julia chamada JuliaCon que já participei, então, para a comunidade brasileiro, recomendo fazerem uma conferência de Julia aí no Brasil, pois pode atrair mais interesse na linguagem no país e também na América Latina tanto por programadores / cientistas quanto por empresas. Por fim, talvez Julia não seja a melhor linguagem para você, especialmente se for sua primeira linguagem, mas não deixe de estudar sobre ela, pois é uma linguagem muito útil!\
-**Paulo:** Não tenho a intenção de ser um “garoto propaganda” de Julia. Claro que a defendo e a utilizo como linguagem principal, mas sim pois ela se aplica muito bem aos problemas e necessidades que lido na minha rotina. A depender do problema / necessidade que você tem, a “melhor” linguagem que você utilizará pode ser Julia, assim como pode ser qualquer outra. Além de pensar apenas na linguagem em si, pensem também em todo o ecossistema dessa linguagem, logo os pacotes que a linguagem possui e como eles funcionam, como diferentes funções se comunicam. Por exemplo, para análise de dados, R é uma linguagem bem estruturada, mas não significa que eu não possa fazer computação científica em R caso fosse meu interesse, mas também não significa que R seja a melhor linguagem para tratar desse tema.
+### Pergunta 9: Quer deixar algum recado para o pessoal da UNICAMP ou do Brasil em geral?
 
-### 
+:::{.justify}
+**Abel:** Aqui nos Países Baixos, existe uma conferência de Julia chamada _JuliaCon_ que já participei. Então, para a comunidade brasileira, recomendo fazerem uma conferência de Julia aí no Brasil, pois pode atrair mais interesse na linguagem no país e também na América Latina, tanto por programadores/cientistas quanto por empresas. Por fim, talvez Julia não seja a melhor linguagem para você, especialmente se for sua primeira linguagem, mas não deixe de estudar sobre ela, pois é uma linguagem muito útil!
+
+**Paulo:** Não tenho a intenção de ser um “garoto-propaganda” de Julia. Claro que a defendo e a utilizo como linguagem principal, pois ela se aplica muito bem aos problemas e necessidades que lido na minha rotina. A depender do problema/necessidade que você tem, a “melhor” linguagem que você utilizará pode ser Julia, assim como pode ser qualquer outra. Além de pensar apenas na linguagem em si, pensem também em todo o ecossistema dessa linguagem. Isso inclui os pacotes que a linguagem possui e como eles funcionam, bem como diferentes funções se comunicam. Por exemplo, para análise de dados, R é uma linguagem bem estruturada, mas não significa que eu não possa fazer computação científica em R caso fosse meu interesse, mas também não significa que R seja a melhor linguagem para tratar desse tema.
+:::
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::
