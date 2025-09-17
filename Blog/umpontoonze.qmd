@@ -86,10 +86,14 @@ quebras de compatibilidade.
 
 **Como atualizar**:
 
+    -   Windows/Mac: Baixe a nova versão do site e instale por cima
+
+    -   Linux: Use o gerenciador de pacotes da sua distribuição
 ```{julia}
-using Pkg
-Pkg.update()
+# No terminal do seu SO, não no REPL do Julia
+juliaup update
 ```
+link para o site: https://julialang.org/install/
 
 ## Conclusão
 
