@@ -5,7 +5,7 @@ description: |
 categories:
   - Pacotes
   - Ferramentas
-  - Manipulação de dados
+  - Manipulação de Dados
 author:
   - name: Sarah Pereira Teixeira Silva
     affiliation: "Universidade Estadual de Campinas"
@@ -22,6 +22,11 @@ draft: false
 engine: knitr
 ---
 
+
+```{r}
+#| echo: false
+Sys.setenv(JULIA_HOME = "/Users/ctrucios/.juliaup/bin")
+```
 
 
 ## Introdução

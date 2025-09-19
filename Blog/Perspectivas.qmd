@@ -3,7 +3,7 @@ title: "Perspectivas de Julia para o Futuro"
 description: |
   Saiba mais sobre o crescimento da popularidade dessa linguagem de programação, suas principais áreas de aplicação e seu potencial de expansão.
 categories:
-  - Quarto
+  - História
 author:
   - name: Esther Cleveston
     affiliation: "Universidade Estadual de Campinas"

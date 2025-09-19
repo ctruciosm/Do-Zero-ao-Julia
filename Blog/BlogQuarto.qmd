@@ -24,6 +24,12 @@ format:
 draft: true
 ---
 
+
+```{r}
+#| echo: false
+Sys.setenv(JULIA_HOME = "/Users/ctrucios/.juliaup/bin")
+```
+
 ## Introdução
 
 O [Quarto](https://quarto.org) é uma ferramenta poderosa para a criação de documentos dinâmicos, que integra texto, código, gráficos e visualizações de forma elegante. Neste post, mostramos como criar um post de blog com Quarto de forma simples e rápida.

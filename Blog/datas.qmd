@@ -3,7 +3,7 @@ title: "Manipulação de datas em Julia"
 description: |
      Aprenda a criar, acessar e manipular datas em *Julia*, incluindo operações aritméticas e comparações entre períodos de tempo.
 categories:
-  - Primeiros passos
+  - Primeiros Passos
   - Ferramentas
 author:
   - name: Vitor Ribas Perrone
@@ -13,7 +13,7 @@ author:
   - name: Nicole Fredericci
     affiliation: "Universidade Estadual de Campinas"
     url: https://github.com/NFredericci
-date: "2025-09-03"
+date: "2025-09-14"
 image: imagens/juliadatas.png
 lang: pt
 format:
@@ -22,21 +22,29 @@ format:
     toc-depth: 3
     self-contained: false
 engine: knitr
-draft: true
+draft: false
 ---
+
+
+```{r}
+#| echo: false
+Sys.setenv(JULIA_HOME = "/Users/ctrucios/.juliaup/bin/")
+```
+
+
 
 ## Introdução
 
 ::: {.justify}
-Manipular datas é essencial em diversas áreas da Estatística aplicada, como análise de séries temporais e estudos de sobrevivência, entre outras. Para isso, *Julia* oferece diversas ferramentas para trabalhar com datas de forma eficiente.
+Manipular datas é essencial em diversas áreas da Estatística aplicada, como análise de séries temporais, estudos de sobrevivência, dados em painel, entre outras. Para isso, `Julia` oferece diversas ferramentas para trabalhar com datas de forma eficiente.
 
-Neste post, vamos explorar como trabalhar com datas e horários em *Julia* utilizando o módulo `Dates`, que já faz parte da biblioteca padrão da linguagem. Você aprenderá a criar, manipular, extrair informações e realizar operações com objetos do tipo data.
+Neste post, vamos explorar como trabalhar com datas e horários em `Julia` utilizando o módulo `Dates`, que já faz parte da biblioteca padrão da linguagem. Você aprenderá a criar, manipular, extrair informações e realizar operações com objetos do tipo _data_.
 :::
 
 ## Criação de objetos de data
 
 ::: {.justify}
-Em primeiro lugar, é necessário carregar o módulo `Dates`, que já está presente na instalação padrão do *Julia*.
+Em primeiro lugar, é necessário carregar o módulo `Dates`, que já está presente na instalação padrão do `Julia`.
 :::
 
 ```{julia}
@@ -44,7 +52,7 @@ using Dates
 ```
 
 ::: {.justify}
-Existem duas principais estruturas para representar datas em *Julia*:
+Existem duas principais estruturas para representar datas em `Julia`:
 
 - `Date`: representa apenas a data (ano, mês e dia).
 - `DateTime`: representa data e hora, incluindo minutos, segundos, etc.
@@ -53,8 +61,8 @@ Podemos criar cada uma dessas estruturas por meio de funções de mesmo nome.
 :::
 
 ```{julia}
-Date(2013,3,25)
-DateTime(2013,3,25)
+Date(2013, 3, 25)
+DateTime(2013, 3, 25)
 ```
 
 :::{.justify}
@@ -63,6 +71,7 @@ Você também pode criar esses objetos a partir de uma `String` que siga o forma
 
 ```{julia}
 Date("2015-03-25", dateformat"y-m-d")
+Date("2015-25-03", dateformat"y-d-m")
 DateTime("2015/03/25 14:30", dateformat"y/m/d HH:MM")
 ```
 
@@ -86,12 +95,13 @@ data = Date("2015-03-25", dateformat"y-m-d")
 ```
 
 :::{.justify}
-É possível extrair partes específicas de uma data utilizando funções que têm o mesmo nome dessas partes, como `year` e `month`.
+É possível extrair partes específicas de uma data utilizando funções que têm o mesmo nome dessas partes, como `year()`, `month()` e `day()`.
 :::
 
 ```{julia}
 year(data)  # Retorna o ano
 month(data) # Retorna o mês
+day(data)   # Retorna o dia
 ```
 
 :::{.justify}
@@ -111,6 +121,7 @@ Além de extrair elementos numéricos da data, também é possível obter inform
 dayname(data)
 monthname(data)
 ```
+
 
 ## Informações de calendário
 
@@ -188,7 +199,7 @@ collect(Date(2020, 03, 02):Year(1):Date(2025, 03, 02)) # Intervalo anual
 ## Conclusão
 
 :::{.justify}
-Agora você já sabe como criar, acessar, manipular e realizar operações com datas em *Julia*! Esse conhecimento é fundamental para análises estatísticas que envolvem o fator tempo, como, por exemplo, o estudo de **séries temporais**.
+Agora você já sabe como criar, acessar, manipular e realizar operações com datas em `Julia`! Esse conhecimento é fundamental para análises estatísticas que envolvem o fator tempo, como, por exemplo, o estudo de **séries temporais** e **dados em painel**.
 :::
 
 ::: callout-note

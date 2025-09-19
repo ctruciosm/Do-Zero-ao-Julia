@@ -1,5 +1,13 @@
 [
   {
+    "listing": "/tutoriais.html",
+    "items": [
+      "/Tutoriais/loops_condicionais_julia.html",
+      "/Tutoriais/tutorial-eda.html",
+      "/Tutoriais/graf_basico.html"
+    ]
+  },
+  {
     "listing": "/equipe.html",
     "items": [
       "/Equipe/Atual/Ana_Luisa.html",
@@ -20,16 +28,12 @@
     ]
   },
   {
-    "listing": "/tutoriais.html",
-    "items": [
-      "/Tutoriais/loops_condicionais_julia.html",
-      "/Tutoriais/tutorial-eda.html",
-      "/Tutoriais/graf_basico.html"
-    ]
-  },
-  {
     "listing": "/blog.html",
     "items": [
+      "/Blog/Zero ao Julia - Entrevistas.html",
+      "/Blog/Velocidade de Processamento.html",
+      "/Blog/strings.html",
+      "/Blog/datas.html",
       "/Blog/pacotes_datasets.html",
       "/Blog/positron.html",
       "/Blog/Matrizes.html",
@@ -45,7 +49,8 @@
       "/Blog/julia_rstudio.html",
       "/Blog/jupytercolab.html",
       "/Blog/instalar_julia.html",
-      "/Blog/as-origens.html"
+      "/Blog/as-origens.html",
+      "/Blog/BlogQuarto.html"
     ]
   }
 ]

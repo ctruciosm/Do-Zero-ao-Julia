@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt" xml:lang="pt"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.39">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Leonardo dos Santos">
+<meta name="author" content="Ana Luisa Pereira da Silva Rodrigues">
+<meta name="description" content="Neste post, conversamos com dois profissionais de destaque que utilizam Julia no dia a dia. Descubra suas experiências, insights e dicas sobre como a linguagem impacta seu trabalho!">
+
+<title>Entrevistas - Abel Soares Siqueira e Paulo José da Silva e Silva – Do Zero ao Julia</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-6bd9cfa162949bde0a231f530c97869d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Nenhum resultado",
+    "search-matching-documents-text": "documentos correspondentes",
+    "search-copy-link-title": "Copiar link para a busca",
+    "search-hide-matches-text": "Esconder correspondências adicionais",
+    "search-more-match-text": "mais correspondência neste documento",
+    "search-more-matches-text": "mais correspondências neste documento",
+    "search-clear-button-title": "Limpar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Procurar"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Do Zero ao Julia</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Procurar"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Alternar de navegação" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../oprojeto.html"> 
+<span class="menu-text">O projeto</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../equipe.html"> 
+<span class="menu-text">Equipe</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../blog.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../tutoriais.html"> 
+<span class="menu-text">Tutoriais</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../meetup.html"> 
+<span class="menu-text">Meetup</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.instagram.com/dozero_aojulia/"> <i class="bi bi-instagram" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Nesta página</h2>
+   
+  <ul>
+  <li><a href="#entrevistados" id="toc-entrevistados" class="nav-link active" data-scroll-target="#entrevistados">Entrevistados</a></li>
+  <li><a href="#perguntas-e-respostas" id="toc-perguntas-e-respostas" class="nav-link" data-scroll-target="#perguntas-e-respostas">Perguntas e Respostas</a>
+  <ul class="collapse">
+  <li><a href="#pergunta-1-você-se-lembra-de-como-foi-seu-primeiro-contato-com-julia" id="toc-pergunta-1-você-se-lembra-de-como-foi-seu-primeiro-contato-com-julia" class="nav-link" data-scroll-target="#pergunta-1-você-se-lembra-de-como-foi-seu-primeiro-contato-com-julia">Pergunta 1: Você se lembra de como foi seu primeiro contato com <code>Julia</code>?</a></li>
+  <li><a href="#pergunta-2-o-que-te-motivou-a-começar-a-utilizar-julia-em-vez-de-outras-linguagens" id="toc-pergunta-2-o-que-te-motivou-a-começar-a-utilizar-julia-em-vez-de-outras-linguagens" class="nav-link" data-scroll-target="#pergunta-2-o-que-te-motivou-a-começar-a-utilizar-julia-em-vez-de-outras-linguagens">Pergunta 2: O que te motivou a começar a utilizar <code>Julia</code> em vez de outras linguagens?</a></li>
+  <li><a href="#pergunta-3-como-você-costuma-utilizar-julia-no-seu-dia-a-dia" id="toc-pergunta-3-como-você-costuma-utilizar-julia-no-seu-dia-a-dia" class="nav-link" data-scroll-target="#pergunta-3-como-você-costuma-utilizar-julia-no-seu-dia-a-dia">Pergunta 3: Como você costuma utilizar <code>Julia</code> no seu dia a dia?</a></li>
+  <li><a href="#pergunta-4-se-tivesse-que-parar-de-usar-julia-hoje-como-isso-impactaria-sua-rotina" id="toc-pergunta-4-se-tivesse-que-parar-de-usar-julia-hoje-como-isso-impactaria-sua-rotina" class="nav-link" data-scroll-target="#pergunta-4-se-tivesse-que-parar-de-usar-julia-hoje-como-isso-impactaria-sua-rotina">Pergunta 4: Se tivesse que parar de usar <code>Julia</code> hoje, como isso impactaria sua rotina?</a></li>
+  <li><a href="#pergunta-5-quais-principais-diferençasdificuldadesfacilidades-você-vê-entre-julia-e-outras-linguagens-de-programação" id="toc-pergunta-5-quais-principais-diferençasdificuldadesfacilidades-você-vê-entre-julia-e-outras-linguagens-de-programação" class="nav-link" data-scroll-target="#pergunta-5-quais-principais-diferençasdificuldadesfacilidades-você-vê-entre-julia-e-outras-linguagens-de-programação">Pergunta 5: Quais principais diferenças/dificuldades/facilidades você vê entre Julia e outras linguagens de programação?</a></li>
+  <li><a href="#pergunta-6-você-acredita-que-o-ensino-de-julia-deveria-ser-mais-incentivado-no-mercado-trabalho-ou-no-meio-acadêmico" id="toc-pergunta-6-você-acredita-que-o-ensino-de-julia-deveria-ser-mais-incentivado-no-mercado-trabalho-ou-no-meio-acadêmico" class="nav-link" data-scroll-target="#pergunta-6-você-acredita-que-o-ensino-de-julia-deveria-ser-mais-incentivado-no-mercado-trabalho-ou-no-meio-acadêmico">Pergunta 6: Você acredita que o ensino de <code>Julia</code> deveria ser mais incentivado no mercado trabalho ou no meio acadêmico?</a></li>
+  <li><a href="#pergunta-7-que-conselhos-você-daria-a-quem-está-pensando-em-aprender-ou-começar-a-utilizar-julia" id="toc-pergunta-7-que-conselhos-você-daria-a-quem-está-pensando-em-aprender-ou-começar-a-utilizar-julia" class="nav-link" data-scroll-target="#pergunta-7-que-conselhos-você-daria-a-quem-está-pensando-em-aprender-ou-começar-a-utilizar-julia">Pergunta 7: Que conselhos você daria a quem está pensando em aprender ou começar a utilizar <code>Julia</code>?</a></li>
+  <li><a href="#pergunta-8-você-é-desenvolvedor-de-um-pacote-de-julia-certo-pode-nos-contar-mais-um-pouco-sobre" id="toc-pergunta-8-você-é-desenvolvedor-de-um-pacote-de-julia-certo-pode-nos-contar-mais-um-pouco-sobre" class="nav-link" data-scroll-target="#pergunta-8-você-é-desenvolvedor-de-um-pacote-de-julia-certo-pode-nos-contar-mais-um-pouco-sobre">Pergunta 8: Você é desenvolvedor de um pacote de <code>Julia</code>, certo? Pode nos contar mais um pouco sobre?</a></li>
+  <li><a href="#pergunta-9-quer-deixar-algum-recado-para-o-pessoal-da-unicamp-ou-do-brasil-em-geral" id="toc-pergunta-9-quer-deixar-algum-recado-para-o-pessoal-da-unicamp-ou-do-brasil-em-geral" class="nav-link" data-scroll-target="#pergunta-9-quer-deixar-algum-recado-para-o-pessoal-da-unicamp-ou-do-brasil-em-geral">Pergunta 9: Quer deixar algum recado para o pessoal da UNICAMP ou do Brasil em geral?</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Entrevistas - Abel Soares Siqueira e Paulo José da Silva e Silva</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Julia</div>
+    <div class="quarto-category">Entrevistas</div>
+    <div class="quarto-category">Mercado de Trabalho</div>
+    <div class="quarto-category">Meio Acadêmico</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    <p>Neste post, conversamos com dois profissionais de destaque que utilizam <code>Julia</code> no dia a dia. Descubra suas experiências, <em>insights</em> e dicas sobre como a linguagem impacta seu trabalho!</p>
+  </div>
+</div>
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Autores</div>
+  <div class="quarto-title-meta-heading">Afiliação</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author"><a href="https://linkedin.com/in/leonardo-dos-santoos">Leonardo dos Santos</a> <a href="https://orcid.org/0009-0008-8927-1507" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Universidade Estadual de Campinas
+          </p>
+      </div>
+    <div class="quarto-title-meta-contents">
+    <p class="author"><a href="https://www.linkedin.com/in/ana-luisa-rodrigues20042906/">Ana Luisa Pereira da Silva Rodrigues</a> <a href="https://orcid.org/0009-0009-7988-4243" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Universidade Estadual de Campinas
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Data de Publicação</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">19 de setembro de 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="justify">
+<p>Você já se perguntou como profissionais usam <code>Julia</code> no dia a dia? Nosso time conversou com Paulo José da Silva e Silva, professor do Departamento de Matemática Aplicada da UNICAMP, e com Abel Soares Siqueira, Doutor em Matemática Aplicada e <em>Research Software Engineer</em> no <em>The Netherlands eScience</em>, para conhecer suas <strong>experiências, rotinas e dicas</strong> sobre a linguagem. Confira o que eles compartilharam!</p>
+</div>
+<section id="entrevistados" class="level2">
+<h2 class="anchored" data-anchor-id="entrevistados">Entrevistados</h2>
+<div id="fig-entrevistados" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-entrevistados-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-entrevistados" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-avel" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-avel-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="imagens/abel.png" class="img-fluid figure-img" style="width:60.0%" data-ref-parent="fig-entrevistados">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-avel-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Abel Soares Siqueira
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-entrevistados" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-paulo" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-paulo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="imagens/paulo.png" class="img-fluid figure-img" data-ref-parent="fig-entrevistados">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-paulo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) Paulo José da Silva e Silva
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-entrevistados-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;1: Entrevistados
+</figcaption>
+</figure>
+</div>
+<div class="justify">
+<p><strong>Abel Soares Siqueira:</strong> Formou-se em Matemática Aplicada na UNICAMP e seguiu para o doutorado na mesma universidade, obtendo o título de doutor em 2013. Foi professor na UFPR entre 2014 e 2021. Durante sua rotina acadêmica, utilizava Matlab, C++ e alguns pacotes em Fortran. Em 2015, conheceu <code>Julia</code> por sugestão de um amigo e vem usando a linguagem desde então. Atualmente, atua como Engenheiro de Software nos Países Baixos (Holanda).</p>
+<p><strong>Prof.&nbsp;Paulo José da Silva e Silva:</strong> Formou-se em Ciência da Computação pelo IME-USP e tem mestrado e doutorado em Matemática Aplicada pela mesma instituição. Foi professor da USP de 2001 a 2012 e, em 2012, transferiu-se para o Departamento de Matemática Aplicada da UNICAMP, onde atualmente é professor titular. Trabalha com otimização contínua, focando em seus aspectos teóricos e computacionais e na interface com áreas de aplicação, como ciência de dados.</p>
+</div>
+</section>
+<section id="perguntas-e-respostas" class="level2">
+<h2 class="anchored" data-anchor-id="perguntas-e-respostas">Perguntas e Respostas</h2>
+<section id="pergunta-1-você-se-lembra-de-como-foi-seu-primeiro-contato-com-julia" class="level3">
+<h3 class="anchored" data-anchor-id="pergunta-1-você-se-lembra-de-como-foi-seu-primeiro-contato-com-julia">Pergunta 1: Você se lembra de como foi seu primeiro contato com <code>Julia</code>?</h3>
+<div class="justify">
+<p><strong>Abel:</strong> No início, achei uma linguagem bem tranquila e rápida, com uma sintaxe parecida com Matlab. Uma questão que considero importante hoje, pensando no meu primeiro contato, é sobre a “responsabilidade” que criei no que faço em <code>Julia</code> — os produtos finais que entrego, reprodutibilidade, entre outros.</p>
+<p><strong>Paulo:</strong> Comprei um livro chamado <em>Seven More Languages in Seven Weeks</em> e uma das linguagens de programação ensinadas no livro era <code>Julia</code>. Na época, não aprendi a linguagem tão profundamente, até que notei que em otimização numérica, minha área de pesquisa, Julia era muito eficaz. Desde então, me aprofundei nela.</p>
+</div>
+</section>
+<section id="pergunta-2-o-que-te-motivou-a-começar-a-utilizar-julia-em-vez-de-outras-linguagens" class="level3">
+<h3 class="anchored" data-anchor-id="pergunta-2-o-que-te-motivou-a-começar-a-utilizar-julia-em-vez-de-outras-linguagens">Pergunta 2: O que te motivou a começar a utilizar <code>Julia</code> em vez de outras linguagens?</h3>
+<div class="justify">
+<p><strong>Abel:</strong> Considero <code>Julia</code> muito mais fácil de utilizar do que outras linguagens. Ela entrega exatamente o que preciso e é uma linguagem muito boa para isso. Por ser de alto nível, ela permite que questões de matemática avançada possam ser implementadas facilmente em comparação a outras linguagens de programação.</p>
+<p><strong>Paulo:</strong> <code>Julia</code> possui uma série de características interessantes para quem faz computação científica: linguagem dinâmica, inferência e geração de códigos rápidos compilados, diferenciação automática (otimização contínua) e uma sintaxe interessante para matemática — como um operador “bolinha” (<span class="math inline">\(\circ\)</span>). para tratar de funções compostas e uma facilidade na leitura de números (1 bilhão = 1_000_000_000 em <code>Julia</code>).</p>
+</div>
+</section>
+<section id="pergunta-3-como-você-costuma-utilizar-julia-no-seu-dia-a-dia" class="level3">
+<h3 class="anchored" data-anchor-id="pergunta-3-como-você-costuma-utilizar-julia-no-seu-dia-a-dia">Pergunta 3: Como você costuma utilizar <code>Julia</code> no seu dia a dia?</h3>
+<div class="justify">
+<p><strong>Abel:</strong> Em meu trabalho, utilizo <code>Julia</code> para fins de criação de softwares de pesquisa, assim como garanto que esse software seja sustentável para outras pessoas/usuários (como falei, a reprodutibilidade é muito importante).</p>
+<p><strong>Paulo:</strong> Como professor da UNICAMP, utilizo linguagens para lecionar matérias, como Cálculo Numérico, em que já fiz notas de aula utilizando <code>Julia</code>. Além disso, criei uma nova disciplina obrigatória no curso de Matemática Aplicada da UNICAMP, chamada de Laboratório da Computação Científica. Ela está focada em aumentar a proficiência dos alunos em programação no contexto da área. Todo o material que uso na disciplina está escrito em cadernos Pluto em <code>Julia</code> e foi adaptado do curso <em>Introduction to Computational Thinking</em>, do MIT, com autorização dos autores. Também já criei e estou criando atualmente um pacote em <code>Julia</code> que trata de escrever e desenvolver modelos não lineares.</p>
+</div>
+</section>
+<section id="pergunta-4-se-tivesse-que-parar-de-usar-julia-hoje-como-isso-impactaria-sua-rotina" class="level3">
+<h3 class="anchored" data-anchor-id="pergunta-4-se-tivesse-que-parar-de-usar-julia-hoje-como-isso-impactaria-sua-rotina">Pergunta 4: Se tivesse que parar de usar <code>Julia</code> hoje, como isso impactaria sua rotina?</h3>
+<div class="justify">
+<p><strong>Abel:</strong> Eu saberia fazer o que preciso fazer fora de <code>Julia</code>, pois antes programava em <code>C</code>, <code>C++</code> e, especialmente, <code>Python</code>. Entretanto, <code>Julia</code> unifica todo o processo da minha rotina, então é ideal para o que faço.</p>
+<p><strong>Paulo:</strong> A linguagem <code>Julia</code> acaba unificando meu trabalho, dado a minha área de pesquisa, devido à sua interface, pacotes existentes, sua compilação, entre outros. Embora <code>Python</code> seja também uma linguagem dinâmica, ele não possui uma boa biblioteca de diferenciação automática. Então, eu precisaria migrar entre diferentes linguagens/ambientes de trabalho para tratar de um único problema.</p>
+</div>
+</section>
+<section id="pergunta-5-quais-principais-diferençasdificuldadesfacilidades-você-vê-entre-julia-e-outras-linguagens-de-programação" class="level3">
+<h3 class="anchored" data-anchor-id="pergunta-5-quais-principais-diferençasdificuldadesfacilidades-você-vê-entre-julia-e-outras-linguagens-de-programação">Pergunta 5: Quais principais diferenças/dificuldades/facilidades você vê entre Julia e outras linguagens de programação?</h3>
+<div class="justify">
+<p><strong>Abel:</strong> Uma facilidade é que <code>Julia</code>, na primeira vez que você roda o código, compila e depois roda o código. Nas seguintes vezes que você rodar o mesmo código, ele já roda todo o código sem nenhuma espera. Além disso, você pode entender o código como lógica matemática e também conectar diferentes pacotes. Uma desvantagem é o <em>startup time</em> do código, ou o <em>TTFX (Time to First Execution)</em>.</p>
+<p><strong>Paulo:</strong> De maneira geral, <code>Julia</code> resolve bem os problemas que tenho, devido às suas muitas características. Se escrevesse um protótipo de código em <code>Python</code>, precisaria reescrevê-lo em <code>C++</code>, por exemplo, para deixá-lo mais eficiente/veloz. Se preciso de uma linguagem específica, compilada e também dinâmica para processamento, <code>Julia</code> faz essas duas partes muito bem. Entretanto, considero que <code>Python</code> é mais fácil de ler/entender do que <code>Julia</code>, por ter códigos mais claros. Não quero dizer, entretanto, que exista uma linguagem unificada, melhor que todas as outras; apenas que <code>Julia</code> é a linguagem que mais se adequa à minha rotina e problemas computacionais. A seleção de linguagem utilizada depende do problema a ser solucionado (otimização, análise de dados, <em>machine learning</em>, etc.).</p>
+</div>
+</section>
+<section id="pergunta-6-você-acredita-que-o-ensino-de-julia-deveria-ser-mais-incentivado-no-mercado-trabalho-ou-no-meio-acadêmico" class="level3">
+<h3 class="anchored" data-anchor-id="pergunta-6-você-acredita-que-o-ensino-de-julia-deveria-ser-mais-incentivado-no-mercado-trabalho-ou-no-meio-acadêmico">Pergunta 6: Você acredita que o ensino de <code>Julia</code> deveria ser mais incentivado no mercado trabalho ou no meio acadêmico?</h3>
+<div class="justify">
+<p><strong>Abel:</strong> Na faculdade, há fáceis razões de utilizar <code>Julia</code>, como em Cálculo Numérico e Álgebra Linear, pois é fácil de escrever as expressões matemáticas e os algoritmos iterativos. No mercado, entretanto, o uso de <code>Julia</code> é mais focado em pesquisas que envolvem matemática avançada, então é um nicho mais específico. Acredito e espero que <code>Julia</code> tome o lugar do <code>Matlab</code>, principalmente no meio acadêmico. Existe também uma possibilidade de que <code>Julia</code> assuma o lugar de principal linguagem para <em>Data Science</em>. Mas não tão cedo, pois <code>Julia</code> não tem os pacotes necessários para que os profissionais sintam a necessidade de fazer essa migração de linguagens.</p>
+<p><strong>Paulo:</strong> Se a sua área envolve otimização, diferenciação e outros temas relacionados, é imprescindível saber sobre <code>Julia</code>. Além disso, acredito que, no meio acadêmico, <code>Julia</code> poderia, em um futuro próximo, substituir ou se juntar ao <code>Matlab</code> ou <code>Python</code> como linguagem ensinada a graduandos/as por ser melhor em algumas questões. Também vejo muitos cursos/materiais em que <code>Julia</code> poderia ser incluída, mas por “inércia”, linguagens como <code>Matlab</code> ou <code>Python</code> são utilizadas.</p>
+</div>
+</section>
+<section id="pergunta-7-que-conselhos-você-daria-a-quem-está-pensando-em-aprender-ou-começar-a-utilizar-julia" class="level3">
+<h3 class="anchored" data-anchor-id="pergunta-7-que-conselhos-você-daria-a-quem-está-pensando-em-aprender-ou-começar-a-utilizar-julia">Pergunta 7: Que conselhos você daria a quem está pensando em aprender ou começar a utilizar <code>Julia</code>?</h3>
+<div class="justify">
+<p><strong>Abel:</strong> Recomendo dar uma olhada no meu <a href="https://www.youtube.com/@abelsiqueira">canal do YouTube</a>, em que falo sobre minha área e aplicações. Além disso, a maneira mais fácil de não desanimar enquanto aprende <code>Julia</code>, ou qualquer outra linguagem, é procurar um projeto prático fácil — seja disciplinas, matérias, cursos, entre outros — para que você não foque somente na teoria. Recomendo também as seguintes referências: <em>Pense em Julia</em> (livro) e <a href="https://github.com/JuliaLang">github.com/JuliaLang</a> (comunidade).</p>
+<blockquote class="blockquote">
+<p><em>Pense em Julia</em> está disponível de forma gratuita no <a href="https://github.com/phrb/PenseJulia">Github</a> ou pode ser encomendado pela <a href="https://www.amazon.com.br/Think-Julia-Ben-Lauwens/dp/1492045039">Amazon</a>.</p>
+</blockquote>
+<p><strong>Paulo:</strong> Não aprenda <code>Julia</code> apenas para resolver um problema específico que você tem interesse. Se for para aprender <code>Julia</code>, ou qualquer outra linguagem, aprenda com calma: leia materiais, documentações e artigos, e procure entender aquela linguagem o mais profundamente possível — especialmente num caso em que você pode precisar utilizar aquela linguagem mais vezes. Assim, você realmente aprende aquela linguagem e o que você está fazendo com ela. Um exemplo bom é o <em>LaTeX</em>: muitos alunos da área de exatas acabam precisando utilizar <em>LaTeX</em> para produzir relatórios durante sua graduação ou até uma pós-graduação, entretanto, é preferível aprender a linguagem quando você percebe que fará parte da sua rotina do que escrever nessa linguagem apenas baseado na necessidade. Pois em alguns anos, quando você precisar fazer um relatório, você vai saber muito bem como escrevê-lo.</p>
+</div>
+</section>
+<section id="pergunta-8-você-é-desenvolvedor-de-um-pacote-de-julia-certo-pode-nos-contar-mais-um-pouco-sobre" class="level3">
+<h3 class="anchored" data-anchor-id="pergunta-8-você-é-desenvolvedor-de-um-pacote-de-julia-certo-pode-nos-contar-mais-um-pouco-sobre">Pergunta 8: Você é desenvolvedor de um pacote de <code>Julia</code>, certo? Pode nos contar mais um pouco sobre?</h3>
+<div class="justify">
+<p><strong>Abel:</strong> Desde que comecei a usar <code>Julia</code>, trabalhei com vários pacotes de otimização e álgebra linear, além de criar um site que auxilia na criação de pacotes do zero. Vejo que a criação de pacotes em Julia não é complicada, pois existem até pacotes que te ajudam a criar outros pacotes — além de possuir uma maior padronização nos pacotes dependendo do problema a ser resolvido. Em outras linguagens, um único problema pode ser resolvido por diferentes pacotes existentes.</p>
+<p><strong>Paulo:</strong> Criar um pacote em <code>Julia</code> é muito fácil. Você precisa de um repositório em sua máquina e seguir convenções para criação de pacotes na linguagem. Se isso está feito, basta “avisar” à linguagem que aquilo que está ali é um pacote, e pronto. A divulgação desse pacote também é bem facilitada. Basta fazer, por exemplo, um commit no GitHub, que o pacote é testado, atualizado e disponibilizado de forma pública, caso prefira. Em geral, <code>Julia</code> é bem estruturada para criação de pacotes. Por meio do site oficial de Julia, uma busca de palavras-chave retorna pacotes que se relacionam com aquela palavra/tema. Em meu uso de <code>Julia</code>, criei um pacote chamado <a href="https://juliapackages.com/p/nlpmodelsalgencan"><em>NLPModelsAlgencan.JL</em></a>, uma junção de dois pacotes que faz manipulações não lineares. Estou criando também um pacote para projetar o simplexo que, em suma, é o conjunto de todos os números que somam 1 em uma dimensão N.</p>
+</div>
+</section>
+<section id="pergunta-9-quer-deixar-algum-recado-para-o-pessoal-da-unicamp-ou-do-brasil-em-geral" class="level3">
+<h3 class="anchored" data-anchor-id="pergunta-9-quer-deixar-algum-recado-para-o-pessoal-da-unicamp-ou-do-brasil-em-geral">Pergunta 9: Quer deixar algum recado para o pessoal da UNICAMP ou do Brasil em geral?</h3>
+<div class="justify">
+<p><strong>Abel:</strong> Aqui nos Países Baixos, existe uma conferência de <code>Julia</code> chamada <em>JuliaCon</em> que já participei. Então, para a comunidade brasileira, recomendo fazerem uma conferência de <code>Julia</code> aí no Brasil, pois pode atrair mais interesse na linguagem no país e também na América Latina, tanto por programadores/cientistas quanto por empresas. Por fim, talvez <code>Julia</code> não seja a melhor linguagem para você, especialmente se for sua primeira linguagem, mas não deixe de estudar sobre ela, pois é uma linguagem muito útil!</p>
+<p><strong>Paulo:</strong> Não tenho a intenção de ser um “garoto-propaganda” de <code>Julia</code>. Claro que a defendo e a utilizo como linguagem principal, pois ela se aplica muito bem aos problemas e necessidades que lido na minha rotina. A depender do problema/necessidade que você tem, a “melhor” linguagem que você utilizará pode ser <code>Julia</code>, assim como pode ser qualquer outra. Além de pensar apenas na linguagem em si, pensem também em todo o ecossistema dessa linguagem. Isso inclui os pacotes que a linguagem possui e como eles funcionam, bem como diferentes funções se comunicam. Por exemplo, para análise de dados, <code>R</code> é uma linguagem bem estruturada, mas não significa que eu não possa fazer computação científica em <code>R</code> caso fosse meu interesse, mas também não significa que <code>R</code> seja a melhor linguagem para tratar desse tema.</p>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Nota
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.</p>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copiada");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copiada");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Website feito com <a href="https://quarto.org/">Quarto</a>. License: <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

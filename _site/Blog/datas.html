@@ -8,9 +8,9 @@
 
 <meta name="author" content="Vitor Ribas Perrone">
 <meta name="author" content="Nicole Fredericci">
-<meta name="description" content="Os dados são a matéria-prima do nosso trabalho. Pensando nisso, hoje vamos apresentar alguns pacotes em Julia que permitem acessar conjuntos de dados prontos para uso. Eles são ótimos para colocar em prática o que você vem aprendendo ao longo da jornada, testar novas ideias de análise ou até mesmo enriquecer o seu portfólio com projetos reais.">
+<meta name="description" content="Aprenda a criar, acessar e manipular datas em Julia, incluindo operações aritméticas e comparações entre períodos de tempo.">
 
-<title>Pacotes com Bancos de Dados para trabalhar em Julia – Do Zero ao Julia</title>
+<title>Manipulação de datas em Julia – Do Zero ao Julia</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -167,11 +167,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#introdução" id="toc-introdução" class="nav-link active" data-scroll-target="#introdução">Introdução</a></li>
-  <li><a href="#instalando-e-carregando-os-pacotes-necessários" id="toc-instalando-e-carregando-os-pacotes-necessários" class="nav-link" data-scroll-target="#instalando-e-carregando-os-pacotes-necessários">Instalando e Carregando os Pacotes Necessários</a></li>
-  <li><a href="#rdatasets.jl" id="toc-rdatasets.jl" class="nav-link" data-scroll-target="#rdatasets.jl">RDatasets.jl</a></li>
-  <li><a href="#mldatasets.jl" id="toc-mldatasets.jl" class="nav-link" data-scroll-target="#mldatasets.jl">MLDatasets.jl</a></li>
-  <li><a href="#worldbankdata.jl" id="toc-worldbankdata.jl" class="nav-link" data-scroll-target="#worldbankdata.jl">WorldBankData.jl</a></li>
-  <li><a href="#yfinance.jl" id="toc-yfinance.jl" class="nav-link" data-scroll-target="#yfinance.jl">YFinance.jl</a></li>
+  <li><a href="#criação-de-objetos-de-data" id="toc-criação-de-objetos-de-data" class="nav-link" data-scroll-target="#criação-de-objetos-de-data">Criação de objetos de data</a></li>
+  <li><a href="#acessar-partes-específicas-da-data" id="toc-acessar-partes-específicas-da-data" class="nav-link" data-scroll-target="#acessar-partes-específicas-da-data">Acessar partes específicas da data</a></li>
+  <li><a href="#informações-de-calendário" id="toc-informações-de-calendário" class="nav-link" data-scroll-target="#informações-de-calendário">Informações de calendário</a></li>
+  <li><a href="#períodos-de-tempo" id="toc-períodos-de-tempo" class="nav-link" data-scroll-target="#períodos-de-tempo">Períodos de tempo</a></li>
+  <li><a href="#operações-com-datas" id="toc-operações-com-datas" class="nav-link" data-scroll-target="#operações-com-datas">Operações com datas</a></li>
   <li><a href="#conclusão" id="toc-conclusão" class="nav-link" data-scroll-target="#conclusão">Conclusão</a></li>
   </ul>
 </nav>
@@ -181,16 +181,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Pacotes com Bancos de Dados para trabalhar em Julia</h1>
+<h1 class="title">Manipulação de datas em Julia</h1>
   <div class="quarto-categories">
-    <div class="quarto-category">Pacotes</div>
     <div class="quarto-category">Primeiros Passos</div>
+    <div class="quarto-category">Ferramentas</div>
   </div>
   </div>
 
 <div>
   <div class="description">
-    <p>Os dados são a matéria-prima do nosso trabalho. Pensando nisso, hoje vamos apresentar alguns pacotes em Julia que permitem acessar conjuntos de dados prontos para uso. Eles são ótimos para colocar em prática o que você vem aprendendo ao longo da jornada, testar novas ideias de análise ou até mesmo enriquecer o seu portfólio com projetos reais.</p>
+    <p>Aprenda a criar, acessar e manipular datas em <em>Julia</em>, incluindo operações aritméticas e comparações entre períodos de tempo.</p>
   </div>
 </div>
 
@@ -222,7 +222,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Data de Publicação</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">5 de setembro de 2025</p>
+      <p class="date">14 de setembro de 2025</p>
     </div>
   </div>
   
@@ -237,278 +237,247 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="introdução" class="level2">
 <h2 class="anchored" data-anchor-id="introdução">Introdução</h2>
 <div class="justify">
-<p>Ao trabalhar com Estatística e Ciência de Dadps, é fundamental ter conjuntos de dados à disposição, seja para testar funções, praticar análises aprendidas ou realizar simulações com caracteristicas semelhantes às observadas em dados reais. No <code>R</code>, diversos bancos de dados já vêm carregados por padrão ou vem incorporados em diversos pacotes, o que torna o processo bem mais simples. Felizmente, <code>Julia</code> oferece vários pacotes que contêm conjuntos de dados prontos para utilizarmos em nossas análises.</p>
-<p>Neste post, conheceremos alguns dos principais pacotes para acessar diversos bancos de dados úteis em análises estatísticas, econométricas e aprendizado de máquina.</p>
+<p>Manipular datas é essencial em diversas áreas da Estatística aplicada, como análise de séries temporais, estudos de sobrevivência, dados em painel, entre outras. Para isso, <code>Julia</code> oferece diversas ferramentas para trabalhar com datas de forma eficiente.</p>
+<p>Neste post, vamos explorar como trabalhar com datas e horários em <code>Julia</code> utilizando o módulo <code>Dates</code>, que já faz parte da biblioteca padrão da linguagem. Você aprenderá a criar, manipular, extrair informações e realizar operações com objetos do tipo <em>data</em>.</p>
 </div>
 </section>
-<section id="instalando-e-carregando-os-pacotes-necessários" class="level2">
-<h2 class="anchored" data-anchor-id="instalando-e-carregando-os-pacotes-necessários">Instalando e Carregando os Pacotes Necessários</h2>
+<section id="criação-de-objetos-de-data" class="level2">
+<h2 class="anchored" data-anchor-id="criação-de-objetos-de-data">Criação de objetos de data</h2>
 <div class="justify">
-<p>Primeiro, vamos instalar e carregar os pacotes que serão utilizados. Para isso, basta executar o código abaixo no seu ambiente:</p>
+<p>Em primeiro lugar, é necessário carregar o módulo <code>Dates</code>, que já está presente na instalação padrão do <code>Julia</code>.</p>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Instalando os pacotes</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">Pkg</span>.<span class="fu">add</span>([</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"DataFrames"</span>,</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"RDatasets"</span>,</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"MLDatasets"</span>,</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"WorldBankData"</span>,</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"YFinance"</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>])</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Aceita automaticamente os termos do MLDatasets</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="cn">ENV</span>[<span class="st">"DATADEPS_ALWAYS_ACCEPT"</span>] <span class="op">=</span> <span class="st">"true"</span>;</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Carregando os pacotes</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">DataFrames</span>, <span class="bu">RDatasets</span>, <span class="bu">MLDatasets</span>, <span class="bu">WorldBankData</span>, <span class="bu">YFinance</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Dates</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="rdatasets.jl" class="level2">
-<h2 class="anchored" data-anchor-id="rdatasets.jl">RDatasets.jl</h2>
 <div class="justify">
-<p>O pacote <a href="https://github.com/JuliaStats/RDatasets.jl">RDatasets.jl</a> faz exatamente o que o nome indica: disponibiliza em <code>Julia</code> os bancos de dados presentes no <code>R</code> e em muitos de seus pacotes. Dessa forma, conjuntos clássicos como <code>iris</code>, <code>mtcars</code> e vários outros ficam prontos para uso no ambiente.</p>
-<p>Para acessá-los, basta utilizar a função <code>dataset</code>:</p>
+<p>Existem duas principais estruturas para representar datas em <code>Julia</code>:</p>
+<ul>
+<li><code>Date</code>: representa apenas a data (ano, mês e dia).</li>
+<li><code>DateTime</code>: representa data e hora, incluindo minutos, segundos, etc.</li>
+</ul>
+<p>Podemos criar cada uma dessas estruturas por meio de funções de mesmo nome.</p>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>iris <span class="op">=</span> <span class="fu">dataset</span>(<span class="st">"datasets"</span>, <span class="st">"iris"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Date</span>(<span class="fl">2013</span>, <span class="fl">3</span>, <span class="fl">25</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>150×5 DataFrame
- Row │ SepalLength  SepalWidth  PetalLength  PetalWidth  Species
-     │ Float64      Float64     Float64      Float64     Cat…
-─────┼─────────────────────────────────────────────────────────────
-   1 │         5.1         3.5          1.4         0.2  setosa
-   2 │         4.9         3.0          1.4         0.2  setosa
-   3 │         4.7         3.2          1.3         0.2  setosa
-   4 │         4.6         3.1          1.5         0.2  setosa
-   5 │         5.0         3.6          1.4         0.2  setosa
-   6 │         5.4         3.9          1.7         0.4  setosa
-   7 │         4.6         3.4          1.4         0.3  setosa
-   8 │         5.0         3.4          1.5         0.2  setosa
-  ⋮  │      ⋮           ⋮            ⋮           ⋮           ⋮
- 144 │         6.8         3.2          5.9         2.3  virginica
- 145 │         6.7         3.3          5.7         2.5  virginica
- 146 │         6.7         3.0          5.2         2.3  virginica
- 147 │         6.3         2.5          5.0         1.9  virginica
- 148 │         6.5         3.0          5.2         2.0  virginica
- 149 │         6.2         3.4          5.4         2.3  virginica
- 150 │         5.9         3.0          5.1         1.8  virginica
-                                                   135 rows omitted</code></pre>
+<pre><code>2013-03-25</code></pre>
 </div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>mtcars <span class="op">=</span> <span class="fu">dataset</span>(<span class="st">"datasets"</span>, <span class="st">"mtcars"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">DateTime</span>(<span class="fl">2013</span>, <span class="fl">3</span>, <span class="fl">25</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>32×12 DataFrame
- Row │ Model              MPG      Cyl    Disp     HP     DRat     WT       QS ⋯
-     │ String31           Float64  Int64  Float64  Int64  Float64  Float64  Fl ⋯
-─────┼──────────────────────────────────────────────────────────────────────────
-   1 │ Mazda RX4             21.0      6    160.0    110     3.9     2.62      ⋯
-   2 │ Mazda RX4 Wag         21.0      6    160.0    110     3.9     2.875
-   3 │ Datsun 710            22.8      4    108.0     93     3.85    2.32
-   4 │ Hornet 4 Drive        21.4      6    258.0    110     3.08    3.215
-   5 │ Hornet Sportabout     18.7      8    360.0    175     3.15    3.44      ⋯
-   6 │ Valiant               18.1      6    225.0    105     2.76    3.46
-   7 │ Duster 360            14.3      8    360.0    245     3.21    3.57
-   8 │ Merc 240D             24.4      4    146.7     62     3.69    3.19
-  ⋮  │         ⋮             ⋮       ⋮       ⋮       ⋮       ⋮        ⋮        ⋱
-  26 │ Fiat X1-9             27.3      4     79.0     66     4.08    1.935     ⋯
-  27 │ Porsche 914-2         26.0      4    120.3     91     4.43    2.14
-  28 │ Lotus Europa          30.4      4     95.1    113     3.77    1.513
-  29 │ Ford Pantera L        15.8      8    351.0    264     4.22    3.17
-  30 │ Ferrari Dino          19.7      6    145.0    175     3.62    2.77      ⋯
-  31 │ Maserati Bora         15.0      8    301.0    335     3.54    3.57
-  32 │ Volvo 142E            21.4      4    121.0    109     4.11    2.78
-                                                   5 columns and 17 rows omitted</code></pre>
+<pre><code>2013-03-25T00:00:00</code></pre>
 </div>
 </div>
 <div class="justify">
-<p>Para verificar quais pacotes do R possuem bancos de dados disponíveis, usamos a função <code>RDatasets.packages</code>.</p>
+<p>Você também pode criar esses objetos a partir de uma <code>String</code> que siga o formato correspondente:</p>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>RDatasets.<span class="fu">packages</span>()</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Date</span>(<span class="st">"2015-03-25"</span>, dateformat<span class="st">"y-m-d"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>34×2 DataFrame
- Row │ Package       Title
-     │ String15      String
-─────┼─────────────────────────────────────────────────
-   1 │ COUNT         Functions, data and code for cou…
-   2 │ Ecdat         Data sets for econometrics
-   3 │ HSAUR         A Handbook of Statistical Analys…
-   4 │ HistData      Data sets from the history of st…
-   5 │ ISLR          Data for An Introduction to Stat…
-   6 │ KMsurv        Data sets from Klein and Moeschb…
-   7 │ MASS          Support Functions and Datasets f…
-   8 │ SASmixed      Data sets from "SAS System for M…
-  ⋮  │      ⋮                        ⋮
-  28 │ reshape2      Flexibly Reshape Data: A Reboot …
-  29 │ robustbase    Basic Robust Statistics
-  30 │ rpart         Recursive Partitioning and Regre…
-  31 │ sandwich      Robust Covariance Matrix Estimat…
-  32 │ sem           Structural Equation Models
-  33 │ survival      Survival Analysis
-  34 │ vcd           Visualizing Categorical Data
-                                        19 rows omitted</code></pre>
+<pre><code>2015-03-25</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Date</span>(<span class="st">"2015-25-03"</span>, dateformat<span class="st">"y-d-m"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>2015-03-25</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">DateTime</span>(<span class="st">"2015/03/25 14:30"</span>, dateformat<span class="st">"y/m/d HH:MM"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>2015-03-25T14:30:00</code></pre>
 </div>
 </div>
 <div class="justify">
-<p>E para verificar quais bancos de dados estão disponíveis em cada pacote, utilizamos a função <code>RDatasets.datasets</code> (onde <code>datasets</code> se refere aos conjuntos de dados do R base).</p>
+<p>Para obter a data e hora atual do sistema, podemos utilizar as funções <code>today</code> e <code>now</code>.</p>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>RDatasets.<span class="fu">datasets</span>(<span class="st">"datasets"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">today</span>() <span class="co"># Retorna apenas a data atual</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>50×5 DataFrame
- Row │ Package   Dataset           Title                              Rows   C ⋯
-     │ String15  String31          String                             Int64  I ⋯
-─────┼──────────────────────────────────────────────────────────────────────────
-   1 │ datasets  BOD               Biochemical Oxygen Demand              6    ⋯
-   2 │ datasets  CO2               Carbon Dioxide Uptake in Grass P…     84
-   3 │ datasets  Formaldehyde      Determination of Formaldehyde          6
-   4 │ datasets  HairEyeColor      Hair and Eye Color of Statistics…     32
-   5 │ datasets  InsectSprays      Effectiveness of Insect Sprays        72    ⋯
-   6 │ datasets  LifeCycleSavings  Intercountry Life-Cycle Savings …     50
-   7 │ datasets  Loblolly          Growth of Loblolly pine trees         84
-   8 │ datasets  OrchardSprays     Potency of Orchard Sprays             64
-  ⋮  │    ⋮             ⋮                          ⋮                    ⋮      ⋱
-  44 │ datasets  sleep             Student's Sleep Data                  20    ⋯
-  45 │ datasets  stackloss         Brownlee's Stack Loss Plant Data      21
-  46 │ datasets  swiss             Swiss Fertility and Socioeconomi…     47
-  47 │ datasets  trees             Girth, Height and Volume for Bla…     31
-  48 │ datasets  volcano           Topographic Information on Auckl…     87    ⋯
-  49 │ datasets  warpbreaks        The Number of Breaks in Yarn dur…     54
-  50 │ datasets  women             Average Heights and Weights for …     15
-                                                    1 column and 35 rows omitted</code></pre>
+<pre><code>2025-09-19</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">now</span>()   <span class="co"># Retorna data e hora completas</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>2025-09-19T12:04:26.202</code></pre>
 </div>
 </div>
 </section>
-<section id="mldatasets.jl" class="level2">
-<h2 class="anchored" data-anchor-id="mldatasets.jl">MLDatasets.jl</h2>
+<section id="acessar-partes-específicas-da-data" class="level2">
+<h2 class="anchored" data-anchor-id="acessar-partes-específicas-da-data">Acessar partes específicas da data</h2>
 <div class="justify">
-<p>O pacote <a href="https://juliaml.github.io/MLDatasets.jl/stable/">MLDatasets.jl</a> possui inúmeros bancos de dados com foco em <em>Machine Learning</em>, abrangendo tarefas que vão desde classificação de imagens até treinamento de modelos de linguagem natural. Como exemplo, vamos acessar o clássico conjunto de dados <code>MNIST</code>.</p>
+<p>Existem funções que permitem extrair partes específicas de uma data. Para exemplificar, vamos criar um objeto chamado <code>data</code>.</p>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">MNIST</span>(<span class="op">:</span>train)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> <span class="fu">Date</span>(<span class="st">"2015-03-25"</span>, dateformat<span class="st">"y-m-d"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>dataset MNIST:
-  metadata  =&gt;    Dict{String, Any} with 3 entries
-  split     =&gt;    :train
-  features  =&gt;    28×28×60000 Array{Float32, 3}
-  targets   =&gt;    60000-element Vector{Int64}</code></pre>
+<pre><code>2015-03-25</code></pre>
 </div>
 </div>
-<p>Para saber quais <em>datasets</em> estão disponíveis no pacote, verifique a <a href="https://juliaml.github.io/MLDatasets.jl/stable/">documentação oficial</a> ou utilize <code>names(MLDatasets)</code>.</p>
+<div class="justify">
+<p>É possível extrair partes específicas de uma data utilizando funções que têm o mesmo nome dessas partes, como <code>year()</code>, <code>month()</code> e <code>day()</code>.</p>
+</div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(MLDatasets)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">year</span>(data)  <span class="co"># Retorna o ano</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>38-element Vector{Symbol}:
- :AQSOL
- :BostonHousing
- :CIFAR10
- :CIFAR100
- :CachedDataset
- :ChickenPox
- :CiteSeer
- :Cora
- :EMNIST
- :FAUST
- ⋮
- :TUDataset
- :TemporalBrains
- :Titanic
- :UD_English
- :WindMillEnergy
- :Wine
- :convert2image
- :getobs
- :numobs</code></pre>
+<pre><code>2015</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">month</span>(data) <span class="co"># Retorna o mês</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">day</span>(data)   <span class="co"># Retorna o dia</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>25</code></pre>
+</div>
+</div>
+<div class="justify">
+<p>Também existem funções que retornam múltiplos componentes de uma vez, como <code>yearmonth</code> e <code>yearmonthday</code>.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">yearmonth</span>(data)     <span class="co"># Retorna ano e mês</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(2015, 3)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">yearmonthday</span>(data)  <span class="co"># Retorna ano, mês e dia</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(2015, 3, 25)</code></pre>
+</div>
+</div>
+<div class="justify">
+<p>Além de extrair elementos numéricos da data, também é possível obter informações em texto, como o nome do dia da semana e o nome do mês.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dayname</span>(data)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>"Wednesday"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">monthname</span>(data)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>"March"</code></pre>
 </div>
 </div>
 </section>
-<section id="worldbankdata.jl" class="level2">
-<h2 class="anchored" data-anchor-id="worldbankdata.jl">WorldBankData.jl</h2>
+<section id="informações-de-calendário" class="level2">
+<h2 class="anchored" data-anchor-id="informações-de-calendário">Informações de calendário</h2>
 <div class="justify">
-<p>O pacote <a href="https://github.com/4gh/WorldBankData.jl">WorldBankData.jl</a> permite acessar diretamente os dados do <a href="https://data.worldbank.org/">Banco Mundial</a>. Sua função principal, <code>wdi()</code>, possibilita consultar uma grande variedade de indicadores para diferentes países. Por exemplo, podemos usar essa função para obter a população total do Brasil ao longo dos anos.</p>
+<p>Também existem funções para verificar informações relacionadas ao calendário, como <code>isleapyear</code>, que indica se o ano é bissexto, e <code>daysinmonth</code>, que retorna o número de dias que aquele mês possui.</p>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wdi</span>(<span class="st">"SP.POP.TOTL"</span>, <span class="st">"BR"</span>, <span class="fl">1990</span>, <span class="fl">2010</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">isleapyear</span>(data) </span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>21×4 DataFrame
- Row │ iso2c   country  year     SP_POP_TOTL
-     │ String  String   Float64  Float64?
-─────┼───────────────────────────────────────
-   1 │ BR      Brazil    1990.0    1.49143e8
-   2 │ BR      Brazil    1991.0    1.51724e8
-   3 │ BR      Brazil    1992.0    1.54275e8
-   4 │ BR      Brazil    1993.0    1.56795e8
-   5 │ BR      Brazil    1994.0    1.59265e8
-   6 │ BR      Brazil    1995.0    1.61735e8
-   7 │ BR      Brazil    1996.0    1.64203e8
-   8 │ BR      Brazil    1997.0    1.66662e8
-  ⋮  │   ⋮        ⋮        ⋮          ⋮
-  15 │ BR      Brazil    2004.0    1.82675e8
-  16 │ BR      Brazil    2005.0    1.84688e8
-  17 │ BR      Brazil    2006.0    1.86653e8
-  18 │ BR      Brazil    2007.0    1.88552e8
-  19 │ BR      Brazil    2008.0    1.90367e8
-  20 │ BR      Brazil    2009.0    1.9208e8
-  21 │ BR      Brazil    2010.0    1.93702e8
-                               6 rows omitted</code></pre>
+<pre><code>false</code></pre>
 </div>
-</div>
-<div class="justify">
-<p>Para visualizar a lista de indicadores disponíveis, podemos utilizar a função <code>search_wdi</code>.</p>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">search_wdi</span>(<span class="st">"indicators"</span>, <span class="st">"name"</span>, <span class="st">r"</span><span class="sc">.</span><span class="st">"</span> )</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">daysinmonth</span>(data)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>25000×5 DataFrame
-   Row │ indicator             name                               description  ⋯
-       │ String                String                             String       ⋯
-───────┼────────────────────────────────────────────────────────────────────────
-     1 │ 1.0.HCount.1.90usd    Poverty Headcount ($1.90 a day)    The poverty  ⋯
-     2 │ 1.0.HCount.2.5usd     Poverty Headcount ($2.50 a day)    The poverty
-     3 │ 1.0.HCount.Mid10to50  Middle Class ($10-50 a day) Head…  The poverty
-     4 │ 1.0.HCount.Ofcl       Official Moderate Poverty Rate-N…  The poverty
-     5 │ 1.0.HCount.Poor4uds   Poverty Headcount ($4 a day)       The poverty  ⋯
-     6 │ 1.0.HCount.Vul4to10   Vulnerable ($4-10 a day) Headcou…  The poverty
-     7 │ 1.0.PGap.1.90usd      Poverty Gap ($1.90 a day)          The poverty
-     8 │ 1.0.PGap.2.5usd       Poverty Gap ($2.50 a day)          The poverty
-   ⋮   │          ⋮                            ⋮                               ⋱
- 24994 │ UIS.NART.1.Q5.F       Total net attendance rate, prima…  Total number ⋯
- 24995 │ UIS.NART.1.Q5.F.LPIA  Total net attendance rate, prima…  The Adjusted
- 24996 │ UIS.NART.1.Q5.GPIA    Total net attendance rate, prima…  The Adjusted
- 24997 │ UIS.NART.1.Q5.LPIA    Total net attendance rate, prima…  The Adjusted
- 24998 │ UIS.NART.1.Q5.M       Total net attendance rate, prima…  Total number ⋯
- 24999 │ UIS.NART.1.Q5.M.LPIA  Total net attendance rate, prima…  The Adjusted
- 25000 │ UIS.NART.1.RUR        Total net attendance rate, prima…  Total number
-                                                3 columns and 24985 rows omitted</code></pre>
+<pre><code>31</code></pre>
 </div>
 </div>
 </section>
-<section id="yfinance.jl" class="level2">
-<h2 class="anchored" data-anchor-id="yfinance.jl">YFinance.jl</h2>
+<section id="períodos-de-tempo" class="level2">
+<h2 class="anchored" data-anchor-id="períodos-de-tempo">Períodos de tempo</h2>
 <div class="justify">
-<p>O pacote <a href="https://eohne.github.io/YFinance.jl/dev/">YFinance.jl</a> oferece uma maneira prática de acessar dados de ações, embora apresente algumas limitações de uso. Para carregar os dados, utilizamos a função <code>get_prices()</code>, na qual podemos especificar o ativo desejado, o intervalo total e a frequência das observações.</p>
+<p>Além disso, é possível criar objetos que representam períodos de tempo, os quais podem ser usados posteriormente em operações e manipulações com datas.</p>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_prices</span>(<span class="st">"AAPL"</span>, range<span class="op">=</span><span class="st">"1y"</span>, interval<span class="op">=</span><span class="st">"1d"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Year</span>(<span class="fl">5</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>OrderedCollections.OrderedDict{String, Union{Vector{Float64}, Vector{Dates.DateTime}, String}} with 8 entries:
-  "ticker"    =&gt; "AAPL"
-  "timestamp" =&gt; [DateTime("2024-09-19T13:30:00"), DateTime("2024-09-20T13:30:0…
-  "open"      =&gt; [223.948, 228.905, 226.287, 227.591, 223.888, 226.247, 227.402…
-  "high"      =&gt; [228.755, 232.01, 228.387, 228.288, 226.237, 227.441, 228.457,…
-  "low"       =&gt; [223.589, 226.566, 224.764, 224.684, 222.982, 224.366, 226.247…
-  "close"     =&gt; [228.87, 228.2, 226.47, 227.37, 226.37, 227.52, 227.79, 233.0,…
-  "adjclose"  =&gt; [227.81, 227.143, 225.421, 226.317, 225.321, 226.466, 226.735,…
-  "vol"       =&gt; [6.64719e7, 3.17204e8, 5.38952e7, 4.33543e7, 4.21127e7, 3.6467…</code></pre>
+<pre><code>5 years</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Day</span>(<span class="fl">7</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>7 days</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Nanosecond</span>(<span class="fl">200</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>200 nanoseconds</code></pre>
+</div>
+</div>
+</section>
+<section id="operações-com-datas" class="level2">
+<h2 class="anchored" data-anchor-id="operações-com-datas">Operações com datas</h2>
+<div class="justify">
+<p>Existem diversas operações que podem ser realizadas com datas. Para ilustrar, utilizaremos os seguintes exemplos:</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>data1 <span class="op">=</span> <span class="fu">Date</span>(<span class="fl">2010</span>, <span class="fl">11</span>, <span class="fl">30</span>) </span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>2010-11-30</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>data2 <span class="op">=</span> <span class="fu">Date</span>(<span class="fl">2011</span>, <span class="fl">12</span>, <span class="fl">25</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>2011-12-25</code></pre>
+</div>
+</div>
+<div class="justify">
+<p>Podemos calcular a diferença, em dias, entre duas datas distintas.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>data2 <span class="op">-</span> data1</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>390 days</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>data1 <span class="op">-</span> data2</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>-390 days</code></pre>
+</div>
+</div>
+<div class="justify">
+<p>Também podemos utilizar aqueles objetos que representam períodos de tempo para somar ou subtrair valores diretamente das datas.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>data1</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>2010-11-30</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>data1 <span class="op">+</span> <span class="fu">Day</span>(<span class="fl">7</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>2010-12-07</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>data1 <span class="op">-</span> <span class="fu">Year</span>(<span class="fl">2</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>2008-11-30</code></pre>
+</div>
+</div>
+<div class="justify">
+<p>Ainda, é possível realizar a comparação direta entre duas datas, verificando se uma desigualdade é verdadeira ou não.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>data1 <span class="op">&lt;</span> data2</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>true</code></pre>
+</div>
+</div>
+<div class="justify">
+<p>Por fim, também é possível criar intervalos entre duas datas, especificando a unidade de incremento, como dias ou anos.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">collect</span>(<span class="fu">Date</span>(<span class="fl">2020</span>, <span class="fl">03</span>, <span class="fl">02</span>)<span class="op">:</span><span class="fu">Day</span>(<span class="fl">1</span>)<span class="op">:</span><span class="fu">Date</span>(<span class="fl">2020</span>, <span class="fl">03</span>, <span class="fl">10</span>))  <span class="co"># Intervalo diário</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>9-element Vector{Date}:
+ 2020-03-02
+ 2020-03-03
+ 2020-03-04
+ 2020-03-05
+ 2020-03-06
+ 2020-03-07
+ 2020-03-08
+ 2020-03-09
+ 2020-03-10</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">collect</span>(<span class="fu">Date</span>(<span class="fl">2020</span>, <span class="fl">03</span>, <span class="fl">02</span>)<span class="op">:</span><span class="fu">Year</span>(<span class="fl">1</span>)<span class="op">:</span><span class="fu">Date</span>(<span class="fl">2025</span>, <span class="fl">03</span>, <span class="fl">02</span>)) <span class="co"># Intervalo anual</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>6-element Vector{Date}:
+ 2020-03-02
+ 2021-03-02
+ 2022-03-02
+ 2023-03-02
+ 2024-03-02
+ 2025-03-02</code></pre>
 </div>
 </div>
 </section>
 <section id="conclusão" class="level2">
 <h2 class="anchored" data-anchor-id="conclusão">Conclusão</h2>
 <div class="justify">
-<p>Portanto, agora você já sabe como acessar diversos conjuntos de dados em <code>Julia</code> para suas análises estatísticas. Para continuar aprendendo, escolha um dos pacotes apresentados, explore os dados disponíveis e tente realizar uma análise completa.</p>
-<p>Para auxiliar nesse processo, recomendamos os tutoriais <a href="https://ime.unicamp.br/julialang/Tutoriais/tutorial-eda.html">Introdução à Análise Exploratória de Dados (EDA) em Julia</a> e <a href="https://ime.unicamp.br/julialang/Tutoriais/graf_basico.html">Gráficos em Julia: primeiros passos</a>, publicados aqui no <strong>Do Zero ao Julia</strong>.</p>
+<p>Agora você já sabe como criar, acessar, manipular e realizar operações com datas em <code>Julia</code>! Esse conhecimento é fundamental para análises estatísticas que envolvem o fator tempo, como, por exemplo, o estudo de <strong>séries temporais</strong> e <strong>dados em painel</strong>.</p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
