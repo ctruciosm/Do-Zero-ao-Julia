@@ -1,7 +1,7 @@
 ---
 title: "Integração Numérica em Julia"
 description: |
-     Aprenda a resolver integrais numericamente em Julia, desde funções univariadas até multivariadas de forma muito fácil e eficiente.
+    Precisa calcular quantidades acumuladas, volumes ou solucionar equações diferenciais? Este guia te mostra como realizar integrais numéricas em `Julia` de forma simples e direta, usando os pacotes `QuadGK` e `Cubature`. 
 categories:
   - Ferramentas
 author:
@@ -9,7 +9,10 @@ author:
     affiliation: "Universidade Estadual de Campinas"
     url: https://github.com/VitorRibasP
     orcid: 0009-0009-6923-7712
-date: "2025-08-14"
+  - name: Nicole Fredericci
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/NFredericci
+date: "2025-10-05"
 image: imagens/integraisnumericas.png
 lang: pt
 format:
@@ -17,69 +20,90 @@ format:
     toc: true
     toc-depth: 3
     self-contained: false
-draft: true
+engine: knitr
+draft: false
 ---
 
 ## Introdução
-::: justify
-Resolver integrais é parte fundamental da Estatística para diversas tarefas, como o cálculo de probabilidades, mas muitas vezes uma solução analítica não é possível ou viável. Felizmente, podemos obter uma aproximação do valor real por meio de métodos de integração numérica. Felizmente, em Julia conseguimos fazer isso de maneira muito fácil.
-Sendo assim, neste post, vamos aprender a realizar integrais numéricas em Julia de uma maneira muito simples e eficiente. 
+
+:::{.justify}
+Resolver integrais é uma parte fundamental de qualquer campo da ciência ou engenharia que lide com modelos contínuos. Entretanto, se você precisa calcular quantidades acumuladas, médias, volumes ou soluções de equações diferenciais, muitas vezes uma solução analítica não é possível ou viável.
+
+Podemos obter uma aproximação do valor real por meio de métodos de integração numérica, e a boa notícia é que, em `Julia`, isso é feito de forma fácil e eficiente. Neste post, vamos aprender a realizar integrais numéricas em `Julia` de um jeito muito simples e direto, utilizando pacotes especializados.
 :::
 
 ## Funções de uma variável
-::: justify
-Para realizar integração numérica de funções de uma variável, utilizaremos o pacote `QuadGK`. Vamos instalá-lo e carregá-lo:
+
+:::{.justify}
+Para realizar a integração numérica de funções de uma única variável, utilizaremos o pacote `QuadGK`. Para instalá-lo e carregá-lo, basta executar o código abaixo:
 :::
+
 ```{julia}
 Pkg.add("QuadGK")
 using QuadGK
 ```
-::: justify
-O `QuadGK` implementa o método de quadratura adaptativa Gauss–Kronrod, cujos detalhes podem ser encontrados [neste link](https://en.wikipedia.org/wiki/Gauss%E2%80%93Kronrod_quadrature_formula).
-O uso é simples: definimos a função que desejamos integrar e utilizamos `quadgk`, inserindo como argumentos a função e o intervalo de integração. A função retorna a estimativa da integral e uma estimativa do erro numérico.
+
+:::{.justify}
+O `QuadGK` implementa o método de quadratura adaptativa *Gauss–Kronrod*, cujos detalhes podem ser encontrados [neste link](https://en.wikipedia.org/wiki/Gauss%E2%80%93Kronrod_quadrature_formula).
+Seu uso é simples: primeiro, definimos a função que desejamos integrar. Em seguida, utilizamos a função `quadgk`, inserindo como argumentos a função e o intervalo de integração da variável. A função retorna a estimativa da integral e uma estimativa do erro numérico.
 :::
+
 ```{julia}
 f(x) = x^2 * exp(-x)
 quadgk(f, 0, 5)
 ```
 
 ## Funções de várias variáveis
-::: justify
-Para integrais envolvendo funções de múltiplas variáveis, vamos utilizar o pacote Cubature:
+
+:::{.justify}
+Para integrais envolvendo funções de múltiplas variáveis (integrais múltiplas ou $n$-dimensionais), utilizaremos o pacote `Cubature`. Para instalá-lo e carregá-lo, basta executar o seguinte código: 
 :::
+
 ```{julia}
 Pkg.add("Cubature")
 using Cubature 
 ```
-::: justify
-O `Cubature` oferece dois métodos principais: h-adaptativo e p-adaptativo, descritos na [documentação oficial](https://github.com/JuliaMath/Cubature.jl). 
-O método h-adaptativo pode ser utilizado com a função `hcubature`, que recebe a função de interesse e vetores com os limites inferiores e superiores de integração. Também obtemos a estimativa da integral e do erro.
+
+:::{.justify}
+O `Cubature` oferece dois métodos principais de cubatura (o equivalente à quadratura para múltiplas dimensões): **h-adaptativo** e **p-adaptativo**, descritos na [documentação oficial](https://github.com/JuliaMath/Cubature.jl). O método **h-adaptativo** pode ser utilizado com a função `hcubature`, que recebe a função de interesse e vetores com os limites inferiores e superiores de integração. Assim como no caso univariado, obtemos a estimativa da integral e do erro.
 :::
+
+::: {.callout-note title="Atenção!"}
+
+A ordem dos vetores dos limites de integração deve corresponder exatamente à ordem em que as variáveis aparecem na função.
+:::
+
 ```{julia}
 f(v) = v[1]^2 + v[2]^2
 hcubature(f, [0.0, 0.0], [1.0, 1.0])
 ```
-::: justify
-O método p-adaptativo é muito semelhante, mas utiliza a função `pcubature`:
+
+:::{.justify}
+O método **p-adaptativo** é muito semelhante ao **h-adaptativo**, mas utiliza a função `pcubature`. A sintaxe é idêntica:
 :::
+
 ```{julia}
 f(v) = v[1]^2 + v[2]^2
 pcubature(f, [0.0, 0.0], [1.0, 1.0])
 ```
 
-## Densidade da Normal
-::: justify
-Como exemplo de aplicação estatística, podemos calcular a integral da função densidade de probabilidade de uma distribuição Normal padrão, "verificando" que sua área é igual a 1:
+## Exemplo: Densidade da Normal
+
+:::{.justify}
+Como um exemplo de aplicação estatística, podemos calcular a integral da **função densidade de probabilidade** de uma distribuição Normal padrão. Ao integrar em todo o domínio, verificamos o resultado esperado: que sua área total é igual a 1.
 :::
+
 ```{julia}
 f(x) = 1/(sqrt(2*pi))*exp(-x^2/2)
 quadgk(f, -Inf, Inf)
 ```
+
 ## Conclusão
-::: justify
-Portanto, com esta ferramenta poderosa e fácil de usar, agora você consegue resolver suas integrais numéricas utilizando Julia. Seja para funções simples ou para cálculos multidimensionais complexos, esses recursos ampliam significativamente suas possibilidades em análises estatísticas, permitindo obter resultados precisos e confiáveis mesmo quando a solução analítica não é viável.
+
+:::{.justify}
+Com essas ferramentas poderosas e fáceis de usar, você agora consegue resolver suas integrais numéricas de forma eficiente utilizando `Julia`. Seja para funções simples de uma variável ou para cálculos multidimensionais complexos (cubatura), os pacotes `QuadGK` e `Cubature` ampliam suas possibilidades em análises estatísticas e científicas, permitindo obter resultados precisos e confiáveis mesmo quando a solução analítica não é viável.
 :::
 
 ::: callout-note
 Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
-:::  
+:::    
