@@ -78,7 +78,7 @@ end
 ```
 
 ::: justify
-Neste exemplo, utilizamos as funções `dmy()`, `mdy()` e `ymd()` do pacote `TidierDates.jl` para converter **strings de datas** em objetos `Date` do Julia, seguindo diferentes ordens de componentes:
+Nesse exemplo, utilizamos as funções `dmy()`, `mdy()` e `ymd()` do pacote `TidierDates.jl` para converter **strings de datas** em objetos `Date` do Julia, seguindo diferentes ordens de componentes:
 
 -   `dmy(Texto)` → interpreta a string como **dia-mês-ano** (ex.: `"01-02-2020"` vira `1 de fevereiro de 2020`);
 -   `mdy("July 4, 2005")` → interpreta como **mês-dia-ano** (ex.: `"July 4, 2005"` vira `4 de julho de 2005`);
@@ -105,7 +105,7 @@ end
 Aqui usamos as funções `*_hms()` (`ymd_hms`, `dmy_hms`, `mdy_hms`) para converter strings em objetos `DateTime`, incluindo hora, minuto e segundo.
 :::
 
-## Arredondando datas
+## Arredondamento de datas
 
 ```{julia}
 using DataFrames, TidierData, TidierDates, Dates
