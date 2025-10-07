@@ -11,6 +11,10 @@ author:
     affiliation: "Universidade Estadual de Campinas"
     url: https://github.com/henriqueavelloso
     orcid: 0009-0002-8262-031X
+  - name: Esther Cleveston
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://www.linkedin.com/in/esthercleveston/
+    orcid: 0009-0008-6612-8417
 date: "2025-08-26"
 image: imagens/tidierdates.png
 lang: pt
@@ -19,12 +23,12 @@ format:
     toc: true
     self-contained: false
 engine: knitr
-draft: true
+draft: false
 ---
 
 # Introdução
 
-::: {.justify}
+::: justify
 O `TidierDates.jl` é um pacote da linguagem `Julia`, integrante da biblioteca `Tidier.jl`, que fornece funções no estilo **tidyverse** para lidar com **datas** e **tempos**.
 
 Ele facilita operações comuns como extração de componentes de datas (ano, mês, dia, hora, etc.), operações com períodos, criação de sequências temporais e muito mais.
@@ -55,9 +59,8 @@ using TidierDates, DataFrames, TidierData, Dates
 
 # Criando datas
 
-::: {.justify}
-O `TidierDates.jl` oferece funções que reconhecem diferentes formatos de datas em texto e os convertem para objetos `Date` ou `DateTime`.
-São extremamente flexíveis, aceitando formatos mistos como `"4th of July, 2005"` ou `"08092019"`.
+::: justify
+O `TidierDates.jl` oferece funções que reconhecem diferentes formatos de datas em texto e os convertem para objetos `Date` ou `DateTime`. São extremamente flexíveis, aceitando formatos mistos como `"4th of July, 2005"` ou `"08092019"`.
 :::
 
 ```{julia}
@@ -74,12 +77,12 @@ end
 
 ```
 
-::: {.justify}
+::: justify
 Neste exemplo, utilizamos as funções `dmy()`, `mdy()` e `ymd()` do pacote `TidierDates.jl` para converter **strings de datas** em objetos `Date` do Julia, seguindo diferentes ordens de componentes:
 
-- `dmy(Texto)` → interpreta a string como **dia-mês-ano** (ex.: `"01-02-2020"` vira `1 de fevereiro de 2020`).
-- `mdy("July 4, 2005")` → interpreta como **mês-dia-ano** (ex.: `"July 4, 2005"` vira `4 de julho de 2005`).
-- `ymd("2019-08-09")` → interpreta como **ano-mês-dia** (ex.: `"2019-08-09"` vira `9 de agosto de 2019`).
+-   `dmy(Texto)` → interpreta a string como **dia-mês-ano** (ex.: `"01-02-2020"` vira `1 de fevereiro de 2020`);
+-   `mdy("July 4, 2005")` → interpreta como **mês-dia-ano** (ex.: `"July 4, 2005"` vira `4 de julho de 2005`);
+-   `ymd("2019-08-09")` → interpreta como **ano-mês-dia** (ex.: `"2019-08-09"` vira `9 de agosto de 2019`).
 
 O uso dessas funções garante que datas escritas em diferentes formatos sejam convertidas de forma consistente em objetos `Date`, permitindo cálculos e manipulações temporais precisas no Julia.
 :::
@@ -98,7 +101,7 @@ df_horas = DataFrame(Evento = ["A", "B"],
 end
 ```
 
-::: {.justify}
+::: justify
 Aqui usamos as funções `*_hms()` (`ymd_hms`, `dmy_hms`, `mdy_hms`) para converter strings em objetos `DateTime`, incluindo hora, minuto e segundo.
 :::
 
@@ -127,12 +130,10 @@ df2 = DataFrame(DataHora = [DateTime("2023-03-15T10:45:32"),
 end
 ```
 
-::: {.justify}
+::: justify
+-   `floor_date()` → arredonda para baixo (ex.: hora cheia, dia, mês);
 
-- `floor_date()` → arredonda para baixo (ex.: hora cheia, dia, mês).
-
-- `round_date()` → arredonda para o mais próximo múltiplo de tempo (ex.: 5 minutos, 1 hora, etc.).
-
+-   `round_date()` → arredonda para o mais próximo múltiplo de tempo (ex.: 5 minutos, 1 hora, etc.).
 :::
 
 ## Diferença entre datas
@@ -151,9 +152,8 @@ end
 
 ```
 
-::: {.justify}
-A subtração direta entre objetos `Date` retorna um número de dias (`Day`).
-O `TidierDates.jl` também disponibiliza funções auxiliares como `difftime()` para cálculos mais explícitos de diferenças em segundos, minutos, horas ou dias.
+::: justify
+A subtração direta entre objetos `Date` retorna um número de dias (`Day`). O `TidierDates.jl` também disponibiliza funções auxiliares como `difftime()` para cálculos mais explícitos de diferenças em segundos, minutos, horas ou dias.
 :::
 
 ## Manipulando apenas tempo (h:m:s)
@@ -168,32 +168,32 @@ df4 = DataFrame(Horario = ["10:15:30", "23:59:59"])
 end
 ```
 
-::: {.justify}
+::: justify
 A função `hms()` converte strings de horários em objetos de tempo (hora, minuto, segundo), úteis em análises de logs ou séries temporais com granularidade horária.
 :::
 
 # Considerações finais
 
-::: {.justify}
+::: justify
 O **TidierDates.jl** é um pacote essencial para trabalhar com datas e horários em `Julia`.
 
 Com ele, é possível:
 
-- Converter strings em datas/horas (`ymd`, `dmy_hms`, etc.);
+-   Converter strings em datas/horas (`ymd`, `dmy_hms`, etc.);
 
-- Arredondar datas para diferentes granularidades (`floor_date`, `round_date`);
+-   Arredondar datas para diferentes granularidades (`floor_date`, `round_date`);
 
-- Calcular diferenças entre datas (`difftime`, operadores diretos);
+-   Calcular diferenças entre datas (`difftime`, operadores diretos);
 
-- Trabalhar diretamente com horários (`hms`).
+-   Trabalhar diretamente com horários (`hms`).
 
 Tudo isso de forma **consistente**, **legível** e **integrada** ao fluxo do **TidierData.jl**.
 :::
 
 # Referências
 
-::: {.justify}
-Blog inspirado na documentação disponibilizada pelos autores do pacote, a qual pode ser acessada pelo link [https://tidierorg.github.io/TidierDates.jl/dev/](https://tidierorg.github.io/TidierDates.jl/dev/).
+::: justify
+Blog inspirado na documentação disponibilizada pelos autores do pacote, a qual pode ser acessada pelo link <https://tidierorg.github.io/TidierDates.jl/dev/>.
 :::
 
 ::: callout-note
