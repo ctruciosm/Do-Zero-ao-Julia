@@ -8,10 +8,10 @@ author:
   - name: Caio Frare
     affiliation: "Universidade Estadual de Campinas"
     url: https://github.com/caiofrare
-  - name: Carlos Trucíos
+  - name: Esther Cleveston
     affiliation: "Universidade Estadual de Campinas"
-    url: https://ctruciosm.github.io
-    orcid: 0000-0001-8746-8877
+    url: https://www.linkedin.com/in/esthercleveston/
+    orcid: 0009-0008-6612-8417
 date: "2025-08-12"
 image: imagens/googledrive.png
 lang: pt
@@ -20,13 +20,13 @@ format:
     toc: true
     toc-depth: 3
     self-contained: false
-draft: true
+engine: knitr
+draft: false
 ---
 
 ## O que é o GoogleDrive.jl?
 
-O GoogleDrive.jl é um pacote Julia que facilita o download de arquivos hospedados no Google Drive a partir de seus links.
-Ele é útil quando você precisa automatizar a obtenção de dados de forma direta, sem precisar acessar o navegador manualmente.
+O GoogleDrive.jl é um pacote Julia que facilita o download de arquivos hospedados no Google Drive a partir de seus links. Ele é útil quando você precisa automatizar a obtenção de dados de forma direta, sem precisar acessar o navegador manualmente.
 
 ## Instalação
 
@@ -44,11 +44,12 @@ Pkg.add("GoogleDrive")
 
 A função principal utilizada é google_download(), que recebe dois argumentos:
 
-1. URL do arquivo no Google Drive
+1.  URL do arquivo no Google Drive;
 
-2. Nome (e opcionalmente o caminho) do arquivo de destino
+2.  Nome e, opcionalmente, o caminho do arquivo de destino.
 
 ```{julia}
+
 using GoogleDrive: google_download
 
 url = "https://drive.google.com/file/d/1GqmszfSB_LHGQEQpSjoiPyDROZ5a8Ls4"
@@ -69,7 +70,7 @@ pwd()
 
 Para salvar em outro local, use o caminho completo:
 
-```{julia}
+```{julia, eval = FALSE}
 
 google_download(url, "/caminho/para/pasta/arquivo_destino.txt")
 
@@ -78,14 +79,13 @@ google_download(url, "/caminho/para/pasta/arquivo_destino.txt")
 
 ## Dicas de Uso
 
-- O pacote não faz upload, apenas download de arquivos.
+-   O pacote não faz upload, apenas download de arquivos.
 
-- Ele é ideal para integrar em pipelines de ETL ou scripts de automação.
+-   Ele é ideal para integrar em pipelines de ETL ou scripts de automação.
 
 ## Conclusão
 
-O GoogleDrive.jl é simples, mas eficiente para automatizar o download de arquivos hospedados no Google Drive.
-Com poucas linhas de código, você pode incorporar dados externos diretamente no seu fluxo de trabalho em Julia.
+O GoogleDrive.jl é simples, mas eficiente para automatizar o download de arquivos hospedados no Google Drive. Com poucas linhas de código, você pode incorporar dados externos diretamente no seu fluxo de trabalho em Julia.
 
 ::: callout-note
 Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
