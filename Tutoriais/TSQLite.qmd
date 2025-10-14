@@ -1,48 +1,54 @@
 ---
 title: "Um pouco mais sobre SQLite em Julia"
-description: O texto é um tutorial prático que ensina a usar o SQLite com a linguagem Julia dentro do RStudio. Ele mostra desde a instalação dos pacotes até a execução de consultas SQL para manipular e analisar dados, usando o dataset iris como exemplo
- 
+description: Explore a poderosa integração entre o banco de dados `SQLite` e a linguagem `Julia` diretamente do seu ambiente `RStudio`. Neste tutorial prático, você aprenderá o passo a passo completo - desde a **configuração inicial** dos pacotes até a execução de **consultas `SQL`** para manipular e analisar dados. Utilizando o clássico conjunto de dados `iris` como exemplo, este guia transforma a maneira como você interage com bancos de dados locais, criando soluções **eficientes, portáteis e sem a necessidade de um servidor**.
+
 categories:
   - SQLite
-  -   Manipulação de dados
+  - Manipulação de dados
+  - RStudio
 author:
   - name: Gabriel Campovilla da Silva
     affiliation: "Universidade Estadual de Campinas"
     url: https://github.com/C4mpovill4
 
-  - name: 
-    affiliation: 
-    url: 
-    orcid: 
+  - name: Arthur Dionizio Martins da Silva
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/Arthur-Dionizio
+    orcid: 0009-0002-4313-9187
 
 date: "2025-07-30"
-image: imagens/loops_condic.png
-lang: "pt"
+image: imagens/sqlite_imagem.jpg
+lang: pt
+engine: knitr
 format:
   html:
     toc: true
+    toc-depth: 3
     self-contained: false
 draft: false
-engine: knitrNet
 ---
 
-# QLite: Uma Solução de Banco de Dados Leve e Versátil
+## SQLite: Uma Solução de Banco de Dados Leve e Versátil
 
-O SQLite se apresenta como uma biblioteca singular no universo dos sistemas de gerenciamento de bancos de dados. Ao contrário de soluções tradicionais que exigem um servidor dedicado e configuração complexa, o SQLite incorpora-se diretamente ao processo da aplicação, oferecendo um mecanismo de banco de dados SQL autônomo, sem servidor e com configuração nula. Essa característica fundamental o torna uma opção extremamente atraente para uma vasta gama de aplicações, desde dispositivos móveis até sistemas embarcados e aplicações desktop.
+O `SQLite` apresenta-se como uma biblioteca singular no universo dos **Sistemas de Gerenciamento de Banco de Dados (SGBDs)**. Diferentemente das soluções tradicionais, que exigem um servidor dedicado e configurações complexas, o `SQLite` integra-se diretamente à aplicação, oferecendo um mecanismo de banco de dados `SQL` *autônomo*, *sem servidor* e de *configuração nula*. Essa característica fundamental o torna uma opção extremamente atraente para uma vasta gama de usos, desde dispositivos móveis e sistemas embarcados até aplicações para desktop.
 
-A natureza "sem servidor" do SQLite elimina a necessidade de um processo de servidor separado para gerenciar o banco de dados. Em vez disso, a biblioteca interage diretamente com arquivos comuns no disco, onde reside toda a estrutura do banco de dados, incluindo tabelas, índices, gatilhos e visões. Essa abordagem simplificada não apenas facilita a implantação e o gerenciamento, mas também contribui para um menor consumo de recursos, tornando o SQLite ideal para ambientes com limitações de hardware.
+### A Arquitetura "Sem Servidor"
 
-Ademais, a licença de domínio público do SQLite garante sua utilização gratuita para qualquer propósito, seja ele comercial ou privado. Essa liberdade de uso, aliada à sua portabilidade, o arquivo de banco de dados funciona em qualquer plataforma e ao seu tamanho compacto de aproximadamente 600KB, reforça sua versatilidade e ampla aplicabilidade. A designação LTS (Long-Term Support) assegura a estabilidade e a continuidade do suporte, conferindo confiança aos desenvolvedores que optam por integrar o SQLite em seus projetos.
+A natureza *“sem servidor”* do `SQLite` elimina a necessidade de um processo de servidor separado para gerenciar o banco de dados. Em vez disso, a biblioteca interage diretamente com um **único arquivo** no disco, no qual reside toda a estrutura do banco de dados, incluindo tabelas, índices, gatilhos e visões. Essa abordagem simplificada não apenas facilita a implantação e o gerenciamento, mas também contribui para um menor consumo de recursos, tornando o `SQLite` ideal para ambientes com limitações de hardware.
 
-Em suma, o SQLite representa uma solução de banco de dados SQL robusta e eficiente, quebrando paradigmas ao oferecer uma alternativa leve, autônoma e de fácil utilização. Sua capacidade de operar diretamente em arquivos, sua portabilidade e sua licença permissiva o posicionam como uma ferramenta valiosa para desenvolvedores que buscam integrar funcionalidades de banco de dados em suas aplicações sem a complexidade e a sobrecarga de Sistema de Gerenciamento de Banco de Dados tradicionais.
+### Vantagens Principais: Licença, Portabilidade e Suporte
 
-SQLite é um mecanismo de banco de dados SQL embutido em um processo, conhecido por sua simplicidade e eficiência. Ele é autônomo, não requer servidor e tem configuração zero, sendo ideal para aplicações que precisam de um banco de dados leve e portátil. SQLite é de domínio público e amplamente utilizado em diversas aplicações, desde sistemas embarcados até grandes plataformas como Android e Windows.
+Ademais, a licença de *domínio público* do `SQLite` garante sua utilização gratuita para qualquer propósito, seja ele comercial ou privado. Essa liberdade de uso, aliada à sua portabilidade — que permite ao arquivo de banco de dados funcionar em qualquer plataforma — e ao seu tamanho compacto de aproximadamente **600 KB**, reforça sua versatilidade e ampla aplicabilidade. A designação **LTS (Long-Term Support)** assegura a estabilidade e a continuidade do suporte, conferindo confiança aos desenvolvedores que optam por integrar o `SQLite` em seus projetos.
 
-Como utilizarei o RStudio, precisamos instalar o pacote do Julia.
+---
+
+## Configuração do Ambiente: RStudio com Julia
+
+Como o `RStudio` será utilizado para este projeto, é preciso instalar o pacote correspondente da linguagem `Julia`.
 
 ```{Julia}
 install.packages("JuliaCall")
-library(JuliaCall)
+
 ```
 
 ```{Julia}
@@ -50,11 +56,12 @@ Sys.setenv(JULIA_HOME = "")
 julia_setup()
 ```
 
-Caso tenha alguma dúvida neste processo, temos um Blog no qual ajuda neste processo: <https://ime.unicamp.br/julialang/Blog/julia_rstudio.html>
+Caso surja alguma dúvida durante este processo, temos um blog que pode ajudar:
+<https://ime.unicamp.br/julialang/Blog/julia_rstudio.html>
 
-# Usando Julia como Interface para SQLite
+## Usando Julia como Interface para SQLite
 
-Julia possui um pacote chamado SQLite.jl; SQLite.jl oferece todos os recursos do SQLite diretamente dentro do Julia. Apesar de, neste caso, estarmos dentro do Julia, os comandos são passados diretamente para o motor do SQLite, que é instalado automaticamente quando o pacote SQLite.jl é adicionado ao ambiente.
+A linguagem `Julia` possui o pacote `SQLite.jl`, que disponibiliza todos os recursos da biblioteca `SQLite` diretamente em seu ambiente. Embora os comandos sejam executados a partir do `Julia`, eles são repassados e processados **diretamente** pelo motor do `SQLite`. Este motor, por sua vez, é instalado **automaticamente** quando o pacote `SQLite.jl` é adicionado.
 
 ```{Julia}
 using Pkg  # Carrega o pacote Pkg, responsável por gerenciar pacotes em Julia.
@@ -69,16 +76,16 @@ using SQLite, CSV, DataFrames  # Carrega os pacotes SQLite, CSV e DataFrames par
 
 ## Algumas Operações Básicas
 
-Vamos agora utilizar o famoso conjunto de dados `iris` do R, mas com consultas SQL dentro do Julia
+Agora, utilizaremos o famoso conjunto de dados `iris` do `R`, porém, executando consultas `SQL` **diretamente no ambiente Julia!**
 
-### Etapa 1: Exportar `iris` do R para CSV
+### Exportar `iris` do R para CSV
 
 ```{Julia}
 write.csv(iris, "iris.csv", row.names = FALSE)
 
 ```
 
-Importar esse CSV no banco SQLite via Julia e visualizar suas tabelas e colunas
+**Importando o `CSV` para o banco `SQLite` via `Julia` e visualizando suas tabelas e colunas:**
 
 ```{Julia}
 using SQLite, CSV, DataFrames
@@ -104,19 +111,21 @@ println(names(colunas))
 
 ```
 
-Explicando o código acima: Nesta etapa, utilizamos Julia para carregar o conjunto de dados iris, originalmente salvo como um arquivo CSV exportado do R, e importá-lo para um banco de dados SQLite, de forma que possamos fazer consultas SQL sobre ele.
+**Explicando o código:**
 
-Primeiro, carregamos os pacotes SQLite, CSV e DataFrames, que permitem manipular arquivos CSV, criar e interagir com bancos de dados SQLite, e trabalhar com os dados como tabelas em Julia. Em seguida, conectamos (ou criamos) um banco de dados chamado meu_banco.sqlite, que será armazenado como um arquivo local no disco. Após isso, lemos o arquivo iris.csv e o carregamos em um DataFrame — uma estrutura tabular usada em Julia para representar dados como em uma planilha.
+Nesta etapa, utilizamos `Julia` para carregar o conjunto de dados `iris`, originalmente salvo como um arquivo `CSV` exportado do `R`, e importá-lo para um banco de dados `SQLite`, de forma que possamos fazer consultas `SQL` sobre ele.
 
-Com os dados já carregados em memória, usamos o comando SQLite.load! para criar uma nova tabela chamada iris dentro do banco SQLite e inserir todos os dados do DataFrame nela. Por fim, usamos SQLite.tables(db) para listar todas as tabelas presentes no banco e confirmar que a importação foi bem-sucedida.
+**Primeiro**, carregamos os pacotes `SQLite`, `CSV` e `DataFrames`, que permitem manipular arquivos `CSV`, criar e interagir com bancos de dados `SQLite`, e trabalhar com os dados como tabelas em `Julia`. **Em seguida**, conectamos (ou criamos) um banco de dados chamado `meu_banco.sqlite`, que será armazenado como um arquivo local no disco. **Após isso**, lemos o arquivo `iris.csv` e o carregamos em um `DataFrame` — *uma estrutura tabular usada em Julia para representar dados como em uma planilha*.
 
-Essa etapa transforma os dados do R em uma base SQL pronta para consultas, combinando o poder do SQLite com a flexibilidade da linguagem Julia.
+Com os dados já carregados em memória, usamos o comando `SQLite.load!` para **criar uma nova tabela chamada `iris`** dentro do banco `SQLite` e inserir todos os dados do `DataFrame` nela. **Por fim**, usamos `SQLite.tables(db)` para **listar todas as tabelas** presentes no banco e confirmar que a importação foi bem-sucedida.
 
-# Manipulação Básica: Selecionando Registros
+Essa etapa transforma os dados do `R` em uma base `SQL` pronta para consultas, combinando o **poder do `SQLite`** com a **flexibilidade da linguagem `Julia`**.
 
--   O comando dbGetQuery consulta o banco de dados, extrai os resultados solicitado e os retorna ao Julia;
--   A sintaxe é dbGetQuery(conexao, chamada SQL);
--   Extraia da tabela albums todas as colunas e todas as linhas e armazene-os em um objeto chamado album_db:
+### Manipulação Básica: Selecionando Registros
+
+-   O comando **`dbGetQuery`** consulta o banco de dados, extrai os resultados solicitados e os retorna para o ambiente `Julia`.
+-   A **sintaxe** é: `dbGetQuery(conexao, "sua instrução SQL aqui")`.
+-   **Tarefa:** Extraia todo o conteúdo da tabela `albums` e armazene o resultado em um objeto chamado `album_db`.
 
 ```{Julia}
 # Consulta SQL para selecionar todas as colunas e linhas da tabela 'iris'
@@ -130,25 +139,15 @@ println(iris_db)
 
 ```
 
-Explicando o código acima: Para extrair todos os dados da tabela iris no SQLite usando Julia, utilizamos uma consulta SQL com o comando SELECT \* FROM iris. Em seguida, usamos SQLite.Query para executar essa consulta no banco e DataFrame(...) para converter o resultado em um objeto chamado iris_db, que armazena os dados como uma tabela em Julia, pronta para análise. Essa operação é equivalente ao uso de dbGetQuery no R.
+Neste código, a extração de todos os dados da tabela `iris` é realizada por meio da consulta `SQL` `SELECT * FROM iris`. A função **`SQLite.Query`** executa essa consulta no banco de dados, e o resultado é então utilizado para construir um `DataFrame`. O objeto resultante, chamado `iris_db`, armazena os dados em uma estrutura tabular no ambiente `Julia`, *pronta para análise*.
 
-# O Comando SELECT O comando SELECT é o mais utilizado em SQL e pode ser combinado com vários argumentos:
+Essa operação é análoga à função `dbGetQuery` da linguagem `R`.
 
--   ORDER BY: ordenar resultados
+### O Comando `SELECT`
 
--   DISTINCT: valores únicos
+O comando `SELECT` é a instrução mais utilizada em `SQL` e pode ser combinado com diversas cláusulas para refinar as consultas:
 
--   WHERE: filtrar linhas
-
--   LIMIT: limitar número de resultados
-
--   JOIN: consultar múltiplas tabelas
-
--   GROUP BY: agrupar resultados
-
--   HAVING: filtrar grupos
-
-    ## ORDER BY: ordenar os resultados
+-   `ORDER BY`: Ordenar os resultados.
 
 ```{Julia}
   query = """
@@ -161,9 +160,9 @@ println(resultado)
 
 ```
 
-Ordena os dados da tabela iris do maior para o menor valor de SepalLength.
+Ordena os dados da tabela `iris` do maior para o menor valor de `SepalLength`.
 
-## DISTINCT: valores únicos
+-   `DISTINCT`: valores únicos.
 
 ```{Julia}
 query = """
@@ -175,9 +174,9 @@ println(resultado)
 
 ```
 
-Retorna as espécies únicas presentes no conjunto iris.
+Retorna as espécies únicas presentes no conjunto `iris`.
 
-## WHERE: filtrar linhas
+-   `WHERE`: filtrar linhas.
 
 ```{Julia}
 query = """
@@ -190,9 +189,9 @@ println(resultado)
 
 ```
 
-Filtra apenas as linhas onde a espécie é setosa.
+Filtra apenas as linhas onde a espécie é **setosa**.
 
-## LIMIT: limitar o número de resultados
+-   `LIMIT`: limitar número de resultados.
 
 ```{Julia}
 query = """
@@ -207,7 +206,8 @@ println(resultado)
 
 Mostra apenas as 10 primeiras linhas da tabela.
 
-## GROUP BY e HAVING: agrupar e filtrar grupos
+-   `GROUP BY`: agrupar linhas que têm os mesmos valores em colunas especificadas.
+-   `HAVING`: filtrar os resultados de um agrupamento com base em uma condição.
 
 ```{Julia}
 query = """
@@ -221,35 +221,43 @@ println(resultado)
 
 ```
 
-Agrupa por espécie, calcula a média de SepalLength e exibe apenas as espécies com média acima de 5.5.
+Agrupa por espécie, calcula a média de `SepalLength` e exibe apenas as espécies com média acima de 5.
 
-## JOIN: Unir tabelas
+-   `JOIN`: consultar múltiplas tabelas.
 
-Como estamos trabalhando apenas com a tabela iris, o exemplo de JOIN não se aplica diretamente aqui. Mas, se você tiver outra tabela relacionada (por exemplo, uma com informações adicionais por espécie), posso te ajudar a montar esse exemplo também.
+Como estamos trabalhando apenas com a tabela `iris`, o exemplo de `JOIN` não se aplica diretamente aqui. Para um exemplo prático, seria necessário criar uma segunda tabela relacionada e então utilizar o `JOIN` para combinar os dados de ambas.
 
-# Funçõesde Agregação
+## Funções de Agregação
 
-## AVG
+### AVG
 
-AVG(\[ALL \| DISTINCT\] expressao) calcula a média de todos os valores não-nulos ou dos valores distintos;
+`AVG(\[ALL \| DISTINCT\] expressao)` - Calcula o valor médio de uma expressão numérica. Por padrão, considera todos os valores não nulos. Se `DISTINCT` for especificado, calcula a média apenas dos valores únicos.
 
-## COUNT
+### COUNT
 
-COUNT(\[ALL \| DISTINCT\] expressao) realiza a contagem de todos registros;
+`COUNT(\[ALL \| DISTINCT\] expressao)` - Realiza a contagem de itens. `COUNT(*)` retorna o número total de linhas de uma tabela. `COUNT(coluna)` retorna a quantidade de valores não nulos em uma coluna específica.
 
-## MAX, MIN, SUM
+### MAX, MIN, SUM
 
-funcionam de maneira análoga às funções anteriores;
+Estas funções operam de maneira similar, retornando um único valor a partir de um conjunto de linhas:
 
-# Boas Práticas:
+- `MAX(expressao)`: Retorna o maior valor.
 
-Segurança em Consultas SQL Ao trabalhar com bancos de dados SQL, uma das principais preocupações é garantir que as consultas sejam executadas com segurança, evitando falhas e, principalmente, vulnerabilidades como injeção de SQL.
+- `MIN(expressao)`: Retorna o menor valor.
 
-No R, o pacote RSQLite oferece funções como dbSendQuery() e dbBind(), que permitem preparar uma consulta com parâmetros e depois passar os valores separadamente. Essa abordagem é mais segura do que interpolar valores diretamente nas strings SQL.
+- `SUM(expressao)`: Retorna a soma de todos os valores.
 
-Embora estejamos utilizando Julia, o conceito permanece o mesmo: evite construir consultas SQL com concatenação de strings contendo dados do usuário. Em vez disso, utilize consultas parametrizadas sempre que possível (embora SQLite.jl ainda tenha limitações nesse suporte de forma nativa, é possível contornar com cuidado).
+## Boas Práticas:
 
-O que não fazer
+Ao trabalhar com bancos de dados, uma das principais preocupações é garantir que as consultas sejam executadas com **segurança**, evitando falhas e, principalmente, vulnerabilidades como a **_Injeção de SQL (SQL Injection)_**.
+
+No `R`, por exemplo, o pacote `RSQLite` oferece funções como `dbSendQuery()` e `dbBind()`. Elas permitem preparar uma consulta com parâmetros e, em um segundo passo, passar os valores de forma segura. Essa abordagem, conhecida como **consulta parametrizada**, é muito mais robusta do que interpolar valores diretamente na string `SQL`.
+
+Embora estejamos utilizando `Julia`, o conceito fundamental permanece o mesmo: **evite construir consultas `SQL` por meio da concatenação de strings que contenham dados inseridos pelo usuário.** A prática recomendada é sempre utilizar **consultas parametrizadas**. Vale notar que, embora o pacote `SQLite.jl` ainda possa ter limitações no suporte nativo a esse recurso, é possível implementar soluções seguras com um cuidado adicional.
+
+### O Que Deve Ser Evitado
+
+- A construção de consultas pela interpolação direta de variáveis em uma `string` é uma prática perigosa.
 
 ```{Julia}
 # NÃO FAÇA: Inserindo valor diretamente na string SQL
@@ -258,9 +266,11 @@ query = "SELECT * FROM iris WHERE Species = '$nome_especie'"
 
 ```
 
-Isso pode parecer inofensivo, mas abre espaço para manipulação maliciosa se o valor de entrada não for controlado.
+Isso pode parecer inofensivo com entradas controladas, mas abre uma brecha grave para manipulação maliciosa **(Injeção de SQL)** se o valor da variável vier de uma fonte externa, como um _formulário web_.
 
-o que fazer de boa prática alternativa (em R com RSQLite):
+### A Abordagem Correta (Exemplo com RSQLite)
+
+- A **boa prática** consiste em usar **consultas parametrizadas**, onde a instrução `SQL` é enviada com um *placeholder* (`?`), e os valores são enviados **separadamente**.
 
 ```{Julia}
 # Em R, utilizando dbBind para evitar injeção
@@ -269,18 +279,21 @@ dbBind(stmt, list("setosa"))
 
 ```
 
-Quando você executa uma consulta SQL, a forma como os dados são inseridos pode afetar a segurança da operação. Em uma consulta segura, os dados são separados da consulta SQL por meio de placeholders (como ? ou :param), e os valores são passados separadamente, evitando a possibilidade de injeção de SQL. Isso significa que mesmo que o valor inserido pelo usuário seja malicioso, ele não será interpretado como parte do comando SQL, garantindo a proteção do banco de dados.
+Quando uma consulta `SQL` é executada, o método de inserção de dados afeta **diretamente a segurança** da operação. Em uma **consulta segura**, os dados são mantidos *separados* da instrução `SQL` por meio de _placeholders_ (marcadores de posição, como `?` ou `:param`). Os valores são então passados de forma **isolada**, eliminando a possibilidade de **injeção de `SQL`**. Isso significa que, mesmo que o valor inserido por um usuário seja malicioso, ele será tratado apenas como um dado literal e *nunca como parte do comando `SQL`*, garantindo a proteção do banco de dados.
 
-Por outro lado, em uma consulta não segura, os valores dos dados são concatenados diretamente na consulta SQL. Isso pode abrir portas para ataques de injeção de SQL, onde um atacante pode manipular a consulta e executar comandos indesejados, como apagar tabelas ou roubar dados.
+Por outro lado, em uma **consulta insegura**, os valores são **concatenados diretamente** na string da consulta. Essa abordagem abre uma **vulnerabilidade crítica** para ataques de **injeção de `SQL`**, nos quais um invasor pode manipular a consulta para executar comandos indesejados, como *apagar tabelas* ou *extrair dados sensíveis*.
 
-Portanto, sempre que possível, use consultas parametrizadas para garantir que os dados sejam tratados corretamente, minimizando riscos e mantendo a integridade e segurança do banco de dados.
+Portanto, a recomendação é **categórica**: sempre que possível, utilize **consultas parametrizadas**. Essa prática garante que os dados sejam tratados corretamente, minimizando riscos e mantendo a **integridade e a segurança** do banco de dados.
 
 ## Fechando Conexões
 
-\
-Com SQLite no Julia (Usando RStudio) Quando você está utilizando o JuliaCall no RStudio para executar comandos Julia, é importante seguir as mesmas boas práticas de fechamento de conexões com bancos de dados que faria em um ambiente Julia puro. Ou seja, após realizar operações no banco de dados, você deve garantir que a conexão com o banco de dados seja fechada e que arquivos temporários, como cópias do banco, sejam removidos.
+Ao utilizar o pacote `_JuliaCall_` no `RStudio` para executar comandos em `Julia`, as boas práticas de gerenciamento de conexões com bancos de dados são as mesmas de um ambiente `Julia` nativo. Ou seja, após concluir suas operações, é fundamental garantir que a conexão com o banco de dados seja **devidamente encerrada** e que quaisquer arquivos temporários sejam **removidos**.
 
-No Julia, para fechar a conexão com o banco de dados SQLite, você usa a função close(), e, para excluir arquivos, a função rm() pode ser utilizada.
+Para realizar essas tarefas, as seguintes funções do `Julia` podem ser utilizadas:
+
+- `close(conexao)`: Fecha a conexão ativa com o banco de dados `SQLite`.
+
+- `rm("caminho_do_arquivo")`: Remove o arquivo especificado do disco.
 
 # Exemplo de código no RStudio usando JuliaCall:
 
@@ -362,10 +375,13 @@ close(db)
 
 ```
 
-# Considerações Finais
+## Considerações Finais
 
-Neste tutorial, exploramos como integrar o SQLite com Julia no RStudio, permitindo realizar operações SQL de forma eficiente em um banco de dados leve e sem servidor. Vimos como importar dados, realizar consultas básicas (como `SELECT`, `ORDER BY`, `WHERE`), inserir dados em tabelas e aplicar boas práticas de segurança para evitar injeção de SQL.
+Neste tutorial, exploramos como integrar o `SQLite` com `Julia` no `RStudio`, permitindo realizar operações `SQL` de forma eficiente em um banco de dados **leve e sem servidor**. Vimos como importar dados, realizar consultas básicas (como `SELECT`, `ORDER BY`, `WHERE`), inserir dados em tabelas e aplicar **boas práticas de segurança** para **evitar injeção de `SQL`**.
 
-Destacamos a importância de fechar conexões adequadamente após as operações para otimizar recursos. O SQLite é ideal para aplicações que necessitam de um banco de dados simples e portátil, e a combinação com Julia oferece flexibilidade para análise de dados e manipulação avançada.
+Destacamos a **importância de fechar conexões adequadamente** após as operações para otimizar recursos. O `SQLite` é ideal para aplicações que necessitam de um banco de dados *simples e portátil*, e a combinação com `Julia` oferece **flexibilidade para análise de dados e manipulação avançada**.
 
-Com o que foi aprendido, você pode expandir suas habilidades explorando mais funcionalidades do SQLite e Julia, criando soluções eficientes e seguras para trabalhar com bancos de dados locais.
+Com o que foi aprendido, você pode *expandir suas habilidades* explorando mais funcionalidades do `SQLite` e `Julia`, criando **soluções eficientes e seguras** para trabalhar com bancos de dados locais.
+::: {.callout-note} 
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::
