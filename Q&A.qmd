@@ -41,19 +41,19 @@ Julia é uma linguagem de programação cada vez mais popular em análise numér
 
 ## 3. A participação no projeto contará créditos?
 
-- Alunos da Graduação: **Sim!** No 2025-II será aberta uma disciplina chamada Tópicos de Extensão (ME881) valendo 5 créditos (equivalente a 75 horas dedicadas ao projeto).
+- Alunos da Graduação: **Sim!** No 2026-I será aberta uma disciplina chamada Tópicos de Extensão (ME881) valendo 5 créditos (equivalente a 75 horas dedicadas ao projeto).
 - Alunos da Pós-graduação: **Não!** (mas colocar no lattes uma participação em projetos de extensão não parece ser uma ideia ruim)
 
 
 ## 4. Quantas horas por semana devo dedicar ao projeto?
 
-Originalmente, o projeto foi pensado para o aluno se dedicar, em média, 10 horas semanais ao projeto, totalizando, aproximadamente, 40 horas num semestre letivo.  Contudo, como a disciplina a ser aberta equivale a 75 horas dedicadas ao projeto, o aluno(a) deverá acumular, pelo menos, 75 horas de dedicação ao projeto no final do 2025-II para ser aprovado na disciplina.
+Originalmente, o projeto foi pensado para o aluno se dedicar, em média, 10 horas semanais ao projeto, totalizando, aproximadamente, 40 horas num semestre letivo.  Contudo, como a disciplina a ser aberta equivale a 75 horas dedicadas ao projeto, o aluno(a) deverá acumular, pelo menos, 75 horas de dedicação ao projeto no final do 2026-I para ser aprovado na disciplina.
 
 ## 5. Se são 75 horas, como será feito isso?
 
 Existem duas formas:
 
-- O aluno(a) se matricula na disciplina no 2025-II e durante o semestre precisará se dedicar, aproximadamente, 19 horas semanais ao projeto (o que é quase impossível, exceto se estiver cursando apenas uma ou duas disciplinas)
+- O aluno(a) se matricula na disciplina no 2026-I e durante o semestre precisará se dedicar, aproximadamente, 19 horas semanais ao projeto (o que é quase impossível, exceto se estiver cursando apenas uma ou duas disciplinas)
 - O aluno(a) começa a trabalhar desde agora, vá acumulando horas e no próximo semestre se matricula normalmente na disciplina e continua trabalhando no projeto até cumprir o número de horas necessárias (opção mais viável e realista).
 
 
@@ -79,8 +79,8 @@ Criei uma tabela de equivalência entre as atividades realizadas e o número de 
 
 Assim, por exemplo:
 
-- Um aluno que no 2025-I escreve 4 posts no semestre, 2 tutoriais, 1 minicurso e organiza um meetup, lhe serão computadas $4 \times 3 + 2 \times 6 + 14 + 2 = 40$ horas
-- Um aluno que no 2025-I escreve 10 post, e organiza um meetup, lhe serão computadas $10 \times 3 +  2 = 32$ horas
+- Um aluno que no 2025-II escreve 4 posts no semestre, 2 tutoriais, 1 minicurso e organiza um meetup, lhe serão computadas $4 \times 3 + 2 \times 6 + 14 + 2 = 40$ horas
+- Um aluno que no 2025-II escreve 10 post, e organiza um meetup, lhe serão computadas $10 \times 3 +  2 = 32$ horas
 
 
 ::: {.callout-tip icon=false}
@@ -113,6 +113,7 @@ Não existe uma roteiro definido, mas todos esses assuntos serão definidos nas 
 - [Julia for Data Analysis](https://www.manning.com/books/julia-for-data-analysis)
 - [Julia Academy](https://juliaacademy.com/courses/category/Advanced)
 - Documentação oficial de Julia.
+- [Do Zero ao Julia](https://ime.unicamp.br/julialang/)
 
 
 ## 10. Uma última coisa
