@@ -1,0 +1,158 @@
+---
+title: "Manipulação e Processamento de Imagens em Julia"
+description: |
+  Um guia introdutório em `Julia` para processamento de imagens utilizando os pacotes `Images.jl`, `ImageIO.jl`, `ImageTransformations.jl` e `ImageFiltering.jl`. Aprenda a carregar, salvar, manipular e aplicar filtros em imagens de forma prática e eficiente.
+categories:
+  - Guia
+  - Ferramentas
+author:
+  - name: Caio Frare
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/caiofrare
+  - name: Nicole Fredericci
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/NFredericci
+date: "2025-10-16"
+image: imagens/Imagem_capa.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+engine: knitr
+draft: false
+---
+
+## Introdução
+
+:::{.justify}
+O processamento de imagens é uma tarefa essencial em diversas áreas, desde ciência de dados e visão computacional até aplicações mais simples de manipulação e análise visual. A linguagem `Julia`, com sua combinação de alto desempenho e sintaxe expressiva, oferece um ecossistema poderoso para lidar com esse tipo de dado.
+
+Neste guia, vamos explorar alguns pacotes fundamentais que tornam o trabalho com imagens em `Julia` muito mais prático:
+
+- `Images.jl` → base para representar e manipular imagens.
+
+- `ImageIO.jl` → leitura e escrita de arquivos em diferentes formatos.
+
+- `ImageTransformations.jl` → operações geométricas, como redimensionamento e rotação.
+
+- `ImageFiltering.jl` → aplicação de filtros clássicos, como o filtro de média e o gaussiano.
+
+Nos exemplos a seguir, você verá como carregar e salvar imagens, realizar operações básicas de manipulação e aplicar filtros para transformar os dados visuais. Este post é um guia introdutório que pode servir como ponto de partida para aplicações mais avançadas.
+:::
+
+## Instalação
+
+:::{.justify}
+Os pacotes utilizados podem ser instalados diretamente via `Pkg`, executando o código abaixo:
+:::
+
+```{julia}
+using Pkg
+Pkg.add([
+    "Images",
+    "ImageIO",
+    "ImageTransformations",
+    "ImageFiltering"])
+```
+
+## Carregando uma imagem
+
+:::{.justify}
+O fluxo básico para abrir e exibir uma imagem é simples:
+:::
+
+```{julia}
+using Images, ImageIO
+
+img = load("imagens/gato.jpg") # carrega a imagem
+display(img)                   # exibe no ambiente 
+```
+
+![Gato de exemplo](imagens/gato.jpg)
+
+## Salvando uma imagem
+
+:::{.justify}
+Você também pode salvar imagens no formato desejado (nesse caso, estamos transformando de _.jpg_ para _.png_):
+:::
+
+```{julia}
+save("imagem.png", img)
+```
+
+## Operações básicas
+
+:::{.justify}
+Algumas operações comuns com imagens incluem alterações na escala de coloração, redimensionamento e recorte de uma área específica.
+:::
+
+```{julia}
+using ImageTransformations
+
+# Dimensões da imagem
+size(img)         # (altura, largura)
+eltype(img)       # Tipo de pixel
+# Convertendo para escala de cinza
+img_gray = Gray.(img)
+# Redimensionando
+img_small = imresize(img, (100, 100))
+# Cortando a imagem
+img_crop = img[1:2000, 1:2000]
+```
+
+:::{.justify}
+Os códigos acima nos fornecem os seguintes resultados:
+
+- Imagem em escala de cinza.
+:::
+
+![Gato cinza](imagens/imagem_cinza.png)
+
+:::{.justify}
+- Imagem pequena.
+:::
+
+![Gato pequeno](imagens/imagem_pequena.png)
+
+:::{.justify}
+- Imagem cortada.
+:::
+
+![Gato cortado](imagens/imagem_crop.png)
+
+## Aplicando filtros
+
+:::{.justify}
+Podemos aplicar filtros para borrar imagens, por exemplo, usando o filtro gaussiano:
+:::
+
+```{julia}
+using Images, ImageFiltering
+
+kernel_gauss = Kernel.gaussian(50)
+img_gauss = imfilter(img, kernel_gauss)
+```
+
+:::{.justify}
+O código acima nos fornece o seguinte resultado:
+
+- Imagem com filtro Gaussiano.
+:::
+
+![Gato com filtro Gaussiano](imagens/imagem_gauss.png)
+
+## Conclusão
+
+:::{.justify}
+Neste post, vimos como `Julia` oferece um ecossistema bastante completo para processamento e manipulação de imagens, indo desde as etapas iniciais de carregar e salvar arquivos até a aplicação de filtros para transformar visualmente os dados.
+
+O guia teve como foco dar uma visão geral dos pacotes mais utilizados, permitindo que você tenha um ponto de partida sólido. A partir daqui, você pode explorar tópicos mais avançados — segmentação de imagens, visão computacional, reconhecimento de padrões e até integração com modelos de _Machine Learning_.
+
+Sucesso na exploração desses pacotes!
+:::
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::
