@@ -1,18 +1,19 @@
 ---
-title: "Estatísticas Incrementais em Julia com OnlineStats.jl - Parte 1"
+title: "Estatísticas Incrementais com OnlineStats.jl - Parte 1"
 description: |
-  Um guia prático para usar OnlineStats.jl em Julia, realizando estatísticas via streaming e algoritmos online com memória constante.
+  Em cenários de __big data__, quando os dados não cabem na memória, as estatísticas tradicionais (que carregam o conjunto completo) se tornam inviáveis. Para resolver esse problema, esse é um guia inicial dos conceitos e exemplos do pacote `OnlineStats.jl`, voltado para projetos que envolvem uma grande quantidade de dados.
 categories:
   - Estatística
+  - Pacotes
+  - Ferramentas
 author:
   - name: Caio Frare
     affiliation: "Universidade Estadual de Campinas"
     url: https://github.com/caiofrare
-  - name: Carlos Trucíos
+  - name: Nicole Fredericci
     affiliation: "Universidade Estadual de Campinas"
-    url: https://ctruciosm.github.io
-    orcid: 0000-0001-8746-8877
-date: "2025-10-08"
+    url: https://github.com/NFredericci
+date: "2025-10-19"
 image: imagens/estatisticas_incrementais.png
 lang: pt
 format:
@@ -21,140 +22,123 @@ format:
     toc-depth: 3
     self-contained: false
 engine: knitr
-draft: true
+draft: false
 ---
 
 ## Introdução
 
-::: justify
-Em cenários de **big data**, **streaming de dados** ou quando os dados não cabem na memória, as estatísticas tradicionais (que carregam tudo de uma vez) ficam inviáveis. O pacote `OnlineStats.jl` chega para resolver isso em Julia, permitindo calcular médias, variâncias, mínimos, máximos, regressão e muito mais **de forma incremental**, ou seja, processando um ponto de dados por vez, com uso constante de memória.
+:::{.justify}
+Em cenários de __big data__, __streaming de dados__ ou quando os dados não cabem na memória, as estatísticas tradicionais (que carregam tudo de uma vez) se tornam inviáveis. O pacote `OnlineStats.jl` chega para resolver isso em `Julia`, permitindo calcular médias, variâncias, mínimos, máximos, fazer modelos de regressão e muito mais! Além disso, o pacote processa as informações de forma __incremental__, ou seja, processando um ponto de dados por vez, com uso constante de memória.
 
-Este post apresenta os conceitos iniciais e exemplos práticos para você começar a usar `OnlineStats.jl` nos seus projetos.
+Este post apresenta os conceitos iniciais e exemplos práticos para você começar a usar `OnlineStats.jl` nos seus projetos que envolvem uma grande quantidade de dados.
 :::
 
 ## Instalação
 
-::: justify
-Para instalar o pacote, basta rodar no REPL do Julia:
+:::{.justify}
+Para instalar o pacote, basta rodar o seguinte comando no REPL de `Julia`:
 :::
 
 ```{julia}
-
 using Pkg
 
 Pkg.add("OnlineStats")
-
 ```
 
-## Conceitos Básicos
+## Conceitos básicos
 
-::: justify
-Temos três comandos principais que utilizaremos na maioria dos casos. Eles são:
+:::{.justify}
+Estes são os três comandos principais que utilizaremos na maioria dos casos:
 
--   `fit!`: função que atualiza a estatística com novos observações.
+- `fit!`: função que atualiza a estatística com novas observações.
 
--   `Series`: funcção de uma coleção de estatísticas (ex: média + variância + extremos) que compartilham o mesmo fluxo de dados.
+- `Series`: função que atua como uma coleção de estatísticas (ex: média + variância + extremos) que compartilham o mesmo fluxo de dados; permite calcular múltiplas estatísticas com apenas uma passagem pelos dados.
 
--   `merge!`: função que combina duas estatísticas do mesmo tipo, útil para paralelismo ou blocos de dados distribuídos.
+- `merge!`: função que combina duas estatísticas do mesmo tipo, útil para paralelismo ou blocos de dados distribuídos — que consiste em dividir um _dataset_ e armazenar cada fragmento em diferentes nós de processamento para maximizar a velocidade e a eficiência do cálculo.
 :::
 
-## Exemplos de Uso
+## Exemplos de uso
 
 ### Média
 
-::: justify
+:::{.justify}
 Vamos começar exemplificando o uso de `fit!` para a média, utilizando a função `Mean()`:
 :::
 
 ```{julia}
-
 using OnlineStats # Carregando o pacote
 
-m = Mean() # Definindo a estatística que iremos usar
-fit!(m, [1.0, 2.0, 3.0, 4.0]) # Atualizando essa estatística para um vetor de valores
-fit!(m, 5.0) # Adicionando um valor a este vetor
-
+m = Mean() # Definindo a estatística que usaremos
+fit!(m, [1.0, 2.0, 3.0, 4.0]) # Atualizando
+fit!(m, 5.0) # Adicionando
 println("Média: ", value(m))
-
 ```
 
-::: justify
-Analisando o output conseguimos entender melhor o funcionamento dessa função. Inicialmente definimos a estatística da média, utilizando `m = Mean()`, mas não anexamos nenhum valor, por isso obtemos a primeira linha de output: `Mean: n=0 | value=0.0`. Com `n` = número de termos utilizados para esse cálculo e `value` = valor obtido.
+:::{.justify}
+Analisando as saídas dos códigos, conseguimos entender melhor o funcionamento dessa função:
 
-Em seguida usamos a função `fit!` para atualizar a média para um vetor de valores. Como esse vetor tem 4 valores, sendo eles 1, 2, 3 e 4 obtemos a média 2,5. Representado pelo output `Mean: n=4 | value=2.5`.
+  1. Inicialmente, definimos o objeto da média utilizando `m = Mean()`. Neste ponto, a estatística está vazia e obtemos `Mean: n=0 | value=0.0`, sendo `n` o número de termos utilizados para o cálculo e `value` o valor atual da estatística.
 
-Por último, atualizamos o valor dessa estatística adicionando o valor 5. E assim recebemos `Mean: n=5 | value=3.0`
+  2. Em seguida, usamos a função `fit!` para atualizar a média para um vetor de valores. Como esse vetor tem 4 valores (sendo eles $1, 2, 3$ e $4$), obtemos a média $2,5$, representada pela saída `Mean: n=4 | value=2.5`.
 
-Podemos também utilizar o comando `value(m)` obtermos o valor númerico dessa estatística. Como foi utilzado aqui `println("Média: ", value(m))` e obtemos `Média: 3.0`.
+  3. Por último, atualizamos o valor dessa estatística adicionando o valor $5$, resultando em `Mean: n=5 | value=3.0`
+
+  4. Podemos também utilizar o comando `value(m)` para obter o valor númerico dessa estatística, tal qual na última linha de código (`println("Média: ", value(m))`), resultando em `Média: 3.0`.
 :::
 
 ### Variância
 
-::: justify
-Podemos utilizar a função `fit!` para outras estatísticas, no proximo exemplo usaremos a variância.
+:::{.justify}
+Podemos utilizar a função `fit!` também para outras estatísticas, como a variância:
 :::
 
 ```{julia}
-
-v = Variance() # Definimos a estatística da variância
-fit!(v, randn(1000)) # Atualizamos para um vetor aleatório gerado a partir de N(0,1)
-
+v = Variance() # Definindo a estatística da variância
+fit!(v, randn(1000)) # Atualizando para um vetor 
 println("Variância: ", value(v))
-
 ```
 
-::: justify
-Similarmente ao exemplo anterior, iniciamos criando a estatística para a variância `v = Variance()` e atualizamos esse valor para um vetor de valores. A única diferença aqui é que não utilizamos um vetor definido e sim geramos um vetor aleatório de mil observações que são identicamente distribuidas e seguem uma distribuição normal com média igual a zero e variância igual a 1, gerado pelo comando `randn(1000)`.
+:::{.justify}
+Similarmente ao exemplo anterior, iniciamos criando o objeto para o cálculo da variância (`v = Variance()`) e atualizamos seu valor com um vetor de dados. A única diferença aqui é que, em vez de um vetor predefinido, geramos mil observações aleatórias e identicamente distribuídas. Esses dados seguem uma distribuição Normal com média zero e variância $1$, gerados pelo comando `randn(1000)`.
 
-Como não definimos uma `seed` anterior a essa geração, obteremos distintos valores para `v`, mas todos eles serão proximos de 1, dado que esse é o valor do parâmetro que define a geração desse vetor aleatório.
+Como não definimos uma `seed` antes da geração, obteremos valores distintos para `v` a cada execução. No entanto, todos os resultados serão próximos de $1$, dado que esse é o valor do parâmetro da variância utilizado na geração desse vetor aleatório, e dado que a média é $0$.
 :::
 
-## Estatísticas Agrupadas
+## Estatísticas agrupadas
 
-::: justify
-Utilizaremos agora a função `Series` para obter varias estatísticas sobre um mesmo conjunto de dados.
+:::{.justify}
+Utilizaremos agora a função `Series` para obter várias estatísticas sobre um mesmo conjunto de dados:
 :::
 
 ```{julia}
-
-s = Series(Mean(), Variance(), Extrema()) # `Extrema()` retorna os valores extremos observados
+s = Series(Mean(), Variance(), Extrema()) # Extrema() retorna os valores extremos observados
 fit!(s, randn(10000))
-
 println(value(s))   # Uma tupla (média, variância e valores extremos)
-
 ```
 
-::: justify
-De maneira análoga aos exemplos anteriores, iniciamos definindo um vetor de estatísticas `s = Series(Mean(), Variance(), Extrema())` que é feito utilizando a função `Series()`.
+:::{.justify}
+De maneira análoga aos exemplos anteriores, iniciamos definindo o objeto `Series`, que agrupa múltiplas estatísticas: `s = Series(Mean(), Variance(), Extrema())`.
 
-Em seguida atualizamos esses valores para um conjunto de dados aleatórios, nesse caso utilizamos dez mil observações \~ N(0,1).
-
-Obtemos como output uma tupla, que contém o valor dessas três estatísticas.
+Em seguida, atualizamos todas essas estatísticas simultaneamente para o conjunto de dados aleatórios, nesse caso composto por dez mil observações com distribuição Normal ($\sim N(0,1)$). Como resultado, obtemos uma tupla que contém os valores das três estatísticas, na ordem em que foram definidas.
 :::
 
-::: justify
-Podemos também utilizar a função `merge!` que une duas estatísticas já existentes
+:::{.justify}
+Podemos também utilizar a função `merge!`, que une duas estatísticas já existentes:
 :::
 
 ```{julia}
-
 a = fit!(Mean(), randn(500))
 b = fit!(Mean(), randn(500))
-
 merge!(a, b)
-
 println("Média combinada: ", value(a))
-
 ```
 
-## Aplicações Avançadas e Conclusão
+## Aplicações avançadas e conclusão
 
-::: justify
-`OnlineStats.jl` vai muito além de médias e variâncias, ele é uma ferramenta poderosa para estatísticas em cenários onde os dados são massivos ou chegam em tempo real. Com ele, você pode construir pipelines que atualizam estatísticas conforme os dados fluem, sem a necessidade de manter tudo na memória. 
+:::{.justify}
+O pacote `OnlineStats.jl` vai muito além de médias, variâncias e estatísticas sumárias. Ele é uma ferramenta poderosa para estatística em cenários onde os dados são massivos ou chegam em tempo real. Com ele, você pode construir _pipelines_ que atualizam estatísticas conforme os dados fluem, sem a necessidade de manter tudo na memória. 
 
-Nos próximos posts, vamos explorar casos de uso como regressão em maiores datasets, análise incremental de logs ou integração com fluxos de dados ao vivo.
-
-Mas caso queiram explorar mais enquanto isso, segue o link para o [github oficial do pacote](https://joshday.github.io/OnlineStats.jl/latest/stats_and_models/). Até lá!
+Nos próximos posts, vamos explorar casos de uso de regressão em _datasets_ maiores, análise incremental de _logs_ ou integração com fluxos de dados ao vivo. Caso você queira explorar mais enquanto isso, é possível acessar a [documentação oficial](https://joshday.github.io/OnlineStats.jl/latest/stats_and_models/) do pacote. Até lá!
 :::
 
 ::: callout-note
