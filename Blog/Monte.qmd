@@ -1,0 +1,113 @@
+---
+title: Monte Carlo, MonteCarloIntegration.jl
+description: Descubra como implementar integração Monte Carlo em Julia usando pacotes modernos. Blog prático com exemplos de código para calcular integrais multidimensionais de forma eficiente.
+
+categories:
+  - Julia
+  - Monte Carlo
+  - Integral
+author:
+  - name: Gabriel Campovilla da Silva
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/C4mpovill4
+
+  - name: 
+    affiliation: 
+    url: 
+    orcid: 
+
+date: "2025-07-30"
+image: imagens/
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+draft: false
+engine: knitrNet
+---
+
+## **Monte Carlo em Julia com MonteCarloIntegration.jl: Uma Introdução Prática**
+
+## **O que é Monte Carlo?**
+
+Monte Carlo é uma técnica poderosa para resolver problemas numéricos que envolvem muitas variáveis ou alta dimensionalidade, especialmente integrais complexas. Baseia-se em amostragem aleatória para estimar resultados, uma alternativa eficiente quando métodos tradicionais falham ou são muito lentos.
+
+## **Por que usar Julia para Monte Carlo?**
+
+Julia combina a simplicidade e flexibilidade de linguagens de alto nível com desempenho próximo ao de linguagens compiladas como C/C++, graças ao seu compilador Just-In-Time (JIT). Isso a torna ideal para computações intensivas e paralelizáveis, comuns em métodos Monte Carlo.
+
+## Conhecendo o MonteCarloMeasurements.jl 
+
+MonteCarloMeasurements.jl é um pacote Julia versátil que combina métodos Monte Carlo com propagação de incertezas. Ele é ideal para problemas que envolvem integração, amostragem estocástica e análise de incertezas, usando partículas para representar distribuições probabilísticas.
+
+## **Recursos principais:**
+
+-   Representação de incertezas via partículas (Particles)
+
+-   Integração Monte Carlo automática com propagação de incertezas
+
+-   Compatível com funções base do Julia (sin, exp, etc.)
+
+-   Suporte a distribuições probabilísticas do Distributions.jl
+
+-   Fácil paralelização
+
+## **Um pequeno exemplo de uso**
+
+```{julia}
+using Statistics
+
+function monte_carlo_integral(f, dim, n_samples; a=-5.0, b=5.0)
+    """
+    Integração Monte Carlo simples para função multidimensional
+    f: função a integrar
+    dim: dimensão do espaço
+    n_samples: número de amostras
+    a, b: limites de integração (assumindo mesmo intervalo para todas as dimensões)
+    """
+    volume = (b - a)^dim
+    sum_f = 0.0
+    sum_f2 = 0.0
+
+    for i in 1:n_samples
+        # Gerar ponto aleatório uniformemente distribuído
+        point = a .+ (b - a) .* rand(dim)
+        f_value = f(point)
+        sum_f += f_value
+        sum_f2 += f_value^2
+    end
+
+    # Média da função
+    mean_f = sum_f / n_samples
+
+    # Estimativa da integral
+    integral = volume * mean_f
+
+    # Estimativa do erro (desvio padrão)
+    variance = (sum_f2 / n_samples - mean_f^2)
+    error = volume * sqrt(variance / n_samples)
+
+    return (integral=integral, error=error, mean=mean_f)
+end
+
+# Função Gaussiana 2D
+f_gaussian(x) = exp(-sum(x.^2))
+
+# Calcular a integral
+result = monte_carlo_integral(f_gaussian, 2, 100000, a=-5.0, b=5.0)
+
+println("Integral Monte Carlo: ", result.integral)
+println("Erro estimado: ", result.error)
+println("Valor teórico (π): ", π)
+println("Diferença: ", abs(result.integral - π))
+```
+
+Esse código calcula a integral da função gaussiana multidimensional de forma eficiente, ilustrando o uso básico do MonteCarloMeasurements.jl, onde nos dá tais saidas:
+
+Integral Monte Carlo: 3.1705215436874568
+Erro estimado: 0.03861369787119071
+Valor teórico (π): π
+Diferença: 0.02892889009766364
+
+
