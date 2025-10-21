@@ -17,13 +17,13 @@ author:
     orcid: 
 
 date: "2025-07-30"
-image: imagens/
+image: imagens/monte.jpeg
 lang: "pt"
 format:
   html:
     toc: true
     self-contained: false
-draft: false
+draft: true
 engine: knitrNet
 ---
 
