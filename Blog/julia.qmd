@@ -1,0 +1,167 @@
+---
+title: Primeiros passos no Julia
+description: Quer dar os primeiros passos na linguagem de programação Julia? Confira nosso guia prático para iniciantes, aprenda os fundamentos e crie seu primeiro programa em menos de 5 minutos!
+
+categories:
+  -  Julia para Iniciantes
+  -  Guia Básico de Julia
+author:
+  - name: Gabriel Campovilla da Silva
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/C4mpovill4
+
+  - name: 
+    affiliation: 
+    url: 
+    orcid: 
+
+date: "2025-10-07"
+image: imagens/julia.jpeg
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+draft: false
+engine: knitrNet
+---
+
+## Sua Jornada em Julia Começa Aqui: Um Guia para Iniciantes
+
+Você já ouviu falar de uma linguagem de programação que promete a **velocidade do C** com a **simplicidade do Python**? Se isso soa como música para os seus ouvidos, então você precisa conhecer a Julia!
+
+Seja você um estudante, um cientista de dados ou apenas um curioso por tecnologia, este guia foi feito para te dar o pontapé inicial no universo da Julia, sem complicações. Vamos lá?
+
+### O que é Julia e por que ela é tão especial?
+
+Julia é uma linguagem de programação de alto nível e alta performance, projetada principalmente para computação científica e análise de dados. Ela foi criada para resolver o que os desenvolvedores chamam de "problema das duas linguagens": a necessidade de prototipar em uma linguagem lenta e fácil (como Python ou R) e depois reescrever tudo em uma linguagem rápida e complexa (como C++ ou Fortran) para obter performance.
+
+Com Julia, você escreve um código fácil de ler e, na maioria das vezes, ele já é incrivelmente rápido.
+
+**Principais Vantagens:**
+
+-   **Velocidade:** Compilada em tempo de execução (Just-in-Time), atingindo velocidades comparáveis às de linguagens estaticamente compiladas.
+
+-   **Sintaxe Amigável:** A sintaxe é limpa e se assemelha muito com a notação matemática tradicional, o que a torna intuitiva.
+
+-   **Tipagem Dinâmica:** Como em Python, você não precisa declarar o tipo de uma variável, mas pode, se quiser, para otimizar o desempenho.
+
+-   **Comunidade Ativa:** Possui uma comunidade acadêmica e científica vibrante e em constante crescimento.
+
+###  Primeiros Passos: Instalação e o REPL
+
+A maneira mais fácil de começar é baixar a versão oficial em [juliang.org](https://www.google.com/search?q=https://juliang.org/downloads/). A instalação é direta em Windows, macOS e Linux.
+
+Após instalar, abra o seu terminal (ou prompt de comando) e digite `julia`. Você será recebido pelo **REPL** (Read-Eval-Print Loop), o ambiente interativo da Julia. É aqui que a mágica acontece!
+
+O REPL é seu playground. Sinta-se à vontade para testar todos os comandos aqui.
+
+### Mãos à Obra: Os Fundamentos
+
+Vamos ver o básico que você precisa para começar a escrever seus primeiros códigos.
+
+-   **Variáveis:** Criar uma variável é tão simples quanto dar um nome a ela e atribuir um valor com o sinal de igual (`=`).
+
+```{julia}
+julia> x = 10
+10
+
+julia> saudacao = "Olá, mundo!"
+"Olá, mundo!"
+
+julia> pi_aproximado = 3.14159
+3.14159
+```
+
+-   **Operações Matemáticas:** Julia brilha aqui. As operações são exatamente como você espera.
+
+```{julia}
+julia> 5 + 3
+8
+
+julia> 100 / 5
+20.0
+
+julia> 2^3  # Potência
+8
+```
+
+-   **Funções:** Funções são blocos de código reutilizáveis. Em Julia, você pode declará-las de duas formas principais. A forma tradicional:
+
+```{julia}
+function somar(a, b)
+    return a + b
+end
+```
+
+Ou a forma compacta, muito útil para funções simples:
+
+```{julia}
+subtrair(a, b) = a - b
+```
+
+Para chamar uma função, basta usar seu nome seguido de parênteses: `somar(10, 5)`.
+
+### Exemplo Prático: Analisando a Área de um Terreno
+
+Vamos juntar tudo o que aprendemos em um exemplo prático. Imagine que precisamos criar uma função que calcula a área de um terreno retangular e nos diz se ele é pequeno, médio ou grande.
+
+Copie e cole o código abaixo diretamente no seu REPL para ver funcionando!
+
+```{julia}
+# Nossa função principal que analisa o terreno
+function analisar_terreno(largura, comprimento)
+    # Primeiro, calculamos a área
+    area = largura * comprimento
+    
+    # Usamos println() para exibir informações no console
+    println("O terreno de dimensões ", largura, "m x ", comprimento, "m tem uma área de ", area, " m².")
+    
+    # Agora, usamos uma estrutura condicional (if-elseif-else) para classificar o tamanho
+    if area < 100
+        println("Este é um terreno PEQUENO.")
+    elseif area >= 100 && area <= 500 # '&&' significa 'E'
+        println("Este é um terreno MÉDIO.")
+    else
+        println("Este é um terreno GRANDE.")
+    end
+end
+
+# --- Vamos testar nossa função! ---
+
+# Teste 1: Um terreno pequeno
+println("--- Análise 1 ---")
+analisar_terreno(8, 10)
+
+# Teste 2: Um terreno médio
+println("\n--- Análise 2 ---") # '\n' cria uma nova linha para separar
+analisar_terreno(20, 20)
+
+# Teste 3: Um terreno grande
+println("\n--- Análise 3 ---")
+analisar_terreno(50, 30)
+```
+
+**Ao executar este código, a saída será:**
+
+--- Análise 1 ---
+O terreno de dimensões 8m x 10m tem uma área de 80 m².
+Este é um terreno PEQUENO.
+
+--- Análise 2 ---
+O terreno de dimensões 20m x 20m tem uma área de 400 m².
+Este é um terreno MÉDIO.
+
+--- Análise 3 ---
+O terreno de dimensões 50m x 30m tem uma área de 1500 m².
+Este é um terreno GRANDE.
+
+Este exemplo simples mostra como **variáveis**, **cálculos**, **funções** e **lógica condicional** se unem para criar um programa útil!
+
+### Conclusão: E Agora?
+
+Você acabou de dar seus primeiros passos em Julia! Viu como a sintaxe é limpa e como é fácil criar programas funcionais.
+
+O verdadeiro poder da Julia aparece quando você começa a explorar seu ecossistema de pacotes para áreas como visualização de dados (`Plots`), machine learning (`Flux`) e manipulação de dados (`DataFrames`).
+
+O convite está feito: continue explorando, teste novas ideias no seu REPL e não tenha medo de errar. A jornada é desafiadora, mas extremamente recompensadora. Bem-vindo à comunidade Julia!
