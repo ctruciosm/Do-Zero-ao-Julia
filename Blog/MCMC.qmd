@@ -1,0 +1,89 @@
+---
+title: MCMC com Turing.jl 
+description: O Markov Chain Monte Carlo (MCMC) é uma técnica essencial da inferência Bayesiana, permitindo estimar distribuições posteriores complexas que não podem ser calculadas diretamente. Com o pacote Turing.jl, é possível criar e amostrar modelos probabilísticos diretamente em Julia, combinando performance e simplicidade na modelagem.
+
+categories:
+  -  Programação Probabilística
+  -  Estatística Computacional
+  - Julia / Data Science
+author:
+  - name: Gabriel Campovilla da Silva
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/C4mpovill4
+
+  - name: 
+    affiliation: 
+    url: 
+    orcid: 
+
+date: "2025-10-03"
+image: imagens/
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+draft: false
+engine: knitrNet
+---
+
+## Blog: Introdução ao MCMC com Turing.jl na Linguagem Julia
+
+O Markov Chain Monte Carlo (MCMC) é uma técnica poderosa para realizar inferência Bayesiana, permitindo estimar distribuições posteriores complexas que são difíceis de calcular diretamente. Com o avanço das linguagens de programação, surgiram ferramentas que facilitam a construção e a amostragem desses modelos probabilísticos — e uma das mais promissoras no universo Julia é o pacote Turing.jl.
+
+Turing.jl é uma linguagem de programação probabilística (PPL) embutida na linguagem Julia. Isso significa que você pode definir modelos probabilísticos usando a mesma sintaxe intuitiva da linguagem Julia, e o Turing.jl cuida de executar a inferência eficiente usando técnicas como MCMC. A vantagem é combinar a performance de Julia com a simplicidade da modelagem probabilística.
+
+## **Como criar um modelo em Turing.jl**
+
+Para começar, instale o pacote Turing.jl com:
+
+```{julia}
+using Turing, StatsPlots, Random
+```
+
+Depois, você pode definir um modelo probabilístico com o macro \@model. Por exemplo, um modelo simples de regressão linear bayesiana pode ser definido assim:
+
+```{julia}
+Random.seed!(1234)
+
+# Dados aleatórios criados para tal teste
+n = 50
+x_data = collect(1:n)
+α_real = 3.0
+β_real = 2.0
+σ_real = 1.0
+y_data = α_real .+ β_real .* x_data .+ randn(n) .* σ_real
+
+# Modelo Bayesiano
+@model linear_regression(x, y) = begin
+    σ ~ InverseGamma(2, 3)
+    β ~ Normal(0, 5)
+    α ~ Normal(0, 5)
+    for i in eachindex(x)
+        y[i] ~ Normal(α + β * x[i], σ)
+    end
+end
+```
+
+## **Realizando amostragem MCMC**
+
+Após definir o modelo, podemos realizar a inferência utilizando o sampler NUTS (No-U-Turn Sampler), um método MCMC eficiente:
+
+```{julia}
+model = linear_regression(x_data, y_data)
+
+# (corrigido)
+chain = sample(model, NUTS(), 1000; chains=4)
+
+# Visualizar resultados
+describe(chain)
+plot(chain)
+```
+
+image: imagens/gráfico
+
+Este comando executa 1000 iterações do MCMC para estimar as distribuições posteriores dos parâmetros α, β e σ.
+
+## **Recursos de Turing.jl**
+
+Além do NUTS, o Turing.jl suporta diversos outros algoritmos de amostragem, permite rodar múltiplas cadeias em paralelo para melhor convergência, e disponibiliza abordagens variacionais e de otimização para inferência rápida. Sua integração com o ecossistema Julia facilita o uso conjunto com pacotes de machine learning, visualização e otimização.
