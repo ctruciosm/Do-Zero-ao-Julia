@@ -23,7 +23,7 @@ engine: knitr
 draft: false
 ---
 
-## Como e porque usar Julia para PCA
+## Como e por que usar Julia para PCA
 
 :::{.justify}
 A Análise de Componentes Principais (PCA) é uma técnica estatística fundamental para redução de dimensionalidade, que transforma um conjunto de variáveis correlacionadas em um conjunto menor de variáveis não correlacionadas, chamadas componentes principais. Isso facilita a visualização e a análise de dados complexos.
