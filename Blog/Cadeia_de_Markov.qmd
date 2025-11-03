@@ -1,0 +1,98 @@
+---
+title: "Cadeias de Markov com o pacote MarkovChainHammer.jl"
+description: |
+  Cadeias de Markov são modelos matemáticos poderosos usados para representar sistemas com memória limitada, e o pacote `MarkovChainHammer.jl` oferece ferramentas práticas para criar e manipular esses objetos de forma rápida e intuitiva, aproveitando o desempenho de `Julia`.
+categories:
+  - Cadeias de Markov
+  - Estatística
+  - Ferramentas
+author:
+  - name: Gabriel Campovilla da Silva
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/C4mpovill4
+  - name: Nicole Fredericci
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/NFredericci
+date: "2025-11-03"
+image: imagens/Markov.jpeg
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+engine: knitr
+draft: false
+---
+
+## O que são cadeias de Markov?
+
+:::{.justify}
+Imagine que você está jogando um jogo de tabuleiro e a sua próxima jogada depende somente da posição atual do seu peão, não de como ele chegou ali. Isso é o básico de uma cadeia de Markov: um conjunto de estados e probabilidades de transição entre eles, que determinam a dinâmica do sistema.
+
+Cadeias de Markov são modelos matemáticos poderosos usados para representar sistemas que evoluem ao longo do tempo com uma característica especial: o próximo estado depende apenas do estado atual, não de todo o histórico. Essa propriedade, chamada de "memória limitada" ou Markoviana, facilita muito a análise e previsão desses processos.
+:::
+
+## Por que usar Julia?
+
+:::{.justify}
+`Julia` é uma linguagem de programação eficiente e moderna, ótima para análise matemática e estatística. O pacote `MarkovChainHammer.jl` oferece ferramentas práticas para criar, manipular e analisar cadeias de Markov de forma rápida e intuitiva, aproveitando o desempenho da linguagem.
+:::
+
+## Exemplo prático
+
+:::{.justify}
+Vamos criar uma cadeia de Markov básica em `Julia`, simular estados e calcular a distribuição estacionária — uma distribuição que permanece constante ao longo do tempo. Primeiro, vamos instalar e carregar os pacotes necessários:
+:::
+
+```{julia}
+using Pkg
+Pkg.add("MarkovChainHammer")
+
+using MarkovChainHammer
+using LinearAlgebra
+```
+
+:::{.justify}
+Em seguida, vamos criar a matriz de transição, que determina as probabilidades do sistema ir de um estado para o outro:
+:::
+
+```{julia}
+P = [0.6 0.3 0.1;
+     0.2 0.5 0.3;
+     0.4 0.2 0.4]
+```
+
+:::{.justify}
+As linhas de código abaixo calculam a distribuição estacionária de uma cadeia de Markov com três estados (Ensolarado, Chuvoso, Nublado): 
+:::
+
+```{julia}
+vals, vecs = eigen(Matrix(P'))
+stationary_idx = findfirst(isapprox(1.0), vals)
+stationary_dist = real(vecs[:, stationary_idx])
+stationary_dist ./= sum(stationary_dist)
+estados = ["Ensolarado", "Chuvoso", "Nublado"]
+```
+
+:::{.justify}
+A saída do próximo código mostra a probabilidade de o sistema estar em cada estado no longo prazo, independentemente do estado inicial:
+:::
+
+```{julia}
+for (i, prob) in enumerate(stationary_dist)
+    println("$(estados[i]): $(round(prob*100, digits=2))%")
+end
+```
+
+
+## Aplicações e considerações
+
+:::{.justify}
+As cadeias de Markov aparecem em muitos campos: modelagem de filas, genética, finanças, aprendizado de máquina, entre outros. Com o `MarkovChainHammer.jl`, fica muito mais fácil explorar essas aplicações, analisar grandes sistemas e até desenvolver modelos mais complexos.
+
+Para aprofundar as funcionalidades do pacote, é possível acessar a [documentação oficial](https://sandreza.github.io/MarkovChainHammer.jl/dev/) e experimentar ampliar os exemplos com mais estados e análise de propriedades.
+:::
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::
