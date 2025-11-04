@@ -1,18 +1,19 @@
 ---
 title: "Introdução ao BioSequences.jl"
 description: |
-  Um breve guia em Julia para manipulação de sequências biológicas com o pacote BioSequences.jl, incluindo geração, leitura e escrita de arquivos FASTA.
+  Descubra a alta performance de Julia na bioinformática! Este guia apresenta o pacote `BioSequences` para a manipulação otimizada de sequências biológicas e a leitura/escrita eficiente de formatos comuns como _FASTA_.
 categories:
   - Guia
+  - Pacotes
+  - Ferramentas
 author:
   - name: Caio Frare
     affiliation: "Universidade Estadual de Campinas"
     url: https://github.com/caiofrare
-  - name: Carlos Trucíos
+  - name: Nicole Fredericci
     affiliation: "Universidade Estadual de Campinas"
-    url: https://ctruciosm.github.io
-    orcid: 0000-0001-8746-8877
-date: "2025-09-04"
+    url: https://github.com/NFredericci
+date: "2025-10-17"
 image: imagens/biosequences_capa.png
 lang: pt
 format:
@@ -20,7 +21,8 @@ format:
     toc: true
     toc-depth: 3
     self-contained: false
-draft: true
+engine: knitr
+draft: false
 ---
 
 ## Introdução
@@ -28,115 +30,107 @@ draft: true
 ::: {.justify}
 A bioinformática é uma das áreas que mais se beneficia do uso de linguagens de programação de alto desempenho. Em análises que envolvem milhões de sequências de DNA, RNA ou proteínas, a eficiência é essencial.
 
-Em `Julia`, o pacote `BioSequences.jl` fornece uma forma rápida e prática de representar e manipular sequências biológicas, como DNA, RNA e proteínas, com tipos especializados que otimizam memória e performance.
+Em `Julia`, o pacote `BioSequences` fornece uma forma rápida e prática de representar e manipular sequências biológicas (como DNA, RNA e proteínas) com tipos especializados que otimizam memória e performance.
 
-Neste post, vamos ver como usar o `BioSequences.jl` para criar, acessar e manipular sequências biológicas de forma simples.
+Neste post, vamos aprender a usar o `BioSequences.jl` para criar, acessar e manipular sequências biológicas de forma simples.
 :::
 
 ## Instalação
 
 ::: {.justify}
-Para instalar o pacote, basta rodar no REPL do Julia:
+Para instalar os pacote usados neste guia, basta executar o seguinte código no REPL do `Julia`:
 :::
 
 ```{julia}
-
 using Pkg
 
-Pkg.add("BioSequences")
-
+Pkg.add(["BioSequences", "FASTX"])
 ```
 
-## Criando Sequências
+## Criando sequências
 
 ::: {.justify}
-O pacote possui tipos próprios para representar moléculas:
+O pacote `BioSequences` possui tipos próprios para representar moléculas:
 
--   `dna`: Sequência de DNA
+-   `dna`: Sequência de DNA.
 
--   `rna`: Sequência de RNA
+-   `rna`: Sequência de RNA.
 
--   `aa`: Sequência de amiaminoácidos (proteínas)
+-   `aa`: Sequência de aminoácidos (proteínas).
 :::
 
 ```{julia}
-
 using BioSequences
 
 dna = dna"ACGTACGT"
 rna = rna"AUGCUU"
 proteina = aa"MTEYKLVVVGAG"  
-
 ```
 
-## Sequências Aleatórias
+## Sequências aleatórias
 
 ::: {.justify}
-Gerar sequências aleatórias é útil para testes:
+Além de criar sequências específicas, gerar sequências aleatórias pode ser útil nos contextos de teste. Para gerar uma sequência aleatória — e passível de reprodução com a função `seed!` —, basta executar o código:
 :::
 
 ```{julia}
-
 using Random
-Random.seed!(123)
 
+Random.seed!(123)
 rand_dna = randdnaseq(50)   # 50 bases DNA (A,C,G,T)
 rand_rna = randrnaseq(30)   # 30 bases RNA (A,C,G,U)
 rand_aa  = randaaseq(20)    # 20 aa (proteína)
-
 ```
 
-## Acessando Elementos
+## Acessando elementos
 
 ::: {.justify}
-As sequências funcionam de forma similar a strings ou vetores, permitindo acessar bases específicas:
+As sequências funcionam de forma similar a strings ou vetores, de modo que é possível acessar bases específicas:
 :::
 
 ```{julia}
-
-dna[1]          # primeiro nucleotídeo
-dna[3:6]        # fatia
-length(dna)     # tamanho da sequência
-
-
+dna[1]          # Retorna o primeiro nucleotídeo
+dna[3:6]        # Retorna a fatia (substring) da posição 3 à 6
+length(dna)     # Retorna o tamanho da sequência
 ```
 
-## Operações Básicas
+## Operações básicas
 
 ::: {.justify}
-O pacote inclui várias operações comuns em bioinformática, como:
+O pacote inclui várias operações comuns em bioinformática, dentre elas:
 
--   `reverse()`: Inverte a ordem da sequência, retornando a mesma cadeia de nucleotídeos, mas lida de trás para frente. É    útil, por exemplo, para trabalhar com a fita complementar de DNA.
+-   `reverse()`: Inverte a ordem da sequência, retornando a mesma cadeia de nucleotídeos, mas lida de trás para frente. É útil, por exemplo, para trabalhar com a fita complementar de DNA.
 
+-   `complement()`: Gera a sequência complementar, substituindo cada nucleotídeo pelo seu par correspondente (A ↔ T e C ↔ G no DNA; A ↔ U e C ↔ G no RNA).
 
--   `complement()`: Gera a sequência complementar, substituindo cada nucleotídeo pelo seu par correspondente (A ↔ T e C ↔ G no   DNA; A ↔ U e C ↔ G no RNA).
+-   `reverse_complement()`: Combina as duas operações anteriores. Primeiro, calcula o complemento e depois o inverte. Essa operação é fundamental em bioinformática, pois representa a segunda fita do DNA dupla-hélice.
 
-
--   `reverse_complement()`: Combina as duas operações anteriores: primeiro calcula o complemento, depois o inverte. Essa operação é       fundamental em bioinformática, pois representa a segunda fita do DNA dupla-hélice.
-
--   `translate()`: Realiza a tradução de uma sequência de DNA (ou RNA) em proteína, seguindo o código genético padrão (triplas   de bases → aminoácidos). É a simulação computacional do processo biológico que ocorre na síntese proteica.
+-   `translate()`: Realiza a tradução de uma sequência de DNA (ou RNA) em proteína, seguindo o código genético padrão (triplas de bases → aminoácidos). É a simulação computacional do processo biológico que ocorre na síntese proteica.
 :::
 
 ```{julia}
-
 reverse(dna)
 complement(dna)
 reverse_complement(dna)
-
-translate(dna"ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG")  # DNA/RNA → proteína
-
+translate(dna"ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG")  
 ```
 
-## Leitura e Escrita (FASTA/FASTQ)
+## Leitura e escrita (_FASTA/FASTQ_)
 
 ::: {.justify}
-Na prática da bioinformática, os formatos `FASTA` e `FASTQ` são os mais comuns para armazenar sequências biológicas e suas qualidades de leitura.
-O pacote `FASTX.jl` integra-se muito bem ao `BioSequences.jl`, permitindo ler, escrever e iterar sobre registros de forma eficiente.
+Na prática da bioinformática, os formatos _FASTA_ e _FASTQ_ são os mais comuns para armazenar sequências biológicas e suas qualidades de leitura. O pacote `FASTX.jl` integra-se muito bem ao `BioSequences.jl`, permitindo ler, escrever e iterar sobre registros de forma eficiente.
 
-Com ele, podemos facilmente carregar bancos de sequências para análise, processar leituras de sequenciamento ou salvar resultados em novos arquivos, mantendo a compatibilidade com ferramentas amplamente utilizadas em pipelines de biologia computacional.
+Com ele, podemos facilmente carregar bancos de sequências para análise, processar leituras de sequenciamento ou salvar resultados em novos arquivos, mantendo a compatibilidade com ferramentas amplamente utilizadas em _pipelines_ de biologia computacional.
 
-Deixo aqui o [link](https://drive.google.com/file/d/1VxA72_DKlifgnfec5fdBzWt2t6uHOKy6/view?usp=sharing) para os dados em FASTA que usei como exemplo.
+Para fazer o download dos dados usados no exemplo diretamente no seu diretório, basta executar o código abaixo:
 :::
+
+```{julia}
+using Downloads
+    
+url = "https://drive.google.com/uc?export=download&id=1VxA72_DKlifgnfec5fdBzWt2t6uHOKy6"
+Downloads.download(url, "seq_exemplo.fasta")
+```
 
 ```{julia}
 using FASTX
@@ -159,9 +153,9 @@ end
 ## Conclusão
 
 ::: {.justify}
-O BioSequences.jl é uma ferramenta poderosa para representar e manipular sequências biológicas em Julia. Ele permite criar sequências tipadas de DNA, RNA e proteínas, acessar elementos, realizar operações como complemento e tradução, buscar motivos, gerar sequências aleatórias e interagir com formatos comuns como FASTA e FASTQ (via FASTX.jl).
+O `BioSequences.jl` é uma ferramenta poderosa para representar e manipular sequências biológicas em `Julia`. Ele permite criar sequências tipadas de DNA, RNA e proteínas; acessar elementos; realizar operações como complemento e tradução; buscar motivos (na biologia, são padrões que se repetem e que geralmente estão ligados a alguma função biológica); gerar sequências aleatórias; e interagir com formatos comuns como _FASTA_ e _FASTQ_ (via `FASTX.jl`).
 
-Este foi apenas um guia introdutório. Em futuros posts, podemos explorar temas mais avançados como alinhamento de sequências, integração com bancos de dados biológicos e análise de grandes genomas.
+Este foi apenas um guia introdutório. Em futuros posts, com teor mais avançado, podemos explorar temas mais avançados como alinhamento de sequências, integração com bancos de dados biológicos e análise de grandes genomas.
 :::
 
 ::: callout-note

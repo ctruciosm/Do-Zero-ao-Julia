@@ -1,272 +1,282 @@
 ---
-title: "Manipulação e Amostragem de Variáveis Aleatórias em Julia"
-description: "Um guia completo de como trabalhar com inúmeras distribuições de probabilidade em Julia, explorando Estatísticas Descritivas, Amostragem e Estimação."
+title: "Manipulação e Amostragem de Variáveis Aleatórias"
+description: |
+  Distribuições de probabilidade são a base para muitas análises estatísticas, e seu entendimento é fundamental para realizar até os modelos mais básicos. Este é um guia completo de como trabalhar com inúmeras distribuições de probabilidade em `Julia`, explorando estatísticas descritivas, amostragem e estimação. 
 categories:
   - Primeiros Passos
   - Variáveis Aleatórias
+  - Ferramentas
 author:
   - name: Vitor Ribas Perrone
     affiliation: "Universidade Estadual de Campinas"
     url: https://github.com/VitorRibasP
-    orcid: 0009-0009-6923-7712
-date: "2025-07-09"
-image: imagens/distribuicoesprobabilidade
+    orcid: 0009-0009-6923-7712 
+  - name: Nicole Fredericci
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/NFredericci
+date: "2025-10-27"
+image: imagens/distribuicoesprobabilidade.png
 lang: pt
 format:
   html:
     toc: true
     toc-depth: 3
     self-contained: false
-draft: true
+engine: knitr
+draft: false
 ---
 
 ## Introdução
 
-::: justify
+:::{.justify}
 Distribuições de probabilidade são a base para muitas análises estatísticas, pois descrevem como os dados podem variar e quais valores são mais ou menos prováveis de ocorrer. Entender e manipular essas distribuições é fundamental para realizar desde análises simples até modelos estatísticos mais avançados.
 
-Com Julia, trabalhar com distribuições torna-se algo rápido, intuitivo e flexível. Julia oferece uma variedade enorme de distribuições de diversos tipos, todas acessíveis por meio de uma sintaxe simples e direta. Além disso, é possível gerar amostras, calcular estatísticas importantes e visualizar comportamentos probabilísticos com facilidade.
+Com `Julia`, trabalhar com distribuições é rápido, intuitivo e flexível. A linguagem oferece uma variedade enorme de distribuições de diversos tipos, todas acessíveis por meio de uma sintaxe simples e direta. Além disso, é possível gerar amostras, calcular estatísticas importantes e visualizar comportamentos probabilísticos com facilidade.
 
-Neste post, vamos apresentar os conceitos básicos das distribuições de probabilidade em Julia e mostrar como criar, manipular e amostrar essas distribuições usando exemplos práticos.
+Neste post, vamos apresentar os conceitos básicos das distribuições de probabilidade em `Julia` e mostrar como criar, manipular e amostrar destas distribuições usando exemplos práticos.
 :::
 
-## Instalando e Carregando os Pacotes Necessários
+## Instalação
 
-Em primeiro lugar, vamos instalar e carregar os pacotes que serão utilizados.
+:::{.justify}
+Em primeiro lugar, vamos instalar e carregar os pacotes que serão utilizados nos exemplos:
+:::
 
 ```{julia}
-Pkg.add("Distributions")
-using Distributions
-Pkg.add("Random")
-using Random
-Pkg.add("StatsBase")
-using StatsBase
-Pkg.add("StatsPlots")
-using StatsPlots
-Pkg.add("Statistics")
-using Statistics
-Pkg.add("DataFrames")
-using DataFrames
+Pkg.add(["Distributions", "Random", "StatsBase", "StatsPlots", "Statistics", "DataFrames"])
+
+using Distributions, Random, StatsBase, StatsPlots, Statistics, DataFrames
 ```
 
-## Determinação de Sementes
+## Reprodutibilidade
 
-::: justify
+:::{.justify}
 Ao lidar com números pseudoaleatórios, garantir a reprodutibilidade dos resultados é fundamental. Para isso, fixamos uma semente antes de executar qualquer procedimento que envolva aleatoriedade. A função `Random.seed!` permite definir essa semente, assegurando que qualquer execução do código produza resultados idênticos.
 :::
 
 ```{julia}
 Random.seed!(123)
 ```
-## Realização de Sorteios
 
-::: justify
-Antes de abordarmos as distribuições de probabilidade, vamos exemplificar como realizar sorteios simples a partir de um vetor. Essa funcionalidade é muito útil para gerar amostras com ou sem reposição. Inicialmente, criamos um vetor com quatro elementos.
+## Realização de sorteios
+
+:::{.justify}
+Antes de abordarmos as distribuições de probabilidade, vamos exemplificar como realizar sorteios simples a partir de um vetor. Essa funcionalidade é muito útil para gerar amostras, com ou sem reposição. Inicialmente, criamos um vetor com quatro elementos:
 :::
 
 ```{julia}
 vetor = ["A", "B", "C", "D"]
 ```
-::: justify
-Dessa forma, para realizar um sorteio, basta utilizar a função `sample` e especificar o tamanho da amostra. Já para determinar se será com ou sem reposição, basta alterar o argumento `replace`.
+
+:::{.justify}
+Dessa forma, para realizar um sorteio, basta utilizar a função `sample` e especificar o tamanho da amostra. Já para determinar se será com ou sem reposição, basta alterar o argumento `replace`, tendo em mente que o padrão é `replace = false` — ou seja, sem reposição.
 :::
 
-
 ```{julia}
-sample(vetor, 2, replace = false)
-```
-```{julia}
+sample(vetor, 2)
 sample(vetor, 10, replace = true)
 ```
 
-## Criação das Variáveis Aleatórias
+## Variáveis aleatórias
 
-::: justify
+:::{.justify}
 O pacote `Distributions` oferece uma ampla variedade de ferramentas para trabalhar com variáveis aleatórias de diferentes tipos. Ele permite criar objetos que representam distribuições de probabilidade, possibilitando a aplicação de diversas funções e operações diretamente sobre elas. A seguir, exploraremos algumas das distribuições disponíveis.
 :::
 
 ### Contínuas
+
+:::{.justify}
 Algumas das distribuições contínuas disponíveis pelo pacote são:
+:::
+
 ```{julia}
-#Normal
 Normal(0,1)
-#Beta
 Beta(2,2)
-#Cauchy
 Cauchy(0,1)
-#Qui Quadrado
-Chisq(3)
-#Exponencial
-Exponential(2)
-#Gama
-Gamma(2,1)
-#T
-TDist(2)
-#Uniforme
-Uniform(0,1)
-#Weibull
+Chisq(3) #Qui Quadrado
+Exponential(2) 
+Gamma(2,1) 
+TDist(2) #T-Student
+Uniform(0,1) 
 Weibull(2,3)
 ```
 
 ### Discretas
+
+:::{.justify}
 Algumas das distribuições discretas disponíveis pelo pacote são:
+:::
+
 ```{julia}
-#Bernoulli
 Bernoulli(0.8)
-#Binomial
 Binomial(10,0.5)
-#Uniforme Discreta
 DiscreteUniform(0,10)
-#Geométrica
 Geometric(0.7)
-#Hipergeométrica
 Hypergeometric(5, 10, 3)
-#Binomial Negativa
 NegativeBinomial(5, 0.5)
-#Poisson
 Poisson(5)
 ```
 
 ### Multivariadas
+
+:::{.justify}
 Algumas das distribuições multivariadas disponíveis pelo pacote são:
+:::
+
 ```{julia}
-#Multinomial
 Multinomial(10, [0.1, 0.2, 0.7])
-#Normal Multivariada
-MvNormal([0, 1], [1 0.6 ; 0.6 2])
-#Dirichlet
+MvNormal([0, 1], [1 0.6 ; 0.6 2]) #Normal Multivariada
 Dirichlet([0.1, 0.2, 0.7])
 ```
 
 ### Truncadas
-::: justify
-Além das distribuições clássicas, o pacote permite o uso de distribuições truncadas, ou seja, com o suporte restringido a um intervalo específico. Para isso, utilizamos a função `truncated` com os limites desejados. 
+
+:::{.justify}
+Além das distribuições clássicas, o pacote permite o uso de distribuições truncadas, ou seja, com o suporte restringido a um intervalo específico. Para isso, utilizamos a função `truncated` com os limites desejados:
 :::
+
 ```{julia}
-#Normal Padrão Truncada
-truncated(Normal(0,1), -50, 50)
-#Poisson Truncada Inferiormente
-truncated(Poisson(3), lower = 2)
-#Exponencial Truncada Superiormente
-truncated(Exponential(5), upper = 50)
+truncated(Normal(0,1), -50, 50) #Limites inferior e superior, respectivamente
+truncated(Poisson(3), lower = 2) #Poisson Truncada Inferiormente
+truncated(Exponential(5), upper = 50) #Exponencial Truncada Superiormente
 ```
 
 ### Mistas
-::: justify
-Também é possível trabalhar com distribuições misturadas, que combinam componentes discretas e contínuas. Utilizamos a função `MixtureModel` para definir essas misturas. Para exemplificar seu funcionamento, vamos definir uma variável aleatória que segue uma Normal(-2,2) com probabilidade 0.25, uma Normal(0,1) com probabilidade 0.45 e uma Normal(3,5) com probabilidade 0.3.
+
+:::{.justify}
+Também é possível trabalhar com distribuições mistas, que combinam componentes de distribuições discretas e contínuas. Utilizamos a função `MixtureModel` para definir essas misturas. Para exemplificar seu funcionamento, vamos definir uma variável aleatória que segue uma Normal($-2,2$) com probabilidade $0.25$, uma Normal($0,1$) com probabilidade $0.45$ e uma Normal($3,5$) com probabilidade $0.3$.
 :::
+
 ```{julia}
-MixtureModel(Normal[
-   Normal(-2, 2),
-   Normal(0, 1),
-   Normal(3, 5)], [0.25, 0.45, 0.3])
+MixtureModel(Normal[Normal(-2, 2),
+                    Normal(0, 1),
+                    Normal(3, 5)], 
+                   [0.25, 0.45, 0.3])
 ```
 
-### Estatísticas de Ordem
-::: justify
-O pacote permite ainda a definição de distribuições de estatísticas de ordem, que são distribuições associadas a valores ordenados da amostra, como mínimo, mediana e máximo.
+### Estatísticas de ordem
+
+:::{.justify}
+O pacote permite ainda a definição de distribuições de estatísticas de ordem, que são distribuições associadas a valores ordenados da amostra, como mínimo, mediana e máximo. No código a seguir, estamos analisando a distribuição dessas três estatísticas para amostras da Normal padrão, todas de tamanho $11$.
 :::
+
 ```{julia}
-#Distribuição do Mínimo para Amostra de Tamanho 11 da Normal Padrão
+# Distribuição do Mínimo 
 OrderStatistic(Normal(0,1), 11, 1)
-#Distribuição da Mediana para Amostra de Tamanho 11 da Normal Padrão
+# Distribuição da Mediana 
 OrderStatistic(Normal(0,1), 11, 6) 
-#Distribuição do Máximo para Amostra de Tamanho 11 da Normal Padrão
+# Distribuição do Máximo 
 OrderStatistic(Normal(0,1), 11, 11)
-#Distribuição conjunta do Mínimo, Mediana e Máximo para Amostra de Tamanho 11 da Normal Padrão
+# Distribuição conjunta do Mínimo, Mediana e Máximo 
 JointOrderStatistics(Normal(0,1), 11, (1, 6, 11))
 ```
 
-## Manipulação e Amostragem
-::: justify
-Com isso, algumas das possibilidades de distribuição que podemos utilizar com o pacote `Distributions` já foram apresentadas, e para ver na íntegra o que é possível, basta acessar a [DOCUMENTAÇÃO](https://juliastats.org/Distributions.jl/stable/) do pacote. Para explorar as demais possibilidades do pacote, vamos utilizar a distribuição normal padrão.
+## Manipulação e amostragem
+
+:::{.justify}
+Com isso, algumas das distribuições disponíveis no pacote `Distributions` já foram apresentadas; para ver na íntegra todas as distribuições contidas nele, basta acessar a [documentação oficial](https://juliastats.org/Distributions.jl/stable/) do pacote. Para explorar as demais funções de `Distributions`, vamos utilizar a distribuição Normal padrão.
+
+Primeiro, vamos criar o objeto `DistribuicaoNormal` a partir da seguinte linha de código:
 :::
+
 ```{julia}
 DistribuicaoNormal = Normal(0,1)
 ```
 
-### Estatísticas Descritivas
+### Estatísticas descritivas
+
+:::{.justify}
 Algumas das estatísticas descritivas que podemos utilizar são:
+:::
+
 ```{julia}
-#Media
-mean(DistribuicaoNormal)
-#Mediana
-median(DistribuicaoNormal)
-#Moda
-mode(DistribuicaoNormal)
-#Desvio Padrão
-std(DistribuicaoNormal)
-#Variância
-var(DistribuicaoNormal)
-#Quantil
-quantile(DistribuicaoNormal, 0.25)
-#Assimetria
-skewness(DistribuicaoNormal)
-#Curtose
-kurtosis(DistribuicaoNormal)
-#Entropia
-entropy(DistribuicaoNormal)
-#Mínimo
-minimum(DistribuicaoNormal)
-#Máximo
-maximum(DistribuicaoNormal)
+mean(DistribuicaoNormal) # Média
+median(DistribuicaoNormal) # Mediana
+mode(DistribuicaoNormal) # Moda
+std(DistribuicaoNormal) # Desvio Padrão
+var(DistribuicaoNormal) # Variância
+quantile(DistribuicaoNormal, 0.25) # Quantil
+skewness(DistribuicaoNormal) # Assimetria
+kurtosis(DistribuicaoNormal) # Curtose
+entropy(DistribuicaoNormal) # Entropia
+minimum(DistribuicaoNormal) # Mínimo
+maximum(DistribuicaoNormal) # Máximo
 ```
 
-### Funções da Distribuição
-Além disso, também podemos acessar funções vinculadas à distribuição, como:
+### Funções
+
+:::{.justify}
+Além disso, também podemos aplicar funções vinculadas à distribuição, como:
+:::
+
 ```{julia}
-#Densidade
-pdf(DistribuicaoNormal, 0)
-#LogDensidade
-logpdf(DistribuicaoNormal, 0)
-#Função de Distribuição Acumulada
-cdf(DistribuicaoNormal, 0)
+pdf(DistribuicaoNormal, 0) # Densidade
+logpdf(DistribuicaoNormal, 0) # LogDensidade
+cdf(DistribuicaoNormal, 0) # Função de Distribuição Acumulada
 ```
 
 ### Amostragem
-::: justify
-Para gerar amostras da distribuição, utilizamos a função `rand`. Por exemplo, uma amostra de tamanho 4 da normal padrão:
+
+:::{.justify}
+Para gerar amostras da distribuição, utilizamos a função `rand`. Por exemplo, uma amostra de tamanho $4$ da Normal padrão pode ser obtida a partir de:
 :::
+
 ```{julia}
 rand(DistribuicaoNormal, 4)
 ```
 
 ### Visualização
+
+:::{.justify}
 A densidade da distribuição pode ser visualizada com a função `plot`:
-```{julia}
-plot(DistribuicaoNormal, title = "Densidade da Distribuição Normal Padrão", legend = false, size = (800, 500))
-```
-### Estimação por Máxima Verossimilhança
-::: justify
-Uma funcionalidade importante é a estimação de parâmetros via Máxima Verossimilhança a partir de amostras geradas. Por exemplo, considere amostras das distribuições Normal(2,5) e Binomial(25, 0.7).
 :::
+
+```{julia}
+plot(DistribuicaoNormal, 
+     title = "Densidade da Distribuição Normal Padrão", 
+     legend = false, 
+     size = (800, 500))
+```
+
+### Estimação
+
+:::{.justify}
+Uma funcionalidade importante é a estimação de parâmetros via __Máxima Verossimilhança__ a partir de amostras geradas. Por exemplo, vamos gerar $100$ amostras da Normal com $\mu=2$ e $\sigma=5$, e $10$ amostras da Binomial com $n=25$ e $p=0.7$, e salvá-las em objetos distintos:
+:::
+
 ```{julia}
 amostra_normal = rand(Normal(2,5), 100)
 amostra_binomial = rand(Binomial(25, 0.7), 10)
 ```
-::: justify
+
+:::{.justify}
 Utilizamos a função `fit_mle` para estimar os parâmetros dessas distribuições a partir dos dados:
 :::
+
 ```{julia}
 fit_mle(Normal, amostra_normal)
 fit_mle(Binomial, 25, amostra_binomial)
 ```
 
-## Comparando Amostras da Normal com a Própria Distribuição
-::: justify
-Para aplicar os conceitos vistos, vamos gerar amostras de tamanhos distintos da normal padrão e comparar suas estatísticas descritivas com as da distribuição teórica. Em primeiro lugar, vamos gerar as amostras.
+## Comparação
+
+:::{.justify}
+Para aplicar os conceitos vistos, vamos gerar amostras de tamanhos distintos da Normal padrão e comparar suas estatísticas descritivas com as da distribuição teórica. Em primeiro lugar, vamos gerar $10$, $100$ e $1000$ amostras a partir do seguinte código:
 :::
+
 ```{julia}
 DistribuicaoNormal = Normal(0, 1)
 amostra10 = rand(DistribuicaoNormal, 10)
 amostra100 = rand(DistribuicaoNormal, 100)
 amostra1000 = rand(DistribuicaoNormal, 1000)
 ```
-::: justify
-Em seguida, calculamos as estatísticas e organizamos os resultados em uma tabela para facilitar a comparação. A função `estatisticas` foi criada para computar as principais medidas e facilitar o processo:
+
+:::{.justify}
+Em seguida, calculamos as estatísticas e organizamos os resultados em uma tabela para facilitar a comparação. A função `estatisticas` foi criada para computar as principais medidas (média, mediana, desvio padrão, mínimo e máximo) e facilitar o processo:
 :::
+
 ```{julia}
-#Função para calcular estatísticas descritivas de um vetor
+# Função para calcular estatísticas descritivas de um vetor
 function estatisticas(vetor)
     return (
         media = mean(vetor),
@@ -274,34 +284,36 @@ function estatisticas(vetor)
         desvio = std(vetor),
         minimo = minimum(vetor),
         maximo = maximum(vetor)
-    )
-end
-
-#Cálculo das estatísticas da distribuição teórica
+        )
+    end
+# Cálculo das estatísticas da distribuição teórica
 teoricas = (
     media = mean(DistribuicaoNormal),
     mediana = median(DistribuicaoNormal),
     desvio = std(DistribuicaoNormal),
     minimo = -Inf,
-    maximo = Inf
-)
-
-#Criação da tabela dos resultados
+    maximo = Inf)
+# Tabela de resultados
 DataFrame(
     Estatística = ["Média", "Mediana", "Desvio Padrão", "Mínimo", "Máximo"],
     Amostra10 = collect(estatisticas(amostra10)),
     Amostra100 = collect(estatisticas(amostra100)),
     Amostra1000 = collect(estatisticas(amostra1000)),
-    Distribuição = [teoricas.media, teoricas.mediana, teoricas.desvio, teoricas.minimo, teoricas.maximo]
-)
+    Distribuição = [teoricas.media, 
+                    teoricas.mediana, 
+                    teoricas.desvio, 
+                    teoricas.minimo, 
+                    teoricas.maximo])
 ```
-::: justify
-A partir da tabela criada, fica evidente que quanto maior o tamanho da amostra, mais próximas do valor teórico ficam as nossas estatísticas descritivas.
+
+:::{.justify}
+A partir da tabela criada, fica evidente que as nossas estatísticas descritivas ficam mais próximas do valor teórico quanto maior for o tamanho da amostra.
 :::
+
 ## Conclusão
 
-::: justify
-Agora que você viu como criar, manipular e amostrar diversas distribuições de probabilidade em Julia, já pode aplicar esses conceitos em seus próprios projetos. Com a eficiência e simplicidade do Julia, fica muito mais fácil trabalhar com simulações, inferência estatística e até mesmo métodos avançados como Bootstrap e MCMC. Continue explorando, praticando e aproveitando tudo que Julia oferece para a estatística!
+:::{.justify}
+Agora que você viu como criar, manipular e amostrar diversas distribuições de probabilidade em `Julia`, já pode aplicar esses conceitos em seus próprios projetos. Com a eficiência e simplicidade da linguagem, fica muito mais fácil trabalhar com simulações, inferência estatística e até mesmo métodos avançados como _Bootstrap_ e _MCMC_ (Cadeia de Markov Monte Carlo). Continue explorando, praticando e aproveitando tudo que `Julia` oferece para a estatística!
 :::
 
 ::: callout-note

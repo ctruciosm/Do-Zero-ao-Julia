@@ -1,0 +1,106 @@
+---
+title: Otimização: minimizando ou maximizando com Optim.jl
+description: Aprenda como realizar otimização numérica na linguagem Julia usando o pacote Optim.jl. Veja um exemplo prático com a função de Rosenbrock e entenda como aplicar métodos como BFGS para encontrar mínimos de funções matemáticas de forma eficiente.
+
+categories:
+  -  Otimização Numérica
+  -  Computação Aplicada
+author:
+  - name: Gabriel Campovilla da Silva
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/C4mpovill4
+
+  - name: 
+    affiliation: 
+    url: 
+    orcid: 
+
+date: "2025-07-30"
+image: imagens/optim.jpeg
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+draft: false
+engine: knitrNet
+---
+
+## **Blog: Introdução à Otimização em Julia com o Pacote Optim**
+
+## **O que é Otimização?**
+
+Otimização é o processo de encontrar a melhor solução para um problema, minimizando ou maximizando uma função objetivo, frequentemente sujeita a restrições. Esse conceito é amplamente utilizado em ciência, engenharia, economia, e muitas outras áreas.
+
+## **Por que usar Julia para Otimização?**
+
+Julia é uma linguagem moderna, rápida e fácil de aprender, ideal para computação numérica e científica. Ela possui pacotes específicos para otimização, sendo o **Optim.jl** um dos principais para resolver problemas de otimização sem restrições ou com restrições simples.
+
+## **Pacote Optim.jl**
+
+O Optim é um pacote Julia que oferece métodos para otimização irrestrita e com caixas (limites nos valores das variáveis). Entre os algoritmos disponíveis no pacote estão:
+
+-   Gradientes conjugados;
+
+-   Algoritmos quasi-Newton (como BFGS e L-BFGS);
+
+-   Métodos de Newton e Newton com regiões de confiança;
+
+-   Métodos metaheurísticos como Simulated Annealing e Particle Swarm.
+
+Ele é inteiramente escrito em Julia, aproveitando vantagens como desempenho, integração com diferenciação automática e facilidade de uso.
+
+## **Como usar o Optim.jl?**
+
+Para começar, instale o pacote no Julia com:
+
+```{julia}
+using Pkg
+Pkg.add("Optim")
+```
+
+## **Exemplo prático**
+
+Vamos minimizar a função de Rosenbrock, um clássico teste em otimização:\
+$$f(x_1, x_2) = (1 - x_1)^2 + 100(x_2 - x_1^2)^2$$
+
+Código Julia usando Optim:
+
+```{julia}
+using Optim
+
+# Definindo a função objetivo
+rosenbrock(x) = (1 - x[1])^2 + 100*(x[2] - x[1]^2)^2
+
+# Ponto inicial de busca
+initial_x = [0.0, 0.0]
+
+# Otimização usando o método BFGS
+result = optimize(rosenbrock, initial_x, BFGS())
+
+# Resultados
+println("Solução encontrada: ", Optim.minimizer(result))
+println("Valor mínimo da função: ", Optim.minimum(result))
+```
+
+Esse exemplo mostra como otimizar uma função multivariada de maneira simples com Optim.jl.
+
+Em resumo nesse cógido definimos uma função não linear(Rosenbrock) e na sequência usamos o método BFGS para encontrar o ponto onde a função é mínima, com isso conseguimos mostrar o ponto ótimo e o valor mínimo alcançado.
+
+O que seria util caso estivessemos minimizar erro de previsão, ajustar parâmetros, minimizar custo, tempo, energia, onde se quer, entre outros.
+
+## **Recursos adicionais**
+
+-   O pacote suporta integração com JuMP para problemas com restrições.
+
+-   A documentação oficial é clara e oferece mais opções de algoritmos e ajustes avançados.
+
+-   Pode-se combinar Optim com outros pacotes Julia para problemas maiores e mais complexos.
+
+Esse blog serve como uma introdução rápida para o uso básico do Optim.jl em otimização, com foco em mostrar seu potencial e simplicidade para iniciantes em Julia e otimização
+
+<https://juliapackages.com/p/optim>
+
+<https://julianlsolvers.github.io/Optim.jl/stable/>
+
+<https://leonardosecchin.github.io/juliaopt_ex7/>

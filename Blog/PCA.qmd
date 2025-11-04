@@ -1,82 +1,80 @@
 ---
-title: 
-description: Introdução prática à Análise de Componentes Principais (PCA) em Julia, destacando o uso do pacote MultivariateStats.jl para realizar redução de dimensionalidade de forma eficiente.
-
+title: "Análise de Componentes Principais (PCA)"
+description: |
+  Introdução prática à Análise de Componentes Principais (PCA) em `Julia`, destacando o uso do pacote `MultivariateStats.jl` para realizar redução de dimensionalidade de forma eficiente.
 categories:
   - Estatística
   - Análise de Dados
-  - Julia
-
 author:
   - name: Gabriel Campovilla da Silva
     affiliation: "Universidade Estadual de Campinas"
     url: https://github.com/C4mpovill4
-
-  - name: 
-    affiliation: 
-    url: 
-    orcid: 
-
-date: "2025-07-30"
+  - name: Nicole Fredericci
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/NFredericci
+date: "2025-11-01"
 image: imagens/PCA.jpeg
 lang: "pt"
 format:
   html:
     toc: true
     self-contained: false
+engine: knitr
 draft: false
-engine: knitrNet
 ---
 
-## Introdução ao PCA Estatístico em Julia
+## Como e por que usar Julia para PCA
 
-A Análise de Componentes Principais (PCA) é uma técnica estatística fundamental para redução de dimensionalidade, que transforma um conjunto de variáveis correlacionadas em um conjunto menor de variáveis não correlacionadas chamadas componentes principais. Isso facilita a visualização e a análise de dados complexos.
+:::{.justify}
+A Análise de Componentes Principais (PCA) é uma técnica estatística fundamental para redução de dimensionalidade, que transforma um conjunto de variáveis correlacionadas em um conjunto menor de variáveis não correlacionadas, chamadas componentes principais. Isso facilita a visualização e a análise de dados complexos.
 
-## Por que usar Julia para PCA?
+`Julia` vem ganhando espaço por unir a facilidade e expressividade de linguagens como `Python`, com a velocidade de linguagens de baixo nível, como `C`. Para quem trabalha com ciência de dados, `Julia` oferece pacotes potentes e eficientes, com destaque para o pacote `MultivariateStats.jl` no âmbito do PCA.
 
-Julia vem ganhando espaço por unir a facilidade e expressividade de linguagens como Python com a velocidade de linguagens de baixo nível como C. Para quem trabalha com ciência de dados, Julia oferece pacotes potentes e eficientes, com destaque para o MultivariateStats.jl no âmbito do PCA.
+O pacote `MultivariateStats.jl` é o padrão em `Julia` para análise estatística multivariada, incluindo PCA, Análise Discriminante Linear, Análise de Fatores, entre outras técnicas. Ele foi projetado para oferecer métodos práticos e rápidos em estruturas e sintaxe compatíveis com a linguagem.
+:::
 
-## O pacote MultivariateStats.jl
+## Exemplo prático
 
-Este é o pacote padrão em Julia para análise estatística multivariada, incluindo PCA, Análise Discriminante Linear, Análise de Fatores, e mais. Ele foi projetado para oferecer métodos práticos e rápidos em estruturas e sintaxe compatíveis com a linguagem.
-
-## Exemplo Prático de PCA em Julia com MultivariateStats.jl
-
-Vamos ver um exemplo simples de como realizar PCA com este pacote utilizando o famoso conjunto de dados Iris.
+:::{.justify}
+Vamos ver um exemplo simples de como realizar PCA com este pacote, utilizando o famoso conjunto de dados `iris`. Primeiro, carregamos os pacotes cujas funções serão usadas no exemplo e, em seguida, salvamos o __dataset__ reduzido no objeto `X`:
+:::
 
 ```{julia}
+import Pkg
+Pkg.add(["MultivariateStats", "RDatasets"])
+
 using MultivariateStats
 using RDatasets
-
-# Carregamos dados, nesse casso usaremos o conjunto chamado iris, em sequência traspomos os dados para termos colunas como amostras
-iris = dataset("datasets", "iris")
-X = Matrix(iris[:, 1:4])' 
-
-# Ajustar o modelo de pca
-pca_model = fit(PCA, X; maxoutdim=2)
-
-# Obtemos os componentes principais
-principal_components = projection(pca_model)
-
-println("Componentes principais:")
-println(principal_components)
-
-# Projeção dos dados no espaço dos componentes principais
-scores = MultivariateStats.transform(pca_model, X)
-
-println("Dados projetados (primeiros 5 exemplos):")
-println(scores[:, 1:5])
-
 ```
 
-## O que fizemos no código acima?
+```{julia}
+iris = dataset("datasets", "iris")
+X = Matrix(iris[:, 1:4]) 
+```
 
-Aplicamos uma **Análise de Componentes Principais** no conjunto de dados **iris**. Na qual ele pega as quatro variáveis numéricas (SepalLength SepalWidth PetalLength PetalWidth) e as reduz para **dois componentes principais**, que juntos explicam quase **98% da variação dos dados**.
+:::{.justify}
+No exemplo abaixo, aplicamos uma Análise de Componentes Principais no conjunto de dados `iris`. O código seleciona as quatro variáveis numéricas (_SepalLength_, _SepalWidth_, _PetalLength_ e _PetalWidth_) e as reduz para dois componentes principais, que juntos explicam quase $98\%$ da variação dos dados.
 
-Os **componentes principais** mostram como cada variável original contribui para os novos eixos, e os **scores** são as coordenadas de cada flor nesse espaço 2D reduzido. Assim, o código transforma dados de 4 dimensões em 2, mantendo quase toda a informação para facilitar a análise e a visualização.
+Os __componentes principais__ mostram como cada variável original contribui para os novos eixos, e os __scores__ são as coordenadas de cada flor nesse espaço $2D$ reduzido. Assim, o código transforma dados de $4$ dimensões em $2$ dimensões mais relevantes, mantendo quase toda a informação para facilitar a análise e a visualização.
+:::
 
-## Considerações Finais
+```{julia}
+# Ajustamos o modelo de pca
+pca_model = fit(PCA, X; maxoutdim=2)
+# Obtemos os componentes principais
+principal_components = projection(pca_model)
+# Projeção dos dados no espaço dos componentes principais
+scores = MultivariateStats.transform(pca_model, X)
+```
 
-O MultivariateStats.jl torna simples e eficiente o uso de PCA em Julia. Com poucas linhas de código, é possível extrair as principais variáveis responsáveis pela variabilidade dos dados, facilitando análise e visualização.
+## Considerações
 
-Para aprender mais, explore a documentação oficial do pacote e experimente aplicá-lo em seus próprios conjuntos de dados.
+:::{.justify}
+O pacote `MultivariateStats.jl` torna simples e eficiente o uso de PCA em `Julia`. Com poucas linhas de código, é possível extrair as principais variáveis responsáveis pela variabilidade dos dados, facilitando a análise e a visualização.
+
+Para mais informações, explore a [documentação oficial](https://juliastats.org/MultivariateStats.jl/dev/) do pacote e experimente aplicá-lo em seus próprios conjuntos de dados.
+:::
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::

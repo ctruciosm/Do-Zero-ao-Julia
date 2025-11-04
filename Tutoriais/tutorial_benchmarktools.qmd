@@ -1,0 +1,229 @@
+---
+title: "Otimizando no Julia com BenchmarkTools.jl"
+description: |
+  Introdução ao pacote BenchmarkTools.jl para medir e otimizar o desempenho do seu código Julia.
+categories:
+  - Pacotes
+  - Ferramentas
+author:
+  - name: Gabriel Cardoso
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/Gabriel-VC
+    orcid: 0009-0001-0954-4579
+date: "2025-10-23"
+image: imagens/gvc_benchmarktools_logo.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+draft: false
+---
+
+## Introdução
+
+O benchmarking é o processo de medir e comparar o desempenho de um programa usando diferentes métricas como: tempo de execução ou uso de memória. A ideia é rodar testes padronizados para avaliar a eficiência e comparar diferentes implementações ou configurações, identificando qual é mais rápida ou consome menos recursos.
+
+Para qualquer linguagem de programação, a performance de um código é crucial. E para programadores na linguagem Julia, o pacote [BenchmarkTools.jl](https://juliaci.github.io/BenchmarkTools.jl/stable/) é uma ferramenta mais conveniênte para medir e otimizar o desempenho de seus códigos, do que os comandos base do Julia como '@time' ou '@timed'.
+
+Este post irá mostrar as ferramentas básicas do BenchmarkTools.jl, mostrando como identificar gargalos e melhorar a eficiência do seu código em Julia.
+
+
+## Realizando um Benchmark
+
+Primeiramente precisamos instalar a biblioteca no ambiente Julia.
+
+```{julia}
+using Pkg
+Pkg.add("BenchmarkTools")
+```
+
+O comando mais básico do BenchmarkTools.jl é o `@benchmark`. Rapidamente define, automaticamente condiciona e executa um benchmark, retornando informações detalhadas de tempo e alocação de memória.
+
+```{julia}
+using BenchmarkTools
+@benchmark cos(1)
+```
+
+Porém, quando você quer ter controle sobre as etapas de um benchmark, os comandos, `@benchmarkable`, `tune!`, `run` servem para definir o bench, modificar os parâmetros e então rodar. Útil quando é necessário reutilizar um benchmark anteriormente definido com uma configuração espesifica.
+
+```{julia}
+a = @benchmarkable cos(1)
+tune!(a)
+run(a)
+```
+
+### Entendendo os Resultados
+
+Vemos que foram feitas 10.000 amostras com 1.000 avaliações cada para reduzir ruído. Em Range, vemos o tempo mínimo e máximo observado, logo abaixo temos a mediana e o média junta da variabilidade dos tempos. GC (Garbage Collection) indica a "coleta de lixo" durante as execuções, ou seja, verifica se o código gera alocações adicionais na memória e se foi reutilizavel algum espaço na memória de variável que não estão sendo usadas mais no programa. E na linha final temos a quantidade de memória usada para o código. Por fim temos o gráficos de barras pretas (um histograma), nele é mostrado a quantos samples caíram em cada intervalo de tempo em escala logarítmica.
+
+## Outros comandos
+
+O pacote `BenchmarkTools.jl` tambem fornece comandos que se comportam da mesma forma aos comandos de temporização do Julia base:
+
+-   `@btime`: Similar ao `@time`, retorna o valor da expressão e mostra o tempo e a alocação de memória.
+-   `@belapsed`: Similar ao `@elapsed`, retorna apenas o tempo de execução em segundos.
+-   `@btimed`: Similar ao `@timed`, retorna o valor da expressão, tempo, bytes alocados, número de alocações e tempo de GC.
+-   `@ballocated`: Similar ao `@allocated`, retorna o número de bytes alocados.
+-   `@ballocations`: Similar ao `@allocations`, retorna o número de alocações.
+
+```{julia}
+@btime sin(1)
+@time sin(1)
+
+@belapsed sin(1)
+@elapsed sin(1)
+
+@btimed sin(1)
+@timed sin(1)
+```
+
+É difícil ver de forma clara a diferença entre os comandos base e os comandos do pacote, pois estamos fazendo somente a análise de sin(1), que não é tão custoso computacionalmente. Ainda assim, o "Elapsed" e o "Timed" do `BenchmarkTools.jl` foram relativamente mais rápidos que os comandos padrão.
+
+## Interpolação de Variáveis
+
+Existe uma regra de boas práticas neste pacote que é, interpolar variáveis externas nas expressões de benchmark, ou seja, substituir uma variável em uma expressão de benchmark pelo seu valor antes que a medição de desempenho comece. Isto ocorre porque, variáveis globais podem levar a resultados imprecisos devido à sobrecarga de desempenho ao acessar a elas. Quando uma variável não é interpolada, o benchmark vai medir não somente o código realizado, mas também o custo para acessar a variável.
+
+Assim, variáveis externas devem ser interpoladas na expressão do benchmark usando `$`. Isso aloca o valor da variável no código antes benchmark começar, fazendo com que apenas o desempenho do código seja medido.
+
+```{julia}
+@benchmark sum(rand(1000))
+```
+
+A função rand(1000) é executada a cada avaliação do benchmark. Como resultado, a medição inclui o tempo para criar um novo vetor e somar ele, resultando em alocações de memória e tempos de "coleta de lixo" grandes.
+
+```{julia}
+x = rand(1000);
+@benchmark sum($x)
+```
+
+Como rand(1000) é executado apenas uma vez (na criação de x), o segundo benchmark não aloca memória e possuie um tempo de execução muito mais rápido e limpo.
+
+## Gerenciamento de Resultados
+
+Depois de realizar um benchmark, podemos fazer uma análise mais detalhada e comparar os diferentes testes dos resultados retornados.
+
+O resultado da execução de um benchmark é um objeto `Trial`, que contém todas as amostras coletadas. Para obter um resumo, podemos usar algumas funções, como median() ou mean(). O retorno dessas funções é um objeto `TrialEstimate`, que pode ser usado para realizar comparações usando:
+
+-   `judge()`: Compara duas estimativas, e a categoriza em: improvement (melhoria), regression (piora) ou invariant (sem mudança significativa).
+
+-   `ratio()`: Fornece a razão numérica entre duas estimativas.
+
+```{julia}
+v = rand(1000) 
+
+trial_quick = @benchmark sort($v, alg=QuickSort)
+trial_merge = @benchmark sort($v, alg=MergeSort)
+```
+
+```{julia}
+mediana_quick = median(trial_quick)
+mediana_merge = median(trial_merge)
+
+julgamento = judge(mediana_merge, mediana_quick)
+razao = ratio(mediana_merge, mediana_quick)
+```
+
+Nos primeiros dois blocos de resultado, temos um breve resumo sobre o cálculo das medianas das variáveis trial_quick e trial_merge. E logo em seguida temos os resultados das funções judge() e ratio() respectivamente.
+
+O `judge()` verificou qual foi a natureza da mudança de QuickSort para MergeSort. Onde `time:` mostra quantos porcento MergeSort foi mais rápido (pelo -) ou mais lento (pelo +) que QuickSort.
+
+O `ratio()` calcula a razão (novo / base) para cada métrica. Neste caso tempo(merge) / tempo(quick).
+
+## Organizando Testes em grupos
+
+Para testar múltiplas funções relacionadas ao invés de executar `@benchmark` para cada uma e salvar em variáveis separadas, o pacote `BenchmarkTools.jl` oferece uma maneira de organizar grupos de benchmarks pelo BenchmarkGroup.
+
+```{julia}
+
+suite = BenchmarkGroup()
+
+#subgrupo trigonometria
+suite["trig"] = BenchmarkGroup()
+suite["trig"]["sin"] = @benchmarkable sin(pi / 3)
+suite["trig"]["cos"] = @benchmarkable cos(pi / 3)
+
+#subgrupo logs
+suite["logs"] = BenchmarkGroup()
+suite["logs"]["log"] = @benchmarkable log(2.0)
+suite["logs"]["log10"] = @benchmarkable log10(2.0)
+```
+
+Um BenchmarkGroup funciona como uma pasta que pode conter benchmarks individuais ou outros BenchmarkGroups. Ficando com esse estrutura:
+
+```{julia}
+println(suite)
+```
+
+```{julia}
+tune!(suite)
+resultados = run(suite)
+```
+
+```{julia}
+mediana_log_base = median(resultados["logs"]["log"])
+mediana_log10 = median(resultados["logs"]["log10"])
+
+display(judge(mediana_log10, mediana_log_base))
+```
+
+Como é possível ver, a grande vantagem do BenchmarkGroup é que ao invés de realizar um Trial por vez para cada benchmark o objeto `resultados` mantém a mesma estrutura de uma "pasta", permitindo acessar e comparar testes específicos mais facilmente.
+
+
+## Exemplo Prático
+
+Agora vamos colocar a mão na massa, a partir de um exemplo prático: comparar o desempenho de diferentes maneiras de somar elementos de um vetor em Julia.
+
+1.  **`sum()`:** A função `sum()` otimizada do Julia.
+2.  **Loop `for`:** Uma implementação manual usando um loop `for`.
+3.  **Compreensão de lista:** Usando `sum([x for x in v])`.
+
+
+```{julia}
+vetorzao = rand(1000)
+
+#sum()
+function sum_builtin(arr)
+    return sum(arr)
+end
+
+#for
+function sum_for_loop(arr)
+    s = 0.0
+    for x in arr
+        s += x
+    end
+    return s
+end
+
+#Compreensão de lista
+function sum_comprehension(arr)
+    return sum([x for x in arr])
+end
+```
+```{julia}
+suite_soma = BenchmarkGroup()
+
+suite_soma["for"] = @benchmarkable sum_for_loop($vetorzao)
+suite_soma["sum"] = @benchmarkable sum_builtin($vetorzao)
+suite_soma["com"] = @benchmarkable sum_comprehension($vetorzao)
+
+tune!(suite_soma)
+resultados_soma = run(suite_soma)
+```
+
+```{julia}
+melhor = median(resultados_soma["sum"])
+
+display(judge(median(resultados_soma["for"]), melhor))
+display(judge(median(resultados_soma["com"]), melhor))
+```
+
+No primeiro bloco de código nós declaramos as funções.
+No segundo utilizamos o BenchmarkGroup, lembrando de interpolar as variáveis para não afetar o resultado do nosso benchmark. Ademais, pelo `resultados_soma` vemos quanto tempo demorou para somar os números do `vetorzao`.
+Por fim vemos os resultados, e, como o esperado, `sum()` (uma função nativa do Julia) foi a mais rápida e a que gostou menos memória!
+
+::: {.callout-note} 
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::

@@ -1,0 +1,225 @@
+---
+title: "Como utilizar Florestas Aleatórias em Julia"
+description: |
+     Aprenda a utilizar Florestas Aleatórias em Julia, tanto para regressão quanto para classificação, incluindo etapas cruciais como separação de treino e teste, cálculo de métricas de erro e validação cruzada para ajuste dos hiperparâmetros.
+categories:
+  - Modelagem
+  - Machine Learning
+author:
+  - name: Vitor Ribas Perrone
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/VitorRibasP
+    orcid: 0009-0009-6923-7712
+date: "2025-10-28"
+image: imagens/floresta_aleatoria.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+engine: knitr
+draft: true
+---
+
+## Introdução
+
+::: justify
+A floresta aleatória é um mudelo muito poderoso e versátil de aprendizado de máquina supervisionado. Baseada no conceito de árvores de decisão, ela combina o resultado de diversas árvores construídas sobre subconjuntos aleatórios dos dados e das variáveis preditoras, gerando um modelo coletivo mais robusto, preciso e menos propenso a overfitting. Essa abordagem permite capturar relações complexas entre as variáveis e funciona bem tanto para tarefas de classificação quanto de regressão, mesmo em bases com ruído ou grande número de covariáveis.
+
+Neste tutorial, você aprenderá a aplicar a floresta aleatória em Julia, incluindo a separação em conjuntos de treino e teste, a padronização das covariáveis, o cálculo de métricas de erro e a escolha do melhor conjunto de hiperparâmetros por meio de validação cruzada.
+:::
+
+## Floresta Aleatória para Regressão
+:::justify
+Primeiro, vamos instalar e carregar os pacotes necessários:
+:::
+
+```{julia}
+Pkg.add("MLJ")
+using MLJ
+Pkg.add("DecisionTree")
+@load RandomForestRegressor pkg=DecisionTree
+@load RandomForestClassifier pkg=DecisionTree
+Pkg.add("MLJDecisionTreeInterface")
+using MLJDecisionTreeInterface
+Pkg.add("Random")
+using Random
+Pkg.add("Distributions")
+using Distributions
+Pkg.add("DataFrames")
+using DataFrames
+```
+::: justify
+Para uma floresta aleatória do tipo regressão, a variável resposta deve ser numérica. Vamos criar o vetor `Y` com a variável resposta e o DataFrame `X` com as covariáveis:
+:::
+```{julia}
+Random.seed!(123)
+X1 = rand(Normal(20, 1), 100)
+X2 = rand(Normal(0, 1), 100)
+X3 = rand(Normal(-5, 1), 100)
+Y = X1 .+ X2.*X3
+X = DataFrame(X1 = X1, X2 = X2, X3 = X3)
+```
+::: justify
+Agora, vamos seprar os dados em treino e teste utilizando a função `partition`. No caso, vamos deixar 80% dos dados para treino e os demais para teste.
+:::
+```{julia}
+Random.seed!(123)
+treino, teste = partition(eachindex(Y), 0.8, shuffle=true)
+```
+::: justify
+Para florestas aleatórias do tipo regressão, utilizamos `RandomForestRegressor`, que possui como parâmetros:
+
+- `n_subfeatures`: número de covariáveis sorteadas por amostra;
+- `n_trees`: número de árvores a serem ajustadas; 
+- `sampling_fraction`: porcentagem das observações a serem utilizadas;
+- `max_depth`: profundidade máxima das árvores; 
+- `min_samples_leaf`: quantidade mínima de observações por folha; 
+- `min_samples_split`: quantidade mínima de observações para ser considerado um nó;
+- `min_purity_increase`: ganho mínimo na predição para ocorrer uma divisão.
+:::
+```{julia}
+floresta_regressao = RandomForestRegressor(n_subfeatures = 2, 
+                                            n_trees = 10, 
+                                            sampling_fraction = 0.3,
+                                            max_depth = 3)
+```
+::: justify
+Dessa forma, podemos utilizar as funções `machine` e `fit` para o ajuste do modelo.
+:::
+```{julia}
+machine_floresta_regressao = machine(floresta_regressao, X, Y)
+fit!(machine_floresta_regressao, rows=treino)
+```
+::: justify
+Com o modelo ajustado, podemos fazer predições nos conjuntos de dados de treino e teste utilizando a função `predict`.
+:::
+```{julia}
+predict(machine_floresta_regressao, rows=treino)
+predict(machine_floresta_regressao, rows=teste)
+```
+::: justify
+Também é possível computar diretamente alguma métrica de erro do modelo. Por exemplo, para computar a raiz quadrada do erro quadrático médio (RMSE), utilizamos a função `rms`.
+:::
+```{julia}
+rms(Y[treino], predict(machine_floresta_regressao, rows=treino))
+rms(Y[teste], predict(machine_floresta_regressao, rows=teste))
+```
+## Floresta Aleatória para Classificação
+::: justify
+Também podemos utilizar a floresta aleatória para classificação, isto é, quando nossa variável resposta é categórica. Para isso, vamos criar um vetor `Y` contendo as categorias e um DataFrame `X` contendo as covariáveis. É interessante ressaltar que a função `categorical` especifica o tipo do vetor da variável resposta como categórico, que é exigido para o ajuste do modelo.
+:::
+```{julia}
+Random.seed!(123)
+X1 = vcat([rand(Normal(mu, 1), 50) for mu in [2, 2, 17, 15]]...)
+X2 = vcat([rand(Normal(mu, 1), 50) for mu in [3, 4, 14, 16]]...)
+X3 = vcat([rand(Normal(mu, 1), 50) for mu in [3, 1, 13, 15]]...)
+Y = categorical(repeat(["A", "B", "C", "D"], inner=50))
+X = DataFrame(X1 = X1, X2 = X2, X3 = X3)
+```
+::: justify
+Assim como no caso anterior, podemos dividir em treino e teste utilizando a função `partition`.
+:::
+```{julia}
+Random.seed!(123)
+treino, teste = partition(eachindex(Y), 0.8, shuffle=true)
+```
+::: justify
+No caso anterior, o interesse era em predizer uma variável numérica. Como agora o interesse é em realizar classificações, a função referente ao modelo passa a ser `RandomForestClassifier`, em que os demais parâmetros são os mesmos.
+:::
+```{julia}
+floresta_classificacao = RandomForestClassifier(n_subfeatures = 2, 
+                                            n_trees = 10, 
+                                            sampling_fraction = 0.3,
+                                            max_depth = 3)
+```
+::: justify
+Com isso, ajustamos o modelo utilizando as funções `machine` e `fit`.
+:::
+```{julia}
+machine_floresta_classificacao = machine(floresta_classificacao, X, Y)
+fit!(machine_floresta_classificacao, rows=treino)
+```
+::: justify
+Para fazer predições nos conjuntos de treino e teste, também utilizamos a função `predict`. Entretanto, como se tratam de classificações, as predições retornam vetores contendo a probabilidade de cada observação pertencer a cada uma das categorias.
+:::
+```{julia}
+predict(machine_floresta_classificacao, rows=treino)
+predict(machine_floresta_classificacao, rows=teste)
+```
+::: justify
+Para extrair a classificação das predições ao invés das probabilidades, utilizamos `mode.()`, em que as predições são inseridas dentro dos parênteses. 
+:::
+```{julia}
+mode.(predict(machine_floresta_classificacao, rows=treino))
+mode.(predict(machine_floresta_classificacao, rows=teste))
+```
+::: justify
+Também podemos calcular métricas de erro para o nosso modelo, por exemplo, podemos calcular a acurácia utilizando a função `accuracy`.
+:::
+```{julia}
+accuracy(mode.(predict(machine_floresta_classificacao, rows=treino)), Y[treino])
+accuracy(mode.(predict(machine_floresta_classificacao, rows=teste)), Y[teste])
+```
+::: justify
+Uma outra maneira interessante de visualizar os resultados do modelo é por meio de uma matriz de confusão, e podemos elaborar uma utilizando a função `confusion_matrix`. Dessa forma, a matriz de confusão para o banco de dados de treino é dada por:
+:::
+```{julia}
+confusion_matrix(Y[treino], mode.(predict(machine_floresta_classificacao, rows=treino)))
+```
+::: justify
+E a matriz de confusão para o banco de dados de teste é dada por:
+:::
+```{julia}
+confusion_matrix(Y[teste], mode.(predict(machine_floresta_classificacao, rows=teste)))
+```
+
+## Ajuste dos Hiperparâmetros
+
+::: justify
+Ao trabalhar com modelos de aprendizado de máquina, é de interesse saber o valor ideal dos nossos hiperparâmetros em questão. No caso da floresta aleatória, existem 7 parâmetros que podemos especificar. Felizmente, existe uma maneira mutio eficaz de comparar diversas combinações de hiperparâmetros e escolher a melhor por meio de validação cruzada.
+
+Para realizar esse procedimento de escolher a melhor combinação de hiperparâmetros por meio de validação cruzada e grid search, é necessário utilizar a função `TunedModel`, que possui como argumentos:
+
+- `model`: modelo a ser ajustado;
+- `resampling`: técnica de divisão dos dados;
+- `range`: valores para cada parâmetro a serem testados;
+- `measure`: métrica de erro a ser considerada para escolha do melhor valor.
+
+Com isso, para especificar os valores de cada hiperparâmetro a serem testados, é necessário utilizar a função `range`, determinando os valores mínimo e o máximo a serem considerados. Já para utilizar validação cruzada do tipo k-fold, é necessário utilizar a função `CV`, especificando por meio do argumento `nfolds` o número de dobras a serem consideradas. Para o exemplo, vou utilizar 5 folds e a acurácia por se tratar de classificações. 
+:::
+```{julia}
+Random.seed!(123)
+valores_n_trees = range(floresta_classificacao, :n_trees, lower = 20, upper = 30)
+valores_max_depth = range(floresta_classificacao, :max_depth, lower = 2, upper = 3)
+floresta_escolher_k = TunedModel(model=floresta_classificacao,
+                               resampling=CV(nfolds=5),
+                               range=[valores_n_trees, valores_n_trees],
+                               measure=accuracy)
+```
+::: justify
+Para ajustar o modelo, novamente utilizamos as funções `machine` e `fit`.
+:::
+```{julia}
+machine_escolher_k = machine(floresta_escolher_k, X, Y)
+fit!(machine_escolher_k)
+```
+::: justify
+Agora, para extrair o melhor modelo, utilizamos a função `fitted_params` e especificamos o melhor modelo com `.best_model`. No caso, o melhor modelo foi aquele com profundidade máxima igual a 3 e 26 árvores. 
+:::
+```{julia}
+melhor_floresta = fitted_params(machine_escolher_k).best_model
+```
+
+## Conclusão
+
+::: justify
+A Floresta Aleatória representa um equilíbrio ideal entre simplicidade e desempenho. Seu princípio de combinar várias árvores independentes torna o modelo naturalmente robusto, reduzindo a variância sem aumentar o viés de forma significativa.
+
+Neste tutorial, mostramos como implementar a floresta aleatória em Julia para regressão e classificação, enfatizando etapas cruciais como divisão dos dados em treino e teste, avaliação de métricas de erro, aplicação de predições e escolha do conjunto ideal de hiperparâmetros por validação cruzada.
+:::
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::

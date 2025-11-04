@@ -1,0 +1,101 @@
+---
+title: Simulação em Julia: SIm Julia 
+description: Como realizar simulações computacionais na linguagem Julia com o pacote SimJulia, ideal para modelar sistemas baseados em eventos discretos como filas, processos industriais e redes. Entenda por que Julia é uma das melhores escolhas para simulação científica, unindo velocidade, clareza e produtividade.
+
+categories:
+  - Simulação Computacional
+  -  julia
+author:
+  - name: Gabriel Campovilla da Silva
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/C4mpovill4
+
+  - name: 
+    affiliation: 
+    url: 
+    orcid: 
+
+date: "2025-10-06"
+image: imagens/simjl.jpeg
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+draft: false
+engine: knitrNet
+---
+
+## **O que é Simulação em Julia**
+
+A simulação computacional consiste em criar modelos matemáticos para estudar sistemas reais ou imaginários, permitindo prever comportamentos ou testar hipóteses sem custos do mundo físico. Julia é excelente para esta tarefa graças à sua alta performance e sintaxe simples, bastante amigável para cientistas e engenheiros.
+
+## **Porque Escolher Julia para Simulação**
+
+Julia combina a agilidade de linguagens interpretadas como Python com a velocidade de linguagens compiladas, tornando a execução de simulações extensas muito mais rápida. O ecossistema de Julia tem pacotes específicos para diferentes tipos de simulação, desde física, química, até finanças e engenharia.
+
+## **Pacote SimJulia: Simulando Eventos Discretos**
+
+O **SimJulia** é um pacote robusto para simulação de eventos discretos, muito utilizado para modelar sistemas como filas, redes logísticas, fábricas e qualquer contexto em que eventos ocorram de forma assíncrona no tempo. Ele se inspira na biblioteca SimPy do Python e utiliza funções especiais e a poderosa abstração de processos.
+
+## **Principais Características**
+
+-   Modelagem baseada em processos: cada componente ativo do sistema é um processo independente.
+
+-   Suporte para recursos compartilhados e restritos, como filas e estoques.
+
+-   Sintaxe clara e concisa, aproveitando recursos do Julia como funções resumáveis e corrotinas.
+
+## **Como Instalar e Usar o SimJulia**
+
+A instalação do SimJulia é fácil e segue o padrão dos pacotes Julia:
+
+```{julia}
+using Pkg
+Pkg.add("SimJulia")
+Pkg.add("ResumableFunctions")
+```
+
+Depois da instalação, basta importar o pacote e começar a construir simulações com base nos exemplos da documentação oficial.
+
+## **Exemplo Prático: Dois Relógios Ticando**
+
+Veja abaixo um exemplo curto de uso do SimJulia, mostrando dois "relógios" que marcam tempo em diferentes intervalos:
+
+```{julia}
+using ResumableFunctions
+using SimJulia
+
+@resumable function clock(sim::Simulation, nome::String, tick::Float64)
+    while true
+        println(nome, " ", now(sim))
+        @yield timeout(sim, tick)
+    end
+end
+
+sim = Simulation()
+@process clock(sim, "rápido", 0.5)
+@process clock(sim, "devagar", 1.0)
+run(sim, 2)
+
+```
+
+Em resumo esse código cria dois processos paralelos e independentes que simulam relógios e exibe "ticks" em tempos diferentes, modelando concorrência e eventos discretos.
+
+Esse tipo de código é usado para **simular sistemas que evoluem ao longo do tempo de forma discreta**, ou seja, **eventos acontecem em momentos específicos**, não continuamente.\
+
+Em vez de resolver equações diferenciais (como na simulação contínua), você modela *quem faz o quê, quando*.
+
+## **Dicas para Modelar com SimJulia**
+
+-   Planeje seu sistema identificando os processos ativos.
+
+-   Defina eventos e recursos do seu modelo.
+
+-   Teste cenários variados alterando parâmetros, aproveitando performance do Julia para experimentações rápidas.
+
+-   Utilize as funções resumáveis para facilitar a escrita de processos concorrentes.
+
+## **Conclusão**
+
+O pacote **SimJulia** é uma ferramenta poderosa e flexível para simulações em Julia, permitindo modelar sistemas complexos de forma clara e eficiente. A linguagem Julia, por sua vez, oferece desempenho suficiente para simulações em larga escala e sintaxe moderna e direta. Começar com SimJulia é um ótimo passo para qualquer pessoa interessada em simulações computacionais.

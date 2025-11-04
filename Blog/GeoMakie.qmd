@@ -1,18 +1,19 @@
 ---
-title: "Mapas e Visualizações Geoespaciais em Julia com GeoMakie.jl"
+title: "Visualizações Geoespaciais com GeoMakie.jl"
 description: |
-  Um guia prático para criar mapas, trabalhar com projeções cartográficas e adicionar camadas geográficas usando o pacote GeoMakie.jl no ecossistema Julia.
+  O pacote `GeoMakie.jl` é ideal para análises em áreas como climatologia, geociências, urbanismo, meio ambiente e outras aplicações que envolvam dados espaciais. Este é um guia prático para criar mapas, trabalhar com projeções cartográficas e adicionar camadas geográficas usando-o no ecossistema de `Julia`.
 categories:
   - Guia
+  - Ferramentas
+  - Pacotes
 author:
   - name: Caio Frare
     affiliation: "Universidade Estadual de Campinas"
     url: https://github.com/caiofrare
-  - name: Carlos Trucíos
+  - name: Nicole Fredericci
     affiliation: "Universidade Estadual de Campinas"
-    url: https://ctruciosm.github.io
-    orcid: 0000-0001-8746-8877
-date: "2025-09-16"
+    url: https://github.com/NFredericci
+date: "2025-10-18"
 image: imagens/mapa_capa.png
 lang: pt
 format:
@@ -20,7 +21,8 @@ format:
     toc: true
     toc-depth: 3
     self-contained: false
-draft: true
+engine: knitr
+draft: false
 ---
 
 ## Introdução
@@ -28,33 +30,30 @@ draft: true
 ::: {.justify}
 O pacote `GeoMakie.jl` é uma extensão da biblioteca `Makie`, projetada para criar visualizações geoespaciais de alta qualidade em `Julia`. Ele possibilita trabalhar com mapas, projeções cartográficas e camadas geográficas de forma prática e interativa, sendo ideal para análises em áreas como climatologia, geociências, urbanismo, meio ambiente e outras aplicações que envolvam dados espaciais.
 
-Com `GeoMakie`, é possível representar dados em diferentes projeções, adicionar camadas (como shapes, pontos e linhas) e personalizar o visual dos mapas, tudo dentro do ecossistema de visualização Makie.
+Com `GeoMakie`, é possível representar dados em diferentes projeções, adicionar camadas (como _shapes_, pontos e linhas) e personalizar o visual dos mapas, tudo dentro do ecossistema de visualização `Makie`. No entanto, para gerar as figuras, é necessário usar um backend compatível.
 
-Para gerar as figuras, é necessário usar um backend compatível. Neste post, adotaremos o `CairoMakie`, ideal para produzir imagens estáticas de alta qualidade.
+Neste post, ensinaremos a criar visualizações geoespaciais com o pacote `GeoMakie.jl` e adotaremos o `CairoMakie` como backend para produzir imagens estáticas de alta qualidade.
 :::
-
 
 ## Instalação
 
 ::: {.justify}
-Para instalar os pacotes, basta rodar no REPL do Julia:
+Para instalar os pacotes que serão usados, basta rodar o seguinte código no REPL do `Julia`:
 :::
 
 ```{julia}
-
 using Pkg
 
 Pkg.add("GeoMakie")
-Pkg.add("CairoMakie") # Backend para gerar imagens estáticas
-
+Pkg.add("CairoMakie") 
 ```
 
-## Criando um Mapa Básico
+## Criando um mapa básico
 
 ::: {.justify}
-Vamos começar carregando o `GeoMakie` e `CairoMakie` e configurando um mapa simples. O GeoAxis é o componente que transforma um gráfico em um mapa com suporte a coordenadas geográficas e projeções.
+Vamos começar carregando os pacotes e configurando um mapa simples. O `GeoAxis` é o componente que transforma um gráfico em um mapa com suporte a coordenadas geográficas e projeções.
 
-Primeiro, criamos a estrutura base do mapa e definimos um título. Em seguida, configuraremos os intervalos de latitude e longitude, criaremos um campo de valores para representar o relevo ou gradiente de cores e, finalmente, exibiremos o resultado com `surface!`.
+Primeiro, criaremos a estrutura base do mapa e definiremos um título. Em seguida, configuraremos os intervalos de latitude e longitude, criaremos um campo de valores para representar o relevo ou gradiente de cores e, finalmente, exibiremos o resultado com `surface!`.
 
 Vamos para a primeira parte:
 :::
@@ -66,11 +65,9 @@ using GeoMakie, CairoMakie
 fig = Figure()
 ax = GeoAxis(
     fig[1, 1];
-    title = "Definindo a estrutura do nosso Mapa" # Aqui podemos adiconar qualquer título
-)
-
-fig
+    title = "Definindo a estrutura do nosso mapa") # Aqui podemos adicionar qualquer título
 ```
+
 ::: {.justify}
 Que nos fornece o seguinte:
 :::
@@ -78,45 +75,36 @@ Que nos fornece o seguinte:
 ![Base do mapa](imagens/mapa_1.png)
 
 ::: {.justify}
-O resultado é uma base inicial. A seguir, definiremos os intervalos de latitude e longitude e construiremos um campo (field) que gera um degradê: regiões próximas ao ponto (0,0) aparecem mais escuras, enquanto áreas distantes se tornam mais claras. Esse campo será exibido sobre o mapa com `surface!`.
-::
+O resultado obtido é uma base inicial para o nosso mapa. A seguir, definiremos os intervalos de latitude e longitude e construiremos um campo (`field`) que gera um degradê: regiões próximas ao ponto $(0,0)$ aparecem mais escuras, enquanto áreas distantes se tornam mais claras. Esse campo será exibido sobre o mapa com `surface!`.
+:::
 
 ```{julia}
-
 # Definindo as longitudes e latitudes
 longs = -180:1:180
 lats = -90:1:90
-
 # Criando um campo de valores para exemplificar
 field = [sqrt(long^2 + lat^2) for long in longs, lat in lats]
-
 fig = Figure()
 ax = GeoAxis(fig[1,1], title = "Formato do Mapa e Coloração")
-surface!(ax, lons, lats, field)
-
-fig
+surface!(ax, longs, lats, field)
 ```
 
 ::: {.justify}
-Que nos fornece a imagem seguinte. Algo que já está começando a ter a cara de um mapa.
+O código nos fornece a imagem a seguir, que começa a se parecer mais com um mapa:
 :::
 
-![Formato do Mapa](imagens/mapa_2.png)
+![Formato do mapa](imagens/mapa_2.png)
 
 ::: {.justify}
 Para dar mais contexto ao mapa, podemos incluir o contorno dos continentes usando o recurso `coastlines()`. Esse passo é essencial para destacar massas de terra e oceanos, tornando a visualização mais intuitiva.
 :::
 
 ```{julia}
-
 fig = Figure()
 ax = GeoAxis(fig[1,1], title = "Linhas costeiras")
-surface!(ax, lons, lats, field)
-
-# Adicionando as linhas de costa para dar contexto
+surface!(ax, longs, lats, field)
+# Adicionando as linhas de costa 
 lines!(ax, GeoMakie.coastlines(), color = :black)
-
-fig
 ```
 
 ::: {.justify}
@@ -125,75 +113,62 @@ Que nos fornece o seguinte:
 
 ![Mapa e costa](imagens/mapa_3.png)
 
-## Adicionando Camadas (Pontos e Linhas)
+## Adicionando camadas (pontos e linhas)
 
 ::: {.justify}
 Uma das maiores vantagens desse pacote é a possibilidade de adicionar várias camadas ao mesmo gráfico. Podemos marcar locais específicos (como cidades) e desenhar rotas entre eles.
 
-No exemplo abaixo, posicionamos marcadores para o Rio de Janeiro e Londres, além de traçar uma linha conectando os dois pontos. Também usamos `axislegend` para criar uma legenda clara, destacando os elementos do mapa.
+No exemplo abaixo, posicionaremos marcadores para o Rio de Janeiro e Londres, e traçaremos uma linha conectando os dois pontos. Também usaremos `axislegend` para criar uma legenda clara, destacando os elementos do mapa.
 :::
 
 ```{julia}
-
 fig = Figure()
 ax = GeoAxis(
     fig[1, 1];
-    title = "Marcando Pontos e Desenhando Linhas"
-)
-
+    title = "Marcando Pontos e Desenhando Linhas")
 lines!(ax, GeoMakie.coastlines(), color = :black)
-
 # Pontos (longitude, latitude)
 scatter!(ax, [-43.2], [-22.9], color = :green, markersize = 10, label = "Rio de Janeiro")
 scatter!(ax, [-0.1], [51.5], color = :blue, markersize = 10, label = "Londres")
-
-# Linha entre duas cidades (Rio e Londres)
+# Linha entre as duas cidades 
 lines!(ax, [-43.2, -0.1], [-22.9, 51.5], color = :red, linewidth = 2, label = "Rota")
-
 axislegend(ax)
-fig
 ```
 
 ::: {.justify}
 Que nos fornece o seguinte:
 :::
 
-![Rota](imagens/mapa_4.png)
+![Rota Rio-Londres](imagens/mapa_4.png)
 
-## Projeção Cartográfica Customizada
+## Projeção Cartográfica customizada
 
 ::: {.justify}
 Outra funcionalidade interessante é o suporte a diferentes projeções cartográficas. Alterar a projeção pode revelar informações de forma mais clara ou melhorar o design do mapa, dependendo do objetivo da análise.
 
-No exemplo a seguir, usamos a projeção Ortográfica, que simula a visualização da Terra como se fosse observada do espaço. Também personalizamos as cores de alguns elementos para melhorar o contraste.
+No exemplo a seguir, usaremos a projeção Ortográfica, que simula a visualização da Terra como se fosse observada do espaço. Também personalizaremos as cores de alguns elementos para melhorar o contraste.
 :::
 
 ```{julia}
-
 fig = Figure()
 ax = GeoAxis(
     fig[1,1];
     dest="+proj=ortho", # Projeção Ortográfica
-    title = "Projeção Ortográfica"
-)
-surface!(ax, lons, lats, field)
+    title = "Projeção Ortográfica")
+surface!(ax, longs, lats, field)
 lines!(ax, GeoMakie.coastlines(), color = :white)
-
-fig
-
-
 ```
 
 ::: {.justify}
-Que nos fornece o seguinte:
+O código nos fornece a seguinte projeção:
 :::
 
-![Rota](imagens/mapa_5.png)
+![Projeção Ortográfica](imagens/mapa_5.png)
 
 ## Conclusão
 
 ::: {.justify}
-O `GeoMakie.jl` é uma ferramenta poderosa para criar mapas e visualizações geográficas em `Julia`, permitindo trabalhar com projeções, camadas, pontos e linhas de forma simples e elegante.
+O `GeoMakie.jl` é uma ferramenta poderosa para criar mapas e visualizações geográficas em `Julia`, permitindo trabalhar com projeções, camadas, pontos e linhas de forma simples e eficiente.
 
 Com ele, é possível produzir desde mapas básicos até figuras complexas para relatórios, artigos ou apresentações. Para explorar mais exemplos e recursos avançados, consulte a [galeria oficial](https://geo.makie.org/dev/examples).
 
