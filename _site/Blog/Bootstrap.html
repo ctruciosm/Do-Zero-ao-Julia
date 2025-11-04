@@ -6,11 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Gabriel Campovilla da Silva">
-<meta name="author" content="Nicole Fredericci">
-<meta name="description" content="Para quem lida com grandes volumes de dados ou cálculos complexos, conhecer a velocidade de execução das linguagens é fundamental. Neste post, comparamos R, Julia e Python por meio de uma função de Fibonacci, mostrando como a escolha da linguagem pode fazer diferença no tempo de processamento e na produtividade.">
+<meta name="author" content="Vitor Ribas Perrone">
+<meta name="author" content="Esther Cleveston">
+<meta name="description" content="Aprenda a utilizar o pacote Bootstrap.jl, que permite, de forma prática e acessível, realizar reamostragem bootstrap em Julia a fim de obter estimativas e intervalos de confiança.">
 
-<title>Velocidade de Processamento: R vs Julia vs Python – Do Zero ao Julia</title>
+<title>Reamostragem com o pacote Bootstrap.jl – Do Zero ao Julia</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -171,9 +171,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#introdução" id="toc-introdução" class="nav-link active" data-scroll-target="#introdução">Introdução</a></li>
-  <li><a href="#por-que-a-velocidade-difere" id="toc-por-que-a-velocidade-difere" class="nav-link" data-scroll-target="#por-que-a-velocidade-difere">Por que a velocidade difere?</a></li>
-  <li><a href="#exemplo-prático-cálculo-de-fibonacci" id="toc-exemplo-prático-cálculo-de-fibonacci" class="nav-link" data-scroll-target="#exemplo-prático-cálculo-de-fibonacci">Exemplo Prático: Cálculo de Fibonacci</a></li>
-  <li><a href="#resultados-esperados" id="toc-resultados-esperados" class="nav-link" data-scroll-target="#resultados-esperados">Resultados Esperados</a></li>
+  <li><a href="#bootstrap" id="toc-bootstrap" class="nav-link" data-scroll-target="#bootstrap">Bootstrap</a></li>
+  <li><a href="#intervalos-de-confiança" id="toc-intervalos-de-confiança" class="nav-link" data-scroll-target="#intervalos-de-confiança">Intervalos de Confiança</a></li>
+  <li><a href="#estimando-uma-regressão" id="toc-estimando-uma-regressão" class="nav-link" data-scroll-target="#estimando-uma-regressão">Estimando uma Regressão</a></li>
   <li><a href="#conclusão" id="toc-conclusão" class="nav-link" data-scroll-target="#conclusão">Conclusão</a></li>
   </ul>
 </nav>
@@ -183,15 +183,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Velocidade de Processamento: R vs Julia vs Python</h1>
+<h1 class="title">Reamostragem com o pacote Bootstrap.jl</h1>
   <div class="quarto-categories">
-    <div class="quarto-category">Benchmark</div>
+    <div class="quarto-category">Ferramentas</div>
   </div>
   </div>
 
 <div>
   <div class="description">
-    <p>Para quem lida com grandes volumes de dados ou cálculos complexos, conhecer a velocidade de execução das linguagens é fundamental. Neste post, comparamos <code>R</code>, <code>Julia</code> e <code>Python</code> por meio de uma função de Fibonacci, mostrando como a escolha da linguagem pode fazer diferença no tempo de processamento e na produtividade.</p>
+    <p>Aprenda a utilizar o pacote <code>Bootstrap.jl</code>, que permite, de forma prática e acessível, realizar reamostragem bootstrap em Julia a fim de obter estimativas e intervalos de confiança.</p>
   </div>
 </div>
 
@@ -200,7 +200,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="quarto-title-meta-heading">Afiliação</div>
   
     <div class="quarto-title-meta-contents">
-    <p class="author"><a href="https://github.com/C4mpovill4">Gabriel Campovilla da Silva</a> </p>
+    <p class="author"><a href="https://github.com/VitorRibasP">Vitor Ribas Perrone</a> <a href="https://orcid.org/0009-0009-6923-7712" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
   </div>
   <div class="quarto-title-meta-contents">
         <p class="affiliation">
@@ -208,7 +208,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           </p>
       </div>
     <div class="quarto-title-meta-contents">
-    <p class="author"><a href="https://github.com/NFredericci">Nicole Fredericci</a> </p>
+    <p class="author"><a href="https://www.linkedin.com/in/esthercleveston/">Esther Cleveston</a> <a href="https://orcid.org/0009-0008-6612-8417" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
   </div>
   <div class="quarto-title-meta-contents">
         <p class="affiliation">
@@ -223,7 +223,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Data de Publicação</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">19 de setembro de 2025</p>
+      <p class="date">4 de novembro de 2025</p>
     </div>
   </div>
   
@@ -238,173 +238,158 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="introdução" class="level2">
 <h2 class="anchored" data-anchor-id="introdução">Introdução</h2>
 <div class="justify">
-<p>Em uma linguagem interpretada, o código é processado linha a linha por um interpretador, o que facilita a execução de testes rápidos, execução de trechos isolados e depuração (mas reduz a velocidade em operações intensivas). Já em linguagens com compilação <em>Just-In-Time (JIT)</em>, o interpretador compila trechos do código em linguagem de máquina durante a execução, em vez de interpretar linha a linha o tempo todo, permitindo um desempenho próximo a linguagens compiladas (especialmente em loops e cálculos intensivos). E quando se procura uma linguagem de programação para análise de dados ou computação científica, a velocidade de processamento pode influenciar bastante a escolha. Neste post, comparamos três linguagens populares — <code>R</code>, <code>Julia</code> e <code>Python</code> — analisando seu desempenho em uma tarefa computacionalmente intensiva.</p>
+<p>Em muitos problemas de Estatística, calcular a variância exata ou assintótica de um estimador é muito dificil (ou sua forma exata é mesmo desconhecida), tornando a tarefa de obter intervalos de confiança bastante dificil ou impossível. Mesmo em situações nas quais a variância assintótica é facil de ser obtida, estes resultados apenas são válidos se dispomos de um número grande de observações (o que nem sempre é possível). Nesses casos, a técnica de Bootstrap pode ser extremamente útil. Ela consiste em realizar reamostrage com reposição dos dados originais e, a partir delas, fazer correção do estimador, estimar a variância, construir intervalos de confiança, fazer testes de hipóteses, etc.</p>
+<p>No Julia, há uma maneira bastante prática de aplicar esse processo por meio do pacote <code>Bootstrap.jl</code>. Neste post, aprenderemos o passo a passo de como utilizar esse pacote.</p>
 </div>
 </section>
-<section id="por-que-a-velocidade-difere" class="level2">
-<h2 class="anchored" data-anchor-id="por-que-a-velocidade-difere">Por que a velocidade difere?</h2>
+<section id="bootstrap" class="level2">
+<h2 class="anchored" data-anchor-id="bootstrap">Bootstrap</h2>
 <div class="justify">
+<p>Em primeiro lugar, vamos instalar e carregar os pacotes necessários:</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Pkg</span>.<span class="fu">add</span>(<span class="st">"Bootstrap"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">Pkg</span>.<span class="fu">add</span>(<span class="st">"Statistics"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Bootstrap</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Statistics</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="justify">
+<p>Para realizar o processo de reamostragem, usamos a função <code>bootstrap()</code>, que recebe três argumentos principais: a estatística de interesse, o conjunto de dados (amostra original) e o método de reamostragem (incluindo o número de amostras).</p>
+<p>A seguir, geramos um vetor de 100 observações de uma normal padrão e realizamos o processo de reamostragem 200 vezes, utilizando o método mais tradicional (amostragem aleatória com reposição):</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dados <span class="op">=</span> <span class="fu">randn</span>(<span class="fl">100</span>);</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>resultado <span class="op">=</span> <span class="fu">bootstrap</span>(mean, dados, <span class="fu">BasicSampling</span>(<span class="fl">200</span>))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Bootstrap Sampling
+  Estimates:
+     Var │ Estimate   Bias      StdError
+         │ Float64    Float64   Float64
+    ─────┼───────────────────────────────
+       1 │ -0.204587  0.013822  0.110889
+  Sampling: BasicSampling
+  Samples:  200
+  Data:     Vector{Float64}: { 100 }</code></pre>
+</div>
+</div>
+<div class="justify">
+<p>O pacote oferece diversos tipos de métodos de reamostragem bootstrap, que podem ser especificados alterando o último argumento da função:</p>
 <ul>
-<li><p><strong>Python</strong>: Linguagem interpretada e dinâmica, o que geralmente a torna mais lenta. No entanto, bibliotecas como <code>NumPy</code> e <code>Pandas</code> usam implementações em <code>C</code> e <code>Fortran</code>, permitindo um bom desempenho em operações numéricas.</p></li>
-<li><p><strong>R</strong>: Também é interpretada e foi criada para atender ao público da estatística. Loops puros são lentos, mas funções vetorizadas e pacotes como <code>data.table</code> e <code>dplyr</code> oferecem bom desempenho.</p></li>
-<li><p><strong>Julia</strong>: Projetada para alta performance, atinge velocidades próximas às de <code>C</code> e <code>Fortran</code> sem depender de bibliotecas externas, graças à sua compilação <em>JIT</em>. Vale notar que <code>Python</code> e <code>R</code> também podem alcançar desempenho semelhante usando ferramentas que compilam partes do código em <code>C</code>, como <code>Cython</code> (uma extensão para Python) e <code>Rcpp</code> (um pacote para R).</p></li>
+<li><code>BasicSampling</code>: arealiza mostragem aleatória com reposição;</li>
+<li><code>AntitheticSampling</code>: introduz correlação negativa entre as amostras;</li>
+<li><code>BalancedSampling</code>: reduz o viés;</li>
+<li><code>ExactSampling</code>: executa todas as amostras possíveis;</li>
+<li><code>ResidualSampling</code> e <code>WildSampling</code>: arealizam mostragem de resíduos para modelos lineares generalizados;</li>
+<li><code>MaximumEntropySampling</code>: utilizado para séries temporais dependentes.</li>
 </ul>
 </div>
 </section>
-<section id="exemplo-prático-cálculo-de-fibonacci" class="level2">
-<h2 class="anchored" data-anchor-id="exemplo-prático-cálculo-de-fibonacci">Exemplo Prático: Cálculo de Fibonacci</h2>
+<section id="intervalos-de-confiança" class="level2">
+<h2 class="anchored" data-anchor-id="intervalos-de-confiança">Intervalos de Confiança</h2>
 <div class="justify">
-<p>Para evidenciar a diferença de desempenho bruto entre as três linguagens, implementamos uma função recursiva de Fibonacci (propositalmente ineficiente), com o objetivo de testar a velocidade de processamento. Os resultados apresentados foram obtidos em um MacBook equipado com Apple M3 Pro e 18 GB de RAM.</p>
+<p>Também podemos utilizar o objeto gerado pelo <code>bootstrap()</code> para calcular um Intervalo de Confiança (IC) da estatística de interesse. Para isso, usamos a função <code>confint</code>, que recebe o objeto criado pela função <code>bootstrap</code> e o método do cálculo (com o nível de confiança) como argumentos.</p>
+<p>Por exemplo, vamos calcular um IC de 95% para o cenário criado anteriormente:</p>
 </div>
-<p><strong>R</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>fib <span class="ot">&lt;-</span> <span class="cf">function</span>(n) {</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (n <span class="sc">&lt;=</span> <span class="dv">1</span>) {</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">return</span>(n)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">return</span>(<span class="fu">fib</span>(n<span class="dv">-1</span>) <span class="sc">+</span> <span class="fu">fib</span>(n<span class="dv">-2</span>))</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="columns">
-<div class="column" style="width:50%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>start <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">fib</span>(<span class="dv">30</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>end <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Resultado:"</span>, result))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>IC <span class="op">=</span> <span class="fu">confint</span>(resultado, <span class="fu">PercentileConfInt</span>(<span class="fl">.95</span>))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "Resultado: 832040"</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Tempo R:"</span>, end <span class="sc">-</span> start))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Tempo R: 0.522500038146973"</code></pre>
+<pre><code>((-0.20458703253123944, -0.39258658292549614, 0.027223120442332507),)</code></pre>
 </div>
 </div>
-</div><div class="column" style="width:50%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>start <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">fib</span>(<span class="dv">40</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>end <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Resultado:"</span>, result))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Resultado: 102334155"</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Tempo R:"</span>, end <span class="sc">-</span> start))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Tempo R: 1.0203111688296"</code></pre>
-</div>
-</div>
-</div>
-</div>
-<p><strong>Julia</strong></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">fib</span>(n)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> n <span class="op">&lt;=</span> <span class="fl">1</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> n</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="fu">fib</span>(n<span class="op">-</span><span class="fl">1</span>) <span class="op">+</span> <span class="fu">fib</span>(n<span class="op">-</span><span class="fl">2</span>)</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>fib (generic function with 1 method)</code></pre>
-</div>
-</div>
-<div class="columns">
-<div class="column" style="width:50%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>start_time <span class="op">=</span> <span class="fu">time</span>();</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> <span class="fu">fib</span>(<span class="fl">30</span>);</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>end_time <span class="op">=</span> <span class="fu">time</span>();</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Resultado: </span><span class="sc">$</span>result<span class="st">"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Resultado: 832040</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Tempo Julia: </span><span class="sc">$</span>(end_time <span class="op">-</span> start_time)<span class="st"> segundos"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Tempo Julia: 0.06513118743896484 segundos</code></pre>
-</div>
-</div>
-</div><div class="column" style="width:50%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>start_time <span class="op">=</span> <span class="fu">time</span>();</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> <span class="fu">fib</span>(<span class="fl">40</span>);</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>end_time <span class="op">=</span> <span class="fu">time</span>();</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Resultado: </span><span class="sc">$</span>result<span class="st">"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Resultado: 102334155</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Tempo Julia: </span><span class="sc">$</span>(end_time <span class="op">-</span> start_time)<span class="st"> segundos"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Tempo Julia: 0.5383601188659668 segundos</code></pre>
-</div>
-</div>
-</div>
-</div>
-<p><strong>Python</strong></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fib(n):</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> n <span class="op">&lt;=</span> <span class="dv">1</span>:</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> n</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> fib(n<span class="op">-</span><span class="dv">1</span>) <span class="op">+</span> fib(n<span class="op">-</span><span class="dv">2</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="columns">
-<div class="column" style="width:50%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>start <span class="op">=</span> time.time()</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> fib(<span class="dv">30</span>)</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>end <span class="op">=</span> time.time()</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Resultado: </span><span class="sc">{</span>result<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Resultado: 832040</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Tempo Python: </span><span class="sc">{</span>end <span class="op">-</span> start<span class="sc">:.4f}</span><span class="ss"> segundos"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Tempo Python: 0.0827 segundos</code></pre>
-</div>
-</div>
-</div><div class="column" style="width:50%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>start <span class="op">=</span> time.time()</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> fib(<span class="dv">40</span>)</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>end <span class="op">=</span> time.time()</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Resultado: </span><span class="sc">{</span>result<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Resultado: 102334155</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Tempo Python: </span><span class="sc">{</span>end <span class="op">-</span> start<span class="sc">:.4f}</span><span class="ss"> segundos"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Tempo Python: 9.9229 segundos</code></pre>
-</div>
-</div>
-</div>
+<div class="justify">
+<p>O pacote nos fornece diversos métodos de cálculo de IC, que podem ser selecionados alterando o último argumento da função:</p>
+<ul>
+<li><code>BasicConfInt</code>: método ingênuo de calcular;</li>
+<li><code>PercentileConfInt</code>: utiliza os percentis empíricos;</li>
+<li><code>NormalConfInt</code>: assume que a estatística segue a distribuição normal;</li>
+<li><code>StudentConfInt</code>: aplica uma correção considerando a variância de cada amostra;</li>
+<li><code>BCaConfInt</code>: aplica uma correção no viés e considera possível assimetria.</li>
+</ul>
 </div>
 </section>
-<section id="resultados-esperados" class="level2">
-<h2 class="anchored" data-anchor-id="resultados-esperados">Resultados Esperados</h2>
+<section id="estimando-uma-regressão" class="level2">
+<h2 class="anchored" data-anchor-id="estimando-uma-regressão">Estimando uma Regressão</h2>
 <div class="justify">
-<p>Os tempos de execução podem variar de execução para execução e dependendo do computador sendo utilizado. Para padronizar um pouco os resultados, utilizando a consiguração padrão do Colab e realizamos os testes para <code>fib(40)</code> os valores encontrados foram:</p>
-<ul>
-<li><p><strong>Julia</strong>: 1,45 segundos.</p></li>
-<li><p><strong>Python</strong>: 23,13 segundos.</p></li>
-<li><p><strong>R</strong>: 159,51 segundos.</p></li>
-</ul>
+<p>Como o exemplo aplicado, vamos utilizar o Bootstrap para calcular intervalos de confiança dos coeficientes de uma Regressão Linear Simples.</p>
+<p>Em primeiro lugar, vamos carregar os pacotes necessários:</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Pkg</span>.<span class="fu">add</span>(<span class="st">"DataFrames"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">Pkg</span>.<span class="fu">add</span>(<span class="st">"GLM"</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">GLM</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">DataFrames</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="justify">
+<p>Agora, vamos criar nossos dados:</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">20</span>;</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="fl">5</span> <span class="op">.+</span> <span class="fl">2</span> <span class="op">.*</span> x <span class="op">.+</span> <span class="fu">randn</span>(<span class="fl">20</span>);</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>dados <span class="op">=</span> <span class="fu">DataFrame</span>(x <span class="op">=</span> x, y <span class="op">=</span> y)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>20×2 DataFrame
+ Row │ x      y
+     │ Int64  Float64
+─────┼─────────────────
+   1 │     1   6.52246
+   2 │     2  10.4967
+   3 │     3  10.7977
+   4 │     4  12.4119
+   5 │     5  15.3369
+   6 │     6  17.0298
+   7 │     7  18.688
+   8 │     8  18.8134
+  ⋮  │   ⋮       ⋮
+  14 │    14  34.1752
+  15 │    15  36.7834
+  16 │    16  37.3749
+  17 │    17  41.9491
+  18 │    18  43.5868
+  19 │    19  43.6994
+  20 │    20  43.9772
+         5 rows omitted</code></pre>
+</div>
+</div>
+<div class="justify">
+<p>Em seguida, precisamos definir uma função que, a partir das determinadas observações selecionadas, ajusta o modelo e retorna os coeficientes para utilizarmos no <code>bootstrap()</code>.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">betas</span>(linhas)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    dados_amostra <span class="op">=</span> dados[linhas, <span class="op">:</span>]</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fu">coef</span>(<span class="fu">lm</span>(<span class="pp">@formula</span>(y <span class="op">~</span> x), dados_amostra))</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>betas (generic function with 1 method)</code></pre>
+</div>
+</div>
+<div class="justify">
+<p>Com isso, podemos realizar o Bootstrap e obter um IC para os coeficientes.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>reamostragem <span class="op">=</span> <span class="fu">bootstrap</span>(betas, <span class="fu">collect</span>(<span class="fl">1</span><span class="op">:</span><span class="fu">nrow</span>(dados)), <span class="fu">BasicSampling</span>(<span class="fl">200</span>))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Bootstrap Sampling
+  Estimates:
+     Var │ Estimate  Bias          StdError
+         │ Float64   Float64       Float64
+    ─────┼───────────────────────────────────
+       1 │  4.51144  -0.0281201    0.536053
+       2 │  2.08188   0.000595809  0.0546895
+  Sampling: BasicSampling
+  Samples:  200
+  Data:     Vector{Int64}: { 20 }</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>IC <span class="op">=</span> <span class="fu">confint</span>(reamostragem, <span class="fu">PercentileConfInt</span>(<span class="fl">.95</span>))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>((4.511435053176298, 3.4412939913858196, 5.421195673757331), (2.0818779902699562, 1.9740275177082132, 2.1840416888094887))</code></pre>
+</div>
 </div>
 </section>
 <section id="conclusão" class="level2">
 <h2 class="anchored" data-anchor-id="conclusão">Conclusão</h2>
 <div class="justify">
-<p>Os testes com a função recursiva de Fibonacci ilustram claramente as diferenças de desempenho entre as linguagens. Embora <code>Julia</code> se destaque em cálculos computacionalmente intensivos devido à sua compilação <em>JIT</em>, a escolha da linguagem deve levar em conta também o ecossistema, a familiaridade do usuário e o tipo de análise a ser realizada.</p>
-<p><code>Python</code> oferece equilíbrio entre desempenho e facilidade de uso, enquanto <code>R</code> continua sendo a opção ideal para análises estatísticas específicas, com sintaxe concisa e pacotes robustos, apesar de mais lento em cálculos brutos.</p>
+<p>O Bootstrap é uma técnica muito útil quando temos poucos dados ou quando não sabemos a distribuição exata da estatística de interesse. Apesar de não ser uma solução mágica para todos os problemas, trata-se de uma abordagem prática e flexível de melhorar nossas análises e ganhar mais confiança nos resultados.</p>
+<p>Portanto, com o pacote <code>Bootstrap.jl</code>, conseguimos aplicar essa ideia de forma rápida em <code>Julia</code>, seja para calcular médias, proporções ou até intervalos de confiança de modelos de regressão (e coisas muito mais complexas).</p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">

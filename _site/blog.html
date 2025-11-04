@@ -79,7 +79,8 @@ ul.task-list li input[type="checkbox"] {
 
     const options = {
       valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
+      page: 25,
+    pagination: { item: "<li class='page-item'><a class='page page-link' href='#'></a></li>" },
       searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
     };
 
@@ -205,7 +206,7 @@ window.Quarto = {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-    <h5 class="quarto-listing-category-title">Categorias</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">Tudo <span class="quarto-category-count">(20)</span></div><div class="category" data-category="QmVuY2htYXJr">Benchmark <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RW50cmV2aXN0YXM=">Entrevistas <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RmVycmFtZW50YXM=">Ferramentas <span class="quarto-category-count">(5)</span></div><div class="category" data-category="SGlzdCVDMyVCM3JpYQ==">História <span class="quarto-category-count">(3)</span></div><div class="category" data-category="SURF">IDE <span class="quarto-category-count">(3)</span></div><div class="category" data-category="SW5zdGFsYSVDMyVBNyVDMyVBM28=">Instalação <span class="quarto-category-count">(4)</span></div><div class="category" data-category="SnVsaWE=">Julia <span class="quarto-category-count">(2)</span></div><div class="category" data-category="TWFuaXB1bGElQzMlQTclQzMlQTNvJTIwZGUlMjBEYWRvcw==">Manipulação de Dados <span class="quarto-category-count">(2)</span></div><div class="category" data-category="TWFya2Rvd24=">Markdown <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TWF0cml6">Matriz <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TWVpbyUyMEFjYWQlQzMlQUFtaWNv">Meio Acadêmico <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TWVyY2FkbyUyMGRlJTIwVHJhYmFsaG8=">Mercado de Trabalho <span class="quarto-category-count">(2)</span></div><div class="category" data-category="T25saW5l">Online <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UGFjb3Rlcw==">Pacotes <span class="quarto-category-count">(4)</span></div><div class="category" data-category="UHJpbWVpcm9zJTIwUGFzc29z">Primeiros Passos <span class="quarto-category-count">(4)</span></div><div class="category" data-category="VGlkeSUyMERhdGE=">Tidy Data <span class="quarto-category-count">(1)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categorias</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">Tudo <span class="quarto-category-count">(26)</span></div><div class="category" data-category="QXR1YWxpemElQzMlQTclQzMlQjVlcyUyMGRlJTIwU29mdHdhcmU=">Atualizações de Software <span class="quarto-category-count">(1)</span></div><div class="category" data-category="QmVuY2htYXJr">Benchmark <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Q29tcHV0YSVDMyVBNyVDMyVBM28lMjBUJUMzJUE5Y25pY2E=">Computação Técnica <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RW50cmV2aXN0YXM=">Entrevistas <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RmVycmFtZW50YXM=">Ferramentas <span class="quarto-category-count">(8)</span></div><div class="category" data-category="SGlzdCVDMyVCM3JpYQ==">História <span class="quarto-category-count">(3)</span></div><div class="category" data-category="SURF">IDE <span class="quarto-category-count">(3)</span></div><div class="category" data-category="SW5zdGFsYSVDMyVBNyVDMyVBM28=">Instalação <span class="quarto-category-count">(4)</span></div><div class="category" data-category="SnVsaWE=">Julia <span class="quarto-category-count">(2)</span></div><div class="category" data-category="TWFuaXB1bGElQzMlQTclQzMlQTNvJTIwZGUlMjBEYWRvcw==">Manipulação de Dados <span class="quarto-category-count">(3)</span></div><div class="category" data-category="TWFya2Rvd24=">Markdown <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TWF0cml6">Matriz <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TWVpbyUyMEFjYWQlQzMlQUFtaWNv">Meio Acadêmico <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TWVyY2FkbyUyMGRlJTIwVHJhYmFsaG8=">Mercado de Trabalho <span class="quarto-category-count">(2)</span></div><div class="category" data-category="T25saW5l">Online <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UGFjb3Rlcw==">Pacotes <span class="quarto-category-count">(6)</span></div><div class="category" data-category="UHJpbWVpcm9zJTIwUGFzc29z">Primeiros Passos <span class="quarto-category-count">(4)</span></div><div class="category" data-category="VGlkeQ==">Tidy <span class="quarto-category-count">(1)</span></div><div class="category" data-category="VGlkeSUyMERhdGE=">Tidy Data <span class="quarto-category-count">(1)</span></div></div></div>
 <!-- main -->
 <main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
 
@@ -219,7 +220,184 @@ window.Quarto = {
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="SnVsaWElMkNFbnRyZXZpc3RhcyUyQ01lcmNhZG8lMjBkZSUyMFRyYWJhbGhvJTJDTWVpbyUyMEFjYWQlQzMlQUFtaWNv" data-listing-date-sort="1758250800000" data-listing-file-modified-sort="1758288314923" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1803">
+<div class="quarto-post image-right" data-index="0" data-categories="RmVycmFtZW50YXM=" data-listing-date-sort="1762225200000" data-listing-file-modified-sort="1762242343357" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="635">
+<div class="thumbnail">
+<p><a href="./Blog/Bootstrap.html" class="no-external"></a></p><a href="./Blog/Bootstrap.html" class="no-external">
+<p><img loading="lazy" src="./Blog/imagens/bootstrap.png" class="thumbnail-image"></p>
+</a><p><a href="./Blog/Bootstrap.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./Blog/Bootstrap.html" class="no-external">Reamostragem com o pacote Bootstrap.jl</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./Blog/Bootstrap.html" class="no-external"></a>
+</div>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('RmVycmFtZW50YXM='); return false;">
+Ferramentas
+</div>
+</div>
+<div class="listing-description">
+<a href="./Blog/Bootstrap.html" class="no-external">Aprenda a utilizar o pacote <code>Bootstrap.jl</code>, que permite, de forma prática e acessível, realizar reamostragem bootstrap em Julia a fim de obter estimativas e intervalos de confiança. </a>
+</div>
+</div>
+<div class="metadata">
+<a href="./Blog/Bootstrap.html" class="no-external">
+<div class="listing-date">
+4 de nov. de 2025
+</div>
+<div class="listing-author">
+Vitor Ribas Perrone, Esther Cleveston
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="1" data-categories="TWFuaXB1bGElQzMlQTclQzMlQTNvJTIwZGUlMjBEYWRvcyUyQ1RpZHklMkNGZXJyYW1lbnRhcyUyQ1BhY290ZXM=" data-listing-date-sort="1761188400000" data-listing-file-modified-sort="1761238838654" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="611">
+<div class="thumbnail">
+<p><a href="./Blog/tidier_strings.html" class="no-external"></a></p><a href="./Blog/tidier_strings.html" class="no-external">
+<p><img loading="lazy" src="./Blog/imagens/tidierstrings_logo.png" class="thumbnail-image"></p>
+</a><p><a href="./Blog/tidier_strings.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./Blog/tidier_strings.html" class="no-external">Pacote TidierStrings.jl</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./Blog/tidier_strings.html" class="no-external"></a>
+</div>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('TWFuaXB1bGElQzMlQTclQzMlQTNvJTIwZGUlMjBEYWRvcw=='); return false;">
+Manipulação de Dados
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('VGlkeQ=='); return false;">
+Tidy
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('RmVycmFtZW50YXM='); return false;">
+Ferramentas
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('UGFjb3Rlcw=='); return false;">
+Pacotes
+</div>
+</div>
+<div class="listing-description">
+<a href="./Blog/tidier_strings.html" class="no-external">O pacote <code>TidierStrings.jl</code> emula a facilidade do <code>StringR</code>, unindo manipulação de strings com dados <em>Tidy</em>. Neste post, serão apresentadas as principais funções do pacote. </a>
+</div>
+</div>
+<div class="metadata">
+<a href="./Blog/tidier_strings.html" class="no-external">
+<div class="listing-date">
+23 de out. de 2025
+</div>
+<div class="listing-author">
+Nicole Fredericci, Esther Cleveston
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="2" data-categories="UGFjb3Rlcw==" data-listing-date-sort="1761188400000" data-listing-file-modified-sort="1761236833514" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="234">
+<div class="thumbnail">
+<p><a href="./Blog/GoogleDrive.html" class="no-external"></a></p><a href="./Blog/GoogleDrive.html" class="no-external">
+<p><img loading="lazy" src="./Blog/imagens/googledrive.png" class="thumbnail-image"></p>
+</a><p><a href="./Blog/GoogleDrive.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./Blog/GoogleDrive.html" class="no-external">Baixando dados com GoogleDrive.jl</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./Blog/GoogleDrive.html" class="no-external"></a>
+</div>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('UGFjb3Rlcw=='); return false;">
+Pacotes
+</div>
+</div>
+<div class="listing-description">
+<a href="./Blog/GoogleDrive.html" class="no-external">Um breve guia em Julia para o download de dados diretamente do GoogleDrive apenas pela URL do arquivo. </a>
+</div>
+</div>
+<div class="metadata">
+<a href="./Blog/GoogleDrive.html" class="no-external">
+<div class="listing-date">
+23 de out. de 2025
+</div>
+<div class="listing-author">
+Caio Frare, Esther Cleveston
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="3" data-categories="RmVycmFtZW50YXM=" data-listing-date-sort="1761188400000" data-listing-file-modified-sort="1761224540074" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="505">
+<div class="thumbnail">
+<p><a href="./Blog/integracao_numerica.html" class="no-external"></a></p><a href="./Blog/integracao_numerica.html" class="no-external">
+<p><img loading="lazy" src="./Blog/imagens/integraisnumericas.png" class="thumbnail-image"></p>
+</a><p><a href="./Blog/integracao_numerica.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./Blog/integracao_numerica.html" class="no-external">Integração Numérica em Julia</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./Blog/integracao_numerica.html" class="no-external"></a>
+</div>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('RmVycmFtZW50YXM='); return false;">
+Ferramentas
+</div>
+</div>
+<div class="listing-description">
+<a href="./Blog/integracao_numerica.html" class="no-external">Precisa calcular áreas, probabilidades acumuladas ou mesmosolucionar equações diferenciais? Este guia te mostra como realizar integrais numéricas em <code>Julia</code> de forma simples e direta, usando os pacotes <code>QuadGK</code> e <code>Cubature</code>. </a>
+</div>
+</div>
+<div class="metadata">
+<a href="./Blog/integracao_numerica.html" class="no-external">
+<div class="listing-date">
+23 de out. de 2025
+</div>
+<div class="listing-author">
+Vitor Ribas Perrone, Nicole Fredericci
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="4" data-categories="QXR1YWxpemElQzMlQTclQzMlQjVlcyUyMGRlJTIwU29mdHdhcmUlMkNDb21wdXRhJUMzJUE3JUMzJUEzbyUyMFQlQzMlQTljbmljYQ==" data-listing-date-sort="1760497200000" data-listing-file-modified-sort="1760565669571" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="725">
+<div class="thumbnail">
+<p><a href="./Blog/umpontoonze.html" class="no-external"></a></p><a href="./Blog/umpontoonze.html" class="no-external">
+<p><img loading="lazy" src="./Blog/imagens/umpontoonze.jpeg" class="thumbnail-image"></p>
+</a><p><a href="./Blog/umpontoonze.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./Blog/umpontoonze.html" class="no-external">Julia 1.11.6 — conheça as melhorias da última atualização</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./Blog/umpontoonze.html" class="no-external"></a>
+</div>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('QXR1YWxpemElQzMlQTclQzMlQjVlcyUyMGRlJTIwU29mdHdhcmU='); return false;">
+Atualizações de Software
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('Q29tcHV0YSVDMyVBNyVDMyVBM28lMjBUJUMzJUE5Y25pY2E='); return false;">
+Computação Técnica
+</div>
+</div>
+<div class="listing-description">
+<a href="./Blog/umpontoonze.html" class="no-external">Lançada em julho de 2025, a versão <code>1.11.6</code> de <code>Julia</code> apresenta diversas atualizações, destacando melhorias no compilador, sistema de tipos e paralelização. A versão também inclui correções de bugs e garante a compatibilidade com versões anteriores. </a>
+</div>
+</div>
+<div class="metadata">
+<a href="./Blog/umpontoonze.html" class="no-external">
+<div class="listing-date">
+15 de out. de 2025
+</div>
+<div class="listing-author">
+Gabriel Campovilla da Silva, Nicole Fredericci
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="5" data-categories="SnVsaWElMkNFbnRyZXZpc3RhcyUyQ01lcmNhZG8lMjBkZSUyMFRyYWJhbGhvJTJDTWVpbyUyMEFjYWQlQzMlQUFtaWNv" data-listing-date-sort="1758250800000" data-listing-file-modified-sort="1758288314923" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1803">
 <div class="thumbnail">
 <p><a href="./Blog/Zero ao Julia - Entrevistas.html" class="no-external"></a></p><a href="./Blog/Zero ao Julia - Entrevistas.html" class="no-external">
 <p><img loading="lazy" src="./Blog/imagens/entrevistas_capa.png" class="thumbnail-image"></p>
@@ -261,7 +439,7 @@ Leonardo dos Santos, Ana Luisa Pereira da Silva Rodrigues
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="1" data-categories="QmVuY2htYXJr" data-listing-date-sort="1758250800000" data-listing-file-modified-sort="1758294400396" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="649">
+<div class="quarto-post image-right" data-index="6" data-categories="QmVuY2htYXJr" data-listing-date-sort="1758250800000" data-listing-file-modified-sort="1758294400396" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="649">
 <div class="thumbnail">
 <p><a href="./Blog/Velocidade de Processamento.html" class="no-external"></a></p><a href="./Blog/Velocidade de Processamento.html" class="no-external">
 <p><img loading="lazy" src="./Blog/imagens/velo.jpeg" class="thumbnail-image"></p>
@@ -294,7 +472,7 @@ Gabriel Campovilla da Silva, Nicole Fredericci
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="2" data-categories="UHJpbWVpcm9zJTIwUGFzc29zJTJDRmVycmFtZW50YXM=" data-listing-date-sort="1757818800000" data-listing-file-modified-sort="1758288432681" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="872">
+<div class="quarto-post image-right" data-index="7" data-categories="UHJpbWVpcm9zJTIwUGFzc29zJTJDRmVycmFtZW50YXM=" data-listing-date-sort="1757818800000" data-listing-file-modified-sort="1758288432681" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="872">
 <div class="thumbnail">
 <p><a href="./Blog/strings.html" class="no-external"></a></p><a href="./Blog/strings.html" class="no-external">
 <p><img loading="lazy" src="./Blog/imagens/juliastrings.png" class="thumbnail-image"></p>
@@ -330,7 +508,7 @@ Vitor Ribas Perrone, Nicole Fredericci
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="3" data-categories="UHJpbWVpcm9zJTIwUGFzc29zJTJDRmVycmFtZW50YXM=" data-listing-date-sort="1757818800000" data-listing-file-modified-sort="1758288441127" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="533">
+<div class="quarto-post image-right" data-index="8" data-categories="UHJpbWVpcm9zJTIwUGFzc29zJTJDRmVycmFtZW50YXM=" data-listing-date-sort="1757818800000" data-listing-file-modified-sort="1758288441127" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="533">
 <div class="thumbnail">
 <p><a href="./Blog/datas.html" class="no-external"></a></p><a href="./Blog/datas.html" class="no-external">
 <p><img loading="lazy" src="./Blog/imagens/juliadatas.png" class="thumbnail-image"></p>
@@ -366,7 +544,7 @@ Vitor Ribas Perrone, Nicole Fredericci
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="4" data-categories="UGFjb3RlcyUyQ1ByaW1laXJvcyUyMFBhc3Nvcw==" data-listing-date-sort="1757041200000" data-listing-file-modified-sort="1757083475486" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="502">
+<div class="quarto-post image-right" data-index="9" data-categories="UGFjb3RlcyUyQ1ByaW1laXJvcyUyMFBhc3Nvcw==" data-listing-date-sort="1757041200000" data-listing-file-modified-sort="1757083475486" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="502">
 <div class="thumbnail">
 <p><a href="./Blog/pacotes_datasets.html" class="no-external"></a></p><a href="./Blog/pacotes_datasets.html" class="no-external">
 <p><img loading="lazy" src="./Blog/imagens/pacotes_datasets.png" class="thumbnail-image"></p>
@@ -402,7 +580,7 @@ Vitor Ribas Perrone, Nicole Fredericci
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="5" data-categories="SW5zdGFsYSVDMyVBNyVDMyVBM28lMkNJREU=" data-listing-date-sort="1756350000000" data-listing-file-modified-sort="1756423020317" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="452">
+<div class="quarto-post image-right" data-index="10" data-categories="SW5zdGFsYSVDMyVBNyVDMyVBM28lMkNJREU=" data-listing-date-sort="1756350000000" data-listing-file-modified-sort="1756423020317" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="452">
 <div class="thumbnail">
 <p><a href="./Blog/positron.html" class="no-external"></a></p><a href="./Blog/positron.html" class="no-external">
 <p><img loading="lazy" src="./Blog/imagens/positron_logo.png" class="thumbnail-image"></p>
@@ -438,7 +616,7 @@ Vitor Ribas Perrone, Nicole Fredericci
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="6" data-categories="TWF0cml6" data-listing-date-sort="1756177200000" data-listing-file-modified-sort="1756427298395" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="835">
+<div class="quarto-post image-right" data-index="11" data-categories="TWF0cml6" data-listing-date-sort="1756177200000" data-listing-file-modified-sort="1756427298395" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="835">
 <div class="thumbnail">
 <p><a href="./Blog/Matrizes.html" class="no-external"></a></p><a href="./Blog/Matrizes.html" class="no-external">
 <p><img loading="lazy" src="./Blog/imagens/matriz.png" class="thumbnail-image"></p>
@@ -471,7 +649,35 @@ Caio Frare, Nicole Fredericci
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="7" data-categories="SGlzdCVDMyVCM3JpYQ==" data-listing-date-sort="1755745200000" data-listing-file-modified-sort="1758288480180" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="403">
+<div class="quarto-post image-right" data-index="12" data-listing-date-sort="1755831600000" data-listing-file-modified-sort="1757088488004" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="638">
+<div class="thumbnail">
+<p><a href="./Blog/Quando usar.html" class="no-external"></a></p><a href="./Blog/Quando usar.html" class="no-external">
+<p><img loading="lazy" src="./Blog/imagens/quando.jpeg" class="thumbnail-image"></p>
+</a><p><a href="./Blog/Quando usar.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./Blog/Quando usar.html" class="no-external">Julia, Python, R e Outras: Quando Usar Cada Linguagem?</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./Blog/Quando usar.html" class="no-external"></a>
+</div>
+<div class="listing-description">
+<a href="./Blog/Quando usar.html" class="no-external">O texto compara Julia, Python e R em análise de dados e computação científica, destacando Julia como a melhor opção para cálculos de alta performance, com sintaxe simples e velocidade comparável a C. Inclui tabela comparativa e casos de uso ideais para cada linguagem.</a>
+</div>
+</div>
+<div class="metadata">
+<a href="./Blog/Quando usar.html" class="no-external">
+<div class="listing-date">
+22 de ago. de 2025
+</div>
+<div class="listing-author">
+Gabriel Campovilla da Silva
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="13" data-categories="SGlzdCVDMyVCM3JpYQ==" data-listing-date-sort="1755745200000" data-listing-file-modified-sort="1758288480180" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="403">
 <div class="thumbnail">
 <p><a href="./Blog/Perspectivas.html" class="no-external"></a></p><a href="./Blog/Perspectivas.html" class="no-external">
 <p><img loading="lazy" src="./Blog/imagens/Perspectivas.png" class="thumbnail-image"></p>
@@ -504,7 +710,7 @@ Esther Cleveston, Nicole Fredericci
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="8" data-categories="UGFjb3RlcyUyQ0ZlcnJhbWVudGFzJTJDTWFuaXB1bGElQzMlQTclQzMlQTNvJTIwZGUlMjBEYWRvcw==" data-listing-date-sort="1754190000000" data-listing-file-modified-sort="1758288776199" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="843">
+<div class="quarto-post image-right" data-index="14" data-categories="UGFjb3RlcyUyQ0ZlcnJhbWVudGFzJTJDTWFuaXB1bGElQzMlQTclQzMlQTNvJTIwZGUlMjBEYWRvcw==" data-listing-date-sort="1754190000000" data-listing-file-modified-sort="1758288776199" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="843">
 <div class="thumbnail">
 <p><a href="./Blog/Álgebra linear com LinearAlgebra.jl.html" class="no-external"></a></p><a href="./Blog/Álgebra linear com LinearAlgebra.jl.html" class="no-external">
 <p><img loading="lazy" src="./Blog/imagens/algebralinear.png" class="thumbnail-image"></p>
@@ -543,7 +749,7 @@ Sarah Pereira Teixeira Silva
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="9" data-categories="RmVycmFtZW50YXMlMkNPbmxpbmU=" data-listing-date-sort="1754190000000" data-listing-file-modified-sort="1754241003794" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1020">
+<div class="quarto-post image-right" data-index="15" data-categories="RmVycmFtZW50YXMlMkNPbmxpbmU=" data-listing-date-sort="1754190000000" data-listing-file-modified-sort="1754241003794" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1020">
 <div class="thumbnail">
 <p><a href="./Blog/juliahub.html" class="no-external"></a></p><a href="./Blog/juliahub.html" class="no-external">
 <p><img loading="lazy" src="./Blog/imagens/hub_logo.png" class="thumbnail-image"></p>
@@ -579,7 +785,7 @@ Nicole Fredericci
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="10" data-categories="SnVsaWElMkNNZXJjYWRvJTIwZGUlMjBUcmFiYWxobw==" data-listing-date-sort="1754103600000" data-listing-file-modified-sort="1754184195557" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="631">
+<div class="quarto-post image-right" data-index="16" data-categories="SnVsaWElMkNNZXJjYWRvJTIwZGUlMjBUcmFiYWxobw==" data-listing-date-sort="1754103600000" data-listing-file-modified-sort="1754184195557" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="631">
 <div class="thumbnail">
 <p><a href="./Blog/Julia no Mercado de Trabalho.html" class="no-external"></a></p><a href="./Blog/Julia no Mercado de Trabalho.html" class="no-external">
 <p><img loading="lazy" src="./Blog/imagens/julia.png" class="thumbnail-image"></p>
@@ -615,7 +821,7 @@ Leonardo dos Santos
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="11" data-categories="SURF" data-listing-date-sort="1751684400000" data-listing-file-modified-sort="1751755872251" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="278">
+<div class="quarto-post image-right" data-index="17" data-categories="SURF" data-listing-date-sort="1751684400000" data-listing-file-modified-sort="1751755872251" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="278">
 <div class="thumbnail">
 <p><a href="./Blog/vscode.html" class="no-external"></a></p><a href="./Blog/vscode.html" class="no-external">
 <p><img loading="lazy" src="./Blog/imagens/logo_vscode.png" class="thumbnail-image"></p>
@@ -648,7 +854,7 @@ Guilherme Duarte, Pedro H. G. Elias
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="12" data-categories="TWFya2Rvd24=" data-listing-date-sort="1751338800000" data-listing-file-modified-sort="1751387554865" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="489">
+<div class="quarto-post image-right" data-index="18" data-categories="TWFya2Rvd24=" data-listing-date-sort="1751338800000" data-listing-file-modified-sort="1751387554865" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="489">
 <div class="thumbnail">
 <p><a href="./Blog/markdown_pluto.html" class="no-external"></a></p><a href="./Blog/markdown_pluto.html" class="no-external">
 <p><img loading="lazy" src="./Blog/imagens/logo_pluto.png" class="thumbnail-image"></p>
@@ -681,7 +887,7 @@ Vitor Ribas Perrone, Guilherme Duarte Alves Basso
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="13" data-categories="TWFuaXB1bGElQzMlQTclQzMlQTNvJTIwZGUlMjBEYWRvcyUyQ1RpZHklMjBEYXRhJTJDRmVycmFtZW50YXMlMkNQYWNvdGVz" data-listing-date-sort="1749870000000" data-listing-file-modified-sort="1758289227063" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="868">
+<div class="quarto-post image-right" data-index="19" data-categories="TWFuaXB1bGElQzMlQTclQzMlQTNvJTIwZGUlMjBEYWRvcyUyQ1RpZHklMjBEYXRhJTJDRmVycmFtZW50YXMlMkNQYWNvdGVz" data-listing-date-sort="1749870000000" data-listing-file-modified-sort="1758289227063" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="868">
 <div class="thumbnail">
 <p><a href="./Blog/tidierdata.html" class="no-external"></a></p><a href="./Blog/tidierdata.html" class="no-external">
 <p><img loading="lazy" src="./Blog/imagens/tidierdata.png" class="thumbnail-image"></p>
@@ -723,7 +929,7 @@ Henrique Anunciação Velloso Silva, Arthur Dionizio Martins da Silva
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="14" data-categories="UGFjb3RlcyUyQ1ByaW1laXJvcyUyMFBhc3Nvcw==" data-listing-date-sort="1749783600000" data-listing-file-modified-sort="1749919742732" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="446">
+<div class="quarto-post image-right" data-index="20" data-categories="UGFjb3RlcyUyQ1ByaW1laXJvcyUyMFBhc3Nvcw==" data-listing-date-sort="1749783600000" data-listing-file-modified-sort="1749919742732" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="446">
 <div class="thumbnail">
 <p><a href="./Blog/pacotes_estatistica.html" class="no-external"></a></p><a href="./Blog/pacotes_estatistica.html" class="no-external">
 <p><img loading="lazy" src="./Blog/imagens/pacotes_estatistica.png" class="thumbnail-image"></p>
@@ -759,7 +965,7 @@ Vitor Ribas Perrone, Arthur Dionizio Martins da Silva
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="15" data-categories="SGlzdCVDMyVCM3JpYQ==" data-listing-date-sort="1749697200000" data-listing-file-modified-sort="1749920844275" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="432">
+<div class="quarto-post image-right" data-index="21" data-categories="SGlzdCVDMyVCM3JpYQ==" data-listing-date-sort="1749697200000" data-listing-file-modified-sort="1749920844275" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="432">
 <div class="thumbnail">
 <p><a href="./Blog/HistoriaJulia.html" class="no-external"></a></p><a href="./Blog/HistoriaJulia.html" class="no-external">
 <p><img loading="lazy" src="./Blog/imagens/HistoriaJulia.png" class="thumbnail-image"></p>
@@ -792,7 +998,7 @@ Esther Cleveston, Pedro H. G. Elias
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="16" data-categories="SW5zdGFsYSVDMyVBNyVDMyVBM28lMkNJREU=" data-listing-date-sort="1747537200000" data-listing-file-modified-sort="1751755303523" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="289">
+<div class="quarto-post image-right" data-index="22" data-categories="SW5zdGFsYSVDMyVBNyVDMyVBM28lMkNJREU=" data-listing-date-sort="1747537200000" data-listing-file-modified-sort="1751755303523" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="289">
 <div class="thumbnail">
 <p><a href="./Blog/julia_rstudio.html" class="no-external"></a></p><a href="./Blog/julia_rstudio.html" class="no-external">
 <p><img loading="lazy" src="./Blog/imagens/rstudio_logo.png" class="thumbnail-image"></p>
@@ -828,7 +1034,7 @@ Vitor Ribas Perrone, Carlos Trucíos
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="17" data-categories="SW5zdGFsYSVDMyVBNyVDMyVBM28=" data-listing-date-sort="1747105200000" data-listing-file-modified-sort="1747096991176" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="459">
+<div class="quarto-post image-right" data-index="23" data-categories="SW5zdGFsYSVDMyVBNyVDMyVBM28=" data-listing-date-sort="1747105200000" data-listing-file-modified-sort="1747096991176" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="459">
 <div class="thumbnail">
 <p><a href="./Blog/jupytercolab.html" class="no-external"></a></p><a href="./Blog/jupytercolab.html" class="no-external">
 <p><img loading="lazy" src="./Blog/imagens/gvc_jupyter_logo.png" class="thumbnail-image"></p>
@@ -861,7 +1067,7 @@ Gabriel Cardoso, Carlos Trucíos
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="18" data-categories="SW5zdGFsYSVDMyVBNyVDMyVBM28=" data-listing-date-sort="1746154800000" data-listing-file-modified-sort="1746203949583" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="368">
+<div class="quarto-post image-right" data-index="24" data-categories="SW5zdGFsYSVDMyVBNyVDMyVBM28=" data-listing-date-sort="1746154800000" data-listing-file-modified-sort="1746203949583" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="368">
 <div class="thumbnail">
 <p><a href="./Blog/instalar_julia.html" class="no-external"></a></p><a href="./Blog/instalar_julia.html" class="no-external">
 <p><img loading="lazy" src="./Blog/imagens/logo_app.png" class="thumbnail-image"></p>
@@ -894,10 +1100,10 @@ Nicole Fredericci, Carlos Trucíos
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="19" data-categories="SGlzdCVDMyVCM3JpYQ==" data-listing-date-sort="1745463600000" data-listing-file-modified-sort="1745509838469" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="563">
+<div class="quarto-post image-right" data-index="25" data-categories="SGlzdCVDMyVCM3JpYQ==" data-listing-date-sort="1745463600000" data-listing-file-modified-sort="1745509838469" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="563">
 <div class="thumbnail">
 <p><a href="./Blog/as-origens.html" class="no-external"></a></p><a href="./Blog/as-origens.html" class="no-external">
-<p><img loading="lazy" src="./Blog/imagens/as_origens.png" class="thumbnail-image"></p>
+<p><img loading="lazy" data-src="./Blog/imagens/as_origens.png" class="thumbnail-image"></p>
 </a><p><a href="./Blog/as-origens.html" class="no-external"></a></p>
 </div>
 <div class="body">
@@ -931,6 +1137,9 @@ Carlos Trucíos
 <div class="listing-no-matching d-none">
 Nenhum item correspondente
 </div>
+<nav id="listing-pagination" class="listing-pagination" aria-label="Page Navigation">
+  <ul class="pagination"></ul>
+</nav>
 </div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {

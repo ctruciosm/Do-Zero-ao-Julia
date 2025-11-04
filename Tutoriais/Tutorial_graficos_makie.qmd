@@ -1,14 +1,18 @@
 ---
-title: "Tutorial de como contruir gráficos com o Pacote Makie.jl"
+title: "Como construir gráficos com o Pacote Makie.jl"
 description: |
-  Tutorial de criação de gráficos simples e avançados com o pacote Makie.jl
+  O `Makie.jl` é um pacote para gráficos em `Julia` que se destaca pela sua flexibilidade e grande variedade de funcionalidades. Neste tutorial, ensinaremos como utilizar o pacote na construção de visualizações básicas (*Scatterplot*, Histograma) até técnicas avançadas (*Heatmaps*, Gráficos de Contorno e Linhas $3D$).
 categories:
   - Gráficos
+  - Pacotes
 author:
   - name: Esther Cleveston
     affiliation: "Universidade Estadual de Campinas"
     orcid: 0009-0008-6612-8417
-date: "2025-07-23"
+  - name: Nicole Fredericci
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/NFredericci
+date: "2025-10-26"
 image: imagens/pacote_makie_capa.png
 lang: pt
 format:
@@ -17,28 +21,36 @@ format:
     toc-depth: 3
     self-contained: false
 engine: knitr
-draft: true
+draft: false
 ---
+
+
+```{r}
+#| echo: false
+Sys.setenv(JULIA_HOME = "/Users/ctrucios/.juliaup/bin")
+```
 
 ## Introdução
 
-::: justify
-O Makie.jl é um pacote de gráficos da linguagem Julia que se destaca pela sua flexibilidade e pela grande variedade de funcionalidades. Com ele, é possível criar desde visualizações bem simples, como gráficos de barras e linhas, até gráficos mais avançados, como visualizações em 3D e animações. O pacote oferece diferentes backends, como o CairoMakie e o GLMakie, que permitem gerar tanto gráficos estáticos quanto gráficos interativos.
+:::{.justify}
+O `Makie.jl` é um pacote para gráficos em `Julia` que se destaca pela sua flexibilidade e grande variedade de funcionalidades. Com ele, é possível criar desde visualizações simples, como gráficos de barras, histogramas, boxplots e gráficos de linhas, até gráficos mais sofisticados, como visualizações em $3D$ e animações. O pacote oferece diferentes *backends*, como o `CairoMakie` e o `GLMakie`, que permitem gerar tanto gráficos estáticos quanto dinâmicos (interativos).
 
-Neste tutorial, vamos mostrar alguns exemplos que ajudam a entender como o Makie funciona, explorando algumas visualizações básicas, como histogramas e gráficos de dispersão, e também um exemplo mais avançado como gráfico de linhas em 3D.
+Neste tutorial, vamos mostrar alguns exemplos para entender como o `Makie` funciona. Começaremos com a exploração de visualizações básicas, como histogramas e gráficos de dispersão, e também apresentaremos exemplos para gráficos mais complexos, incluindo gráfico de linhas em $3D$.
 :::
 
 ## Instalar os pacotes
 
-::: justify
-Para instalar os pacotes que serão utilizados, execute as seguintes linhas de código:
+:::{.justify}
+Para instalar e carregar os pacotes que serão utilizados, execute as seguintes linhas de código:
 :::
+
 ```{julia, eval = TRUE}
 using Pkg
 Pkg.add("Makie") 
 Pkg.add("CairoMakie") 
 Pkg.add("GLMakie")
 ```
+
 ```{julia, eval = TRUE}
 using Makie 
 using CairoMakie
@@ -47,14 +59,30 @@ using GLMakie
 
 ## Gráfico de Dispersão
 
-::: justify
-Podemos fazer um scatterplot (Gráfico de Dispersão) com o código abaixo. Neste caso, para o eixo X utilizamos valores de 1 até 10 e para o eixo Y geramos aleatoriamente 10 números entre 0 e 1.
+:::{.justify}
+Para iniciar, vamos construir um *scatterplot* (Gráfico de Dispersão) com o código abaixo. Neste caso, utilizamos valores sequenciais de $1$ até $10$ para o eixo X e geramos aleatoriamente $10$ números entre $0$ e $1$ para o eixo Y.
 :::
 
 ```{julia, eval = TRUE}
-x = 1:10 
-y = rand(10)
+x = 1:10;
+y = rand(10);
+scatter(x, y,
+    color = :green,
+    markersize = 15,
+    label = "Dados Aleatórios",
+    axis = (
+        title = "Gráfico de Dispersão",
+        xlabel = "Eixo X",
+        ylabel = "Eixo Y"))
+```
 
+![](imagens/makie_dispersao.png){fig-align="center" width="50%"}
+
+:::{.justify}
+Caso queira salvar o gráfico, a função `save` pode ser utilizada a partir da seguinte sintaxe:
+:::
+
+```{julia, eval = TRUE}
 fig = scatter(x, y,
     color = :green,
     markersize = 15,
@@ -62,91 +90,80 @@ fig = scatter(x, y,
     axis = (
         title = "Gráfico de Dispersão",
         xlabel = "Eixo X",
-        ylabel = "Eixo Y"
-    )
-)
-fig
+        ylabel = "Eixo Y"))
+save("figura_01.png", fig)
 ```
-::: justify
-Caso queira salvar o gráfico, a função save pode ser utilizada.
-:::
-
-![](imagens/makie_dispersao.png){fig-align="center" width="50%"}
 
 ## Gráfico de Barras
 
-::: justify
-Iremos fazer gráfico de barras lado a lado, empilhadas e empilhadas lado a lado. 
-Para o primeiro caso, iremos utilizar o código abaixo. Primeiro criamos uma tabela com as categorias gato indo de 1 até 3, a altura será gerada de 0.1 até 0.9 com incremento de 0.1 e, por fim, a categoria grupo contendo 3 tipos.
+:::{.justify}
+Nesta seção, vamos explorar a criação de gráficos de barras no `Makie.jl`, abordando os tipos mais comuns: barras simples lado a lado, empilhadas (*stacked*) e empilhadas lado a lado (*dodged*).
+
+Para o primeiro exemplo, utilizaremos o código abaixo para criar um gráfico de barras simples lado a lado. Vamos criar uma tabela com as seguintes categorias:
+
+- **Gato**: Variável categórica de $1$ a $3$.
+- **Altura**: Gerada sequencialmente de $0.1$ até $0.9$, com incremento de $0.1$.
+- **Grupo**: Variável categórica de $1$ a $3$.
 :::
 
 ```{julia, eval = TRUE}
 tabela = (gato = [1, 1, 1, 2, 2, 2, 3, 3, 3],
        altura = 0.1:0.1:0.9,
-       grupo = [1, 2, 3, 1, 2, 3, 1, 2, 3]
-       )
+       grupo = [1, 2, 3, 1, 2, 3, 1, 2, 3])
 barplot(tabela.gato, tabela.altura,
         dodge = tabela.grupo,
         color = tabela.grupo,
         axis = (xticks = (1:3, ["Esquerda", "Meio", "Direita"]),
-                title = "Barras Lado a Lado"),
-        )
+                title = "Barras Lado a Lado"))
 ```
 
 ![](imagens/makie_barras_lado_a_lado.png){fig-align="center" width="50%"}
 
-::: justify
-Para fazermos o gráfico das barras empilhadas iremos utilizar a mesma tabela feita anteriormente e mudaremos o argumento dodge para stack.
+:::{.justify}
+Para fazermos o gráfico de barras empilhadas, utilizaremos a mesma tabela feita anteriormente e mudaremos o argumento de `dodge` para `stack` na função.
 :::
 
 ```{julia, eval = TRUE}
-tabela = (gato = [1, 1, 1, 2, 2, 2, 3, 3, 3],
-       altura = 0.1:0.1:0.9,
-       grupo = [1, 2, 3, 1, 2, 3, 1, 2, 3]
-       )
 barplot(tabela.gato, tabela.altura,
         stack = tabela.grupo,
         color = tabela.grupo,
         axis = (xticks = (1:3, ["Esquerda", "Meio", "Direita"]),
-                title = "Barras Empilhadas"),
-        )
+                title = "Barras Empilhadas"))
 ```
 
 ![](imagens/makie_barras_empilhadas.png){fig-align="center" width="50%"}
 
-::: justify
-Por fim, iremos fazer uma combinação dos dois últimos gráficos. Para isso, vamos adicionar na tabela duas categorias extras, grupo1 e grupo2, os quais serão utilizados respectivamente nos argumentos dodge e stack.
+:::{.justify}
+Por fim, faremos uma combinação dos dois últimos gráficos, resultando no gráfico de barras empilhadas lado a lado. Esta visualização é ideal para comparar subtotais em diferentes categorias principais.
+
+Para isso, vamos adicionar duas categorias extras à tabela, **tipo1** e **tipo2**, as quais serão utilizadas nos argumentos `dodge` e `stack`, respectivamente. O primeiro tipo definirá as barras que ficarão lado a lado, e o segundo, as que ficarão empilhadas dentro de cada grupo lateral.
 :::
 
 ```{julia, eval = TRUE}
 tabela = (gato = [1, 1, 1, 2, 2, 2, 3, 3, 3],
        altura = 0.1:0.1:0.9,
        grupo = [1, 2, 3, 1, 2, 3, 1, 2, 3],
-       grupo1 = [1, 2, 2, 1, 1, 2, 1, 1, 2],
-       grupo2 = [1, 1, 2, 1, 2, 1, 1, 2, 1]
-       )
-
+       tipo1 = [1, 2, 2, 1, 1, 2, 1, 1, 2],
+       tipo2 = [1, 1, 2, 1, 2, 1, 1, 2, 1])
 barplot(tabela.gato, tabela.altura,
-        dodge = tabela.grupo1,
-        stack = tabela.grupo2,
+        dodge = tabela.tipo1,
+        stack = tabela.tipo2,
         color = tabela.grupo,
         axis = (xticks = (1:3, ["Esquerda", "Meio", "Direita"]),
-                title = "Lado a lado e Empilhadas"),
-        )
+                title = "Lado a lado e Empilhadas"))
 ```
 
 ![](imagens/makie_barras_lado_empilhadas.png){fig-align="center" width="50%"}
 
 ## Gráfico BoxPlot
 
-::: justify
-Para a construção do BoxPlot utilizamos o código abaixo. Para o eixo X iremos gerar 1000 valores aleatórios entre 1 e 3 e para o eixo Y iremos gerar 1000 valores aleatórios de uma distribuição normal padrão.
+:::{.justify}
+Para a construção de um boxplot, uma ferramenta fundamental para visualizar a distribuição e a dispersão dos dados, utilizaremos o código abaixo. Serão gerados $1000$ valores aleatórios (discretos) entre $1$ e $3$ para compor o eixo X, e $1000$ valores aleatórios de uma distribuição Normal padrão ($\mu=0, \sigma=1$) para o eixo Y.
 :::
 
 ```{julia, eval = TRUE}
-x = rand(1:3, 1000)
-y = randn(1000)
-
+x = rand(1:3, 1000);
+y = randn(1000);
 boxplot(x, y,
     color = :green,
     markersize = 15,
@@ -161,27 +178,27 @@ boxplot(x, y,
 
 ## Gráfico de Densidade
 
-::: justify
-Para a construção do Gráfico de Densidade iremos gerar uma curva de densidade de 300 valores aleatórios da normal padrão e atribuir a variável densidade, após isso o ! é utilizado para adicionar a densidade a um gráfico já existente. Por meio dele iremos gerar 300 valores aleatórios e deslocar para a direita, somando 2. O alpha irá definir a transparência da curva.
+:::{.justify}
+Para a construção de um gráfico de densidade, vamos gerar uma curva de densidade de $300$ valores aleatórios de uma Normal padrão e atribuir à variável densidade.
+
+Em seguida, utilizaremos o operador `!` para adicionar a segunda curva a este mesmo gráfico existente. A segunda curva também terá $300$ valores aleatórios, mas será deslocada (somando $3$) para a direita. O argumento `alpha` será usado para definir a transparência da curva, permitindo que ambas sejam visualizadas claramente, mesmo quando se sobrepõem.
 :::
 
 ```{julia, eval = TRUE}
-densidade = density(randn(300))
+density(randn(300))
 density!(randn(300) .+ 3, alpha = 0.8)
-
-densidade
 ```
 
 ![](imagens/makie_densidade.png){fig-align="center" width="50%"}
 
 ## Gráfico Histograma
 
-::: justify
-Podemos fazer um Histograma com o código abaixo. Primeiro geramos 1000 amostras aleatórias de uma normal padrão e depois geramos o histograma com 30 colunas.
+:::{.justify}
+Para visualizar a distribuição de frequência de um conjunto de dados, o histograma é a ferramenta ideal. Podemos fazer um histograma com o código abaixo. Como exemplo, geraremos $1000$ amostras aleatórias de uma Normal padrão. Em seguida, especificamos que a faixa de valores deve ser dividida em 30 colunas (*bins*).
 :::
 
 ```{julia, eval = TRUE}
-dados = randn(1000)
+dados = randn(1000);
 hist(dados, bins = 30, color = :green)
 ```
 
@@ -189,14 +206,13 @@ hist(dados, bins = 30, color = :green)
 
 ## Gráfico de Linhas
 
-::: justify
-O Gráfico de Linhas pode ser feito com o código abaixo. Para o eixo X utilizamos valores de 1 até 10 e para o Eixo Y utilizamos uma lista de valores aleatórios.
+:::{.justify}
+O gráfico de linhas pode ser feito com o código abaixo, servindo para visualizar séries de dados. Para o eixo X utilizaremos valores sequenciais de $1$ até $10$, e para o eixo Y, uma lista de $10$ valores aleatórios.
 :::
 
 ```{julia, eval = TRUE}
-x = 1:10
-y = [2, 4, 3, 6, 7, 8, 7, 9, 10, 12]
-
+x = 1:10;
+y = [2, 4, 3, 6, 7, 8, 7, 9, 10, 12];
 lines(x, y,
     color = :green,
     label = "Dados Aleatórios",
@@ -208,76 +224,89 @@ lines(x, y,
 
 ![](imagens/makie_linhas.png){fig-align="center" width="50%"}
 
-## Mais gráficos
+## Mais Gráficos
 
-::: justify
-Iremos explorar alguns gráficos possíveis de serem feitos com o GLMakie e com o CairoMakie. Para o primeiro exemplo iremos carregar também o pacote DelimitedFiles e iremos acessar a elevação de um terreno, após isso iremos criar o espaço para a figura utilizando Figure() e Axis(). Com a função contourf iremos criar o contorno 10 faixas de valores (altitudes), assim teremos um Gráfico de Contorno.
+:::{.justify}
+Nesta seção final, vamos explorar visualizações que demonstram a potência do `Makie.jl` para gráficos complexos, utilizando o `GLMakie` e o `CairoMakie`.
 :::
 
-```{julia, eval = FALSE}
-pkg.add("DelimitedFiles")
-using DelimitedFiles
+### Gráfico de Contorno
 
-vulcao = readdlm(Makie.assetpath("volcano.csv"), ',', Float64)
+:::{.justify}
+Para o primeiro exemplo, que visa visualizar dados tridimensionais em um plano $2D$, será necessário carregar o pacote `DelimitedFiles` tal qual no código abaixo: 
+:::
+
+```{julia}
+Pkg.add("DelimitedFiles")
+using DelimitedFiles
+```
+
+:::{.justify}
+Em seguida, usaremos a elevação de um terreno como os dados no nosso exemplo e salvaremos as observações no objeto `vulcao`. Após, vamos criar o espaço para a figura utilizando as funções `Figure()` e `Axis()`. Com a função `contourf` (que cria contornos preenchidos), delimitaremos o contorno a $10$ faixas de valores (altitudes), obtendo assim um gráfico de contorno.
+:::
+
+```{julia, eval = TRUE}
+vulcao = readdlm(Makie.assetpath("volcano.csv"), ',', Float64);
 
 f = Figure()
 Axis(f[1, 1])
 contorno = contourf!(vulcao, levels = 10)
 Colorbar(f[1, 2], contorno)
-
-f
 ```
 
 ![](imagens/makie_grafico_contorno.png){fig-align="center" width="50%"}
 
-::: justify
-No segundo exemplo iremos construir um Mapa de Calor (Heatmap), para isso definimos os valores do eixo X indo de 1 até 5 e do eixo Y indo de 6 até 10 e depois uma matriz 5x5 com os números indo de 1 até 25 (essa matriz será usada com os valores do heatmap para definir as cores).
+### Heatmap
+
+:::{.justify}
+Para construir um Mapa de Calor (*Heatmap*), ideal para visualizar a magnitude de dados em uma matriz $2D$, vamos definir três componentes:
+
+- Os valores do eixo X, de $1$ a $5$ (sequencial).
+- Os valores do eixo Y, de $6$ a $10$ (sequencial).
+- A matriz de dados $5x5$ com valores sequenciais de $1$ a $25$, que será utilizada para definir as cores e a intensidade do *heatmap*.
 :::
 
-```{julia, eval = FALSE}
+```{julia, eval = TRUE}
 figura = Figure()
 ax = Axis(figura[1, 1])
-
-centro_x = 1:5
-centro_y = 6:10
-dados = reshape(1:25, 5, 5)
-
+centro_x = 1:5;
+centro_y = 6:10;
+dados = reshape(1:25, 5, 5);
 heatmap!(ax, centro_x, centro_y, dados)
-
-figura
 ```
 
 ![](imagens/makie_heatmap.png){fig-align="center" width="50%"}
 
-::: justify
-Por fim, no último exemplo iremos fazer um Gráfico de Linhas 3D. Primeiro criamos 100 pontos aleatórios em um espaço 3D e depois geramos outros 100 valores aleatórios. Criamos uma figura e depois desenhamos as linhas conectando os pontos e as cores serão definidas pela variável valores. Por fim, o fxaa = true irá suavizar as linhas.
+### Gráfico de Linhas 3D
+
+:::{.justify}
+Por fim, para fazer um gráfico de linhas $3D$, vamos criar $100$ pontos aleatórios em um espaço $3D$ (definindo as coordenadas X, Y, Z) e outros 100 valores aleatórios que definirão as cores. Depois de criar a figura, desenharemos as linhas conectando os pontos. As cores serão definidas pela variável contendo os valores, e o argumento `fxaa = true` será utilizado para suavizar as linhas, melhorando a qualidade visual.
 :::
 
-```{julia, eval = FALSE}
-pontos = rand(Point3f, 100)
-valores = rand(100)
-
+```{julia, eval = TRUE}
+pontos = rand(Point3f, 100);
+valores = rand(100);
 figura = Figure(size = (600, 650))
 Label(figura[1, 1], "base", tellwidth = false)
 lines(figura[2, 1], pontos, color = valores, fxaa = true)
-
-figura
 ```
 
 ![](imagens/makie_3D.png){fig-align="center" width="50%"}
 
 ## Conclusão
 
-::: justify
-O pacote Makie.jl, juntamente com seus backends CairoMakie e GLMakie, oferece uma ampla gama de recursos para a criação de gráficos, indo desde os mais simples até visualizações interativas e 3D. Suas funcionalidades são tantas que seria impossível abordar todas em um único tutorial. Neste material, exploramos apenas algumas delas, com exemplos que vão de gráficos básicos, como barras, histogramas e linhas, até representações mais avançadas, como mapas de calor e gráficos de linhas em 3D.
+:::{.justify}
+O pacote `Makie.jl`, juntamente com seus *backends* `CairoMakie` e `GLMakie`, oferece uma ampla gama de recursos para a criação de gráficos, desde os mais simples até visualizações interativas e $3D$. 
+
+Suas funcionalidades são vastas demais para serem abordadas em um único material. Neste tutorial, exploramos apenas algumas delas, começando por visualizações básicas como gráficos de barras, histogramas e linhas, e avançando para representações mais sofisticadas, incluindo mapas de calor, gráficos de contorno e gráficos de linhas em $3D$.
+:::
+
+## Referências
+
+:::{.justify}
+Danisch & Krumbiegel, (2021). Makie.jl: Flexible high-performance data visualization for Julia. *Journal of Open Source Software*, *6*(65), 3349, [DOI: 10.21105/joss.03349](https://doi.org/10.21105/joss.03349)
 :::
 
 ::: callout-note
 Ferramentas de IA foram utilizadas para correção ortográfica, aprimoramento do texto e criação de imagens.
-:::
-
-## Referências utilizadas para a construção do tutorial:
-
-::: justify
-Danisch & Krumbiegel, (2021). Makie.jl: Flexible high-performance data visualization for Julia. Journal of Open Source Software, 6(65), 3349, https://doi.org/10.21105/joss.03349
 :::

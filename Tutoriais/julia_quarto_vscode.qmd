@@ -3,6 +3,8 @@ title: "Instalação e Configuração de Julia e Quarto no VS Code"
 description: "Tutorial cujo objetivo é apresentar os conceitos e dissecar os passos por trás da instalação e configuração de Julia e Quarto em sua máquina."
 categories:
   - Quarto
+  - VS Code
+  - "DEV"
 author:
   - name: Arthur Dionizio Martins da Silva
     affiliation: "Universidade Estadual de Campinas"
@@ -22,7 +24,7 @@ format:
     toc: true
     toc-depth: 3
     self-contained: false
-draft: true
+draft: false
 ---
 
 ## Introdução

@@ -6,11 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Gabriel Campovilla da Silva">
+<meta name="author" content="Vitor Ribas Perrone">
 <meta name="author" content="Nicole Fredericci">
-<meta name="description" content="Para quem lida com grandes volumes de dados ou cálculos complexos, conhecer a velocidade de execução das linguagens é fundamental. Neste post, comparamos R, Julia e Python por meio de uma função de Fibonacci, mostrando como a escolha da linguagem pode fazer diferença no tempo de processamento e na produtividade.">
+<meta name="description" content="Precisa calcular áreas, probabilidades acumuladas ou mesmosolucionar equações diferenciais? Este guia te mostra como realizar integrais numéricas em Julia de forma simples e direta, usando os pacotes QuadGK e Cubature.">
 
-<title>Velocidade de Processamento: R vs Julia vs Python – Do Zero ao Julia</title>
+<title>Integração Numérica em Julia – Do Zero ao Julia</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -104,6 +104,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -171,9 +200,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#introdução" id="toc-introdução" class="nav-link active" data-scroll-target="#introdução">Introdução</a></li>
-  <li><a href="#por-que-a-velocidade-difere" id="toc-por-que-a-velocidade-difere" class="nav-link" data-scroll-target="#por-que-a-velocidade-difere">Por que a velocidade difere?</a></li>
-  <li><a href="#exemplo-prático-cálculo-de-fibonacci" id="toc-exemplo-prático-cálculo-de-fibonacci" class="nav-link" data-scroll-target="#exemplo-prático-cálculo-de-fibonacci">Exemplo Prático: Cálculo de Fibonacci</a></li>
-  <li><a href="#resultados-esperados" id="toc-resultados-esperados" class="nav-link" data-scroll-target="#resultados-esperados">Resultados Esperados</a></li>
+  <li><a href="#funções-de-uma-variável" id="toc-funções-de-uma-variável" class="nav-link" data-scroll-target="#funções-de-uma-variável">Funções de uma variável</a></li>
+  <li><a href="#funções-de-várias-variáveis" id="toc-funções-de-várias-variáveis" class="nav-link" data-scroll-target="#funções-de-várias-variáveis">Funções de várias variáveis</a></li>
+  <li><a href="#exemplo-densidade-da-normal" id="toc-exemplo-densidade-da-normal" class="nav-link" data-scroll-target="#exemplo-densidade-da-normal">Exemplo: Densidade da Normal</a></li>
   <li><a href="#conclusão" id="toc-conclusão" class="nav-link" data-scroll-target="#conclusão">Conclusão</a></li>
   </ul>
 </nav>
@@ -183,15 +212,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Velocidade de Processamento: R vs Julia vs Python</h1>
+<h1 class="title">Integração Numérica em Julia</h1>
   <div class="quarto-categories">
-    <div class="quarto-category">Benchmark</div>
+    <div class="quarto-category">Ferramentas</div>
   </div>
   </div>
 
 <div>
   <div class="description">
-    <p>Para quem lida com grandes volumes de dados ou cálculos complexos, conhecer a velocidade de execução das linguagens é fundamental. Neste post, comparamos <code>R</code>, <code>Julia</code> e <code>Python</code> por meio de uma função de Fibonacci, mostrando como a escolha da linguagem pode fazer diferença no tempo de processamento e na produtividade.</p>
+    <p>Precisa calcular áreas, probabilidades acumuladas ou mesmosolucionar equações diferenciais? Este guia te mostra como realizar integrais numéricas em <code>Julia</code> de forma simples e direta, usando os pacotes <code>QuadGK</code> e <code>Cubature</code>.</p>
   </div>
 </div>
 
@@ -200,7 +229,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="quarto-title-meta-heading">Afiliação</div>
   
     <div class="quarto-title-meta-contents">
-    <p class="author"><a href="https://github.com/C4mpovill4">Gabriel Campovilla da Silva</a> </p>
+    <p class="author"><a href="https://github.com/VitorRibasP">Vitor Ribas Perrone</a> <a href="https://orcid.org/0009-0009-6923-7712" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
   </div>
   <div class="quarto-title-meta-contents">
         <p class="affiliation">
@@ -223,7 +252,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Data de Publicação</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">19 de setembro de 2025</p>
+      <p class="date">23 de outubro de 2025</p>
     </div>
   </div>
   
@@ -238,173 +267,121 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="introdução" class="level2">
 <h2 class="anchored" data-anchor-id="introdução">Introdução</h2>
 <div class="justify">
-<p>Em uma linguagem interpretada, o código é processado linha a linha por um interpretador, o que facilita a execução de testes rápidos, execução de trechos isolados e depuração (mas reduz a velocidade em operações intensivas). Já em linguagens com compilação <em>Just-In-Time (JIT)</em>, o interpretador compila trechos do código em linguagem de máquina durante a execução, em vez de interpretar linha a linha o tempo todo, permitindo um desempenho próximo a linguagens compiladas (especialmente em loops e cálculos intensivos). E quando se procura uma linguagem de programação para análise de dados ou computação científica, a velocidade de processamento pode influenciar bastante a escolha. Neste post, comparamos três linguagens populares — <code>R</code>, <code>Julia</code> e <code>Python</code> — analisando seu desempenho em uma tarefa computacionalmente intensiva.</p>
+<p>Resolver integrais é uma parte fundamental de qualquer em diversos áreas. Embora resolver a integral de forma analítica, quando possível, seja uma alternativa interessante e fácil de implementar, nem sempre isto é possível e a integração numérica torna-se fundamental. Por exemplo, quando trabalhamos com a distribuição Normal, o calculo das probabilidade resume-se à integração numérica. Um outro exemplo no qual a integração numérica pode ser de muita ajuda, é para calcular o <em>Expected Shortfall (ES)</em> (uma medida de risco amplamente utilizada em finanças).</p>
+<p>Em <code>Julia</code>, a integração numérica pode ser feita de forma fácil e eficiente. Neste post, aprenderemos a realizar integrais numéricas em <code>Julia</code> de um jeito muito simples e direto, utilizando os pacotes <code>QuadGK</code> e <code>Cubature</code>.</p>
 </div>
 </section>
-<section id="por-que-a-velocidade-difere" class="level2">
-<h2 class="anchored" data-anchor-id="por-que-a-velocidade-difere">Por que a velocidade difere?</h2>
+<section id="funções-de-uma-variável" class="level2">
+<h2 class="anchored" data-anchor-id="funções-de-uma-variável">Funções de uma variável</h2>
 <div class="justify">
-<ul>
-<li><p><strong>Python</strong>: Linguagem interpretada e dinâmica, o que geralmente a torna mais lenta. No entanto, bibliotecas como <code>NumPy</code> e <code>Pandas</code> usam implementações em <code>C</code> e <code>Fortran</code>, permitindo um bom desempenho em operações numéricas.</p></li>
-<li><p><strong>R</strong>: Também é interpretada e foi criada para atender ao público da estatística. Loops puros são lentos, mas funções vetorizadas e pacotes como <code>data.table</code> e <code>dplyr</code> oferecem bom desempenho.</p></li>
-<li><p><strong>Julia</strong>: Projetada para alta performance, atinge velocidades próximas às de <code>C</code> e <code>Fortran</code> sem depender de bibliotecas externas, graças à sua compilação <em>JIT</em>. Vale notar que <code>Python</code> e <code>R</code> também podem alcançar desempenho semelhante usando ferramentas que compilam partes do código em <code>C</code>, como <code>Cython</code> (uma extensão para Python) e <code>Rcpp</code> (um pacote para R).</p></li>
-</ul>
+<p>Para realizar a integração numérica de funções de uma única variável, utilizaremos o pacote <code>QuadGK</code>. Para instalá-lo e carregá-lo, basta executar o código abaixo:</p>
 </div>
-</section>
-<section id="exemplo-prático-cálculo-de-fibonacci" class="level2">
-<h2 class="anchored" data-anchor-id="exemplo-prático-cálculo-de-fibonacci">Exemplo Prático: Cálculo de Fibonacci</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Pkg</span>.<span class="fu">add</span>(<span class="st">"QuadGK"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">QuadGK</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <div class="justify">
-<p>Para evidenciar a diferença de desempenho bruto entre as três linguagens, implementamos uma função recursiva de Fibonacci (propositalmente ineficiente), com o objetivo de testar a velocidade de processamento. Os resultados apresentados foram obtidos em um MacBook equipado com Apple M3 Pro e 18 GB de RAM.</p>
+<p>O <code>QuadGK</code> implementa o método de quadratura adaptativa <em>Gauss–Kronrod</em>, cujos detalhes podem ser encontrados <a href="https://en.wikipedia.org/wiki/Gauss%E2%80%93Kronrod_quadrature_formula">neste link</a>. Seu uso é simples: primeiro, definimos a função que desejamos integrar. Em seguida, utilizamos a função <code>quadgk</code>, inserindo como argumentos a função e o intervalo de integração da variável. A função retorna o valor da integral e uma estimativa do erro numérico de aproximação.</p>
 </div>
-<p><strong>R</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>fib <span class="ot">&lt;-</span> <span class="cf">function</span>(n) {</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (n <span class="sc">&lt;=</span> <span class="dv">1</span>) {</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">return</span>(n)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">return</span>(<span class="fu">fib</span>(n<span class="dv">-1</span>) <span class="sc">+</span> <span class="fu">fib</span>(n<span class="dv">-2</span>))</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="columns">
-<div class="column" style="width:50%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>start <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">fib</span>(<span class="dv">30</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>end <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Resultado:"</span>, result))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>(x) <span class="op">=</span> x<span class="op">^</span><span class="fl">2</span> <span class="op">*</span> <span class="fu">exp</span>(<span class="op">-</span>x)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "Resultado: 832040"</code></pre>
+<pre><code>f (generic function with 1 method)</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Tempo R:"</span>, end <span class="sc">-</span> start))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quadgk</span>(f, <span class="fl">0</span>, <span class="fl">5</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "Tempo R: 0.522500038146973"</code></pre>
-</div>
-</div>
-</div><div class="column" style="width:50%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>start <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">fib</span>(<span class="dv">40</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>end <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Resultado:"</span>, result))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Resultado: 102334155"</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Tempo R:"</span>, end <span class="sc">-</span> start))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Tempo R: 1.0203111688296"</code></pre>
-</div>
-</div>
-</div>
-</div>
-<p><strong>Julia</strong></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">fib</span>(n)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> n <span class="op">&lt;=</span> <span class="fl">1</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> n</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="fu">fib</span>(n<span class="op">-</span><span class="fl">1</span>) <span class="op">+</span> <span class="fu">fib</span>(n<span class="op">-</span><span class="fl">2</span>)</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>fib (generic function with 1 method)</code></pre>
-</div>
-</div>
-<div class="columns">
-<div class="column" style="width:50%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>start_time <span class="op">=</span> <span class="fu">time</span>();</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> <span class="fu">fib</span>(<span class="fl">30</span>);</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>end_time <span class="op">=</span> <span class="fu">time</span>();</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Resultado: </span><span class="sc">$</span>result<span class="st">"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Resultado: 832040</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Tempo Julia: </span><span class="sc">$</span>(end_time <span class="op">-</span> start_time)<span class="st"> segundos"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Tempo Julia: 0.06513118743896484 segundos</code></pre>
-</div>
-</div>
-</div><div class="column" style="width:50%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>start_time <span class="op">=</span> <span class="fu">time</span>();</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> <span class="fu">fib</span>(<span class="fl">40</span>);</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>end_time <span class="op">=</span> <span class="fu">time</span>();</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Resultado: </span><span class="sc">$</span>result<span class="st">"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Resultado: 102334155</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Tempo Julia: </span><span class="sc">$</span>(end_time <span class="op">-</span> start_time)<span class="st"> segundos"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Tempo Julia: 0.5383601188659668 segundos</code></pre>
-</div>
-</div>
-</div>
-</div>
-<p><strong>Python</strong></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fib(n):</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> n <span class="op">&lt;=</span> <span class="dv">1</span>:</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> n</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> fib(n<span class="op">-</span><span class="dv">1</span>) <span class="op">+</span> fib(n<span class="op">-</span><span class="dv">2</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="columns">
-<div class="column" style="width:50%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>start <span class="op">=</span> time.time()</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> fib(<span class="dv">30</span>)</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>end <span class="op">=</span> time.time()</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Resultado: </span><span class="sc">{</span>result<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Resultado: 832040</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Tempo Python: </span><span class="sc">{</span>end <span class="op">-</span> start<span class="sc">:.4f}</span><span class="ss"> segundos"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Tempo Python: 0.0827 segundos</code></pre>
-</div>
-</div>
-</div><div class="column" style="width:50%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>start <span class="op">=</span> time.time()</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> fib(<span class="dv">40</span>)</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>end <span class="op">=</span> time.time()</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Resultado: </span><span class="sc">{</span>result<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Resultado: 102334155</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Tempo Python: </span><span class="sc">{</span>end <span class="op">-</span> start<span class="sc">:.4f}</span><span class="ss"> segundos"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Tempo Python: 9.9229 segundos</code></pre>
-</div>
-</div>
+<pre><code>(1.750695961033838, 2.2027231372234723e-8)</code></pre>
 </div>
 </div>
 </section>
-<section id="resultados-esperados" class="level2">
-<h2 class="anchored" data-anchor-id="resultados-esperados">Resultados Esperados</h2>
+<section id="funções-de-várias-variáveis" class="level2">
+<h2 class="anchored" data-anchor-id="funções-de-várias-variáveis">Funções de várias variáveis</h2>
 <div class="justify">
-<p>Os tempos de execução podem variar de execução para execução e dependendo do computador sendo utilizado. Para padronizar um pouco os resultados, utilizando a consiguração padrão do Colab e realizamos os testes para <code>fib(40)</code> os valores encontrados foram:</p>
-<ul>
-<li><p><strong>Julia</strong>: 1,45 segundos.</p></li>
-<li><p><strong>Python</strong>: 23,13 segundos.</p></li>
-<li><p><strong>R</strong>: 159,51 segundos.</p></li>
-</ul>
+<p>Para integrais envolvendo funções de múltiplas variáveis (integrais múltiplas ou <span class="math inline">\(n\)</span>-dimensionais), utilizaremos o pacote <code>Cubature</code>. Para instalá-lo e carregá-lo, basta executar o seguinte código:</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Pkg</span>.<span class="fu">add</span>(<span class="st">"Cubature"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Cubature</span> </span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="justify">
+<p>O <code>Cubature</code> oferece dois métodos principais de cubatura (o equivalente à quadratura para múltiplas dimensões): <strong>h-adaptativo</strong> e <strong>p-adaptativo</strong>, descritos na <a href="https://github.com/JuliaMath/Cubature.jl">documentação oficial</a>. O método <strong>h-adaptativo</strong> pode ser utilizado com a função <code>hcubature</code>, que recebe a função de interesse e vetores com os limites inferiores e superiores de integração. Assim como no caso univariado, obtemos a estimativa da integral e do erro.</p>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Atenção!">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Atenção!
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A ordem dos vetores dos limites de integração deve corresponder exatamente à ordem em que as variáveis aparecem na função.</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>(v) <span class="op">=</span> v[<span class="fl">1</span>]<span class="op">^</span><span class="fl">2</span> <span class="op">+</span> v[<span class="fl">2</span>]<span class="op">^</span><span class="fl">2</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>f (generic function with 1 method)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hcubature</span>(f, [<span class="fl">0.0</span>, <span class="fl">0.0</span>], [<span class="fl">1.0</span>, <span class="fl">1.0</span>])</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(0.6666666666666665, 2.220446049250313e-16)</code></pre>
+</div>
+</div>
+<div class="justify">
+<p>O método <strong>p-adaptativo</strong> é muito semelhante ao <strong>h-adaptativo</strong>, mas utiliza a função <code>pcubature</code>. A sintaxe é idêntica:</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>(v) <span class="op">=</span> v[<span class="fl">1</span>]<span class="op">^</span><span class="fl">2</span> <span class="op">+</span> v[<span class="fl">2</span>]<span class="op">^</span><span class="fl">2</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>f (generic function with 1 method)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pcubature</span>(f, [<span class="fl">0.0</span>, <span class="fl">0.0</span>], [<span class="fl">1.0</span>, <span class="fl">1.0</span>])</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(0.6666666666666667, 1.1102230246251565e-16)</code></pre>
+</div>
+</div>
+</section>
+<section id="exemplo-densidade-da-normal" class="level2">
+<h2 class="anchored" data-anchor-id="exemplo-densidade-da-normal">Exemplo: Densidade da Normal</h2>
+<div class="justify">
+<p>Como um exemplo de aplicação em estatística, podemos calcular a integral da <strong>função densidade de probabilidade</strong> de uma distribuição Normal padrão. Ao integrar em todo o domínio, verificamos o resultado esperado: que sua área total é igual a 1.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>(x) <span class="op">=</span> <span class="fl">1</span><span class="op">/</span>(<span class="fu">sqrt</span>(<span class="fl">2</span><span class="op">*</span><span class="cn">pi</span>))<span class="fu">*exp</span>(<span class="op">-</span>x<span class="op">^</span><span class="fl">2</span><span class="op">/</span><span class="fl">2</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>f (generic function with 1 method)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quadgk</span>(f, <span class="op">-</span><span class="cn">Inf</span>, <span class="cn">Inf</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(1.0000000000032583, 1.4395584886006938e-8)</code></pre>
+</div>
+</div>
+<p>Se quisermos, por exemplo, calcular <span class="math inline">\(P(-1 \leq Z \leq 1.5)\)</span>, podemos fazer</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>(x) <span class="op">=</span> <span class="fl">1</span><span class="op">/</span>(<span class="fu">sqrt</span>(<span class="fl">2</span><span class="op">*</span><span class="cn">pi</span>))<span class="fu">*exp</span>(<span class="op">-</span>x<span class="op">^</span><span class="fl">2</span><span class="op">/</span><span class="fl">2</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>f (generic function with 1 method)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quadgk</span>(f, <span class="op">-</span><span class="fl">1</span>, <span class="fl">1.5</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(0.774537544799685, 1.3410557109239107e-9)</code></pre>
+</div>
+</div>
+<p>que é o mesmo valor obtido com a função <code>cdf()</code> do pacote <code>Distributions</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">Distributions</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cdf</span>(<span class="fu">Normal</span>(<span class="fl">0</span>, <span class="fl">1</span>), <span class="fl">1.5</span>) <span class="op">-</span> <span class="fu">cdf</span>(<span class="fu">Normal</span>(<span class="fl">0</span>, <span class="fl">1</span>), <span class="op">-</span><span class="fl">1</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.774537544799685</code></pre>
+</div>
 </div>
 </section>
 <section id="conclusão" class="level2">
 <h2 class="anchored" data-anchor-id="conclusão">Conclusão</h2>
 <div class="justify">
-<p>Os testes com a função recursiva de Fibonacci ilustram claramente as diferenças de desempenho entre as linguagens. Embora <code>Julia</code> se destaque em cálculos computacionalmente intensivos devido à sua compilação <em>JIT</em>, a escolha da linguagem deve levar em conta também o ecossistema, a familiaridade do usuário e o tipo de análise a ser realizada.</p>
-<p><code>Python</code> oferece equilíbrio entre desempenho e facilidade de uso, enquanto <code>R</code> continua sendo a opção ideal para análises estatísticas específicas, com sintaxe concisa e pacotes robustos, apesar de mais lento em cálculos brutos.</p>
+<p>Com essas ferramentas poderosas e fáceis de usar, você agora consegue resolver integrais numéricas de forma fácil utilizando <code>Julia</code>. Seja para funções simples de uma variável ou para cálculos multidimensionais complexos (cubatura), os pacotes <code>QuadGK</code> e <code>Cubature</code> ampliam suas possibilidades em análises estatísticas e científicas, mesmo quando a solução analítica não é viável.</p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">

@@ -27,3 +27,4 @@ desktop.ini
 *.log
 _pycache_/
 *.pyc
+**/*.quarto_ipynb

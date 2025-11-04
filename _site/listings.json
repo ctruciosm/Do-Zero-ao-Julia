@@ -1,13 +1,5 @@
 [
   {
-    "listing": "/tutoriais.html",
-    "items": [
-      "/Tutoriais/loops_condicionais_julia.html",
-      "/Tutoriais/tutorial-eda.html",
-      "/Tutoriais/graf_basico.html"
-    ]
-  },
-  {
     "listing": "/equipe.html",
     "items": [
       "/Equipe/Atual/Ana_Luisa.html",
@@ -28,8 +20,22 @@
     ]
   },
   {
+    "listing": "/tutoriais.html",
+    "items": [
+      "/Tutoriais/Tutorial_graficos_makie.html",
+      "/Tutoriais/loops_condicionais_julia.html",
+      "/Tutoriais/tutorial-eda.html",
+      "/Tutoriais/graf_basico.html"
+    ]
+  },
+  {
     "listing": "/blog.html",
     "items": [
+      "/Blog/Bootstrap.html",
+      "/Blog/tidier_strings.html",
+      "/Blog/GoogleDrive.html",
+      "/Blog/integracao_numerica.html",
+      "/Blog/umpontoonze.html",
       "/Blog/Zero ao Julia - Entrevistas.html",
       "/Blog/Velocidade de Processamento.html",
       "/Blog/strings.html",
@@ -37,6 +43,7 @@
       "/Blog/pacotes_datasets.html",
       "/Blog/positron.html",
       "/Blog/Matrizes.html",
+      "/Blog/Quando usar.html",
       "/Blog/Perspectivas.html",
       "/Blog/Álgebra linear com LinearAlgebra.jl.html",
       "/Blog/juliahub.html",

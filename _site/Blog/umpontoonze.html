@@ -8,9 +8,9 @@
 
 <meta name="author" content="Gabriel Campovilla da Silva">
 <meta name="author" content="Nicole Fredericci">
-<meta name="description" content="Para quem lida com grandes volumes de dados ou cálculos complexos, conhecer a velocidade de execução das linguagens é fundamental. Neste post, comparamos R, Julia e Python por meio de uma função de Fibonacci, mostrando como a escolha da linguagem pode fazer diferença no tempo de processamento e na produtividade.">
+<meta name="description" content="Lançada em julho de 2025, a versão 1.11.6 de Julia apresenta diversas atualizações, destacando melhorias no compilador, sistema de tipos e paralelização. A versão também inclui correções de bugs e garante a compatibilidade com versões anteriores.">
 
-<title>Velocidade de Processamento: R vs Julia vs Python – Do Zero ao Julia</title>
+<title>Julia 1.11.6 — conheça as melhorias da última atualização – Do Zero ao Julia</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,40 +22,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -171,9 +137,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#introdução" id="toc-introdução" class="nav-link active" data-scroll-target="#introdução">Introdução</a></li>
-  <li><a href="#por-que-a-velocidade-difere" id="toc-por-que-a-velocidade-difere" class="nav-link" data-scroll-target="#por-que-a-velocidade-difere">Por que a velocidade difere?</a></li>
-  <li><a href="#exemplo-prático-cálculo-de-fibonacci" id="toc-exemplo-prático-cálculo-de-fibonacci" class="nav-link" data-scroll-target="#exemplo-prático-cálculo-de-fibonacci">Exemplo Prático: Cálculo de Fibonacci</a></li>
-  <li><a href="#resultados-esperados" id="toc-resultados-esperados" class="nav-link" data-scroll-target="#resultados-esperados">Resultados Esperados</a></li>
+  <li><a href="#novidades-da-versão" id="toc-novidades-da-versão" class="nav-link" data-scroll-target="#novidades-da-versão">Novidades da Versão</a></li>
+  <li><a href="#compatibilidade-e-upgrade" id="toc-compatibilidade-e-upgrade" class="nav-link" data-scroll-target="#compatibilidade-e-upgrade">Compatibilidade e Upgrade</a></li>
   <li><a href="#conclusão" id="toc-conclusão" class="nav-link" data-scroll-target="#conclusão">Conclusão</a></li>
   </ul>
 </nav>
@@ -183,15 +148,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Velocidade de Processamento: R vs Julia vs Python</h1>
+<h1 class="title">Julia 1.11.6 — conheça as melhorias da última atualização</h1>
   <div class="quarto-categories">
-    <div class="quarto-category">Benchmark</div>
+    <div class="quarto-category">Atualizações de Software</div>
+    <div class="quarto-category">Computação Técnica</div>
   </div>
   </div>
 
 <div>
   <div class="description">
-    <p>Para quem lida com grandes volumes de dados ou cálculos complexos, conhecer a velocidade de execução das linguagens é fundamental. Neste post, comparamos <code>R</code>, <code>Julia</code> e <code>Python</code> por meio de uma função de Fibonacci, mostrando como a escolha da linguagem pode fazer diferença no tempo de processamento e na produtividade.</p>
+    <p>Lançada em julho de 2025, a versão <code>1.11.6</code> de <code>Julia</code> apresenta diversas atualizações, destacando melhorias no compilador, sistema de tipos e paralelização. A versão também inclui correções de bugs e garante a compatibilidade com versões anteriores.</p>
   </div>
 </div>
 
@@ -223,7 +189,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Data de Publicação</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">19 de setembro de 2025</p>
+      <p class="date">15 de outubro de 2025</p>
     </div>
   </div>
   
@@ -238,173 +204,71 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="introdução" class="level2">
 <h2 class="anchored" data-anchor-id="introdução">Introdução</h2>
 <div class="justify">
-<p>Em uma linguagem interpretada, o código é processado linha a linha por um interpretador, o que facilita a execução de testes rápidos, execução de trechos isolados e depuração (mas reduz a velocidade em operações intensivas). Já em linguagens com compilação <em>Just-In-Time (JIT)</em>, o interpretador compila trechos do código em linguagem de máquina durante a execução, em vez de interpretar linha a linha o tempo todo, permitindo um desempenho próximo a linguagens compiladas (especialmente em loops e cálculos intensivos). E quando se procura uma linguagem de programação para análise de dados ou computação científica, a velocidade de processamento pode influenciar bastante a escolha. Neste post, comparamos três linguagens populares — <code>R</code>, <code>Julia</code> e <code>Python</code> — analisando seu desempenho em uma tarefa computacionalmente intensiva.</p>
+<p>Conhecida por sua performance em computação científica e análise de dados, a linguagem <code>Julia</code> acaba de receber sua última atualização. A versão <code>1.11.6</code> foi lançada em 9 de julho de 2025, trazendo melhorias significativas em relação à versão anterior para quem busca desempenho e estabilidade. Neste post, vamos explorar as principais mudanças e como elas impactam positivamente a experiência dos usuários.</p>
 </div>
 </section>
-<section id="por-que-a-velocidade-difere" class="level2">
-<h2 class="anchored" data-anchor-id="por-que-a-velocidade-difere">Por que a velocidade difere?</h2>
+<section id="novidades-da-versão" class="level2">
+<h2 class="anchored" data-anchor-id="novidades-da-versão">Novidades da Versão</h2>
 <div class="justify">
+<ol type="1">
+<li><p><strong>Otimizações no Compilador</strong>:</p>
 <ul>
-<li><p><strong>Python</strong>: Linguagem interpretada e dinâmica, o que geralmente a torna mais lenta. No entanto, bibliotecas como <code>NumPy</code> e <code>Pandas</code> usam implementações em <code>C</code> e <code>Fortran</code>, permitindo um bom desempenho em operações numéricas.</p></li>
-<li><p><strong>R</strong>: Também é interpretada e foi criada para atender ao público da estatística. Loops puros são lentos, mas funções vetorizadas e pacotes como <code>data.table</code> e <code>dplyr</code> oferecem bom desempenho.</p></li>
-<li><p><strong>Julia</strong>: Projetada para alta performance, atinge velocidades próximas às de <code>C</code> e <code>Fortran</code> sem depender de bibliotecas externas, graças à sua compilação <em>JIT</em>. Vale notar que <code>Python</code> e <code>R</code> também podem alcançar desempenho semelhante usando ferramentas que compilam partes do código em <code>C</code>, como <code>Cython</code> (uma extensão para Python) e <code>Rcpp</code> (um pacote para R).</p></li>
+<li>Melhorias no tempo de compilação (<em>Time-to-First-Execution</em> — TTFX).</li>
+<li>Otimizações específicas para funções matemáticas complexas.</li>
+<li>Redução de alocações de memória em operações comuns, tornando a execução do código mais rápida.</li>
+</ul></li>
+<li><p><strong>Aprimoramentos no Sistema de Tipos</strong>:</p>
+<ul>
+<li>Maior precisão na inferência de tipos de dados.</li>
+<li>Melhor tratamento de tipos <code>Union</code> (quando uma variável pode ter mais de um tipo possível).</li>
+<li>Correções em <em>corner cases</em> do sistema de tipos (onde a lógica do sistema de tipos poderia falhar ou levar a um comportamento inesperado).</li>
+</ul></li>
+<li><p><strong>Melhorias na Paralelização</strong>:</p>
+<ul>
+<li>Redução da sobrecarga em operações distribuídas, que geram um ônus de tempo para gerenciar a comunicação entre os diferentes processos.</li>
+<li>Melhor escalabilidade em ambientes <em>multi-core</em> (máquinas com muitos núcleos).</li>
+<li>Correções no sistema de tarefas (<em>Tasks</em>), que garante que <code>Julia</code> execute várias operações simultaneamente.</li>
+</ul></li>
+<li><p><strong>Atualizações na Biblioteca Padrão</strong>:</p>
+<ul>
+<li>Novas funções matemáticas especializadas, sem a necessidade de instalar pacotes externos à base de <code>Julia</code>.</li>
+<li>Melhorias no desempenho de operações com <code>arrays</code> (vetores e matrizes).</li>
+<li>Atualizações no sistema de macros, ferramentas poderosas para meta-programação e criação de pacotes.</li>
+</ul></li>
+<li><p><strong>Correções de Bugs</strong>:</p>
+<ul>
+<li>Diversas correções de estabilidade para evitar travamentos (<em>crashes</em>), erros difíceis de reproduzir ou comportamentos incorretos na execução.</li>
+<li>Solução para problemas de <em>memory leak</em> (vazamento de memória) — falha em liberar a memória <em>RAM</em> após o uso, o que afeta a performance em tarefas longas.</li>
+<li>Correções em comportamentos inesperados em <em>edge cases</em> (cenários ou combinações incomuns de código que geram erros).</li>
+</ul></li>
+</ol>
+</div>
+</section>
+<section id="compatibilidade-e-upgrade" class="level2">
+<h2 class="anchored" data-anchor-id="compatibilidade-e-upgrade">Compatibilidade e Upgrade</h2>
+<div class="justify">
+<p>Uma das maiores vantagens da versão <code>1.11.6</code> é a sua compatibilidade total com todo o código escrito para as versões <code>1.x</code> da linguagem. Desenvolvedores podem realizar o upgrade com segurança, aproveitando as melhorias de performance sem se preocupar com quebras de código devido à incompatibilidade. Quanto à atualização, os caminhos disponíveis estão listados abaixo e a escolha do método fica totalmente a cargo do usuário.</p>
+<p><strong>Via Juliaup:</strong></p>
+<p>Para atualizar <code>Julia</code>, abra o Terminal do seu sistema operacional e execute <code>juliaup update</code>. O acesso ao Terminal é diferente para cada sistema:</p>
+<ul>
+<li>Windows: Pesquise <em>CMD</em> ou <em>PowerShell</em> no menu Iniciar.</li>
+<li>macOS: Siga o caminho Aplicativos &gt; Utilitários &gt; Terminal.</li>
+<li>Linux: O padrão de acesso é o comando <em>Ctrl+Alt+T</em>.</li>
 </ul>
-</div>
-</section>
-<section id="exemplo-prático-cálculo-de-fibonacci" class="level2">
-<h2 class="anchored" data-anchor-id="exemplo-prático-cálculo-de-fibonacci">Exemplo Prático: Cálculo de Fibonacci</h2>
-<div class="justify">
-<p>Para evidenciar a diferença de desempenho bruto entre as três linguagens, implementamos uma função recursiva de Fibonacci (propositalmente ineficiente), com o objetivo de testar a velocidade de processamento. Os resultados apresentados foram obtidos em um MacBook equipado com Apple M3 Pro e 18 GB de RAM.</p>
-</div>
-<p><strong>R</strong></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>fib <span class="ot">&lt;-</span> <span class="cf">function</span>(n) {</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (n <span class="sc">&lt;=</span> <span class="dv">1</span>) {</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">return</span>(n)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">return</span>(<span class="fu">fib</span>(n<span class="dv">-1</span>) <span class="sc">+</span> <span class="fu">fib</span>(n<span class="dv">-2</span>))</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="columns">
-<div class="column" style="width:50%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>start <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">fib</span>(<span class="dv">30</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>end <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Resultado:"</span>, result))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Resultado: 832040"</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Tempo R:"</span>, end <span class="sc">-</span> start))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Tempo R: 0.522500038146973"</code></pre>
-</div>
-</div>
-</div><div class="column" style="width:50%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>start <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">fib</span>(<span class="dv">40</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>end <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Resultado:"</span>, result))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Resultado: 102334155"</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Tempo R:"</span>, end <span class="sc">-</span> start))</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Tempo R: 1.0203111688296"</code></pre>
-</div>
-</div>
-</div>
-</div>
-<p><strong>Julia</strong></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">fib</span>(n)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> n <span class="op">&lt;=</span> <span class="fl">1</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> n</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="fu">fib</span>(n<span class="op">-</span><span class="fl">1</span>) <span class="op">+</span> <span class="fu">fib</span>(n<span class="op">-</span><span class="fl">2</span>)</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>fib (generic function with 1 method)</code></pre>
-</div>
-</div>
-<div class="columns">
-<div class="column" style="width:50%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>start_time <span class="op">=</span> <span class="fu">time</span>();</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> <span class="fu">fib</span>(<span class="fl">30</span>);</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>end_time <span class="op">=</span> <span class="fu">time</span>();</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Resultado: </span><span class="sc">$</span>result<span class="st">"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Resultado: 832040</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Tempo Julia: </span><span class="sc">$</span>(end_time <span class="op">-</span> start_time)<span class="st"> segundos"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Tempo Julia: 0.06513118743896484 segundos</code></pre>
-</div>
-</div>
-</div><div class="column" style="width:50%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>start_time <span class="op">=</span> <span class="fu">time</span>();</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> <span class="fu">fib</span>(<span class="fl">40</span>);</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>end_time <span class="op">=</span> <span class="fu">time</span>();</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Resultado: </span><span class="sc">$</span>result<span class="st">"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Resultado: 102334155</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">"Tempo Julia: </span><span class="sc">$</span>(end_time <span class="op">-</span> start_time)<span class="st"> segundos"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Tempo Julia: 0.5383601188659668 segundos</code></pre>
-</div>
-</div>
-</div>
-</div>
-<p><strong>Python</strong></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fib(n):</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> n <span class="op">&lt;=</span> <span class="dv">1</span>:</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> n</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> fib(n<span class="op">-</span><span class="dv">1</span>) <span class="op">+</span> fib(n<span class="op">-</span><span class="dv">2</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="columns">
-<div class="column" style="width:50%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>start <span class="op">=</span> time.time()</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> fib(<span class="dv">30</span>)</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>end <span class="op">=</span> time.time()</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Resultado: </span><span class="sc">{</span>result<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Resultado: 832040</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Tempo Python: </span><span class="sc">{</span>end <span class="op">-</span> start<span class="sc">:.4f}</span><span class="ss"> segundos"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Tempo Python: 0.0827 segundos</code></pre>
-</div>
-</div>
-</div><div class="column" style="width:50%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>start <span class="op">=</span> time.time()</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> fib(<span class="dv">40</span>)</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>end <span class="op">=</span> time.time()</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Resultado: </span><span class="sc">{</span>result<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Resultado: 102334155</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Tempo Python: </span><span class="sc">{</span>end <span class="op">-</span> start<span class="sc">:.4f}</span><span class="ss"> segundos"</span>)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Tempo Python: 9.9229 segundos</code></pre>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="resultados-esperados" class="level2">
-<h2 class="anchored" data-anchor-id="resultados-esperados">Resultados Esperados</h2>
-<div class="justify">
-<p>Os tempos de execução podem variar de execução para execução e dependendo do computador sendo utilizado. Para padronizar um pouco os resultados, utilizando a consiguração padrão do Colab e realizamos os testes para <code>fib(40)</code> os valores encontrados foram:</p>
+<p><strong>Instalação Manual:</strong></p>
+<p>Se você prefere reinstalar <code>Julia</code> em sua nova versão, basta seguir os comandos de acordo com seu sistema operacional:</p>
 <ul>
-<li><p><strong>Julia</strong>: 1,45 segundos.</p></li>
-<li><p><strong>Python</strong>: 23,13 segundos.</p></li>
-<li><p><strong>R</strong>: 159,51 segundos.</p></li>
+<li><p>Windows/macOS: Basta baixar o instalador mais recente no <a href="https://julialang.org/install/">site oficial</a> e executá-lo. Assim, é possível migrar as configurações de forma segura e sem a necessidade de desinstalar a versão anterior, pois o novo instalador irá sobrepor o antigo.</p></li>
+<li><p>Linux (via gerenciador de pacotes): Se você instalou o programa via <code>apt</code>, <code>yum</code>, <code>pacman</code> ou outro gerenciador da sua distribuição, utilize o comando de atualização correspondente no Terminal (como <code>sudo apt update &amp;&amp; sudo apt install julia</code>, para o gerenciador <code>apt</code>).</p></li>
 </ul>
 </div>
 </section>
 <section id="conclusão" class="level2">
 <h2 class="anchored" data-anchor-id="conclusão">Conclusão</h2>
 <div class="justify">
-<p>Os testes com a função recursiva de Fibonacci ilustram claramente as diferenças de desempenho entre as linguagens. Embora <code>Julia</code> se destaque em cálculos computacionalmente intensivos devido à sua compilação <em>JIT</em>, a escolha da linguagem deve levar em conta também o ecossistema, a familiaridade do usuário e o tipo de análise a ser realizada.</p>
-<p><code>Python</code> oferece equilíbrio entre desempenho e facilidade de uso, enquanto <code>R</code> continua sendo a opção ideal para análises estatísticas específicas, com sintaxe concisa e pacotes robustos, apesar de mais lento em cálculos brutos.</p>
+<p>A versão <code>1.11.6</code> de <code>Julia</code> representa mais um passo na evolução desta poderosa linguagem, com foco especial em performance e estabilidade. As otimizações no compilador, o sistema de tipos mais preciso e os ganhos na paralelização garantem que a linguagem continue sendo uma das melhores opções para computação científica e análise de dados de alto desempenho.</p>
+<p><strong>Próximos passos</strong>: Use nosso guia de upgrade para instalar a nova versão de <code>Julia</code> e compartilhe suas impressões com a equipe nas <a href="https://www.instagram.com/dozero_aojulia/">redes sociais</a> do projeto! Você já notou diferenças de performance em seu código?</p>
+<p>Para informações mais detalhadas sobre cada alteração, consulte as <a href="https://docs.julialang.org/en/v1/NEWS/">notas de lançamento oficiais</a>.</p>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">

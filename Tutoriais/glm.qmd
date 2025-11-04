@@ -1,0 +1,215 @@
+---
+title: "Como trabalhar com Modelos Lineares Generalizados em Julia"
+description: "Um guia completo de como trabalhar com Modelos Lineares Generalizados em Julia, incluindo estimação dos parâmetros, análises inferenciais e diagnóstico para diversas distribuições de probabilidade e funções de ligação."
+categories:
+  - Modelagem
+author:
+  - name: Vitor Ribas Perrone
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/VitorRibasP
+    orcid: 0009-0009-6923-7712
+date: "2025-10-15"
+image: imagens/glm.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+draft: true
+---
+
+## Introdução
+
+::: justify
+Os Modelos Lineares Generalizados (GLMs) são ferramentas estatísticas extremamente poderosas, pois ampliam o conceito da Regressão Linear Normal para abranger todas as distribuições de probabilidade pertencentes à família exponencial, além de permitir a incorporação de diferentes estruturas lineares por meio de diversas funções de ligação.
+
+No Julia, trabalhar com esse tipo de análise é uma tarefa simples e eficiente graças ao pacote `GLM.jl`, que oferece compatibilidade com várias distribuições e fornece métricas de interesse de forma direta e intuitiva.
+
+Neste tutorial, exploraremos em detalhes como utilizar o `GLM.jl`, abordando o ajuste de parâmetros, o diagnóstico do modelo, as análises inferenciais, as diferentes parametrizações e outros aspectos fundamentais para o uso prático dos GLMs em Julia.
+:::
+
+## Instalando e Carregando os Pacotes Necessários
+::: justify
+Em primeiro lugar, vamos instalar e carregar os pacotes que serão utilizados.
+:::
+```{julia}
+Pkg.add("Distributions")
+using Distributions
+Pkg.add("Random")
+using Random
+Pkg.add("StatsBase")
+using StatsBase
+Pkg.add("StatsPlots")
+using StatsPlots
+Pkg.add("DataFrames")
+using DataFrames
+Pkg.add("GLM")
+using GLM
+```
+
+## Estimação dos parâmetros
+::: justify
+Para realizar a estimação de um Modelo Linear Generalizado com o pacote `GLM.jl`, utilizamos a função `glm()`, e existem duas maneiras de realizar esse procedimento:
+
+-   Utilizando um DataFrame e especificando uma fórmula: `glm(formula, dados, familia, ligacao)`
+-   Inserindo manualmente o vetor `y` e a matriz `X`: `glm(X, y, familia, ligacao)`
+
+As opções de família disponíveis são:
+
+-   Bernoulli: `Bernoulli()`;
+-   Binomial: `Binomial()`;
+-   Gama: `Gamma()`;
+-   Geométrica: `Geometric()`;
+-   Normal: `Normal()`;
+-   Poisson: `Poisson()`;
+-   Binomial Negativa: `NegativeBinomial(theta)` (é necessário especificar o parâmetro de dispersão $\theta$).
+
+Por padrão, ao especificar uma família de distribuições, a função de ligação utilizada será a canônica. Mas é possível especificar outras, e as opções de funções de ligação $g(\mu)$ são:
+
+-   $g(\mu) = tan[\pi(\mu−1/2)]$: `CauchitLink()`;
+-   $g(\mu) = log[−log(1−\mu)]$: `CloglogLink()`;
+-   $g(\mu) = \mu$: `IdentityLink()`;
+-   $g(\mu) = 1/\mu$: `InverseLink()`;
+-   $g(\mu) = 1/\mu^2$: `InverseSquareLink()`;
+-   $g(\mu) = log(\mu/(1- \mu))$: `LogitLink()`;
+-   $g(\mu) = log(\mu)$: `LogLink()`;
+-   $g(\mu) = log(\mu/(\theta + \mu))$: `NegativeBinomialLink()`;
+-   $g(\mu) = \mu^p$: `PowerLink(p)`;
+-   $g(\mu) = \Phi^{-1}(\mu)$: `ProbitLink()`;
+-   $g(\mu) = \sqrt{\mu}$: `SqrtLink()`.
+
+Por exemplo, vamos gerar um conjunto de dados e ajustar um modelo de contagem.
+:::
+```{julia}
+Random.seed!(123)
+X1 = rand(Exponential(3), 50)
+X2 = rand(Exponential(5), 50)
+X3 = rand(Exponential(7), 50)
+Y = [rand(Poisson(l)) for l in (X1 + X3)]
+```
+
+```{julia}
+dados_simulados = DataFrame(y = Y, X1 = X1, X2 = X2, X3 = X3)
+```
+
+```{julia}
+modelo_exemplo = glm(@formula(y ~ X1 + X2 + X3), dados_simulados, Poisson())
+```
+
+## Covariáveis categórias
+::: justify
+Ao utilizar variáveis categóricas como covariáveis, o pacote automaticamente cria variáveis indicadoras e utiliza por padrão a parametrização casela de referência, escolhendo o primeiro grupo como a referência.
+
+Vamos gerar um conjunto de dados com um preditor categórico para exemplificar as diferentes parametrizações.
+:::
+```{julia}
+Random.seed!(123)
+dados_categoricos = DataFrame(
+  y = vcat([rand(Normal(mu, 1), 25) for mu in [2, 5, 8, 15]]...),
+  X = repeat(["A", "B", "C", "D"], inner=25))
+```
+::: justify
+Ajustanto um modelo sem especificar nada, automaticamente foi utilizada a parametrização de Casela de Referência em que "A" foi considerado a referência.
+:::
+```{julia}
+modelo_CR = glm(@formula(y ~X), dados_categoricos, Normal())
+```
+::: justify
+Dentro da parametrização Casela de Referência, podemos trocar o grupo de referência usando a função `Dict()` com o argumento `DummyCoding()`. Por exemplo, vamos trocar o grupo de referência para o "C" agora.
+:::
+```{julia}
+modelo_CR_2 = glm(@formula(y ~X), dados_categoricos, Normal(), 
+                  contrasts = Dict(:X => DummyCoding(base="C")))
+```
+::: justify
+Também podemos utilizar a parametrização de Efeito Diferencial usando a mesma função `Dict()`, mas agora com o argumento `EffectsCoding()`. Aplicando no nosso exemplo:
+:::
+```{julia}
+modelo_ED = glm(@formula(y ~X), dados_categoricos, Normal(),
+                contrasts = Dict(:X => EffectsCoding()))
+```
+
+## Extração de elementos do modelo
+::: justify
+A partir do objeto de um modelo, podemos extrair diversas informações de interesse. Por exemplo, para extrair os valores dos coeficientes podemos utilizar a função `coef()`.
+:::
+```{julia}
+coef(modelo_exemplo)
+```
+::: justify
+Já para obter os intervalos de confiança para os coeficientes, utilizamos a função `confint()`.
+:::
+```{julia}
+confint(modelo_exemplo)
+```
+::: justify
+E para obter a matriz de variâncias e covariâncias dos coeficientes, utilizamos a função `vcov()`.
+:::
+```{julia}
+vcov(modelo_exemplo)
+```
+::: justify
+Além disso, a depender a distribuição, também temos o parâmetro de dispersão, no caso da Normal, $\sigma^2$, por exemplo. Para obter o seu valor estimado, utilizamos a função `dispersion()`.
+:::
+```{julia}
+dispersion(modelo_CR.model)
+```
+::: justify
+Também podemos extrair a matriz de planejamento de um modelo usando a função `modelmatrix()`.
+:::
+```{julia}
+modelmatrix(modelo_exemplo)
+```
+
+## Predição de novas observações
+::: justify
+Com um modelo ajustado, podemos realizar novas predições utilizando a função `predict()`. Dessa forma, precisamos criar um conjunto de dados contendo as mesmas colunas que os dados utilizados para ajustar o modelo.
+:::
+```{julia}
+novas_observacoes = DataFrame(X1 = [1,4,5],
+                              X2 = [2,20,7],
+                              X3 = [1,6,2])
+```
+
+```{julia}
+predict(modelo_exemplo, novas_observacoes)
+```
+
+## Diagnóstico do modelo
+::: justify
+Com um modelo ajustado, existem diversas funções que conseguimos aplicar nele para obter métricas de interesse, sendo algumas delas:
+
+-   $R^2$: `r2()`;
+-   $R^2_{adj}$: `adjr2()`;
+-   AIC: `aic()`;
+-   AICc: `aicc()`;
+-   BIC: `bic()`;
+-   Deviance: `deviance()`;
+-   Deviance do modelo sem preditores: `nulldeviance()`;
+-   Valor da Log-Verossimilhança: `loglikelihood()`;
+-   Valor da Log-Verossimilhança do modelo sem preditores: `nullloglikelihood()`.
+:::
+## Análise residual
+::: justify
+Infelizmente, o pacote `GLM.jl` não proporciona diretamente funções para calcular os diversos tipos de resíduo (Pearson, Padronizado, Deviance, Anscombe, entre outros). Para isso, precisaremos implementar os que desejarmos usar.
+
+O pacote `GLM.jl` possui duas funções para auxiliar o processo de usar diversos tipos de resíduos, `fitted()`, que extrai os valores preditos para cada observação do conjunto de dados e `residuals()`, que extrai os resíduos brutos, isto é, a diferença entre o valor real e a predição.
+
+Vamos calcular, por exemplo, o Resíduo de Pearson para o modelo Poisson que foi ajustado.
+:::
+```{julia}
+(dados_simulados[!, "y"] .- fitted(modelo_exemplo)) ./ fitted(modelo_exemplo)
+```
+
+## Conclusão
+
+::: justify
+Agora você já domina como trabalhar de forma completa com Modelos Lineares Generalizados em Julia. Com o poderoso pacote `GLM.jl` e a eficiência computacional da linguagem, é possível realizar análises estatísticas das mais variadas naturezas com rapidez e precisão.
+
+Combine essa ferramenta com outras abordadas em nossos tutoriais para tornar suas análises em Julia cada vez mais robustas, integradas e profissionais.
+:::
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::

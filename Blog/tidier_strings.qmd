@@ -1,7 +1,7 @@
 ---
 title: "Pacote TidierStrings.jl"
 description: |
-  O pacote `TidierStrings.jl` emula a facilidade do `StringR`, unindo manipulação de strings com dados *Tidy*. Neste post, serão demonstradas as funções básicas do pacote.
+  O pacote `TidierStrings.jl` emula a facilidade do `StringR`, unindo manipulação de strings com dados *Tidy*. Neste post, serão apresentadas as principais funções do pacote.
 categories:
   - Manipulação de Dados
   - Tidy 
@@ -11,7 +11,11 @@ author:
   - name: Nicole Fredericci
     affiliation: "Universidade Estadual de Campinas"
     url: https://github.com/NFredericci
-date: "2025-08-07"
+  - name: Esther Cleveston
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://www.linkedin.com/in/esthercleveston/
+    orcid: 0009-0008-6612-8417
+date: "2025-10-23"
 image: imagens/tidierstrings_logo.png
 lang: pt
 format:
@@ -22,6 +26,14 @@ format:
 engine: knitr
 draft: false
 ---
+
+
+```{r}
+#| echo: false
+Sys.setenv(JULIA_HOME = "/Users/ctrucios/.juliaup/bin")
+```
+
+
 
 # Introdução
 
@@ -35,7 +47,7 @@ Neste post, serão apresentadas e exemplificadas funções de remoção, substit
 
 # Carregando os pacotes
 
-:::{justify}
+::: {justify}
 Para instalar os pacotes necessários e carregar seus comandos no ambiente, execute as seguintes linhas de código:
 :::
 
@@ -46,21 +58,20 @@ Pkg.add(["TidierStrings", "Tidier"])
 using Tidier, TidierStrings
 ```
 
-:::{justify}
+::: {justify}
 Além disso, utilizaremos o pacote `RDataSets` para importar bancos de dados originários do `R` e usaremos o conjunto de dados **Titanic** como exemplo para aplicar as funções.
 :::
 
 ```{julia, results='hide'}
 import Pkg    
 Pkg.add("RDatasets")
-
 using RDatasets
 
 titanic = dataset("datasets", "Titanic")
 ```
 
-:::{justify}
-Selecionaremos apenas as variáveis do tipo "String", correspondentes às quatro primeiras colunas do banco de dados:
+::: {justify}
+Selecionaremos apenas as 10 primeiras observaçÕes das variáveis do tipo "String", correspondentes às quatro primeiras colunas do banco de dados:
 :::
 
 ```{julia}
@@ -69,17 +80,17 @@ titanic = first(titanic[:, 1:4], 10)
 
 # Funções
 
-## str_replace(), str_replace_all 
+## str_replace(), str_replace_all()
 
-:::{justify}
-A função **str_replace()** substitui a primeira ocorrência do padrão indicado no segundo argumento pelo valor informado no terceiro argumento. No exemplo abaixo, a primeira letra “e” minúscula encontrada em cada elemento da coluna `Sex` foi substituída pela sua equivalente maiúscula..
+::: {justify}
+A função **str_replace()** substitui a primeira ocorrência do padrão indicado no segundo argumento pelo valor informado no terceiro argumento. No exemplo abaixo, a primeira letra “e” minúscula encontrada em cada elemento da coluna `Sex` foi substituída pela sua equivalente maiúscula.
 :::
 
 ```{julia}
 @mutate(titanic, Sex = str_replace(Sex, "e", "E"))
 ```
 
-:::{justify}
+::: {justify}
 Já **str_replace_all()** substitui todas as ocorrências do padrão no conjunto de strings especificado.
 :::
 
@@ -87,9 +98,9 @@ Já **str_replace_all()** substitui todas as ocorrências do padrão no conjunto
 @mutate(titanic, Sex = str_replace_all(Sex, "e", "E"))
 ```
 
-## str_remove(), str_remove_all() 
+## str_remove(), str_remove_all()
 
-:::{justify}
+::: {justify}
 De forma análoga às funções anteriores, **str_remove()** remove a primeira ocorrência do padrão informado no segundo argumento, enquanto **str_remove_all()** remove todas as ocorrências desse padrão nas strings indicadas no primeiro argumento.
 :::
 
@@ -101,43 +112,43 @@ De forma análoga às funções anteriores, **str_remove()** remove a primeira o
 @mutate(titanic, Sex = str_remove_all(Sex, "e"))
 ```
 
-## str_detect() 
+## str_detect()
 
-:::{justify}
-Essa função  identifica padrões nas strings especificadas e pode utilizar operadores lógicos, como `|` e `&`. No exemplo abaixo, foram filtradas as observações que correspondiam a passageiros (excluindo tripulantes). 
+::: {justify}
+Essa função identifica padrões nas strings especificadas e pode utilizar operadores lógicos, como `|` e `&`. No exemplo abaixo, foram filtradas as observações que correspondiam a passageiros (excluindo tripulantes).
 :::
 
 ```{julia}
-@filter(titanic, str_detect(Class, "d | s"))
+TidierData.@filter(titanic, str_detect(Class, "d | s"))
 ```
 
 ## str_to_upper()
 
-:::{justify}
-A função **str_to_upper** converte todos os caracteres de uma string para maiúsculas. Existem outras funções com estrutura semelhante que modificam o formato das strings:
+::: {justify}
+A função **str_to_upper()** converte todos os caracteres de uma string para maiúsculas. Existem outras funções com estrutura semelhante que modificam o formato das strings:
 
-  - **str_to_lower**: converte todos os caracteres para minúsculas;
-  - **str_to_sentence**: deixa apenas o primeiro caractere em maiúsculo;
-  - **str_to_title**: coloca em maiúscula a primeira letra de cada palavra e mantém as demais em minúsculas.
+-   **str_to_lower()**: converte todos os caracteres para minúsculas;
+-   **str_to_sentence()**: deixa apenas o primeiro caractere em maiúsculo;
+-   **str_to_title()**: coloca em maiúscula a primeira letra de cada palavra e mantém as demais em minúsculas.
 :::
 
 ```{julia}
 @mutate(titanic, Age = str_to_upper(Age))
 ```
 
-## str_starts 
+## str_starts()
 
-:::{justify}
-Essa função responde de forma binária à pergunta: "A *string* começa com determinado *caractere*?". No exemplo, verificamos se a coluna `Age` inicia com a letra **C**. A função retorna `1` para sim e `0` para não. De modo análogo, **str_ends** verifica se a string indicada termina com o caractere especificado.
+::: {justify}
+Essa função responde de forma binária à pergunta: "A *string* começa com determinado *caractere*?". No exemplo, verificamos se a coluna `Age` inicia com a letra **C**. A função retorna `1` para sim e `0` para não. De modo análogo, **str_ends()** verifica se a string indicada termina com o caractere especificado.
 :::
 
 ```{julia}
 str_starts.(titanic.Age, "C")
 ```
 
-## str_length 
+## str_length()
 
-:::{justify}
+::: {justify}
 Retorna o tamanho da string informada. No exemplo, foi utilizada a palavra "Female", localizada na quinta linha da segunda coluna do data frame.
 :::
 
@@ -145,20 +156,20 @@ Retorna o tamanho da string informada. No exemplo, foi utilizada a palavra "Fema
 str_length(titanic[5,2])
 ```
 
-## str_c 
+## str_c()
 
-:::{justify}
-A função **str_c** concatena um vetor de strings em uma única string. Ela comporta o argumento `sep`, que define o separador entre os elementos, e o argumento `collapse`, que agrega todas as concatenações em um único objeto.
+::: {justify}
+A função **str_c()** concatena um vetor de strings em uma única string. Ela comporta o argumento `sep`, que define o separador entre os elementos, e o argumento `collapse`, que agrega todas as concatenações em um único objeto.
 :::
- 
+
 ```{julia}
 @chain titanic begin
-@mutate(ID = str_c(Ref(Class), Ref(Survived); sep = ", "))
-@select(Sex, Age, ID)
+@mutate(ID = str_c(Ref(Class), Ref(Survived); sep = "-"))
+TidierData.@select(Sex, Age, ID)
 end
 ```
 
-:::{justify}
+::: {justify}
 No exemplo, criamos uma nova coluna (`ID`) que agrupa as informações de `Class` e `Survived`. Em seguida, selecionamos as colunas `Sex`, `Age` e `ID`, resultando em um *data frame* com uma coluna a menos.
 :::
 
@@ -166,10 +177,8 @@ No exemplo, criamos uma nova coluna (`ID`) que agrupa as informações de `Class
 
 # Referências
 
-Este post foi elaborado a partir da [documentação oficial](https://tidierorg.github.io/TidierStrings.jl/dev/) produzida pelos autores do pacote. 
+Este post foi elaborado a partir da [documentação oficial](https://tidierorg.github.io/TidierStrings.jl/dev/) produzida pelos autores do pacote.
 
 ::: callout-note
 Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
 :::
-
-

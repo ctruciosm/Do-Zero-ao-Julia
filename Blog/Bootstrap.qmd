@@ -1,7 +1,7 @@
 ---
 title: "Reamostragem com o pacote Bootstrap.jl"
 description: |
-     Aprenda a utilizar o pacote Bootstrap.jl, que fornece ferramentas muito práticas e acessíveis para realizar reamostragem em Julia a fim de obter estimativas e intervalos de confiança.
+     Aprenda a utilizar o pacote `Bootstrap.jl`, que permite, de forma prática e acessível, realizar reamostragem bootstrap em Julia a fim de obter estimativas e intervalos de confiança.
 categories:
   - Ferramentas 
 author:
@@ -9,7 +9,11 @@ author:
     affiliation: "Universidade Estadual de Campinas"
     url: https://github.com/VitorRibasP
     orcid: 0009-0009-6923-7712
-date: "2025-08-14"
+  - name: Esther Cleveston
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://www.linkedin.com/in/esthercleveston/
+    orcid: 0009-0008-6612-8417
+date: "2025-11-04"
 image: imagens/bootstrap.png
 lang: pt
 format:
@@ -17,99 +21,134 @@ format:
     toc: true
     toc-depth: 3
     self-contained: false
-draft: true
+engine: knitr
+draft: false
 ---
 
-## Introdução
-::: justify
-Em muitos problemas de Estatística, não existe uma forma exata ou assintótica para calcular um intervalo de confiança, ou a amostra disponível é muito pequena. Nesses casos, a técnica de Bootstrap pode ser extremamente útil. Ela consiste em realizar diversas reamostragens dos dados originais e, a partir disso, obter estimativas de forma aproximada.
+```{r}
+#| echo: false
+Sys.setenv(JULIA_HOME = "/Users/ctrucios/.juliaup/bin")
+```
 
-Em Julia, existe uma maneira muito prática de aplicar esse processo por meio do pacote Bootstrap.jl. Neste post, vamos mostrar o passo a passo de como utilizar esse pacote.
+
+## Introdução
+
+::: justify
+Em muitos problemas de Estatística, calcular a variância exata ou assintótica de um estimador é muito dificil (ou sua forma exata é mesmo desconhecida), tornando a tarefa de obter intervalos de confiança bastante dificil ou impossível. Mesmo em situações nas quais a variância assintótica é facil de ser obtida, estes resultados apenas são válidos se dispomos de um número grande de observações (o que nem sempre é possível). Nesses casos, a técnica de Bootstrap pode ser extremamente útil. Ela consiste em realizar reamostrage com reposição dos dados originais e, a partir delas, fazer correção do estimador, estimar a variância, construir intervalos de confiança, fazer testes de hipóteses, etc.
+
+No Julia, há uma maneira bastante prática de aplicar esse processo por meio do pacote `Bootstrap.jl`. Neste post, aprenderemos o passo a passo de como utilizar esse pacote.
 :::
 
 ## Bootstrap
+
 ::: justify
-Em primeiro lugar, vamos instalar e carregar os pacotes necessários.
+Em primeiro lugar, vamos instalar e carregar os pacotes necessários:
 :::
+
 ```{julia}
 Pkg.add("Bootstrap")
-using Bootstrap
 Pkg.add("Statistics")
+using Bootstrap
 using Statistics
 ```
-::: justify
-Para realizar o processo de reamostragem, usamos a função `bootstrap`, que recebe três argumentos principais: a estatística de interesse, o conjunto de dados e o método de reamostragem (com o número de amostras).
 
-A seguir, geramos um vetor de 100 observações de uma normal padrão e realizamos o processo de reamostragem 200 vezes, utilizando o método mais tradicional:
+::: justify
+Para realizar o processo de reamostragem, usamos a função `bootstrap()`, que recebe três argumentos principais: a estatística de interesse, o conjunto de dados (amostra original) e o método de reamostragem (incluindo o número de amostras).
+
+A seguir, geramos um vetor de 100 observações de uma normal padrão e realizamos o processo de reamostragem 200 vezes, utilizando o método mais tradicional (amostragem aleatória com reposição):
 :::
+
 ```{julia}
-dados = randn(100)
+dados = randn(100);
 resultado = bootstrap(mean, dados, BasicSampling(200))
 ```
-::: justify
-O pacote nos fornece diversos tipos de métodos de reamostragem, bastando alterar o último argumento da função:
-- `BasicSampling`: amostragem aleatória com reposição;
-- `AntitheticSampling`: introduz correlação negativa entre as amostras;
-- `BalancedSampling`: reduz o viés;
-- `ExactSampling`: executa todas as amostras possíveis;
-- `ResidualSampling` e `WildSampling`: amostragem de resíduos para modelos lineares generalizados;
-- `MaximumEntropySampling`: utilizado para séries temporais dependentes.
-:::
-## Intervalos de Confiança
-::: justify
-Também podemos utilizar o objeto gerado pelo `bootstrap` para calcular um Intervalo de Confiança (IC) da estatística de interesse. Para isso, usamos a função `confint`, que recebe o objeto criado pela função `bootstrap` e o método do cálculo (com o nível de confiança).
 
-Por exemplo, vamos calcular um IC de 95% para o cenário criado anteriormente.
+::: justify
+O pacote oferece diversos tipos de métodos de reamostragem bootstrap, que podem ser especificados alterando o último argumento da função:
+
+-   `BasicSampling`: arealiza mostragem aleatória com reposição;
+-   `AntitheticSampling`: introduz correlação negativa entre as amostras;
+-   `BalancedSampling`: reduz o viés;
+-   `ExactSampling`: executa todas as amostras possíveis;
+-   `ResidualSampling` e `WildSampling`: arealizam mostragem de resíduos para modelos lineares generalizados;
+-   `MaximumEntropySampling`: utilizado para séries temporais dependentes.
 :::
+
+## Intervalos de Confiança
+
+::: justify
+Também podemos utilizar o objeto gerado pelo `bootstrap()` para calcular um Intervalo de Confiança (IC) da estatística de interesse. Para isso, usamos a função `confint`, que recebe o objeto criado pela função `bootstrap` e o método do cálculo (com o nível de confiança) como argumentos.
+
+Por exemplo, vamos calcular um IC de 95% para o cenário criado anteriormente:
+:::
+
 ```{julia}
 IC = confint(resultado, PercentileConfInt(.95))
 ```
-::: justify
-O pacote nos fornece diversos métodos de cálculo de IC, bastando alterar o último argumento da função:
-- `BasicConfInt`: método ingênuo de calcular;
-- `PercentileConfInt`: utiliza os percentis empíricos;
-- `NormalConfInt`: assume que a estatística segue a distribuição normal;
-- `StudentConfInt`: aplica uma correção considerando a variância de cada amostra;
-- `BCaConfInt`: aplica uma correção no viés e considera possível assimetria.
-:::
-## Estimando uma Regressão
-::: justify
-Como exemplo aplicado, vamos utilizar o Bootstrap para calcular intervalos de confiança dos coeficientes de uma Regressão Linear Simples.
 
-Em primeiro lugar, vamos carregar os pacotes necessários.
+::: justify
+O pacote nos fornece diversos métodos de cálculo de IC, que podem ser selecionados alterando o último argumento da função:
+
+-   `BasicConfInt`: método ingênuo de calcular;
+-   `PercentileConfInt`: utiliza os percentis empíricos;
+-   `NormalConfInt`: assume que a estatística segue a distribuição normal;
+-   `StudentConfInt`: aplica uma correção considerando a variância de cada amostra;
+-   `BCaConfInt`: aplica uma correção no viés e considera possível assimetria.
 :::
+
+## Estimando uma Regressão
+
+::: justify
+Como o exemplo aplicado, vamos utilizar o Bootstrap para calcular intervalos de confiança dos coeficientes de uma Regressão Linear Simples.
+
+Em primeiro lugar, vamos carregar os pacotes necessários:
+:::
+
 ```{julia}
+Pkg.add("DataFrames")
 Pkg.add("GLM")
 using GLM
-Pkg.add("DataFrames")
 using DataFrames
 ```
 
-Agora, vamos criar nossos dados.
+::: justify
+Agora, vamos criar nossos dados:
+:::
+
 ```{julia}
-x = 1:20
-y = 5 .+ 2 .* x .+ randn(20)
+x = 1:20;
+y = 5 .+ 2 .* x .+ randn(20);
 dados = DataFrame(x = x, y = y)
 ```
+
 ::: justify
-Em seguida, precisamos definir uma função que, a partir das determinadas observações selecionadas, ajusta o modelo e retorna os coeficientes, para utilizarmos no `bootstrap`.
+Em seguida, precisamos definir uma função que, a partir das determinadas observações selecionadas, ajusta o modelo e retorna os coeficientes para utilizarmos no `bootstrap()`.
 :::
+
 ```{julia}
 function betas(linhas)
     dados_amostra = dados[linhas, :]
     return coef(lm(@formula(y ~ x), dados_amostra))
 end
 ```
-Com isso, podemos realizar nosso Bootstrap e obter um IC para os coeficientes.
+
+::: justify
+Com isso, podemos realizar o Bootstrap e obter um IC para os coeficientes.
+:::
+
 ```{julia}
 reamostragem = bootstrap(betas, collect(1:nrow(dados)), BasicSampling(200))
 IC = confint(reamostragem, PercentileConfInt(.95))
 ```
+
 ## Conclusão
+
 ::: justify
-O Bootstrap é uma técnica muito útil quando temos poucos dados ou quando não sabemos a distribuição exata da estatística que queremos estudar. Apesar de não ser uma solução mágica para todos os problemas, o Bootstrap é uma forma prática e flexível de melhorar nossas análises e ganhar mais confiança nos resultados. Portanto, com o pacote `Bootstrap.jl`, conseguimos aplicar essa ideia de forma rápida em Julia, seja para calcular médias, proporções ou até intervalos de confiança de modelos de regressão
+O Bootstrap é uma técnica muito útil quando temos poucos dados ou quando não sabemos a distribuição exata da estatística de interesse. Apesar de não ser uma solução mágica para todos os problemas, trata-se de uma abordagem prática e flexível de melhorar nossas análises e ganhar mais confiança nos resultados.
+
+Portanto, com o pacote `Bootstrap.jl`, conseguimos aplicar essa ideia de forma rápida em `Julia`, seja para calcular médias, proporções ou até intervalos de confiança de modelos de regressão (e coisas muito mais complexas).
 :::
 
 ::: callout-note
 Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
-:::  
+:::
