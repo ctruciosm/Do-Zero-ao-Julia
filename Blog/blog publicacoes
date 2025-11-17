@@ -1,0 +1,88 @@
+---
+title: "Um guia para iniciar Julia através do Blog"
+description: |
+  Breve post explicando o passo a passo para começar a aprender Julia através do Blog
+categories:
+  - Blog, JULIA
+author:
+  - name: Carolina Tae Ishii Hara
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://CTaeDCDN.github.io
+    date: "2025-11-15"
+image: imagens/Julia_A_Capivara_CD.jpeg
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+draft: true
+---
+
+## Introdução
+
+::: {.justify}
+Iniciar a aprender a liguagem JULIA pode ser um pouco complicado no início, sendo assim, preparei um guia das páginas do BLOG para aconselhar e organizar sua aprendizagem nessa linguagem incrível! 
+
+Lembrando, que não existe forma certa de aprender uma linguagem computacional, esse é apenas um guia. 
+:::
+
+## Primeiros passos 
+::: {.justify}
+No início, às vezes é desejado aprender essa linguagem por meio de conteúdos informativos, entender sobre o que se trata e instalar e configurar o ambiente. Nesse sentido, uma ordem dos posts já escritos seria: 
+
+1. Do Zero ao Julia: As origens 
+
+2. Entenda a História da Linguagem que une Simplicidade e Desempenho 
+
+3. Como instalar Julia? 
+
+4. Como programar em Julia no VSCode?
+
+5. Programando em Julia com o Positron
+
+6. Como utilizar Julia no RStudio no Windows
+
+7. Notebooks em Julia: Jupyter e Colab
+
+8. Para que serve o JuliaHub?
+
+:::
+
+## Fundamentos da linguagem
+::: {.justify}
+
+Em seguida, para começar o aprendizado da linguagem como sintaxes essenciais e operações básicas, alguns posts indicados são: 
+
+9. Manipulação de strings em Julia
+
+10. Pacote TidierStrings.jl (complementa o anterior)
+
+11. Matrizes em Julia
+
+12. Álgebra linear com LinearAlgebra.jl
+
+13. Integração Numérica em Julia
+:::
+
+## Pacotes, ecossistema e estatística
+::: {.justify}
+Para entender as bibliotecas mais comuns e começar a analisar os dados, segue os posts:
+ 
+14. Pacotes Essenciais para Trabalhar com Estatística em Julia 
+
+15. Pacotes com Bancos de Dados para trabalhar em Julia
+
+16. Reamostragem com o pacote Bootstrap.jl
+
+17. Baixando dados com GoogleDrive.jl
+
+Introdução ao BioSequences.jl (específico para bioinformática)
+:::
+
+
+
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::
