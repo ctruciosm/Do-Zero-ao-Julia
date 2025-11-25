@@ -1,0 +1,200 @@
+---
+title: "Estatísticas Incrementais em Julia com OnlineStats.jl - Parte 3"
+description: |
+  Um guia prático para usar OnlineStats.jl em Julia, realizando estatísticas via streaming e algoritmos online com memória constante.
+categories:
+  - Estatística
+author:
+  - name: Caio Frare
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/caiofrare
+  - name: Carlos Trucíos
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://ctruciosm.github.io
+    orcid: 0000-0001-8746-8877
+date: "2025-10-24"
+image: imagens/xxx.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+engine: knitr
+draft: true
+---
+
+## introdução
+
+::: justify
+Nas partes anteriores desta série, exploramos como o OnlineStats.jl permite calcular estatísticas de forma incremental, sem precisar manter todos os dados em memória. Isso se torna essencial quando lidamos com streams, logs ou qualquer fluxo contínuo de dados.
+
+Agora, vamos dar um passo além: vamos visualizar estatísticas evoluindo ao longo do tempo, criando uma animação baseada em dados sendo processados ao vivo.
+
+Isso é útil para:
+
+-   Monitorar métricas de produção
+
+-   Acompanhar convergência de algoritmos online
+
+-   Visualizar deriva de dados (data drift)
+
+-   Diagnóstico em pipelines de streaming
+:::
+
+## Estatísticas Online + Visualização Incremental
+
+::: justify
+Vamos acompanhar a evolução da média de uma sequência de valores aleatórios recebidos de forma contínua. A cada n observações, vamos salvar um quadro de gráfico e, ao final, juntar tudo em uma animação.
+:::
+
+```{julia}
+using OnlineStats
+using CairoMakie
+using Random
+
+# Reprodutibilidade
+Random.seed!(123)
+
+# Estatística incremental
+o = Mean()
+
+# Vetores para armazenar o histórico
+xs = Int[]
+ys = Float64[]
+
+# Loop incremental
+for (i, x) in enumerate(randn(300))
+    fit!(o, x)
+    push!(xs, i)
+    push!(ys, value(o))
+
+    # Salva um frame a cada 30 passos
+    if i % 30 == 0
+        fig = Figure()
+        ax = Axis(fig[1,1],
+            xlabel = "Iteração",
+            ylabel = "Média",
+            title = "Evolução da Média Incremental"
+        )
+        lines!(ax, xs, ys)
+        save("frame_$(lpad(i,3,'0')).png", fig)
+    end
+end
+
+println("✅ Frames gerados no diretório atual: ", pwd())
+
+```
+
+::: justify
+Você obterá arquivos como:
+
+frame_030.png frame_060.png frame_090.png ... frame_300.png
+
+Que quando juntamos tudo obtemos o seguinte GIF:
+:::
+
+![gif grafico da média](imagens/gif_estat_incremental.gif)
+
+::: justify
+Nele é possível observarmos a convergência da média dessa distribuição.
+:::
+
+## Estatísticas com Janelas Deslizantes
+
+::: justify
+Em muitos cenários, não queremos calcular estatísticas considerando *todos* os dados históricos, mas apenas os valores mais recentes. Isso é comum em monitoramento, finanças e controle de processos.
+
+O `OnlineStats.jl` oferece o `MovingWindow` para esse propósito: Ele mantém um buffer circular que guarda apenas as últimas `b` observações.
+:::
+
+```{julia}
+using OnlineStats
+
+# Dados de exemplo
+dados = [20, 22, 21, 23, 24, 25, 26]
+
+# Criando uma janela móvel de tamanho 3 para valores Int
+janela = MovingWindow(3, Int)
+
+# Alimentando a janela com os dados
+for x in dados
+    fit!(janela, x)
+    println("Entrada: ", x, " | Janela atual: ", value(janela))
+end
+
+```
+
+::: justify
+Ao alimentar o `MovingWindow(3, Int)` com a sequência de dados, observamos passo a passo como funciona uma janela deslizante. A ideia é simples: o objeto armazena apenas os últimos 3 valores recebidos, descartando automaticamente os mais antigos à medida que novos chegam.
+
+O primeiro bloco exibido:
+:::
+
+```{yaml}
+7-element Vector{Int64}:
+ 20
+ 22
+ 21
+ 23
+ 24
+ 25
+ 26
+```
+
+::: justify
+representa apenas o vetor completo de dados que estamos usando como exemplo.
+
+Em seguida, vemos o estado inicial da janela:
+:::
+
+```{yaml}
+MovingWindow: n=0 | value=Int64[]
+```
+
+::: justify
+Depois, começamos a inserir cada número da sequência. A janela tem tamanho 3, então ela simplesmente guarda o valor recebido.
+:::
+
+```{yaml}
+Entrada: 20 | Janela atual: [20]
+Entrada: 22 | Janela atual: [20, 22]
+Entrada: 21 | Janela atual: [20, 22, 21]
+```
+
+::: justify
+Quando o quarto valor chega, a mágica acontece.
+
+A janela já estava cheia. Para manter apenas os últimos 3 valores, o elemento mais antigo (20) é removido automaticamente. Esse comportamento continua:
+:::
+
+```{yaml}
+Entrada: 23 | Janela atual: [22, 21, 23]
+Entrada: 24 | Janela atual: [21, 23, 24]
+Entrada: 25 | Janela atual: [23, 24, 25]
+Entrada: 26 | Janela atual: [24, 25, 26]
+```
+
+::: justify
+A cada nova entrada:
+
+o item mais antigo é descartado, o novo valor entra no final e a janela sempre apresenta os últimos 3 dados vistos.
+:::
+
+## Resumo
+
+::: justify
+O `MovingWindow` funciona como um "buffer móvel". Ele não acumula o histórico inteiro, apenas armazena os valores mais recentes. Esse tipo de estrutura é essencial em:
+
+-   monitoramento de séries temporais,
+-   detecção de anomalias,
+-   análise de sinais,
+-   streaming de dados,
+-   cálculos de métricas móveis (média móvel, volatilidade, etc.).
+:::
+
+## Conclusão
+
+:::justify
+
+:::
