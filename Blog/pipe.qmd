@@ -1,0 +1,155 @@
+---
+title: Pipe no Julia, quando e como usar.
+description: Aprenda a usar o operador pipe (|>) em Julia para transformar código aninhado e confuso em pipelines de dados limpas, legíveis e eficientes. Descubra como escrever código mais intuitivo com um exemplo prático!
+
+categories:
+  -  Pipe Operator
+  -  Pipeline de Dados
+author:
+  - name: Gabriel Campovilla da Silva
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/C4mpovill4
+
+  - name: 
+    affiliation: 
+    url: 
+    orcid: 
+
+date: "2025-10-07"
+image: imagens/pipe.jpeg
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+draft: false
+engine: knitrNet
+---
+
+## Código Julia Mais Limpo e Legível com o Operador Pipe (`|>`)
+
+Você já se deparou com uma linha de código que parecia um ninho de parênteses, onde uma função era chamada dentro de outra, que por sua vez estava dentro de outra? Algo como `terceira_funcao(segunda_funcao(primeira_funcao(dado)))`.
+
+Ler e depurar esse tipo de código pode ser confuso, pois nossa mente precisa ir até o centro da expressão e trabalhar de dentro para fora. É aqui que a linguagem Julia nos oferece uma ferramenta elegante e poderosa para simplificar nossa vida: o **operador pipe**, representado por `|>`.
+
+Neste post, vamos desvendar como o pipe pode transformar seu código, tornando-o mais intuitivo e legível.
+
+### O Problema: Funções Aninhadas
+
+Vamos imaginar um cenário comum: você tem um conjunto de dados e precisa aplicar uma sequência de operações. Por exemplo, calcular a raiz quadrada da soma dos quadrados de um vetor de números (ou seja, a norma euclidiana).
+
+A forma tradicional de escrever isso seria:
+
+```{julia}
+numeros = [1, 2, 3, 4]
+resultado = sqrt(sum(abs2.(numeros)))
+println(resultado) 
+```
+
+Saída: 5.477225575051661
+
+Funciona, mas observe a ordem de leitura. Para entender o que está acontecendo, você precisa ler:
+
+1.  Aplique `abs2` a cada elemento de `numeros`.
+
+2.  Pegue o resultado disso e calcule a `sum`.
+
+3.  Pegue o resultado disso e calcule a `sqrt`.
+
+A execução ocorre de dentro para fora, mas nossa leitura natural é da esquerda para a direita. Não seria ótimo se o código pudesse seguir nosso fluxo de pensamento?
+
+### A Solução Elegante: O Operador Pipe `|>`
+
+O operador pipe faz exatamente isso. Ele pega o resultado da expressão à sua esquerda e o "injeta" como o **primeiro argumento** da função à sua direita.
+
+A sintaxe é simples: `dado |> funcao`. Isso é exatamente o mesmo que `funcao(dado)`.
+
+Agora, vamos reescrever nosso exemplo anterior usando o pipe:
+
+```{julia}
+numeros = [1, 2, 3, 4]
+
+resultado = numeros |>
+            x -> abs2.(x) |> sum |>
+            sqrt
+
+println(resultado)
+```
+
+Saída: 5.477225575051661
+
+Veja como o código se tornou uma sequência de passos, lidos da esquerda para a direita (ou de cima para baixo):
+
+1.  Comece com `numeros`.
+
+2.  **Então**, aplique `abs2.` (a forma vetorial).
+
+3.  **Então**, aplique `sum`.
+
+4.  **Então**, aplique `sqrt`.
+
+Essa estrutura se assemelha a uma receita ou a uma linha de montagem, tornando o processo muito mais claro e fácil de seguir.
+
+### Exemplo Prático: Uma Mini-Pipeline de Dados
+
+Agora, vamos para o exemplo prometido. Imagine que temos uma lista de números inteiros e queremos fazer o seguinte:
+
+1.  Filtrar e manter apenas os números positivos.
+
+2.  Dobrar o valor de cada número restante.
+
+3.  Somar todos os valores resultantes.
+
+**A Abordagem Tradicional (Aninhada)**
+
+Sem o pipe, nosso código ficaria assim:
+
+```{julia}
+dados = [-5, 8, 3, -1, 0, 7, -2, 4]
+
+# Leia de dentro para fora: filtre, depois mapeie, depois some.
+soma_dos_dobros_positivos = sum(map(x -> x * 2, filter(x -> x > 0, dados)))
+
+println(soma_dos_dobros_positivos) 
+```
+
+Saída: 44
+
+Novamente, funciona, mas é denso e cheio de parênteses.
+
+**Com o Poder do Pipe**
+
+Agora, vamos refatorar essa lógica para usar o `|>`. Aqui, vamos precisar de uma pequena ajuda de funções anônimas (`arr -> ...`) para lidar com funções como `filter` e `map`, que esperam os dados como seu segundo argumento, não o primeiro.
+
+```{julia}
+dados = [-5, 8, 3, -1, 0, 7, -2, 4]
+
+resultado = dados |>
+    # Passo 1: Filtrar os números positivos.
+    # A função anônima garante que a lista (arr) seja passada no lugar certo.
+    arr -> filter(x -> x > 0, arr) |>
+
+    # Passo 2: Dobrar cada valor da lista filtrada.
+    arr -> map(x -> x * 2, arr) |>
+
+    # Passo 3: Somar o resultado final.
+    sum
+
+println(resultado) 
+```
+
+Saída: 44
+
+A beleza desta abordagem é que cada passo da sua transformação de dados é uma linha separada. Se algo der errado, você pode facilmente comentar uma das linhas para depurar o processo passo a passo. A intenção do código se torna explícita e auto-documentada.
+
+### Conclusão
+
+O operador pipe (`|>`) é mais do que apenas um "açúcar sintático" em Julia. É uma ferramenta poderosa que promove um estilo de programação mais **declarativo** e **funcional**. Ao encadear operações de forma linear, você obtém um código que é:
+
+-   **Mais legível:** Segue o fluxo de pensamento natural da esquerda para a direita.
+
+-   **Mais fácil de manter:** Adicionar, remover ou reordenar passos na pipeline é trivial.
+
+-   **Mais elegante:** Reduz a desordem visual causada por excesso de parênteses.
+
+Na sua próxima sessão de codificação em Julia, quando se deparar com funções aninhadas, dê uma chance ao operador pipe. Você verá como suas pipelines de dados e manipulações de código se tornarão mais limpas e intuitivas!
