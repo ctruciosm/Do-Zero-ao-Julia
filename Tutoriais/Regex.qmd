@@ -1,0 +1,242 @@
+---
+title: Regex na limpeza de dados 
+description: Neste Tutorial veremos como manipular dados para a limpeza, organização e padronização do seus dados por meio de regex no Julia, sem utilizar pacotes, apenas com as funções base
+
+categories:
+  -  Limpeza do banco de dados
+  -  Padronização
+author:
+  - name: Caio Frare
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/caiofrare
+  - name: Carlos Trucíos
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://ctruciosm.github.io
+    orcid: 0000-0001-8746-8877
+date: "2025-11-25"
+image: imagens/regex.jpeg
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+draft: false
+engine: knitrNet
+---
+
+## Um Guia Prático de Regex em Julia para Limpar Dados
+
+::: justify
+Se você já trabalhou com dados do mundo real, sabe que eles raramente vêm em um formato limpo e organizado. CPFs com e sem pontuação, números de telefone em dezenas de formatos, textos com hashtags que você precisa extrair... a lista é infinita.
+
+Fazer essa limpeza usando `split`, `findfirst`, `contains` e outras funções de string pode se tornar um pesadelo de código complexo e frágil. E se houvesse uma "linguagem" universal para descrever e manipular padrões em textos?
+
+Ela existe, e se chama **Expressões Regulares**, ou **Regex**.
+
+Neste tutorial, vamos desmistificar o `Regex`. O objetivo não é se tornar um mestre em um dia, mas sim aprender os 20% de Regex que resolvem 80% dos problemas de limpeza de dados. Ao final, você será capaz de validar, extrair e substituir textos como um profissional, usando exemplos práticos e diretos em Julia.
+:::
+
+## O Básico: Construindo um Padrão
+
+::: justify
+Em `Julia`, criamos uma expressão regular usando a macro de string `r"..."`. Tudo o que está dentro das aspas é o "padrão" que queremos encontrar.
+
+O poder do Regex vem de seus **metacaracteres**, que são caracteres com um significado especial. Aqui está uma cola dos mais importantes:
+:::
+
+|  |  |  |
+|------------------------|------------------------|------------------------|
+| Metacaractere | Descrição | Exemplo |
+| `.` | Qualquer caractere (exceto nova linha) | `r"a.c"` casa com "abc", "axc", "a2c" |
+| `\d` | Qualquer dígito (0-9) | `r"\d\d"` casa com "12", "99" |
+| `\w` | Qualquer caractere de "palavra" (letras, números, \*) | `r"\w\w\w"` casa com "oi\*", "dev" |
+| `\s` | Qualquer caractere de espaço (espaço, tab, etc.) | `r"oi\sJulia"` casa com "oi Julia" |
+| `^` | Início da string | `r"^Olá"` só casa se a string começar com "Olá" |
+| `$` | Fim da string | `r"mundo$"` só casa se a string terminar com "mundo" |
+| `*` | 0 ou mais repetições do anterior | `r"go*l"` casa com "gl", "gol", "gooool" |
+| `+` | 1 ou mais repetições do anterior | `r"go+l"` casa com "gol", "gooool" (mas não "gl") |
+| `?` | 0 ou 1 repetição do anterior (opcional) | `r"honou?r"` casa com "honor" e "honour" |
+| `[...]` | Um conjunto de caracteres permitidos | `r"gr[ae]y"` casa com "gray" e "grey" |
+| `(...)` | Agrupa uma expressão (para captura) | `r"R\$ (\d+)"` captura o número após "R\$ " |
+
+::: justify
+Com essas poucas regras, já podemos construir padrões incrivelmente poderosos.
+:::
+
+## As Ferramentas de Julia: `occursin`, `match` e `replace`.
+
+::: justify
+Julia nos dá algumas funções principais para trabalhar com Regex:
+
+**`occursin(padrão, texto)`**: Verifica se o padrão **existe** no texto. Retorna `true` ou `false`.
+
+**`match(padrão, texto)`**: Encontra a **primeira ocorrência** do padrão e retorna um objeto `RegexMatch`, que contém o texto encontrado e os grupos capturados.
+
+**`eachmatch(padrão, texto)`**: Encontra **todas as ocorrências** e retorna um iterador.
+
+**`replace(texto, padrão => substituição)`**: Substitui as ocorrências do padrão por outro texto.
+:::
+
+## Exemplos Práticos
+
+::: justify
+Vamos aplicar esse conhecimento em problemas reais.
+:::
+
+### Exemplo 1: Validar um CEP
+
+::: justify
+**Problema:** Verificar se uma string contém um CEP no formato "XXXXX-XXX".
+:::
+
+```{julia}
+# Padrão: Começa com 5 dígitos, seguido de um hífen, e termina com 3 dígitos.
+padrao_cep = r"^\d{5}-\d{3}$"
+
+cep_valido = "13083-859"
+cep_invalido1 = "13083859" # Falta o hífen
+cep_invalido2 = "CEP 13083-859" # Tem texto extra "CEP"
+
+occursin(padrao_cep, cep_valido)
+occursin(padrao_cep, cep_invalido1) 
+occursin(padrao_cep, cep_invalido2) 
+
+#Saídas:
+
+#true
+#false
+#false
+```
+
+### Exemplo 2: Extrair um Valor Monetário
+
+::: justify
+**Problema:** De uma frase, extrair o valor numérico que vem depois de "R\$".
+:::
+
+```{julia}
+texto = raw"O produto custa R$ 199,90 e o frete é R$ 15,00."
+```
+
+::: justify
+**Padrão**: A sigla "R\$ ", seguida por um grupo de um ou mais dígitos, uma vírgula, e dois dígitos. O parêntese cria um "grupo de captura".
+:::
+
+```{julia}
+padrao_valor = r"R\$ (\d+,\d{2})"
+m = match(padrao_valor, texto)
+```
+
+::: jusitfy
+"m" é um objeto RegexMatch
+
+O texto completo que casou com o padrão
+:::
+
+```{julia}
+println(m.match) 
+# Saída: 
+
+#R$ 199,90
+```
+
+::: justify
+Acessando o que foi capturado pelo parêntese
+:::
+
+```{julia}
+valor_extraido = m.captures[1]
+println(valor_extraido) 
+# Saída: 
+
+#199,90
+```
+
+::: justify
+O \`match\` só pega a primeira ocorrência. E se quisermos todas?
+:::
+
+### Exemplo 3: Encontrar Todas as Hashtags em um Texto
+
+::: justify
+**Problema:** Listar todas as hashtags de um post de rede social.
+:::
+
+```{julia}
+post = "Que dia incrível para #DataScience com #JuliaLang! Falamos de performance e #BigData."
+padrao_hashtag = r"#(\w+)"
+```
+
+::: justify
+eachmatch retorna um iterador. Vamos coletar os resultados.
+:::
+
+```{julia}
+hashtags = [m.captures[1] for m in eachmatch(padrao_hashtag, post)]
+println(hashtags) 
+# Saída: 
+
+#["DataScience", "JuliaLang", "BigData"]
+```
+
+::: justify
+Perfeito para extrair todas as menções, e-mails ou qualquer padrão que se repete.
+:::
+
+### Exemplo 4: Padronizar Números de Telefone
+
+::: justify
+**Problema:** Remover parênteses, espaços e hifens de um número de telefone, deixando apenas os dígitos.
+:::
+
+```{julia}
+telefone_sujo = "(19) 3521-6073"
+```
+
+::: justify
+Padrão: \D é o oposto de \d, ou seja, qualquer coisa que NÃO seja um dígito.
+:::
+
+```{julia}
+padrao_nao_digito = r"\D"
+```
+
+::: justify
+Substitui tudo que não for dígito por uma string vazia.
+:::
+
+```{julia}
+telefone_limpo = replace(telefone_sujo, padrao_nao_digito => "")
+println(telefone_limpo) 
+# Saída: 
+
+#1935216073
+```
+
+::: justify
+Com uma linha, fizemos uma limpeza que exigiria várias chamadas a \`replace\` sem Regex.
+:::
+
+## Conclusão
+
+::: justify
+Você chegou ao fim! E mais do que isso, agora você tem as ferramentas para enfrentar strings bagunçadas sem medo.
+
+Nós vimos que com a macro `r"..."` e um punhado de metacaracteres, podemos criar padrões para:
+
+-   **Validar** formatos com `occursin`.
+
+-   **Extrair** a primeira informação com `match`.
+
+-   **Coletar** todas as ocorrências com `eachmatch`.
+
+-   **Limpar** e substituir texto com `replace`.
+
+A melhor forma de se aprofundar é praticando. Um site fantástico para testar seus padrões de forma interativa é o [**Regex101.com**](https://regex101.com/).
+
+Agora, vá em frente e coloque ordem no caos dos seus dados!
+:::
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::
