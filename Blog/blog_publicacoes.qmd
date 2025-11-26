@@ -1,0 +1,93 @@
+---
+title: "Um guia para iniciar Julia através do Blog"
+description: |
+  Começar a aprender algo novo pode ser um pouco complicado no início. Diante de tanta informação, por onde começar? Esse guia organiza os posts do blog __Do Zero ao Julia__ para orientar sua jornada de aprendizado.
+categories:
+  - Guia
+  - Online
+  - Julia
+author:
+  - name: Carolina Tae Ishii Hara
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://CTaeDCDN.github.io
+    date: "2025-11-15"
+  - name: Nicole Fredericci
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/NFredericci
+image: imagens/Julia_A_Capivara_CD.jpeg
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+engine: knitr    
+draft: true
+---
+
+## Introdução
+
+::: {.justify}
+Começar a aprender algo novo pode ser um pouco complicado no início. Diante de tanta informação, por onde começar? E se o assunto é complexo, qual é a abordagem mais simples para uma introdução eficaz?
+
+Pensando nisso, preparamos este guia, que organiza os posts do blog __Do Zero ao Julia__ para orientar sua jornada de aprendizado nesta linguagem incrível! Lembrando que não existe forma certa de aprender uma linguagem computacional: este é apenas um caminho sugerido para otimizar seus estudos.
+:::
+
+## Primeiros passos 
+
+::: {.justify}
+No início, é recomendado aprender `Julia` por meio de conteúdos informativos, entender mais sobre a linguagem, e preparar o ambiente de programação. Nesse sentido, você pode ler os posts já escritos na seguinte ordem: 
+
+1. [Do Zero ao Julia: As origens](https://ime.unicamp.br/julialang/Blog/as-origens.html). 
+
+2. [Entenda a História da Linguagem que une Simplicidade e Desempenho](https://ime.unicamp.br/julialang/Blog/HistoriaJulia.html). 
+
+3. [Como instalar Julia?](https://ime.unicamp.br/julialang/Blog/instalar_julia.html). 
+
+4. [Como programar em Julia no VSCode?](https://ime.unicamp.br/julialang/Blog/vscode.html).
+
+5. [Programando em Julia com o Positron](https://ime.unicamp.br/julialang/Blog/positron.html).
+
+6. [Como utilizar Julia no RStudio no Windows](https://ime.unicamp.br/julialang/Blog/julia_rstudio.html).
+
+7. [Notebooks em Julia: Jupyter e Colab](https://ime.unicamp.br/julialang/Blog/jupytercolab.html).
+
+8. [Para que serve o JuliaHub?](https://ime.unicamp.br/julialang/Blog/juliahub.html).
+:::
+
+## Fundamentos da linguagem
+
+::: {.justify}
+
+Em seguida, para começar o aprendizado prático da linguagem com sintaxes essenciais e operações básicas, alguns posts indicados são: 
+
+9. [Manipulação de strings em Julia](https://ime.unicamp.br/julialang/Blog/strings.html).
+
+10. [Pacote TidierStrings.jl](https://ime.unicamp.br/julialang/Blog/tidier_strings.html) (complementa o item anterior).
+
+11. [Matrizes em Julia](https://ime.unicamp.br/julialang/Blog/Matrizes.html).
+
+12. [Álgebra linear com LinearAlgebra.jl](https://ime.unicamp.br/julialang/Blog/%C3%81lgebra%20linear%20com%20LinearAlgebra.jl.html).
+
+13. [Integração Numérica em Julia](https://ime.unicamp.br/julialang/Blog/integracao_numerica.html).
+:::
+
+## Pacotes, ecossistema e estatística
+
+::: {.justify}
+Por fim, para entender as bibliotecas mais utilizadas na área de Ciência de Dados, os seguintes posts podem ser fundamentais:
+ 
+14. [Pacotes Essenciais para Trabalhar com Estatística em Julia](https://ime.unicamp.br/julialang/Blog/pacotes_estatistica.html). 
+
+15. [Pacotes com Bancos de Dados para trabalhar em Julia](https://ime.unicamp.br/julialang/Blog/pacotes_datasets.html).
+
+16. [Reamostragem com o pacote Bootstrap.jl](https://ime.unicamp.br/julialang/Blog/Bootstrap.html).
+
+17. [Baixando dados com GoogleDrive.jl](https://ime.unicamp.br/julialang/Blog/GoogleDrive.html).
+
+18. [Introdução ao BioSequences.jl](https://ime.unicamp.br/julialang/Blog/BioSequences.html) (específico para bioinformática).
+:::
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::
