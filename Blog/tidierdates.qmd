@@ -22,7 +22,7 @@ format:
   html:
     toc: true
     self-contained: false
-engine: knitr
+engine: julia
 draft: false
 ---
 
@@ -64,17 +64,15 @@ O `TidierDates.jl` oferece funções que reconhecem diferentes formatos de datas
 :::
 
 ```{julia}
-
-df = DataFrame(Texto = ["01-02-2020", "15/03/2021", "2022-07-30"])
+df = DataFrame(Texto = ["01-02-2020"])
 
 @chain df begin
     @mutate(
-        Data1 = dmy(Texto),   # dia-mês-ano
+        Data1 = dmy("01-02-2020"),    # dia-mês-ano
         Data2 = mdy("July 4, 2005"),  # mês-dia-ano
-        Data3 = ymd("2019-08-09")     # ano-mês-dia
+        Data3 = ymd("2019/08/09")     # ano-mês-dia
     )
 end
-
 ```
 
 ::: justify
@@ -111,7 +109,7 @@ Aqui usamos as funções `*_hms()` (`ymd_hms`, `dmy_hms`, `mdy_hms`) para conver
 using DataFrames, TidierData, TidierDates, Dates
 
 df2 = DataFrame(DataHora = [DateTime("2023-03-15T10:45:32"),
-                            DateTime("2023-03-15T22:17:05")])
+                            DateTime("2023-03-15T22:17:05")]);
 
 @chain df2 begin
     @mutate(
@@ -149,7 +147,6 @@ df3 = DataFrame(
         Diferenca = Fim - Inicio
     )
 end
-
 ```
 
 ::: justify
