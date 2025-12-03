@@ -1,0 +1,213 @@
+---
+title: "Análise de Redes e Teoria dos Grafos com Graphs.jl"
+description: |
+  Descubra quem realmente manda na rede. Um guia prático para criar, analisar e visualizar redes complexas utilizando Graphs.jl e GraphMakie.jl.
+categories:
+  - Grafos
+  - Pacotes
+  - Data Science
+author:
+  - name: Caio Frare
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/caiofrare
+  - name: Carlos Trucíos
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://ctruciosm.github.io
+    orcid: 0000-0001-8746-8877
+date: "2025-12-01"
+image: imagens/graphs_intro.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+engine: knitr
+draft: true
+---
+
+## Introdução
+
+::: justify
+Muitos problemas reais não cabem em planilhas. Relações sociais, transações financeiras, rotas logísticas e interações biológicas são melhor representadas como **Grafos** (ou Redes). Enquanto ferramentas tradicionais focam em analisar linhas individuais de dados, a Teoria dos Grafos foca nas **conexões**.
+
+Em Julia, o pacote `Graphs.jl` oferece uma interface leve e de altíssima performance para lidar com milhões de nós e arestas. Neste tutorial, vamos fugir dos exemplos abstratos e analisar um caso real de poder e influência: as **Famílias Florentinas** da Renascença. Vamos descobrir matematicamente por que os *Medici* se tornaram tão poderosos, usando métricas de centralidade e algoritmos de detecção de comunidades.
+:::
+
+## Instalação
+
+::: justify
+Utilizaremos o `Graphs.jl` para a matemática, o `GraphMakie.jl` (com `CairoMakie`) para visualização e o `DataFrames.jl` para manipulação dos dados brutos.
+:::
+
+```{julia}
+using Pkg
+Pkg.add([
+    "Graphs", 
+    "GraphMakie", 
+    "CairoMakie", 
+    "DataFrames",
+    "NetworkLayout"
+])
+```
+
+## Construindo o Grafo a partir de Dados
+
+::: justify
+No mundo real, grafos raramente vêm prontos. Eles nascem de tabelas de relacionamentos (como "De -\> Para"). Vamos reconstruir a rede de casamentos entre as famílias de elite de Florença no século XV.
+:::
+
+```{julia}
+using Graphs
+using DataFrames
+
+# 1. Dados brutos: Lista de Arestas (Quem casou com quem)
+df_arestas = DataFrame(
+    Familia_A = ["Acciaiuoli", "Medici", "Medici", "Medici", "Medici", "Medici", 
+                 "Castellani", "Castellani", "Peruzzi", "Peruzzi", "Strozzi", 
+                 "Strozzi", "Strozzi", "Bissi", "Bissi", "Ridolfi", "Ridolfi", 
+                 "Tornabuoni", "Albizzi", "Albizzi", "Salviati", "Guadagni", 
+                 "Guadagni", "Guadagni", "Pazzi"],
+    Familia_B = ["Medici", "Barbadori", "Ridolfi", "Tornabuoni", "Albizzi", "Salviati",
+                 "Peruzzi", "Strozzi", "Strozzi", "Bissi", "Ridolfi", "Bissi", 
+                 "Castellani", "Ridolfi", "Guadagni", "Tornabuoni", "Medici", 
+                 "Guadagni", "Ginori", "Guadagni", "Pazzi", "Lamberteschi", 
+                 "Bissi", "Albizzi", "Salviati"]
+)
+
+# 2. Mapeamento de Nomes para IDs Numéricos (Graphs.jl usa inteiros)
+# Extraímos todos os nomes únicos para criar os nós
+nomes_familias = unique(vcat(df_arestas.Familia_A, df_arestas.Familia_B))
+n_nos = length(nomes_familias)
+
+# Dicionário para buscar ID pelo Nome
+nome_para_id = Dict(nome => i for (i, nome) in enumerate(nomes_familias))
+
+# 3. Inicializando e Povoando o Grafo
+g = SimpleGraph(n_nos) # Grafo não-direcionado com N vértices
+
+for row in eachrow(df_arestas)
+    u = nome_para_id[row.Familia_A]
+    v = nome_para_id[row.Familia_B]
+    add_edge!(g, u, v)
+end
+
+println("Grafo construído com sucesso!")
+println("Número de Famílias (Nós): ", nv(g))
+println("Número de Casamentos (Arestas): ", ne(g))
+```
+
+## Quem manda na rede? (Métricas de Centralidade)
+
+::: justify
+A simples visualização não revela tudo. Precisamos de métricas quantitativas para definir "importância". Vamos calcular duas das mais vitais:
+
+-   Grau: Número de conexões diretas. Quem conhece mais gente?
+
+-   Intermediação: Quantas vezes uma família serve de "ponte" entre outras duas. Quem controla o fluxo de informação?
+:::
+
+```{julia}
+# Cálculo das métricas
+graus = degree(g)
+betw = betweenness_centrality(g)
+
+# Criando um DataFrame para analisar os resultados
+df_resultados = DataFrame(
+    Familia = nomes_familias,
+    Conexoes = graus,
+    Influencia_Ponte = betw
+)
+
+# Ordenando por Intermediação (Betweenness)
+sort!(df_resultados, :Influencia_Ponte, rev=true)
+
+# Exibindo o Top 5
+first(df_resultados, 5)
+```
+
+::: justify
+Observe o resultado. É provável que os Medici apareçam no topo da intermediação. Historicamente, isso explica sua ascensão: mesmo não sendo a família com mais dinheiro ou exércitos no início, eles eram a "cola" que unia famílias desconexas, permitindo-lhes arbitrar conflitos e consolidar poder.
+:::
+
+## Detecção de Comunidades
+
+::: justify
+Redes complexas tendem a formar "panelinhas" ou clusters. Podemos detectar esses grupos automaticamente usando algoritmos de propagação de rótulos (label_propagation), que simulam uma "votação" onde cada nó adota o grupo da maioria de seus vizinhos.
+:::
+
+```{julia}
+# Detectando comunidades
+comunidades = label_propagation(g)[1] # Retorna vetor de inteiros (IDs dos grupos)
+
+println("Comunidades detectadas: ", length(unique(comunidades)))
+```
+
+## Visualização com GraphMakie
+
+::: justify
+Agora vamos plotar tudo isso. Usaremos o GraphMakie para criar uma visualização rica onde:
+
+-   Tamanho do nó = Centralidade de Grau (Popularidade).
+
+-   Cor do nó = Comunidade a que pertence.
+
+-   Layout = Algoritmo de força (Spring/Stress) para organizar visualmente.
+:::
+
+```{julia}
+using GraphMakie
+using CairoMakie
+using NetworkLayout
+
+# Configuração estética
+# Normalizamos o tamanho dos nós para ficar visível (entre 10 e 30)
+tamanho_nos = (graus ./ maximum(graus)) .* 30 .+ 10
+
+# Cores baseadas nas comunidades (usando uma paleta categórica)
+cores_nos = comunidades
+
+fig = Figure(size = (800, 600))
+ax = Axis(fig[1, 1], title = "Rede das Famílias Florentinas (1434)", 
+          titlesize = 24)
+
+# Plotando o grafo
+graphplot!(ax, g,
+    layout = Stress(),              # Algoritmo de layout robusto
+    node_size = tamanho_nos,        # Tamanho dinâmico
+    node_color = cores_nos,         # Cor por comunidade
+    colormap = :Set3,               # Paleta de cores
+    nlabels = nomes_familias,       # Rótulos com os nomes
+    nlabels_textsize = 12,
+    nlabels_align = (:center, :center)
+    # Removemos nlabels_offset para evitar o erro de tipo
+)
+
+hidedecorations!(ax); hidespines!(ax) # Remove eixos x/y para limpeza
+
+# Exibir (ou salvar)
+save("grafos_familias.png", fig)
+fig
+```
+
+Que retorna o seguinte gráfico: ![Rede das Famílias](imagens/grafos_familia.png)
+
+## Conclusão
+
+::: justify
+O Graphs.jl nos permitiu, com poucas linhas, reconstruir uma estrutura social histórica e extrair insights matemáticos sobre poder político. Vimos como:
+
+-   Transformar dados tabulares (DataFrames) em estruturas de grafos.
+
+-   Calcular métricas avançadas como Betweenness Centrality.
+
+-   Aplicar algoritmos não-supervisionados de detecção de comunidades.
+
+-   Visualizar essas dimensões complexas com GraphMakie.
+
+Essas mesmas técnicas podem ser aplicadas para analisar redes de fraude bancária, otimizar rotas de distribuição ou entender a propagação de doenças em uma população.
+:::
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::
