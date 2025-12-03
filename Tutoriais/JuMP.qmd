@@ -1,0 +1,243 @@
+---
+title: "Introdução à Otimização Matemática com JuMP.jl"
+description: |
+  Aprenda a modelar e resolver problemas de otimização linear e inteira usando o JuMP.jl, a linguagem de modelagem premiada do ecossistema Julia.
+categories:
+  - Otimização
+  - Pacotes
+  - Modelagem
+author:
+  - name: Caio Frare
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/caiofrare
+  - name: Carlos Trucíos
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://ctruciosm.github.io
+    orcid: 0000-0001-8746-8877
+date: "2025-12-03"
+image: imagens/jump_intro.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+engine: knitr
+draft: true
+---
+
+## Introdução
+
+::: justify
+A otimização matemática está no centro da tomada de decisão eficiente. Seja para maximizar lucros em uma linha de produção, minimizar custos de transporte em uma rede logística ou alocar ativos financeiros com o menor risco possível, precisamos de ferramentas robustas para traduzir problemas do mundo real em modelos matemáticos. No ecossistema Julia, a ferramenta definitiva para isso é o **JuMP.jl**.
+
+Diferente de pacotes de otimização genérica, o `JuMP` é uma **Linguagem de Modelagem Algébrica**. Isso significa que ele permite escrever o problema computacionalmente com uma sintaxe quase idêntica à notação matemática que usamos no papel. Além disso, o JuMP atua como uma interface unificada: você escreve o modelo uma vez e pode trocar facilmente o "motor" que resolve o problema (o *solver*) sem precisar reescrever o código.
+
+Neste tutorial, vamos explorar os conceitos fundamentais do JuMP resolvendo um problema clássico de Pesquisa Operacional: o **Mix de Produção**.
+:::
+
+## Instalação e Arquitetura
+
+::: justify
+Para usar o JuMP, precisamos instalar dois componentes: 1. O pacote **JuMP** (a interface de modelagem). 2. Um **Solver** (o algoritmo que efetivamente encontra a solução).
+
+Neste guia, utilizaremos o `HiGHS`, um solver de alta performance e código aberto, capaz de lidar com Programação Linear (LP) e Programação Inteira Mista (MIP).
+:::
+
+```{julia}
+using Pkg
+Pkg.add(["JuMP", "HiGHS"])
+```
+
+## O Problema do Mix de Produção
+
+::: justify
+Imagine uma marcenaria que produz dois produtos: Mesas e Cadeiras. O objetivo da empresa é decidir quantas unidades de cada produto fabricar para maximizar o lucro semanal, respeitando as limitações de estoque de madeira e horas de trabalho disponíveis. Os dados são os seguintes:
+
+Lucro por unidade:
+
+-   Mesa: R\$ 500,00
+
+-   Cadeira: R\$ 300,00
+
+Recursos necessários por unidade:
+
+-   Mesa: consome 10m de madeira e 5h de trabalho.
+
+-   Cadeira: consome 2m de madeira e 2h de trabalho.
+
+Disponibilidade total semanal:
+
+-   Madeira: 400 metros.
+
+-   Trabalho: 100 horas.
+
+Demanda máxima: O mercado compra no máximo 40 cadeiras. Matematicamente, queremos encontrar $x_1$ (número de mesas) e $x_2$ (número de cadeiras) tal que:
+
+$$
+\begin{aligned}
+\text{Maximizar } Z = \ & 500x_1 + 300x_2 \\
+\text{Sujeito a: } \ & 10x_1 + 2x_2 \leq 400 \quad (\text{Madeira}) \\
+& 5x_1 + 2x_2 \leq 100 \quad (\text{Trabalho}) \\
+& x_2 \leq 40 \quad (\text{Demanda}) \\
+& x_1, x_2 \geq 0
+\end{aligned}
+$$ {#eq-modelo}
+:::
+
+## Modelando com JuMP
+
+::: justify
+Vamos traduzir o modelo matemático acima diretamente para Julia. A estrutura básica segue quatro passos: inicializar o modelo, criar variáveis, definir a função objetivo e adicionar as restrições.
+:::
+
+```{julia}
+using JuMP
+using HiGHS
+
+# 1. Inicializando o modelo com o solver HiGHS
+model = Model(HiGHS.Optimizer)
+
+# 2. Definindo as variáveis de decisão
+# x_mesa >= 0 e x_cadeira >= 0
+@variable(model, x_mesa >= 0)
+@variable(model, x_cadeira >= 0)
+
+# 3. Definindo a Função Objetivo (Maximizar Lucro)
+@objective(model, Max, 500 * x_mesa + 300 * x_cadeira)
+
+# 4. Adicionando as Restrições (Constraints)
+
+# Restrição de Madeira
+@constraint(model, c_madeira, 10 * x_mesa + 2 * x_cadeira <= 400)
+
+# Restrição de Trabalho
+@constraint(model, c_trabalho, 5 * x_mesa + 2 * x_cadeira <= 100)
+
+# Restrição de Demanda de Cadeiras
+@constraint(model, c_demanda, x_cadeira <= 40)
+
+# Visualizando o modelo gerado
+print(model)
+```
+
+::: justify
+Observe como a macro @constraint permite nomear as restrições (ex: c_madeira). Isso é extremamente útil para análises posteriores, como verificar preços-sombra (shadow prices) ou folgas.
+:::
+
+## Resolvendo e Analisando Resultados
+
+::: justify
+Com o modelo estruturado, usamos o comando optimize! para chamar o solver.
+:::
+
+```{julia}
+# Otimiza o modelo
+optimize!(model)
+
+# Verifica o status da solução
+println("Status da Solução: ", termination_status(model))
+
+# Recupera os valores ótimos
+if termination_status(model) == MOI.OPTIMAL
+    qtd_mesas = value(x_mesa)
+    qtd_cadeiras = value(x_cadeira)
+    lucro_total = objective_value(model)
+    
+    println("\n--- Resultado Otimizado ---")
+    println("Produzir Mesas:    ", qtd_mesas)
+    println("Produzir Cadeiras: ", qtd_cadeiras)
+    println("Lucro Máximo:      R\$ ", lucro_total)
+else
+    println("Não foi possível encontrar uma solução ótima.")
+end
+```
+
+::: justify
+O resultado acima nos dá a solução matemática exata. No entanto, em problemas de Programação Linear (LP), as variáveis podem assumir valores fracionários (ex: produzir 12.5 mesas). Dependendo do negócio, isso pode não ser viável. É aqui que entra a Programação Inteira.
+:::
+
+## Programação Inteira (MIP)
+
+::: justify
+Se não for possível vender meia mesa, precisamos restringir as variáveis para aceitarem apenas números inteiros. No JuMP, basta adicionar o parâmetro Int na declaração da variável. Isso transforma o problema em um problema de Programação Inteira Mista (MIP), que é computacionalmente mais difícil, mas o HiGHS lida muito bem com isso.
+:::
+
+```{julia}
+# Criando um novo modelo para a versão inteira
+model_int = Model(HiGHS.Optimizer)
+
+# Definindo variáveis como Inteiras (Int) e não-negativas
+@variable(model_int, x_mesa >= 0, Int)
+@variable(model_int, x_cadeira >= 0, Int)
+
+@objective(model_int, Max, 500 * x_mesa + 300 * x_cadeira)
+
+@constraint(model_int, 10 * x_mesa + 2 * x_cadeira <= 400)
+@constraint(model_int, 5 * x_mesa + 2 * x_cadeira <= 100)
+@constraint(model_int, x_cadeira <= 40)
+
+# Resolve
+optimize!(model_int)
+
+println("--- Resultado Inteiro ---")
+println("Mesas:    ", value(x_mesa))
+println("Cadeiras: ", value(x_cadeira))
+println("Lucro:    R\$ ", objective_value(model_int))
+```
+
+::: justify
+Note que, ao forçar as variáveis a serem inteiras, o lucro máximo pode cair levemente, pois perdemos a flexibilidade dos números fracionários. Essa diferença é o "custo da integridade".
+:::
+
+## Vetorização e Escalabilidade
+
+::: justify
+Para problemas com milhares de variáveis, não declaramos uma a uma (x_mesa, x_cadeira). Usamos contêineres e álgebra linear, o que torna o Julia extremamente poderoso para grandes modelos de Supply Chain. Veja como modelar o mesmo problema de forma compacta usando vetores:
+:::
+
+```{julia}
+# Dados em vetores e matrizes
+lucros = [500, 300]          # Vetor de coeficientes da função objetivo
+matriz_tecnica = [10 2;      # Matriz de restrições (A)
+                   5 2;
+                   0 1]
+limites = [400, 100, 40]     # Vetor do lado direito (b)
+n = length(lucros)
+
+model_vec = Model(HiGHS.Optimizer)
+
+# Variável vetorial x[1] e x[2]
+@variable(model_vec, x[1:n] >= 0)
+
+# Função objetivo (produto escalar)
+@objective(model_vec, Max, lucros' * x)
+
+# Restrições vetoriais (broadcast)
+@constraint(model_vec, matriz_tecnica * x .<= limites)
+
+optimize!(model_vec)
+println("Solução Vetorial: ", value.(x))
+```
+
+## Conclusão
+
+::: justify
+O JuMP.jl combina a legibilidade da notação matemática com a performance da linguagem Julia. Neste tutorial, vimos como:
+
+Instalar e configurar o JuMP com o solver HiGHS.
+
+Traduzir um problema de texto para uma formulação matemática.
+
+Implementar o modelo passo-a-passo.
+
+Lidar com restrições de números inteiros.
+
+Utilizar a forma vetorial para escalar o problema.
+
+Este é apenas o começo. O JuMP também suporta otimização não-linear, cônica, estocástica e até otimização robusta, tornando-o uma das ferramentas mais versáteis disponíveis para Cientistas de Dados e Pesquisadores Operacionais hoje.
+:::
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::
