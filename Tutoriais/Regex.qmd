@@ -14,7 +14,7 @@ author:
     url: https://ctruciosm.github.io
     orcid: 0000-0001-8746-8877
 date: "2025-11-25"
-image: imagens/regex.jpeg
+image: imagens/regex.jpg
 lang: "pt"
 format:
   html:
