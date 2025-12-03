@@ -1,0 +1,199 @@
+---
+title: "Modelagem de Epidemias com DifferentialEquations.jl"
+description: |
+  Entenda a matemática por trás das epidemias. Um guia prático para simular o modelo SIR e resolver sistemas de equações diferenciais (EDOs) de alta performance em Julia.
+categories:
+  - SciML
+  - Modelagem
+  - Saúde Pública
+author:
+  - name: Caio Frare
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/caiofrare
+  - name: Carlos Trucíos
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://ctruciosm.github.io
+    orcid: 0000-0001-8746-8877
+date: "2025-10-07"
+image: imagens/sir_intro.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+engine: knitr
+draft: true
+---
+
+## Introdução
+
+::: justify
+O mundo é dinâmico. Populações crescem, reações químicas acontecem e doenças se espalham. Para descrever como essas quantidades mudam ao longo do tempo, usamos **Equações Diferenciais**.
+
+Enquanto a estatística tradicional muitas vezes olha para "retratos" estáticos dos dados, a modelagem dinâmica tenta descrever o "filme". No ecossistema Julia, a biblioteca `DifferentialEquations.jl` é a ferramenta definitiva para isso, oferecendo velocidade superior a concorrentes em Python (Scipy) ou MATLAB, além de recursos avançados como sensibilidade de parâmetros e integração com redes neurais.
+
+Neste tutorial, vamos modelar uma epidemia utilizando o clássico modelo **SIR**. Veremos como pequenas mudanças nas taxas de contágio podem alterar drasticamente o destino de uma população.
+:::
+
+## O Modelo SIR
+
+::: justify
+O modelo SIR divide a população em três compartimentos que variam no tempo $t$:
+
+1.  **Suscetíveis (**$S$): Pessoas saudáveis que podem pegar a doença.
+2.  **Infectados (**$I$): Pessoas doentes que transmitem a doença.
+3.  **Recuperados (**$R$): Pessoas que se curaram (ou faleceram) e não transmitem mais.
+
+A dinâmica é regida pelo seguinte sistema de Equações Diferenciais Ordinárias (EDOs):
+:::
+
+$$
+\begin{aligned}
+\frac{dS}{dt} &= -\beta S I \\
+\frac{dI}{dt} &= \beta S I - \gamma I \\
+\frac{dR}{dt} &= \gamma I
+\end{aligned}
+$$ :::justify
+
+Onde: \* $\beta$ (beta): Taxa de transmissão (contágio). \* $\gamma$ (gama): Taxa de recuperação. :::
+
+## Instalação
+
+::: justify
+Precisamos do pacote principal de equações diferenciais e do `Plots` para visualizar as curvas.
+:::
+
+```{julia}
+using Pkg
+Pkg.add([
+    "DifferentialEquations", 
+    "Plots"
+])
+```
+
+## Definindo o Problema
+
+::: justify
+A sintaxe do DifferentialEquations.jl é direta: definimos uma função que descreve as derivadas ($du/dt$), configuramos o estado inicial e o intervalo de tempo.
+:::
+
+```{julia}
+using DifferentialEquations
+using Plots
+
+# 1. Definindo a equação (A "Lei" do sistema)
+# u: vetor de estados atuais [S, I, R]
+# p: vetor de parâmetros [beta, gamma]
+# t: tempo atual
+function sir_model!(du, u, p, t)
+    S, I, R = u       # Desempacota os estados
+    beta, gamma = p   # Desempacota os parâmetros
+    
+    # As equações diferenciais (dS/dt, dI/dt, dR/dt)
+    # Note que usamos N = S + I + R = 1 (população normalizada)
+    du[1] = -beta * S * I
+    du[2] = beta * S * I - gamma * I
+    du[3] = gamma * I
+end
+
+# 2. Configurando as condições iniciais
+# 99% da população saudável, 1% infectada, 0 recuperados
+u0 = [0.99, 0.01, 0.0]
+
+# 3. Parâmetros do modelo
+# beta = 0.5 (alta transmissão), gamma = 0.1 (recuperação lenta)
+p = [0.5, 0.1]
+
+# 4. Intervalo de tempo (dias 0 a 60)
+tspan = (0.0, 60.0)
+
+# Criando o objeto do problema
+prob = ODEProblem(sir_model!, u0, tspan, p)
+```
+
+## Resolvendo e Visualizando
+
+::: justify
+Com o problema definido, usamos a função solve para integrar as equações. O solver escolhe automaticamente o melhor algoritmo numérico.
+:::
+
+```{julia}
+# Resolve a EDO
+sol = solve(prob)
+
+# Plota os resultados
+plot(sol, 
+     label=["Suscetíveis" "Infectados" "Recuperados"],
+     xlabel="Tempo (Dias)", 
+     ylabel="Proporção da População",
+     title="Dinâmica da Epidemia (SIR)",
+     lw=2) # Espessura da linha
+```
+
+![Gráfico epidemia](imagens/de.png)
+
+::: justify
+O gráfico acima conta a história clássica de uma epidemia sem controle: o número de suscetíveis cai rapidamente enquanto os infectados explodem num pico (o surto), até que a "imunidade de rebanho" é atingida (muitos recuperados) e o vírus não encontra novos hospedeiros.
+:::
+
+## Análise de Cenários: "Achatando a Curva"
+
+::: justify
+Como estatísticos e cientistas de dados, nosso interesse é simular "E se?".Vamos comparar o cenário anterior com um cenário onde medidas de distanciamento social são aplicadas.Isso reduz o parâmetro $\beta$ (transmissão).Vamos reduzir $\beta$ de $0.5$ para $0.25$ e ver o impacto no pico de infectados.
+:::
+
+```{julia}
+# Cenário 2: Distanciamento Social
+# Reduzindo a taxa de contágio pela metade
+p_controle = [0.25, 0.1] 
+
+# Recriando e resolvendo o problema com novos parâmetros
+prob_controle = ODEProblem(sir_model!, u0, tspan, p_controle)
+sol_controle = solve(prob_controle)
+
+# Comparando apenas a curva de Infectados (índice 2)
+plot(sol, vars=(2), label="Sem Controle", lw=2, color=:red,
+     title="Comparação: Achatando a Curva",
+     xlabel="Tempo (Dias)", ylabel="Proporção de Infectados")
+
+plot!(sol_controle, vars=(2), label="Com Distanciamento", lw=2, color=:blue, linestyle=:dash)
+```
+
+![Gráfico epidemia](imagens/de2.png)
+
+::: justify
+A diferença é brutal. Embora a doença ainda exista no cenário azul, o pico é muito menor e mais tardio. Isso é crucial para não colapsar sistemas de saúde que possuem capacidade limitada de atendimento simultâneo.
+:::
+
+## O Número Básico de Reprodução
+
+::: justify
+Na epidemiologia, um parâmetro crítico derivado desse modelo é o $R_0$ ("R-zero"), calculado como:$$ R_0 = \frac{\beta}{\gamma} $$
+
+Ele indica quantas pessoas, em média, um único infectado contamina.
+
+-   Se $R_0 > 1$: A epidemia cresce exponencialmente.
+
+-   Se $R_0 < 1$: A doença desaparece sozinha.
+
+No nosso primeiro cenário: $R_0 = 0.5 / 0.1 = 5$ (crescimento explosivo).No segundo cenário: $R_0 = 0.25 / 0.1 = 2.5$ (ainda cresce, mas mais devagar).
+:::
+
+## Conclusão
+
+::: justify
+O DifferentialEquations.jl permitiu simular um sistema dinâmico complexo com poucas linhas de código.Partimos das equações matemáticas fundamentais, resolvemos o sistema numericamente e visualizamos o impacto de intervenções de saúde pública.Este é apenas o começo. O pacote SciML permite expandir esse modelo para incluir:
+
+-   Vacinação: Adicionando um fluxo direto de $S$ para $R$.
+
+-   Reinfecção: Permitindo fluxo de $R$ de volta para $S$ (modelo SIRS).
+
+-   Estocasticidade: Adicionando aleatoriedade para simular incertezas reais (StochasticDiffEq.jl).
+
+Dominar a modelagem dinâmica dá ao cientista de dados o poder de prever não apenas o que provavelmente acontecerá, mas como e quando acontecerá.
+:::
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::
