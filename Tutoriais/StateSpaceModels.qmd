@@ -15,7 +15,7 @@ author:
     url: https://ctruciosm.github.io
     orcid: 0000-0001-8746-8877
 date: "2025-12-02"
-image: imagens/series.png
+image: imagens/series0.png
 lang: pt
 format:
   html:
@@ -89,19 +89,145 @@ Plots.plot(y, label="Log(Passageiros)", title="Série Temporal: AirPassengers (L
      xlabel="Tempo (Meses)", ylabel="Log(Qtd)")
 ```
 
+![Gráfico series](imagens/series.png)
+
 ## O Modelo Estrutural Básico
 
+::: justify
+O StateSpaceModels.jl facilita muito a criação de modelos estruturais. Não precisamos escrever as matrizes do Filtro de Kalman manualmente.
+Podemos usar a estrutura BasicStructural, que define a série $y_t$ como:
 
+$$y_t = \mu_t + \gamma_t + \varepsilon_t$$
+Onde:
 
+-   $\mu_t$: É a Tendência Local (nível + inclinação).
 
+-   $\gamma_t$: É a Sazonalidade (padrão que se repete).
 
+-   $\varepsilon_t$: É o Ruído (erro de medição).
 
+Como nossos dados são mensais, a sazonalidade é $s = 12$.
+:::
 
+```{julia}
+# Definindo o modelo Estrutural Básico
+# s = 12 indica sazonalidade de 12 períodos (anual/mensal)
+model = BasicStructural(y, 12)
 
+# Ajustando o modelo (encontrando as variâncias ótimas dos componentes)
+fit!(model)
 
+# Exibindo resumo do ajuste
+print_results(model)
+```
 
+## Forecasting (Previsão)
 
+::: justify
+Com o modelo ajustado, prever o futuro é simples. Vamos projetar os próximos 24 meses (2 anos). O pacote calcula não apenas a previsão pontual, mas também os intervalos de confiança baseados na incerteza dos estados. 
+:::
 
+```{julia}
+# Realiza a previsão para 24 passos à frente
+steps = 24
+forec = forecast(model, steps)
+
+# Visualizando a previsão
+# O gráfico automático do pacote já mostra dados históricos + previsão + intervalo
+plot(model, forec, title="Previsão de Passageiros (24 meses)")
+```
+
+![Gráfico series2](imagens/series2.png)
+
+::: justify
+O gráfico acima mostra a linha azul (dados observados) e a linha laranja (previsão), com a sombra indicando o intervalo de confiança. Note como o modelo capturou perfeitamente os picos de verão e as quedas de inverno. 
+:::
+
+## O "Pulo do Gato": Decomposição
+
+::: justify
+A grande vantagem deste tipo de modelo sobre o ARIMA ou Redes Neurais é a interpretabilidade. Podemos pedir ao modelo para nos mostrar separadamente o que ele entende como "Tendência" e o que é "Sazonalidade". Isso é crucial para tomada de decisão: se as vendas caíram, foi culpa da sazonalidade (esperado) ou a tendência do negócio que está piorando (preocupante)? 
+:::
+
+```{julia}
+# Obtendo os estados suavizados (smoothed states)
+# Isso retorna a melhor estimativa dos componentes para cada ponto do passado
+states = get_smoothed_state(model)
+
+# O BasicStructural retorna os estados na ordem: [Tendência, Inclinação, Sazonalidade...]
+trend = states[:, 1]
+seasonal = states[:, 3] # O índice pode variar, mas geralmente o 3º inicia a sazonalidade
+
+# Plotando a decomposição
+p1 = plot(y, label="Original", title="Série Original")
+p2 = plot(trend, label="Tendência", color=:red, title="Componente de Tendência")
+p3 = plot(seasonal, label="Sazonalidade", color=:green, title="Componente Sazonal")
+
+plot(p1, p2, p3, layout=(3,1), size=(800, 800))
+```
+
+![Gráfico series3](imagens/series3.png)
+
+::: justify 
+Na figura acima:
+
+-   Original: A série completa.
+
+-   Tendência: Note como ela é suave e remove as oscilações anuais, mostrando o crescimento real do tráfego aéreo.
+
+-   Sazonalidade: O padrão cíclico isolado, oscilando em torno de zero. :::
+
+## Diagnóstico do Modelo (Análise de Resíduos)
+
+::: justify
+Como saber se nosso modelo é bom? Na estatística, analisamos os **resíduos** (a diferença entre o que o modelo previu e o que realmente aconteceu).
+Se o modelo capturou bem a estrutura dos dados (tendência e sazonalidade), os resíduos devem se comportar como **Ruído Branco**:
+1.  Média próxima de zero.
+2.  Variância constante.
+3.  Sem correlação temporal (aleatórios).
+:::
+
+```{julia}
+# Obtendo as inovações (resíduos de predição um passo à frente)
+residuos = get_innovations(model)
+
+# Visualizando
+# 1. Gráfico no tempo (deve parecer aleatório)
+p1 = plot(residuos, title="Resíduos no Tempo", legend=false, color=:gray)
+hline!(p1, [0], color=:red, linestyle=:dash)
+
+# 2. Histograma (deve parecer uma Normal centrada no zero)
+p2 = histogram(residuos, title="Distribuição dos Resíduos", legend=false, normalize=true)
+
+# Plotando juntos
+plot(p1, p2, layout=(2,1), size=(800, 600))
+```
+
+![Gráfico series4](imagens/series4.png)
+
+::: justify 
+Análise de Diagnóstico: Os gráficos acima validam nosso modelo. Na parte superior, vemos os resíduos ao longo do tempo; a oscilação violenta no início (esquerda) representa o período em que o modelo estava "aprendendo" os estados iniciais. 
+
+Após esse período, os resíduos se estabilizam em torno da linha vermelha (zero), sem padrões óbvios, o que indica que capturamos com sucesso a tendência e a sazonalidade. O histograma reforça isso, mostrando uma alta concentração de erros próximos a zero. 
+:::
+
+## Conclusão
+
+::: justify
+O StateSpaceModels.jl é uma ferramenta poderosa que traz a robustez da engenharia de controle (Filtro de Kalman) para a Ciência de Dados. Neste tutorial, vimos que modelar uma série temporal não precisa ser uma "caixa-preta". Ao decompor o problema em Tendência + Sazonalidade, ganhamos:
+
+-   Previsões Precisas: Que respeitam a estrutura dos dados.
+
+-   Interpretabilidade: Sabemos exatamente o impacto da sazonalidade.
+
+-   Flexibilidade: Podemos lidar com dados faltantes (o Kalman Filter lida nativamente com missing) e simular cenários.
+
+Para quem estuda estatística, dominar Espaço de Estados é um diferencial técnico importante, abrindo portas para modelos ainda mais complexos como Modelos Dinâmicos Bayesianos. 
+:::
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto. 
+:::
 
 
 

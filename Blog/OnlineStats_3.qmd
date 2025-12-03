@@ -193,7 +193,7 @@ O `MovingWindow` funciona como um "buffer móvel". Ele não acumula o histórico
 
 ## Conclusão
 
-:::justify
+::: justify
 Nas três partes deste blog, exploramos diversos recursos e conceitos do `OnlineStats.jl`. Ainda assim, tudo isso representa apenas a superfície do que esse pacote é realmente capaz de fazer.
 
 O OnlineStats se torna ainda mais poderoso quando utilizado em conjunto com outros pacotes do ecossistema Julia — seja para modelagem, visualização, análise de séries temporais ou processamento avançado de dados em fluxo contínuo.
@@ -202,6 +202,7 @@ Explorem seus limites, combinem ferramentas e experimentem diferentes abordagens
 
 Obrigado por ler — e boa programação!
 :::
+
 ::: callout-note
 Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
 :::

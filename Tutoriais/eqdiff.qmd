@@ -15,7 +15,7 @@ author:
     url: https://ctruciosm.github.io
     orcid: 0000-0001-8746-8877
 date: "2025-10-07"
-image: imagens/sir_intro.png
+image: imagens/eqdiff_capa.png
 lang: pt
 format:
   html:
@@ -54,9 +54,11 @@ $$
 \frac{dI}{dt} &= \beta S I - \gamma I \\
 \frac{dR}{dt} &= \gamma I
 \end{aligned}
-$$ :::justify
+$$
 
-Onde: \* $\beta$ (beta): Taxa de transmissão (contágio). \* $\gamma$ (gama): Taxa de recuperação. :::
+::: justify
+Onde: \* $\beta$ (beta): Taxa de transmissão (contágio). \* $\gamma$ (gama): Taxa de recuperação.
+:::
 
 ## Instalação
 
@@ -140,7 +142,7 @@ O gráfico acima conta a história clássica de uma epidemia sem controle: o nú
 ## Análise de Cenários: "Achatando a Curva"
 
 ::: justify
-Como estatísticos e cientistas de dados, nosso interesse é simular "E se?".Vamos comparar o cenário anterior com um cenário onde medidas de distanciamento social são aplicadas.Isso reduz o parâmetro $\beta$ (transmissão).Vamos reduzir $\beta$ de $0.5$ para $0.25$ e ver o impacto no pico de infectados.
+Como estatísticos e cientistas de dados, nosso interesse é simular casos "E se?".Vamos comparar o cenário anterior com um cenário onde medidas de distanciamento social são aplicadas.Isso reduz o parâmetro $\beta$ (transmissão).Vamos reduzir $\beta$ de $0.5$ para $0.25$ e ver o impacto no pico de infectados.
 :::
 
 ```{julia}

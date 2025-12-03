@@ -15,7 +15,7 @@ author:
     url: https://ctruciosm.github.io
     orcid: 0000-0001-8746-8877
 date: "2025-12-01"
-image: imagens/graphs_intro.png
+image: imagens/grafos.png
 lang: pt
 format:
   html:
@@ -127,7 +127,7 @@ first(df_resultados, 5)
 ```
 
 ::: justify
-Observe o resultado. É provável que os Medici apareçam no topo da intermediação. Historicamente, isso explica sua ascensão: mesmo não sendo a família com mais dinheiro ou exércitos no início, eles eram a "cola" que unia famílias desconexas, permitindo-lhes arbitrar conflitos e consolidar poder.
+Observe o resultado. Os Medici apareçam no topo da intermediação. Historicamente, isso explica sua ascensão: mesmo não sendo a família com mais dinheiro ou exércitos no início, eles eram a "cola" que unia famílias desconexas, permitindo-lhes arbitrar conflitos e consolidar poder.
 :::
 
 ## Detecção de Comunidades
@@ -180,7 +180,6 @@ graphplot!(ax, g,
     nlabels = nomes_familias,       # Rótulos com os nomes
     nlabels_textsize = 12,
     nlabels_align = (:center, :center)
-    # Removemos nlabels_offset para evitar o erro de tipo
 )
 
 hidedecorations!(ax); hidespines!(ax) # Remove eixos x/y para limpeza
@@ -190,7 +189,7 @@ save("grafos_familias.png", fig)
 fig
 ```
 
-Que retorna o seguinte gráfico: ![Rede das Famílias](imagens/grafos_familia.png)
+Que retorna o seguinte gráfico: ![Rede das Famílias](imagens/grafos_familias.png)
 
 ## Conclusão
 
@@ -199,7 +198,7 @@ O Graphs.jl nos permitiu, com poucas linhas, reconstruir uma estrutura social hi
 
 -   Transformar dados tabulares (DataFrames) em estruturas de grafos.
 
--   Calcular métricas avançadas como Betweenness Centrality.
+-   Calcular métricas avançadas como Grau e Intermediação.
 
 -   Aplicar algoritmos não-supervisionados de detecção de comunidades.
 
