@@ -1,0 +1,114 @@
+---
+title: "Séries Temporais Estruturais com StateSpaceModels.jl"
+description: |
+  Vá além do ARIMA. Aprenda a usar Modelos de Espaço de Estados para decompor séries temporais em tendência e sazonalidade, e fazer previsões robustas usando o Filtro de Kalman em Julia.
+categories:
+  - Time Series
+  - Forecasting
+  - Estatística
+author:
+  - name: Caio Frare
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/caiofrare
+  - name: Carlos Trucíos
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://ctruciosm.github.io
+    orcid: 0000-0001-8746-8877
+date: "2025-12-02"
+image: imagens/series.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+engine: knitr
+draft: true
+---
+
+## Introdução
+
+::: justify
+Na análise de séries temporais, muitas vezes queremos mais do que apenas prever o próximo valor. Queremos entender **o que** compõe a série. A tendência está subindo? O padrão sazonal é estável? Existe um ciclo de longo prazo?
+
+Modelos clássicos como o ARIMA focam na correlação entre valores passados. Já os **Modelos de Espaço de Estados (State Space Models)** focam na estrutura latente. Eles assumem que o que observamos é o resultado de componentes não observáveis (estados) que evoluem no tempo.
+
+Em Julia, o pacote `StateSpaceModels.jl` fornece uma interface moderna e de alta performance para esses modelos. Ele utiliza o poderoso **Filtro de Kalman** para estimar componentes e realizar previsões.
+
+Neste tutorial, vamos modelar o famoso dataset *AirPassengers* (número mensal de passageiros de linhas aéreas internacionais) para aprender a:
+1.  Definir um modelo estrutural (Tendência + Sazonalidade).
+2.  Ajustar os parâmetros via Máxima Verossimilhança.
+3.  Decompor a série em seus componentes.
+4.  Realizar previsões para o futuro.
+:::
+
+## Instalação
+
+::: justify
+Precisaremos do pacote de modelagem, além de ferramentas para carregar dados (`CSV`, `DataFrames`) e plotar gráficos (`Plots`).
+:::
+
+```{julia}
+using Pkg
+Pkg.add([
+    "StateSpaceModels", 
+    "CSV", 
+    "DataFrames", 
+    "HTTP",         
+    "Plots"
+])
+```
+
+## Carregando e Preparando os Dados
+
+::: justify 
+Vamos baixar o dataset diretamente da web. Como a variância do número de passageiros aumenta com o tempo (heterocedasticidade), aplicaremos uma transformação logarítmica. Isso estabiliza a variância e torna a tendência mais linear, o que ajuda o modelo. 
+:::
+
+```{julia}
+using StateSpaceModels
+using CSV
+using DataFrames
+using HTTP
+using Plots
+
+# URL do dataset AirPassengers
+url = "https://raw.githubusercontent.com/jbrownlee/Datasets/master/airline-passengers.csv"
+
+# Usamos HTTP.get para baixar o conteúdo e IOBuffer para ler como se fosse arquivo
+resp = HTTP.get(url)
+df = CSV.read(IOBuffer(resp.body), DataFrame)
+
+# Acessando a coluna de dados e aplicando Log
+# A coluna geralmente se chama "Passengers"
+y_raw = Float64.(df[:, 2])
+y = log.(y_raw)
+
+# Visualização inicial
+Plots.plot(y, label="Log(Passageiros)", title="Série Temporal: AirPassengers (Log)", 
+     xlabel="Tempo (Meses)", ylabel="Log(Qtd)")
+```
+
+## O Modelo Estrutural Básico
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
