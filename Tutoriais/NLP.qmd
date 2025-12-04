@@ -4,8 +4,8 @@ description: |
   Descubra o que os dados têm a dizer. Um guia prático para processar textos, limpar dados não estruturados e gerar Nuvens de Palavras impressionantes com TextAnalysis.jl e WordCloud.jl.
 categories:
   - NLP
-  - Text Mining
-  - Data Science
+  - Mineração de Texto
+  - Ciência de Dados
 author:
   - name: Caio Frare
     affiliation: "Universidade Estadual de Campinas"
@@ -14,8 +14,8 @@ author:
     affiliation: "Universidade Estadual de Campinas"
     url: https://ctruciosm.github.io
     orcid: 0000-0001-8746-8877
-date: "2025-01-22"
-image: imagens/nlp_intro.png
+date: "2025-11-01"
+image: imagens/nlp.png
 lang: pt
 format:
   html:
@@ -52,16 +52,10 @@ Pkg.add([
 ])
 ```
 
-```{julia}
-using Pkg
-Pkg.add("Languages")
-```
-
-
-## Coleta de Dados: Baixando "Dom Casmurro"
+## Coleta de Dados
 
 ::: justify
-O Project Gutenberg disponibiliza milhares de livros em domínio público. Vamos baixar o arquivo .txt direto da fonte. 
+O Project Gutenberg disponibiliza milhares de livros em domínio público. Vamos baixar o arquivo .txt de Dom Casmurro direto da fonte.
 :::
 
 ```{julia}
@@ -75,6 +69,23 @@ url = "https://www.gutenberg.org/cache/epub/55752/pg55752.txt"
 arquivo = Downloads.download(url)
 texto_bruto = read(arquivo, String)
 
+# --- LIMPEZA DE CABEÇALHO ---
+# Definimos a frase exata onde o livro começa
+marcador_inicio = "*** START OF THE PROJECT GUTENBERG EBOOK DOM CASMURRO ***"
+
+# Encontramos onde essa frase está no texto
+range_marcador = findfirst(marcador_inicio, texto_bruto)
+
+# Se o marcador for encontrado, cortamos o texto
+if !isnothing(range_marcador)
+    # Pegamos do final do marcador (+1) até o fim do texto (end)
+    texto_bruto = texto_bruto[last(range_marcador)+1:end]
+    println("Cabeçalho removido com sucesso!")
+else
+    println("Marcador não encontrado. O texto original foi mantido.")
+end
+# ----------------------------
+
 # Visualizando os primeiros 500 caracteres
 println(first(texto_bruto, 500))
 ```
@@ -82,7 +93,7 @@ println(first(texto_bruto, 500))
 ## O Objeto StringDocument
 
 ::: justify
-Para o TextAnalysis.jl funcionar, precisamos transformar nossa string comum em um objeto do tipo StringDocument. Isso adiciona metadados e permite que as funções de limpeza alterem o texto in-place (diretamente na memória). 
+Para o TextAnalysis.jl funcionar, precisamos transformar nossa string comum em um objeto do tipo StringDocument. Isso adiciona metadados e permite que as funções de limpeza alterem o texto in-place (diretamente na memória).
 :::
 
 ```{julia}
@@ -99,7 +110,7 @@ println("Documento criado com sucesso!")
 ## Pré-processamento: A Arte da Limpeza
 
 ::: justify
-Texto bruto é sujo. Ele contém pontuação, números, letras maiúsculas misturadas com minúsculas e palavras que não agregam significado (como "o", "a", "de", "para"), chamadas de Stopwords. Vamos limpar nosso documento passo a passo. 
+Texto bruto é sujo. Ele contém pontuação, números, letras maiúsculas misturadas com minúsculas e palavras que não agregam significado (como "o", "a", "de", "para"), chamadas de Stopwords. Vamos limpar nosso documento passo a passo.
 :::
 
 ```{julia}
@@ -128,7 +139,7 @@ println(first(text(doc), 200)) # text(doc) recupera a string processada
 ## Análise de Frequência (N-Grams)
 
 ::: justify
-Agora que o texto está limpo, podemos contar as palavras. Uma abordagem comum é criar uma Matriz de Termos (Lexicon), que mapeia cada palavra única para sua contagem. 
+Agora que o texto está limpo, podemos contar as palavras. Uma abordagem comum é criar uma Matriz de Termos (Lexicon), que mapeia cada palavra única para sua contagem.
 :::
 
 ```{julia}
@@ -148,17 +159,17 @@ palavras_freq = sort(collect(lexico), by = x -> x[2], rev=true)
 println("--- Top 10 Palavras em Dom Casmurro ---")
 for (palavra, contagem) in first(palavras_freq, 10)
     println("$palavra: $contagem")
-end()
+end 
 ```
 
 ::: justify
-Olhando o Top 10, vemos nomes como "capitu" e "mãe" (Dona Glória) dominando a narrativa, o que faz todo sentido para quem conhece a obra! 
+Olhando o Top 10, vemos nomes como "capitu" e "mãe" (Dona Glória) dominando a narrativa, o que faz todo sentido para quem conhece a obra!
 :::
 
 ## Visualização: WordCloud
 
 ::: justify
-Tabelas são úteis, mas Nuvens de Palavras capturam a essência de forma imediata. O WordCloud.jl é um pacote nativo do Julia extremamente poderoso. Diferente de bibliotecas em Python que apenas "colam" palavras, ele usa algoritmos de otimização para encaixar as palavras de forma densa e estética. 
+Tabelas são úteis, mas Nuvens de Palavras capturam a essência de forma imediata. O WordCloud.jl é um pacote nativo do Julia extremamente poderoso. Diferente de bibliotecas em Python que apenas "colam" palavras, ele usa algoritmos de otimização para encaixar as palavras de forma densa e estética.
 :::
 
 ```{julia}
@@ -183,14 +194,34 @@ wc = wordcloud(
 generate!(wc)
 
 # Salvando a imagem
-paint(wc, "dom_casmurro_nuvem.png")
+paint(wc, "imagens/dom_casmurro_nuvem.png")
 ```
 
-![grafico nuvem](imagens/dom_casmurro_nuvem.png)
+::: justify
+Que fornece o seguinte: ![grafico nuvem](imagens/dom_casmurro_nuvem.png)
+:::
 
 ## Customizando a Forma (Máscaras)
-::: justify 
-O WordCloud.jl permite usar imagens como máscaras. Que tal moldar as palavras no formato de um coração (ou seria um coração partido, considerando a história)? 
+
+::: justify
+O WordCloud.jl permite usar imagens como máscaras. Que tal moldar as palavras no formato de um coração (ou seria um coração partido, considerando a história)? Para esse exemplo vamos utilizar o formato de um círculo.
+:::
+
+```{julia}
+# Criando uma máscara em forma de elipse/círculo
+wc_circle = wordcloud(
+    text(doc), 
+    mask = shape(ellipse, 600, 600),
+    colors = :Dark2_8,
+    angles = -90:90,          # Permite rotação das palavras
+    run = x->generate!(x)     # Gera automaticamente
+)
+
+paint(wc_circle, "imagens/dom_casmurro_circulo.png")
+```
+
+::: justify
+Que fornece o seguinte: ![grafico circulo](imagens/dom_casmurro_circulo.png)
 :::
 
 ## Conclusão
@@ -204,15 +235,9 @@ A mineração de texto nos permite transformar literatura em dados. Neste tutori
 
 -   O WordCloud.jl gera visualizações de alta qualidade prontamente utilizáveis em apresentações ou relatórios.
 
-Essas técnicas são a base para aplicações mais avançadas, como classificação automática de documentos, análise de sentimentos em redes sociais ou chatbots. 
+Essas técnicas são a base para aplicações mais avançadas, como classificação automática de documentos, análise de sentimentos em redes sociais ou chatbots.
 :::
 
 ::: callout-note
 Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
 :::
-
-
-
-
-
-
