@@ -1,0 +1,218 @@
+---
+title: "Mineração de Texto e NLP com Julia"
+description: |
+  Descubra o que os dados têm a dizer. Um guia prático para processar textos, limpar dados não estruturados e gerar Nuvens de Palavras impressionantes com TextAnalysis.jl e WordCloud.jl.
+categories:
+  - NLP
+  - Text Mining
+  - Data Science
+author:
+  - name: Caio Frare
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/caiofrare
+  - name: Carlos Trucíos
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://ctruciosm.github.io
+    orcid: 0000-0001-8746-8877
+date: "2025-01-22"
+image: imagens/nlp_intro.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+engine: knitr
+draft: true
+---
+
+## Introdução
+
+::: justify
+A maior parte dos dados do mundo não está em planilhas, mas em formato de texto não estruturado: e-mails, contratos, tweets, artigos médicos e livros. A área da Ciência de Dados que lida com isso é o **Processamento de Linguagem Natural (NLP)**.
+
+Em Julia, o pacote `TextAnalysis.jl` fornece uma suíte completa para transformar texto bruto em dados matemáticos (matrizes), enquanto o `WordCloud.jl` permite criar visualizações artísticas de alta qualidade.
+
+Neste tutorial, faremos uma análise literária computacional. Vamos baixar o clássico **"Dom Casmurro"**, de Machado de Assis, e utilizar técnicas de mineração de texto para responder: quais são as palavras que definem esta obra?
+:::
+
+## Instalação
+
+::: justify
+Utilizaremos o pacote de análise, o pacote de visualização e o `Downloads` (padrão do Julia) para baixar o livro.
+:::
+
+```{julia}
+using Pkg
+Pkg.add([
+    "TextAnalysis", 
+    "WordCloud", 
+    "Downloads",
+    "Languages"
+])
+```
+
+```{julia}
+using Pkg
+Pkg.add("Languages")
+```
+
+
+## Coleta de Dados: Baixando "Dom Casmurro"
+
+::: justify
+O Project Gutenberg disponibiliza milhares de livros em domínio público. Vamos baixar o arquivo .txt direto da fonte. 
+:::
+
+```{julia}
+using TextAnalysis
+using Downloads
+
+# URL do livro no Project Gutenberg
+url = "https://www.gutenberg.org/cache/epub/55752/pg55752.txt"
+
+# Baixando e lendo o arquivo como uma String única
+arquivo = Downloads.download(url)
+texto_bruto = read(arquivo, String)
+
+# Visualizando os primeiros 500 caracteres
+println(first(texto_bruto, 500))
+```
+
+## O Objeto StringDocument
+
+::: justify
+Para o TextAnalysis.jl funcionar, precisamos transformar nossa string comum em um objeto do tipo StringDocument. Isso adiciona metadados e permite que as funções de limpeza alterem o texto in-place (diretamente na memória). 
+:::
+
+```{julia}
+# Criando o documento
+doc = StringDocument(texto_bruto)
+
+# Metadados (Opcional, mas boa prática)
+author!(doc, "Machado de Assis")
+title!(doc, "Dom Casmurro")
+
+println("Documento criado com sucesso!")
+```
+
+## Pré-processamento: A Arte da Limpeza
+
+::: justify
+Texto bruto é sujo. Ele contém pontuação, números, letras maiúsculas misturadas com minúsculas e palavras que não agregam significado (como "o", "a", "de", "para"), chamadas de Stopwords. Vamos limpar nosso documento passo a passo. 
+:::
+
+```{julia}
+# 1. Normalização básica
+# Remove pontuação, números e converte tudo para minúsculas
+prepare!(doc, strip_punctuation | strip_numbers | strip_case)
+
+# 2. Removendo Stopwords (Palavras de parada)
+# O pacote Languages.jl (embutido) já tem listas para Português
+using Languages
+stop_words_pt = stopwords(Languages.Portuguese())
+
+# Adicionamos algumas extras específicas do formato do livro ou arcaísmos
+extras = ["project", "gutenberg", "ebook", "capitulo", "tão", "aí", "diz", "coisa"]
+append!(stop_words_pt, extras)
+
+remove_words!(doc, stop_words_pt)
+
+# Removendo espaços em branco extras que sobraram após a limpeza
+prepare!(doc, strip_whitespace)
+
+println("Limpeza concluída. Amostra do texto limpo:")
+println(first(text(doc), 200)) # text(doc) recupera a string processada
+```
+
+## Análise de Frequência (N-Grams)
+
+::: justify
+Agora que o texto está limpo, podemos contar as palavras. Uma abordagem comum é criar uma Matriz de Termos (Lexicon), que mapeia cada palavra única para sua contagem. 
+:::
+
+```{julia}
+# Para analisar frequências, o TextAnalysis exige que o documento esteja em um Corpus
+crps = Corpus([doc])
+
+# Atualiza o léxico (contagem de palavras) do corpus inteiro
+update_lexicon!(crps)
+
+# Obtém o dicionário de frequências
+lexico = lexicon(crps)
+
+# Vamos pegar as top 10 palavras mais frequentes?
+# Convertemos o dicionário para um vetor e ordenamos
+palavras_freq = sort(collect(lexico), by = x -> x[2], rev=true)
+
+println("--- Top 10 Palavras em Dom Casmurro ---")
+for (palavra, contagem) in first(palavras_freq, 10)
+    println("$palavra: $contagem")
+end()
+```
+
+::: justify
+Olhando o Top 10, vemos nomes como "capitu" e "mãe" (Dona Glória) dominando a narrativa, o que faz todo sentido para quem conhece a obra! 
+:::
+
+## Visualização: WordCloud
+
+::: justify
+Tabelas são úteis, mas Nuvens de Palavras capturam a essência de forma imediata. O WordCloud.jl é um pacote nativo do Julia extremamente poderoso. Diferente de bibliotecas em Python que apenas "colam" palavras, ele usa algoritmos de otimização para encaixar as palavras de forma densa e estética. 
+:::
+
+```{julia}
+using WordCloud
+using Random
+
+Random.seed!(42) # Para a nuvem sair sempre igual
+
+# Gerando a nuvem a partir do texto limpo
+# mask=shape(box, 600, 400): Define o formato (retângulo)
+# density=0.5: Tenta preencher 50% da área (evita sobreposição)
+wc = wordcloud(
+    text(doc), 
+    mask = shape(box, 800, 500),
+    colors = :seaborn_dark,
+    angles = 0,               # Palavras apenas na horizontal (mais legível)
+    density = 0.55,
+    maxnum = 150              # Apenas as 150 mais importantes
+)
+
+# O processo de "montagem" da nuvem (otimização de posições)
+generate!(wc)
+
+# Salvando a imagem
+paint(wc, "dom_casmurro_nuvem.png")
+```
+
+![grafico nuvem](imagens/dom_casmurro_nuvem.png)
+
+## Customizando a Forma (Máscaras)
+::: justify 
+O WordCloud.jl permite usar imagens como máscaras. Que tal moldar as palavras no formato de um coração (ou seria um coração partido, considerando a história)? 
+:::
+
+## Conclusão
+
+::: justify
+A mineração de texto nos permite transformar literatura em dados. Neste tutorial, vimos que:
+
+-   O TextAnalysis.jl fornece ferramentas robustas para limpar e normalizar textos em português.
+
+-   A análise de frequência revela os protagonistas e temas centrais sem precisarmos ler o livro.
+
+-   O WordCloud.jl gera visualizações de alta qualidade prontamente utilizáveis em apresentações ou relatórios.
+
+Essas técnicas são a base para aplicações mais avançadas, como classificação automática de documentos, análise de sentimentos em redes sociais ou chatbots. 
+:::
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::
+
+
+
+
+
+
