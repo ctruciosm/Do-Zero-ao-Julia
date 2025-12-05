@@ -1,0 +1,212 @@
+---
+title: "Álgebra Linear em Julia (parte 2): Autovalores - O Método da Iteração Inversa"
+description: |
+  Aprenda como utilizar a Iteração Inversa para encontrar autovalores específicos de uma matriz e como analisar a taxa de convergência teórica e prática usando Julia.
+categories:
+  - Álgebra Linear
+  - Julia
+  - Análise Numérica
+  - Autovalores
+author:
+  - name: Henrique Anunciação Velloso Silva
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/henriqueavelloso
+    orcid: 0009-0002-8262-031X
+date: "2025-12-04"
+image: imagens/inverse_iteration.png
+lang: pt
+format:
+  html:
+    toc: true
+    self-contained: false
+    code-fold: false
+engine: julia
+draft: true
+---
+
+# Introdução
+
+::: {.justify}
+O Método das Potências é excelente para encontrar o maior autovalor de uma matriz. Mas e se quisermos encontrar um autovalor específico, próximo de um número qualquer? É aí que entra a **Iteração Inversa**.
+
+Neste post, vamos resolver um exercício clássico de análise numérica para demonstrar:
+
+1.  Como implementar a Iteração Inversa em `Julia`.
+2.  Como usar o **Quociente de Rayleigh** para refinar a estimativa.
+3.  Como verificar se a taxa de convergência prática bate com a teoria.
+
+Vamos utilizar os pacotes `LinearAlgebra` e `Printf`.
+:::
+
+```{julia}
+#| echo: false
+import Pkg;
+
+redirect_stdout(devnull) do
+    redirect_stderr(devnull) do
+        Pkg.add(["LinearAlgebra", "Printf"])
+    end;
+end;
+```
+
+```{julia}
+#| output: false
+using LinearAlgebra
+using Printf
+```
+
+# O Problema
+
+::: {.justify}
+Temos a matriz $A$ e queremos encontrar o autovalor e autovetor mais próximos de um valor "chute" (o shift) $\rho = 8$.
+
+$ A = \begin{bmatrix} 8 & 1 \ -2 & 1 \end{bmatrix}, \quad \rho = 8 $
+
+A estratégia é aplicar o método das potências na matriz inversa deslocada $(A - \rho I)^{-1}$.
+:::
+
+```{julia}
+# Definição da Matriz e do Shift
+A = [8.0 1.0; 
+    -2.0 1.0]
+
+rho = 8.0
+
+# Vetor inicial arbitrário (normalizado)
+q0 = [1.0, 1.0]
+q = q0 / norm(q0)
+
+# Pré-calculando a matriz inversa deslocada
+# Nota: Em sistemas grandes, preferimos fatoração LU ao invés de inv(), 
+# mas para uma matriz 2x2, inv() é didático e aceitável.
+B = inv(A - rho*I)
+```
+
+## Parte A: Executando a iteração
+
+::: {.justify}
+Vamos rodar o algoritmo por 12 iterações. A cada passo, multiplicamos $B$ pelo vetor atual, normalizamos e calculamos o autovalor estimado.
+:::
+
+```{julia}
+num_iter = 12
+
+# Vamos guardar o histórico dos vetores para análise posterior
+qs = Vector{Vector{Float64}}()
+push!(qs, q)
+
+evals = []  # Para guardar as aproximações do autovalor
+
+println("Iterações:")
+println("---------------------------------------------------------")
+
+for j in 1:num_iter
+    global q # acessando variável global no loop do notebook
+    
+    # Passo da iteração inversa
+    q_new = B * q
+    q_new = q_new / norm(q_new)
+    push!(qs, q_new)
+
+    # Aproximação do autovalor original pelo Quociente de Rayleigh
+    # λ ≈ (q^T A q) / (q^T q) -> como q é unitário, apenas q^T A q
+    λ = dot(q_new, A*q_new)
+    push!(evals, λ)
+
+    @printf("Iter %2d: q = [% .8f, % .8f],  lambda ≈ %.12f\n", j, q_new[1], q_new[2], λ)
+
+    q = q_new
+end
+```
+
+::: {.justify}
+Observe como o valor de `lambda` converge rapidamente para um valor estável.
+:::
+
+## Parte B: Análise de Convergência
+
+::: {.justify}
+Agora vem a parte interessante. A teoria nos diz que a convergência deve ser linear e a taxa depende da distância entre o nosso shift $\rho$ e os autovalores reais.
+
+Vamos calcular a razão de convergência observada: $\text{Razão} = \frac{||q_{j+1} - v||}{||q_j - v||}$ Onde $v$ é a nossa melhor estimativa do autovetor (o resultado da última iteração).
+:::
+
+```{julia}
+# Assumindo que o último q é a melhor aproximação de v
+v = qs[end]
+
+println("\nTaxa de Convergência Observada:")
+println("--------------------------------")
+
+for j in 1:num_iter-1
+    num = norm(qs[j+1] - v)
+    den = norm(qs[j]   - v)
+    if den > 1e-14 # Evitar divisão por zero no finalzinho
+        ratio = num/den
+        @printf("j=%2d: ||q_{j+1}-v|| / ||q_j-v|| = %.12f\n", j, ratio)
+    end
+end
+```
+
+# Teoria vs. Prática
+
+::: {.justify}
+Será que essa taxa observada faz sentido? Vamos calcular os autovalores exatos do Julia (`eigvals`) e aplicar a fórmula da taxa teórica:
+
+$\text{Taxa Teórica} = \left| \frac{\lambda_1 - \rho}{\lambda_2 - \rho} \right|$
+
+Onde $\lambda_1$ é o autovalor mais próximo de $\rho$ e $\lambda_2$ é o segundo mais próximo.
+:::
+
+```{julia}
+# Autovalores exatos calculados pelo Julia
+λ_exact = eigvals(A)
+@printf("\nAutovalores Exatos:\n")
+@printf("λ1 (exato) = %.12f\n", λ_exact[1])
+@printf("λ2 (exato) = %.12f\n", λ_exact[2])
+
+# O autovalor para o qual convergimos (próximo de 8) é o 10.0 ou o 7.5?
+# Olhando o output da Parte A, convergimos para 10.0? Não!
+# O shift é 8.0.
+# |10.0 - 8.0| = 2.0
+# |7.56... - 8.0| = 0.43...
+# Convergimos para o λ que está a "distância mínima" de 8.
+
+# Ordenando para a fórmula
+λ_target = λ_exact[2] # Este é ~7.56 (o mais próximo de 8)
+λ_other  = λ_exact[1] # Este é ~1.43
+
+# Ops, vamos verificar qual λ está mais perto de 8 manualmente:
+dist1 = abs(λ_exact[1] - rho)
+dist2 = abs(λ_exact[2] - rho)
+
+# O código original assume uma ordem, vamos garantir a correta:
+λ_closest = dist1 < dist2 ? λ_exact[1] : λ_exact[2]
+λ_second  = dist1 < dist2 ? λ_exact[2] : λ_exact[1]
+
+# Taxa teórica
+taxa_teorica = abs((λ_closest - rho) / (λ_second - rho))
+
+println("\nConclusão:")
+@printf("Autovalor alvo (mais próximo de 8): %.4f\n", λ_closest)
+@printf("Taxa Teórica Calculada:             %.12f\n", taxa_teorica)
+```
+
+# Conclusão
+
+::: {.justify}
+Ao comparar a **Taxa de Convergência Observada** (nos últimos passos do loop) com a **Taxa Teórica Calculada**, você deve notar que elas são extremamente próximas.
+
+Isso demonstra o poder de prever o comportamento de algoritmos numéricos. Se o `ratio` for pequeno (próximo de 0), a convergência é rápida. Se for próximo de 1, o algoritmo vai demorar uma eternidade. Na iteração inversa, nós controlamos essa velocidade escolhendo um shift $\rho$ inteligente!
+:::
+
+# Referências
+
+::: {.justify}
+1. D. S. Watkins, Fundamentals of Matrix Computations, New Jersey: John Wiley & Sons, 3. Ed, 2010
+2. [Documentação do pacote LinearAlgebra.jl](https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/)
+:::
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica, organização estrutural e aprimoramento da clareza do texto.
+:::

@@ -1,0 +1,499 @@
+---
+title: "Seu primeiro projeto em Julia com Documenter.jl"
+description: |
+  Um tutorial passo a passo para iniciantes que desejam criar seu primeiro pacote em Julia e gerar documentação acadêmica profissional utilizando Documenter.jl. Ideal para estudantes e pesquisadores que querem aprender boas práticas desde o início.
+categories:
+  - Pacotes
+  - Documentação
+  - Ferramentas
+author:
+  - name: Henrique Anunciação Velloso Silva
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/henriqueavelloso
+    orcid: 0009-0002-8262-031X
+date: "2025-12-06"
+image: imagens/documenter-julia.png
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+engine: julia
+draft: true
+---
+
+# Introdução
+
+::: {.justify}
+Este tutorial é um **passo a passo didático**, pensado para quem **nunca criou um projeto em Julia** e **nunca usou o Documenter.jl**.
+
+A ideia é aprender fazendo! No final deste tutorial, iremos terminar com:
+
+* um projeto `Julia` organizado
+* documentação em formato de **site acadêmico**
+* exemplos **executáveis e reproduzíveis**
+
+> Se você já escreveu relatórios em `LaTeX` ou `RMarkdown`, pense nisso como um **livro online vivo**.
+:::
+
+---
+
+## O que vamos construir
+
+::: {.justify}
+Ao final deste tutorial, teremos:
+
+* um projeto `Julia` chamado `MeuPrimeiroProjeto`
+* uma função simples (didática)
+* um site de documentação gerado com **Documenter.jl**
+
+Estrutura final:
+:::
+
+```text
+MeuPrimeiroProjeto/
+├── src/
+│   └── MeuPrimeiroProjeto.jl
+├── docs/
+|   ├── build
+|   |   ├── [...]
+|   |   └── index.html
+│   ├── src/
+│   │   ├── index.md
+│   │   └── exemplos.md
+│   └── make.jl
+├── Project.toml
+└── README.md
+```
+
+---
+
+## Pré-requisitos
+
+::: {.justify}
+Antes de começar, você precisa ter:
+
+* Julia instalado (versão ≥ 1.9)
+* Um terminal, **VS Code** ou outra IDE
+* Conhecimento **básico** de `Julia` (funções e vetores já é suficiente)
+:::
+
+---
+
+# Sua primeira função
+
+## Passo 1 — Criando o projeto Julia
+
+::: {.justify}
+Abra o terminal do seu computador na pasta onde deseja criar o projeto e execute:
+:::
+
+```bash
+C:\Users\Alunx\caminho_para_projeto> julia --project=.
+```
+
+::: {.justify}
+No REPL do Julia, ative o gerenciador de pacotes:
+:::
+
+```julia
+julia> ]
+```
+
+::: {.justify}
+Agora crie o projeto:
+:::
+
+```julia
+pkg> generate MeuPrimeiroProjeto
+```
+
+::: {.justify}
+Entre na pasta criada:
+:::
+
+```bash
+C:\Users\Alunx\caminho_para_projeto> cd MeuPrimeiroProjeto
+```
+
+::: {.justify}
+✅ Isso cria automaticamente o arquivo `Project.toml`.
+:::
+
+---
+
+## Passo 2 — Criando o módulo do projeto
+
+::: {.justify}
+Abra o arquivo `src/MeuPrimeiroProjeto.jl` na sua IDE e edite para algo assim:
+:::
+
+```julia
+module MeuPrimeiroProjeto
+
+export media_simples
+
+"""
+    media_simples(x)
+
+Calcula a média aritmética de um vetor numérico.
+"""
+function media_simples(x)::Float64
+    sum(x) / length(x)
+end
+
+end
+```
+
+::: {.justify}
+📌 Aqui já fizemos algo **importante**:
+
+* criamos um módulo
+* escrevemos uma **docstring** (documentação!)
+:::
+
+---
+
+## Passo 3 — Testando o projeto
+
+::: {.justify}
+Agora volte para o terminal, vá até a pasta do projeto 'MeuPrimeiroProjeto' e ative o julia usando `julia --project=.` no terminal.
+
+Então execute o seguinte código:
+:::
+
+```julia
+julia> using MeuPrimeiroProjeto
+
+julia> media_simples([1, 2, 3, 4])
+```
+
+::: {.justify}
+Se retornar `2.5`, tudo certo ✅
+:::
+
+---
+
+## Passo 4 — Criando a pasta de documentação
+
+::: {.justify}
+Agora vem a parte nova.
+
+Agora, ainda na pasta 'MeuPrimeiroProjeto', execute no terminal:
+:::
+
+```bash
+C:\Users\Alunx\caminho_para_projeto\MeuPrimeiroProjeto> mkdir docs
+C:\Users\Alunx\caminho_para_projeto\MeuPrimeiroProjeto> cd docs
+```
+
+::: {.justify}
+Isso vai criar a pasta `docs` na pasta do seu projeto e colocá-lo no diretório dessa nova pasta.
+
+Então, inicie `Julia` novamente:
+:::
+
+```bash
+C:\Users\Alunx\caminho_para_projeto\MeuPrimeiroProjeto\docs> julia --project=.
+```
+
+::: {.justify}
+No modo `pkg`:
+:::
+
+```julia
+julia> ]
+pkg> add Documenter
+```
+
+---
+
+## Passo 5 — Estrutura da documentação
+
+::: {.justify}
+Dentro da pasta `docs`, crie as pastas:
+:::
+
+```bash
+C:\Users\Alunx\caminho_para_projeto\MeuPrimeiroProjeto\docs> mkdir src
+```
+
+::: {.justify}
+Dentro de `docs\src`, crie o arquivo `index.md` (pode ser pelo próprio **VSCode** ou outro **IDE** de sua escolha).
+
+Então cole este conteúdo:
+:::
+
+```markdown
+# Meu Primeiro Projeto em Julia
+
+Bem-vindo à documentação do **MeuPrimeiroProjeto**.
+
+Este projeto é parte do *Do Zero ao Julia* e tem como objetivo mostrar como criar projetos acadêmicos organizados.
+```
+
+---
+
+## Passo 6 — Criando a página de exemplos
+
+::: {.justify}
+Crie o arquivo `docs\src\exemplos.md`:
+:::
+
+````markdown
+# Exemplos de uso
+
+Nesta seção mostramos como usar a função `media_simples`.
+
+Segue a documentação da função:
+
+```@docs
+MeuPrimeiroProjeto.media_simples
+```
+
+```@example
+using MeuPrimeiroProjeto
+
+media_simples([10, 20, 30])
+```
+
+📌 Esse código será **executado automaticamente** quando o site for gerado.
+````
+
+---
+
+## Passo 7 — Arquivo `make.jl`
+
+::: {.justify}
+Na pasta `docs\`, crie o arquivo `make.jl` e coloque:
+:::
+
+```julia
+using Documenter
+using MeuPrimeiroProjeto
+
+makedocs(
+    sitename = "Meu Primeiro Projeto Acadêmico em Julia",
+    modules = [MeuPrimeiroProjeto],
+    pages = [
+        "Home" => "index.md",
+        "Exemplos" => "exemplos.md",
+    ],
+)
+```
+
+---
+
+## Passo 8 — Gerando o site
+
+::: {.justify}
+Ainda em `docs\`, execute:
+:::
+
+```julia
+julia> ]
+pkg> dev ..
+```
+
+::: {.justify}
+Assim o `Julia` entenderá que o projeto docs que você criou na pasta `MeuPrimeiroProjeto` está dentro de um *outro* projeto.
+
+Agora, no mesmo local, execute:
+:::
+
+```julia
+julia> import Pkg; Pkg.add("MeuPrimeiroProjeto")
+```
+
+::: {.justify}
+e então:
+:::
+
+```julia
+julia> include("make.jl")
+```
+
+::: {.justify}
+Se não aparecer erro:
+
+✅ O site foi gerado com sucesso!
+
+Ele estará em:
+:::
+
+```text
+docs/build/
+```
+
+::: {.justify}
+Abra o `index.html` no navegador.
+:::
+
+---
+
+# Lendo dados e *plotando* gráficos
+
+::: {.justify}
+Além de funções simples, é muito comum trabalharmos com **dados reais** e **visualizações** em projetos acadêmicos.
+
+Vamos ver um exemplo completo.
+:::
+
+## Passo 1 - Novas dependências
+
+::: {.justify}
+Ainda no diretório `docs/`, no modo `pkg`:
+:::
+
+```julia
+julia> ]
+pkg> add CSV DataFrames Plots
+```
+
+## Passo 2 - Adicionando os dados
+
+::: {.justify}
+Na pasta `docs/src/`, crie um arquivo chamado `dados.csv` e escreva:
+:::
+
+````csv
+x,y
+1,1
+2,4
+3,9
+4,16
+5,25
+````
+
+## Passo 3 - Atualizando `docs/src/exemplos.md`
+
+::: {.justify}
+Agora adicione ao final do arquivo `exemplos.md`:
+:::
+
+````markdown
+## Exemplo com dados e gráfico
+
+Vamos agora:
+
+1. Ler um arquivo `.csv`
+2. Visualizar os dados
+3. Criar um gráfico simples
+
+```@setup exemplos
+using CSV
+using DataFrames
+using Plots
+
+# Lendo os dados
+df = CSV.read(joinpath(@__DIR__, "dados.csv"), DataFrame)
+
+# Visualizando os dados
+df
+```
+
+```@example exemplos
+using Plots
+
+# Criando um gráfico simples
+plot(
+    df.x,
+    df.y,
+    xlabel = "x",
+    ylabel = "y",
+    title = "Exemplo de gráfico simples",
+    legend = false
+)
+```
+
+📌 Este gráfico será **gerado automaticamente** quando a documentação for construída.
+````
+
+::: {.justify}
+> Nesse caso usamos o `@setup` que garante que nossa variável `df` seja guardada na memória da rodagem. Usando `@example` cada bloco é executado em um módulo isolado, do zero.
+
+Note também que usamos uma chave para guardar os resultados do bloco de `@setup`, que é `exemplos`, e assim precisamos adicionar essa chave em todos os blocos que quisermnos que usem a informação guardada no bloco de `@setup`.
+:::
+
+## Passo 4 - Resultado final
+
+::: {.justify}
+Assim, quando você rodar novamente:
+:::
+
+````julia
+julia> include("make.jl")
+````
+
+::: {.justify}
+O site terá:
+
+- ✔ tabela renderizada
+- ✔ gráfico embutido
+- ✔ código executado
+- ✔ tudo reproduzível
+:::
+
+## Passo 5 (Opcional) - Testando função + dados
+
+::: {.justify}
+Adicione no arquivo `exemplos.md`:
+:::
+
+````markdown
+```@example exemplos
+# Testando nossa função de média simples no nosso banco de dados
+# Usamos @example exemplos pois vamos usar a variável armazenada 'df'
+
+media_simples(df.y)
+```
+
+📌 Esse código será **executado automaticamente** quando o site for gerado.
+````
+
+::: {.justify}
+e repita o **Passo 4**.
+:::
+
+# O que aprendemos até aqui
+
+::: {.justify}
+Neste tutorial você aprendeu:
+
+* criar um projeto Julia do zero
+* estruturar código como módulo
+* escrever docstrings
+* criar documentação acadêmica com Documenter.jl
+* gerar um site reproduzível
+
+Esse tipo de estrutura contribui para um projeto acadêmico **bem organizado** e **sustentável**.
+:::
+
+---
+
+## Próximos passos sugeridos
+
+* Adicionar mais funções
+* Criar páginas para metodologia
+* Integrar gráficos mais complexos e tabelas
+* Publicar no GitHub Pages
+
+---
+
+# Conclusão
+
+::: {.justify}
+Documentar desde o início é uma **boa prática acadêmica**, e `Julia` torna isso natural.
+
+No *Do Zero ao Julia*, a ideia é exatamente essa: aprender certo desde o começo 🚀
+:::
+
+# Referências
+
+::: {.justify}
+1. [Documentação do Documenter.jl](https://documenter.juliadocs.org/stable/)
+:::
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::

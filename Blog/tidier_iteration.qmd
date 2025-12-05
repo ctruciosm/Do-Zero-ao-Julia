@@ -1,0 +1,226 @@
+---
+title: "Pacote TidierIteration.jl"
+description: |
+  Saudades do pacote purrr do R? Conheça o TidierIteration.jl, a implementação 100% Julia que traz map, walk, flatten e outras ferramentas funcionais para seus pipelines de dados.
+categories:
+  - Julia
+  - Data Science
+  - Tidyverse
+author:
+  - name: Henrique Anunciação Velloso Silva
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/henriqueavelloso
+    orcid: 0009-0002-8262-031X
+date: "2025-12-05"
+image: imagens/tidier_iteration.png
+lang: pt
+format:
+  html:
+    toc: true
+    self-contained: false
+    code-fold: false
+engine: julia
+draft: false
+---
+
+# Introdução
+
+::: {.justify}
+Se você veio do universo `R`, provavelmente tem um lugar especial no coração para o pacote `purrr`. A capacidade de mapear funções, iterar sobre listas complexas e limpar dados de forma funcional é viciante.
+
+Embora Julia tenha ferramentas nativas poderosas (como o *broadcasting* `f.(x)` e compreensões de lista), às vezes sentimos falta daquela sintaxe fluida orientada a *pipelines* (`|>`).
+
+É aqui que entra o **TidierIteration.jl**.
+:::
+
+## O que é?
+
+::: {.justify}
+O **TidierIteration.jl** é uma implementação em `Julia` do `purrr`. Ele visa simplificar o mapeamento de funções para *Arrays*, *Dicionários* e outras estruturas, além de fornecer advérbios (`possibly`, `quietly`) e funções de "achatamento" (`flatten`) essenciais para lidar com dados aninhados (como *JSON*).
+:::
+
+## Instalação
+
+```{julia}
+#| echo: false
+import Pkg;
+
+redirect_stdout(devnull) do
+    redirect_stderr(devnull) do
+        Pkg.add(["TidierIteration", "Plots"])
+    end;
+end;
+```
+
+::: {.justify}
+Vamos carregar o pacote para os exemplos:
+:::
+
+```{julia}
+using TidierIteration, Plots
+```
+
+# Por que usar TidierIteration.jl se já existe `map`?
+
+::: {.justify}
+`Julia` já possui `map(f, x)`. O TidierIteration introduz o `map_tidy`, que coloca os dados como primeiro argumento. Isso padroniza a leitura do código.
+
+Imagine que queremos elevar números ao quadrado e subtrair 1.
+:::
+
+**Jeito nativo:**
+
+```{julia}
+dados = [1, 2, 3, 4, 5]
+map(x -> x^2 - 1, dados)
+```
+
+::: {.justify}
+**Com `TidierIteration.jl` (usando o pipe `|>`):**
+:::
+
+```{julia}
+# A função map_tidy recebe os dados primeiro, depois a função
+dados |> d ->
+    map_tidy(d, x -> x^2 - 1)
+```
+
+# Lidando com Dicionários
+
+::: {.justify}
+Iterar sobre dicionários em `Julia` nativo pode ser um pouco verboso. O pacote facilita isso com `map_keys` e `map_values`.
+:::
+
+```{julia}
+precos = Dict("Arroz" => 20.50, "Feijão" => 8.90, "Café" => 15.00)
+
+# Aplicando desconto de 10% apenas nos valores
+precos |>
+    d -> map_values(d, v -> v * 0.9) |>
+    println
+```
+
+# Lidando com falhas: `possibly`
+
+::: {.justify}
+Uma das features mais amadas do `purrr` são os "advérbios" que modificam funções. O `possibly` permite que seu código continue rodando mesmo se encontrar um erro, retornando um valor padrão.
+:::
+
+```{julia}
+# Lista com um erro proposital (string no meio de números)
+lista_suja = [10, 20, "erro", 40]
+
+# Função perigosa
+dividir_por_2(x) = x / 2
+
+# Criando uma versão segura da função
+# Se der erro, retorna missing
+dividir_seguro = possibly(dividir_por_2, missing)
+
+# Agora podemos rodar sem medo de quebrar o loop
+lista_suja |>
+    d -> map_tidy(d, dividir_seguro) |>
+    println
+```
+
+::: {.justify}
+Isso é vital em *web scraping* ou leitura de arquivos sujos!
+:::
+
+# Efeitos colaterais com `walk`
+
+::: {.justify}
+Às vezes, queremos executar uma ação (como imprimir na tela ou salvar um arquivo) sem alterar os dados que estão passando pelo pipe.
+
+Enquanto o `map` retorna o resultado da função (o que quebraria o pipe se a função retornasse `nothing`), o `walk` executa a ação e **devolve o objeto original**.
+
+Imagine que queremos criar gráficos para várias funções e salvá-los no disco automaticamente:
+:::
+
+```{julia}
+# Lista de funções matemáticas para plotar
+funcoes = [sin, cos, tan]
+
+# Vamos criar os gráficos na memória
+# Retorna: Um vetor de objetos Plot
+meus_plots =
+    funcoes |>
+    fns -> map_tidy(fns, f ->
+        plot(f, 0, 2π,
+             title = string(f),
+             label = false)
+    )
+
+# Agora usamos iwalk para exibir cada um.
+# iwalk recebe (elemento, indice) na ordem do Julia (mas no Tidier é invertido: indice, elemento)
+meus_plots |>
+    ps -> iwalk(ps, (i, p) -> display(p))
+```
+
+::: {.justify}
+> Cuidado! Por que não usar `map` aqui?
+
+Se tentássemos usar `imap` no lugar de `iwalk`, perderíamos nossos dados. A função `display` retorna `nothing`. O `map` captura esse retorno e substitui nossos gráficos por ele.
+
+Veja a demonstração do erro:
+:::
+
+```{julia}
+#| output: false
+
+# TENTATIVA ERRADA: Usando 'imap' para exibir
+# O imap vai retornar uma lista com o resultado de display() (que é nothing)
+resultado_quebrado =
+    meus_plots |>
+    ps -> imap(ps, (i, p) -> display(p))
+```
+
+```{julia}
+println("Tipo do objeto após imap: ", typeof(resultado_quebrado))
+println("Conteúdo final: ", resultado_quebrado)
+```
+
+::: {.justify}
+Como resultado, `resultado_quebrado` vira um vetor de `nothing`'s, e o pipeline morre ali. Com `walk`, os dados originais (`meus_plots`) são preservados e passados adiante.
+:::
+
+# Domando JSONs com `flatten`
+
+::: {.justify}
+Quem trabalha com APIs sabe o pesadelo que é lidar com listas de listas de dicionários. O `flatten_*` resolve isso.
+:::
+
+```{julia}
+# Dados aninhados simulando uma resposta JSON
+dados_api = [
+    Dict("id" => 1, "info" => Dict("nome" => "João", "score" => 10)),
+    Dict("id" => 2, "info" => Dict("nome" => "Maria", "score" => 20))
+]
+
+# A função 'flatten' funciona em um dicionário por vez.
+# Então usamos map_tidy para aplicar o flatten em cada item da lista.
+dados_api |>
+    d -> map_tidy(d, flatten) |>
+    fd -> println(fd[1])
+
+# Apenas demonstrando a estrutura simplificada do primeiro item
+# Veja que "info" sumiu e virou "info_nome" e "info_score"
+```
+
+# Conclusão
+
+::: {.justify}
+O **TidierIteration.jl** preenche uma lacuna importante para cientistas de dados que buscam uma sintaxe consistente, legível e orientada a *pipelines*. Se você trabalha com dados hierárquicos complexos ou apenas sente falta do fluxo de trabalho do `purrr`, vale a pena testar!
+
+> Veja também os nossos outros blogs sobre os outros pacotes da biblioteca `Tidier.jl`!
+:::
+
+# Referências
+
+::: {.justify}
+1. [Documentação do pacote TidierIteration.jl](https://github.com/TidierOrg/TidierIteration.jl/blob/main/README.md?plain=1)
+:::
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica, organização estrutural e aprimoramento da clareza do texto.
+:::

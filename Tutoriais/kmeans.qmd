@@ -1,0 +1,365 @@
+---
+ title: "Clusterização com K-means em Julia"
+ description: |
+   Um guia introdutório e prático sobre a aplicação do algoritmo K-means em Julia, utilizando o pacote Clustering.jl para análise, avaliação e visualização de agrupamentos.
+ categories:
+   - Estatística
+   - Machine Learning
+   - Aprendizado Não Supervisionado
+   - Clusterização
+ author:
+   - name: Henrique Anunciação Velloso Silva
+     affiliation: "Universidade Estadual de Campinas"
+     url: https://github.com/henriqueavelloso
+     orcid: 0009-0002-8262-031X
+ date: "2025-12-03"
+ image: imagens/kmeans_julia.png
+ lang: pt
+ format:
+   html:
+     toc: true
+     self-contained: false
+ engine: julia
+ draft: true
+---
+
+# Introdução
+
+::: {.justify}
+O algoritmo **K-means** é uma das técnicas mais conhecidas de **clusterização não supervisionada**. Seu objetivo é particionar um conjunto de observações em *k* grupos (_clusters_), de modo que observações dentro de um mesmo cluster sejam mais semelhantes entre si do que observações pertencentes a clusters distintos.
+
+Na linguagem `Julia`, o pacote `Clustering.jl` fornece uma implementação simples, eficiente e amplamente utilizada do algoritmo K-means, integrando-se bem com pacotes de visualização e análise multivariada.
+
+Neste tutorial, aplicaremos o K-means ao clássico conjunto de dados **Iris**, investigando:
+- como preparar os dados para clusterização;
+- como escolher o número adequado de clusters;
+- como interpretar os resultados obtidos;
+- como visualizar os agrupamentos por meio de redução de dimensionalidade (**PCA**);
+- e tudo em `Julia`!
+:::
+
+# Carregando os pacotes
+
+```{julia}
+#| echo: false
+import Pkg;
+
+redirect_stdout(devnull) do
+    redirect_stderr(devnull) do
+        Pkg.add(["Clustering", "RDatasets", "StatsPlots", "MultivariateStats",
+                 "Plots", "Distances", "Statistics", "DataFrames"])
+    end;
+end;
+```
+
+```{julia}
+using Clustering, RDatasets, StatsPlots,
+      MultivariateStats, Plots, Distances,
+      Statistics, DataFrames;
+```
+
+# Conjunto de dados
+
+::: {.justify}
+O conjunto de dados **Iris** contém 150 observações de flores, descritas por quatro variáveis numéricas:
+
+- comprimento da sépala;
+- largura da sépala;
+- comprimento da pétala;
+- largura da pétala.
+
+Além disso, o conjunto inclui a espécie verdadeira de cada flor, o que nos permite comparar posteriormente os clusters encontrados com as classes reais.
+:::
+
+```{julia}
+iris = dataset("datasets", "iris")
+first(iris, 5)
+```
+
+As espécies presentes no conjunto de dados são:
+
+```{julia}
+unique(iris.Species)
+```
+
+O conjunto possui três espécies distintas: `setosa`, `versicolor` e `virginica`. Dessa forma, espera-se que uma escolha natural para o número de clusters seja **k = 3**. Ainda assim, a escolha de *k* deve ser guiada por critérios quantitativos, como veremos a seguir.
+
+## Preparando os dados
+
+```{julia}
+X = Matrix(iris[:, 1:4])
+```
+
+Aqui selecionamos apenas as variáveis numéricas, formando a matriz `X`, que será utilizada como entrada para o algoritmo de clusterização.
+
+## Estatísticas descritivas
+
+```{julia}
+mean(X, dims=1)
+```
+
+```{julia}
+std(X, dims=1)
+```
+
+::: {.justify}
+Vemos que nossas variáveis estão bem comportadas e não pssuem alta variabilidade. No entanto, é importante notar que como o algoritmo K-means é baseado em distâncias, variáveis com maior escala podem dominar o cálculo das distâncias, influenciando excessivamente o agrupamento. Por isso, a normalização é fundamental para garantir que todas as variáveis contribuam de forma equilibrada ao modelo.
+::: 
+
+## Normalização (Z-score)
+
+Vamos adicionar esse passo, por mais que desnecessário nesse caso, para efeito didático.
+
+```{julia}
+function zscore_normalize(X)
+    μ = mean(X, dims=1)
+    σ = std(X, dims=1)
+    Xn = (X .- μ) ./ σ
+    return Xn, μ, σ
+end
+```
+
+::: {.justify}
+A função acima calcula, para cada variável, sua média (μ) e desvio-padrão (σ) e aplica a transformação de Z-score. Além dos dados normalizados, retornamos esses parâmetros para fins de inspeção, interpretação ou eventual inversão da transformação.
+:::
+
+```{julia}
+X_norm, μ_X, σ_X = zscore_normalize(X)
+```
+
+::: {.justify}
+Após a normalização, esperamos que cada variável apresente média aproximadamente zero e desvio-padrão aproximadamente igual a um.
+:::
+
+```{julia}
+mean(X_norm, dims=1)
+```
+
+```{julia}
+std(X_norm, dims=1)
+```
+
+::: {.justify}
+Os resultados acima confirmam que a normalização foi aplicada corretamente, assegurando que todas as variáveis contribuam de forma equilibrada para o cálculo das distâncias no algoritmo K-means.
+:::
+
+# Explorando distâncias
+
+::: {.justify}
+Como o K-means se baseia diretamente em distâncias euclidianas, é instrutivo comparar como essas distâncias se comportam antes e depois da normalização dos dados. Essa comparação ajuda a entender o impacto da escala das variáveis na geometria do espaço de atributos.
+:::
+
+```{julia}
+D_raw = pairwise(Euclidean(), X', dims=2);
+D_norm = pairwise(Euclidean(), X_norm', dims=2);
+```
+
+::: {.justify}
+Aqui calculamos as matrizes de distância entre todas as observações utilizando a métrica euclidiana, primeiro com os dados originais (X) e depois com os dados normalizados (X_norm).
+:::
+
+```{julia}
+mean(D_raw), mean(D_norm)
+```
+
+::: {.justify}
+A diferença entre as médias das distâncias evidenciaria como a normalização altera a escala global do espaço de dados. Embora os valores absolutos das distâncias mudem, o objetivo da normalização não é preservar essas magnitudes, mas sim redefinir o espaço de forma que todas as variáveis contribuam de maneira balanceada para o cálculo das distâncias, tornando o processo de clusterização mais estável e interpretável. 
+
+No nosso caso, não houve uma diferença gritante.
+:::
+
+# Escolhendo o número de clusters (K)
+
+::: {.justify}
+A escolha do número de clusters é uma das etapas mais importantes do K-means. Nesta seção, utilizaremos duas abordagens clássicas:
+
+- o **método do cotovelo (Elbow Method)**, baseado na inércia do modelo;
+- o **índice de Silhouette**, que mede o quão bem cada observação se ajusta ao seu cluster.
+:::
+
+## Definindo parâmetros
+
+```{julia}
+ks = 2:10
+totalcosts = Float64[]
+mean_silhouettes = Float64[]
+
+D = pairwise(Euclidean(), X', dims=2)
+```
+
+Testaremos valores de *k* entre 2 e 10. A matriz `D` contém as distâncias euclidianas entre as observações e será utilizada no cálculo do índice de Silhouette.
+
+## Ajustando o modelo para diferentes valores de K
+
+```{julia}
+for k in ks
+    R = kmeans(X', k; maxiter=100)
+
+    push!(totalcosts, R.totalcost)
+
+    s = silhouettes(R.assignments, D)
+    push!(mean_silhouettes, mean(s))
+end
+```
+
+Para cada valor de *k*, armazenamos:
+
+- o custo total do modelo (inércia);
+- o valor médio do índice de Silhouette.
+
+## Gráfico de Cotovelo
+
+```{julia}
+plot(ks, totalcosts,
+     marker = :o,
+     xlabel = "Número de clusters (k)",
+     ylabel = "Custo total (Inércia)",
+     title = "Gráfico de Cotovelo",
+     legend = false)
+```
+
+O método do cotovelo busca identificar um ponto onde a redução da inércia passa a ser marginal. Neste caso, observa-se um ponto de inflexão em **k = 3**.
+
+## Gráfico de Silhouette
+
+```{julia}
+plot(ks, mean_silhouettes,
+     marker = :o,
+     xlabel = "Número de clusters (k)",
+     ylabel = "Silhouette médio",
+     title = "Silhouette médio por k",
+     legend = false)
+```
+
+O índice de Silhouette médio atinge seu maior valor em **k = 3**, indicando que essa escolha fornece clusters mais bem definidos.
+
+> **Observação:** nem sempre essas métricas fornecem respostas claras, especialmente em problemas de alta dimensão ou com estruturas mais complexas. Mais pra frente na análise por **PCA** veremos porque o score de Silhouette também ficou alto para `k = 2`.
+
+# Aplicando o K-means
+
+Com base nas análises anteriores, ajustamos o modelo final com *k = 3* clusters.
+
+```{julia}
+k = 3
+R = kmeans(X', k; maxiter = 100, display = :iter)
+```
+
+```{julia}
+R.assignments[1:5]
+```
+
+::: {.justify}
+O vetor `assignments` indica o cluster atribuído a cada observação. Ele constitui o principal resultado do algoritmo K-means.
+:::
+
+# Avaliação interna do clustering
+
+::: {.justify}
+Após o ajuste do modelo K-means, é fundamental avaliar a qualidade interna dos clusters, ou seja, quão bem as observações foram agrupadas sem utilizar informação externa (como os rótulos verdadeiros). Um dos índices mais utilizados para essa finalidade é o coeficiente de Silhouette.
+:::
+
+```{julia}
+s = silhouettes(R.assignments, D)
+```
+
+::: {.justify}
+O coeficiente de Silhouette mede, para cada observação, o quão próxima ela está das observações do seu próprio cluster em comparação com as observações dos clusters vizinhos. Seus valores variam entre −1 e 1, onde valores próximos de 1 indicam boas atribuições, valores próximos de 0 indicam observações na fronteira entre clusters e valores negativos sugerem possível má alocação.
+:::
+
+```{julia}
+minimum(s), mean(s), maximum(s)
+```
+
+::: {.justify}
+Esses resumos permitem avaliar o comportamento global do agrupamento, indicando, respectivamente, a pior, a média e a melhor qualidade de alocação observada entre todas as observações.
+:::
+
+```{julia}
+histogram(s, bins=20, xlabel="Silhouette", title="Distribuição do Silhouette")
+```
+
+::: {.justify}
+Bom, aqui percebe-se que há valores do *score* próximos de zero, no entanto, a distribuição dos coeficientes estão bem positivos e distribuídos de forma a indicar um bom ajuste do modelo.
+:::
+
+# Visualização dos clusters com PCA
+
+::: {.justify}
+Para facilitar a interpretação visual dos resultados, utilizamos a **Análise de Componentes Principais (PCA)** para reduzir os dados para duas dimensões.
+:::
+
+```{julia}
+M = fit(PCA, X'; maxoutdim = 2)
+X_reduced = MultivariateStats.transform(M, X')
+
+scatter(X_reduced[1, :], X_reduced[2, :],
+        group = R.assignments,
+        title = "K-means aplicado ao Iris (k = 3)",
+        xlabel = "PC1",
+        ylabel = "PC2",
+        legend = :outertopright)
+```
+
+## Comparação com as espécies verdadeiras
+
+```{julia}
+scatter(X_reduced[1, :], X_reduced[2, :],
+        group = iris.Species,
+        title = "Espécies verdadeiras do conjunto Iris",
+        xlabel = "PC1",
+        ylabel = "PC2",
+        legend = :bottomright)
+```
+
+::: {.justify}
+A comparação entre os clusters obtidos pelo K-means e as espécies verdadeiras mostra que a espécie *setosa* é claramente separável, enquanto *versicolor* e *virginica* apresentam certa sobreposição.
+:::
+
+# Tabela de contingência
+
+::: {.justify}
+Para comparar os clusters obtidos pelo K-means com as categorias reais do conjunto de dados, construímos uma tabela de contingência entre os rótulos de cluster e as espécies verdadeiras do Iris.
+:::
+
+```{julia}
+conf = DataFrame(
+    Cluster = R.assignments,
+    Species = iris.Species
+)
+```
+
+```{julia}
+combine(groupby(conf, [:Cluster, :Species]), nrow)
+```
+
+::: {.justify}
+A tabela resultante mostra, para cada combinação de cluster e espécie, quantas observações foram atribuídas a cada grupo. Isso permite identificar quais espécies foram melhor separadas pelo K-means e onde ocorrem confusões entre clusters, servindo como uma avaliação intuitiva do agrupamento em relação às classes reais.
+
+A espécie `setosa`, que aparece bem separada no PCA, foi completamente agrupada em um único cluster, indicando um bom desempenho do modelo. Já `virginica` e `versicolor`, por possuírem características semelhantes, apresentaram alguma sobreposição entre os clusters.
+:::
+
+# Considerações finais
+
+::: {.justify}
+Neste tutorial, vimos como aplicar o algoritmo K-means em Julia, desde a preparação dos dados até a análise e visualização dos agrupamentos. Em particular, aprendemos a:
+
+- carregar e manipular dados com `RDatasets` e `DataFrames`;
+- aplicar o K-means via `Clustering.jl`;
+- escolher o número adequado de clusters usando métodos quantitativos;
+- visualizar os resultados com PCA.
+
+Apesar de sua simplicidade e eficiência, o K-means possui limitações importantes: ele exige a definição prévia de *k*, assume clusters aproximadamente esféricos e é sensível à presença de outliers. Em aplicações futuras, vale considerar métodos alternativos como **DBSCAN**, **Hierarchical Clustering** ou **Gaussian Mixture Models**.
+:::
+
+# Referências
+
+::: {.justify}
+1. [Documentação do Clustering.jl](https://juliastats.org/Clustering.jl)
+2. [RDatasets](https://vincentarelbundock.github.io/Rdatasets)
+3. Everitt, B. S. et al. (2011). *Cluster Analysis*. Wiley.
+4. Izenman, A. J. (2008). *Modern Multivariate Statistical Techniques*. Springer.
+:::
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica, organização estrutural e aprimoramento da clareza do texto.
+:::

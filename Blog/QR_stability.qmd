@@ -1,0 +1,248 @@
+---
+title: "Álgebra Linear em Julia (parte 1): Fatoração QR e Estabilidade Numérica"
+description: |
+  Um guia prático demonstrando por que a abordagem 'ingênua' de Mínimos Quadrados pode falhar e como utilizar a Fatoração QR e a mudança de base em Julia para garantir precisão numérica.
+categories:
+  - Julia
+  - Álgebra Linear
+  - Computação Numérica
+author:
+  - name: Henrique Anunciação Velloso Silva
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/henriqueavelloso
+    orcid: 0009-0002-8262-031X
+date: "2025-12-03"
+image: imagens/qr_julia.png
+lang: pt
+format:
+  html:
+    toc: true
+    self-contained: false
+    code-fold: false
+engine: julia
+draft: true
+---
+
+## Introdução
+
+::: {.justify}
+Quem trabalha com Ciência de Dados ou Computação Científica cedo ou tarde esbarra no problema dos **Mínimos Quadrados**. A teoria nos diz para resolver $A^T A x = A^T b$. Porém, até mesmo em `Julia`, traduzir matemática diretamente para código sem entender como o computador lida com ponto flutuante pode ser desastroso.
+
+Neste post, vamos usar um exercício clássico de análise numérica para demonstrar:
+
+1.  O perigo das **matrizes mal condicionadas**.
+2.  Por que a **Fatoração QR** (nativa no Julia) é superior às Equações Normais.
+3.  Como uma simples **mudança de base** pode salvar sua análise.
+
+Vamos utilizar os pacotes `LinearAlgebra` e `Plots`.
+:::
+
+```{julia}
+#| echo: false
+import Pkg;
+
+redirect_stdout(devnull) do
+    redirect_stderr(devnull) do
+        Pkg.add(["LinearAlgebra", "Printf", "Plots"])
+    end;
+end;
+```
+
+```{julia}
+#| output: false
+using LinearAlgebra
+using Printf
+using Plots
+
+# Definindo um tema padrão para os gráficos
+theme(:wong)
+```
+
+# O Problema: Dados "perigosos"
+
+::: {.justify}
+Imagine que coletamos dados experimentais onde a variável independente $t$ varia muito pouco. Observe a precisão necessária nos valores abaixo:
+:::
+
+```{julia}
+ti = [0.98765431,
+      0.98765432,
+      0.98765433,
+      0.98765434,
+      0.98765435,
+      0.98765436,
+      0.98765437,
+      0.98765438,
+      0.98765439]
+
+yi = [2.1, 2.1, 2.1, 2.0, 1.9, 1.9, 1.8, 1.7, 1.7]
+
+n = length(ti)
+# Matriz de design usando a base polinomial padrão ϕ1=1, ϕ2=t
+A = [ones(n) ti]
+b = yi;
+```
+
+::: {.justify}
+Temos um sistema sobredeterminado $Ax \approx b$. Vamos tentar encontrar a melhor reta que se ajusta a esses pontos.
+:::
+
+# Abordagem 1: Fatoração QR
+
+::: {.justify}
+Em `Julia`, o operador `\` (divisão à esquerda) é polimórfico e inteligente. Ao perceber que a matriz $A$ não é quadrada, ele automaticamente aplica uma fatoração QR para resolver o problema de mínimos quadrados, evitando a inversão explícita de matrizes.
+:::
+
+```{julia}
+# Solução usando fatoração QR automática do Julia
+x_qr = A \ b 
+r_qr = b - A*x_qr
+condA = cond(A)
+
+@printf("Número de condição cond(A) = %.6e\n", condA)
+@printf("Coeficientes (QR): a0 = %.16f, a1 = %.16f\n", x_qr[1], x_qr[2])
+@printf("Norma do resíduo = %.16e\n", norm(r_qr))
+```
+
+::: {.justify}
+Podemos inclusive inspecionar os fatores $Q$ e $R$ explicitamente usando a biblioteca `LinearAlgebra`:
+:::
+
+```{julia}
+F = qr(A)
+Q = Matrix(F.Q)
+R = F.R
+
+# Verificando se A = QR
+norm(Q'*A - R)
+```
+
+# Abordagem 2: Equações Normais
+
+::: {.justify}
+A abordagem clássica de livros didáticos sugere resolver $A^T A x = A^T b$. O problema é que, ao multiplicar $A^T$ por $A$, elevamos o número de condicionamento ao quadrado. Se a matriz $A$ já era instável, $A^T A$ será muito pior.
+:::
+
+```{julia}
+# Montando as Equações Normais
+AtA = A' * A
+Atb = A' * b
+
+x_normal = AtA \ Atb
+r_normal = b - A*x_normal
+condAtA = cond(AtA)
+
+@printf("cond(A^T A) = %.6e\n", condAtA)
+@printf("Coeficientes (Eq. Normais): a0 = %.16f, a1 = %.16f\n", x_normal[1], x_normal[2])
+@printf("Norma do resíduo = %.16e\n", norm(r_normal))
+```
+
+::: {.justify}
+Note a diferença gritante nos números de condicionamento! Enquanto `cond(A)` é alto, `cond(AtA)` explode para a ordem de $10^{15}$, perigosamente perto do limite de precisão de ponto flutuante de 64 bits (~$10^{16}$).
+:::
+
+## Comparando visualmente
+
+::: {.justify}
+Vamos plotar as duas retas. Teoricamente deveriam ser idênticas, mas numericamente...
+:::
+
+```{julia}
+#| label: fig-comparacao-inicial
+#| fig-cap: "Comparação entre o ajuste estável (QR) e instável (Normais)"
+
+# Funções ajustadas
+p_qr(t) = x_qr[1] + x_qr[2] * t
+p_normal(t) = x_normal[1] + x_normal[2] * t
+
+# Grid para plotagem
+tgrid = range(minimum(ti)-1e-6, maximum(ti)+1e-6, length=200)
+
+plot(tgrid, [p_qr.(tgrid) p_normal.(tgrid)],
+     label=["Ajuste via QR" "Ajuste via Normais"], 
+     lw=2, linestyle=[:solid :dash],
+     title="Instabilidade Numérica em Mínimos Quadrados")
+scatter!(ti, yi, label="Dados Originais", ms=4, color=:black)
+```
+
+::: {.justify}
+Dependendo da máquina e da precisão, a reta das equações normais pode sair completamente distorcida.
+:::
+
+# A solução definitiva: Mudança de base
+
+::: {.justify}
+A melhor forma de lidar com problemas mal condicionados não é apenas mudar o algoritmo, mas transformar os dados.
+
+Vamos centralizar e escalar a variável $t$. Criaremos uma nova base: $\hat{\phi}_2(t) = 3 \times 10^7 \times (t - 0.98765435)$
+
+Isso transforma nossos números "feios" em inteiros pequenos e simétricos em torno de zero.
+:::
+
+```{julia}
+scale = 3e7
+tshift = 0.98765435
+ϕ2hat = scale .* (ti .- tshift)
+
+# Nova matriz de design (muito mais saudável)
+Ahat = [ones(n) ϕ2hat]
+
+condAhat = cond(Ahat)
+@printf("Novo Número de Condição cond(Ahat) = %.6e\n", condAhat)
+```
+
+::: {.justify}
+O número de condicionamento caiu drasticamente para ~1! Agora o problema é trivial para o computador.
+:::
+
+```{julia}
+# Resolvendo na base ajustada
+xhat_qr = Ahat \ b
+
+# Convertendo coeficientes de volta para a base original para comparar
+c0, c1 = xhat_qr
+a1_recuperado = c1 * scale
+a0_recuperado = c0 - c1 * scale * tshift
+
+@printf("Coeficiente a1 original (QR): %.16f\n", x_qr[2])
+@printf("Coeficiente a1 recuperado:    %.16f\n", a1_recuperado)
+```
+
+## Visualização final
+
+::: {.justify}
+Agora, com os dados bem comportados, podemos ver que o ajuste é perfeito.
+:::
+
+```{julia}
+#| label: fig-ajuste-final
+#| fig-cap: "Ajuste utilizando mudança de base e recuperação dos coeficientes"
+
+p_hat(t) = a0_recuperado + a1_recuperado * t
+
+plot(tgrid, p_hat.(tgrid), 
+     label="Ajuste com Mudança de Base", 
+     lw=3, color=:green, alpha=0.6)
+scatter!(ti, yi, label="Dados", ms=4, color=:black)
+```
+
+# Conclusão
+
+::: {.justify}
+Este blog nos ensina duas lições valiosas para computação científica em `Julia`:
+
+1. **Prefira** `A \ b`: O operador backslash do `Julia` é otimizado para escolher o algoritmo mais estável (geralmente QR para sistemas retangulares). Evite montar as Equações Normais explicitamente ($A^T A$) a menos que tenha certeza absoluta da qualidade dos seus dados.
+
+2. **Pré-processe seus dados**: Centralizar (subtrair a média) e escalar seus dados pode transformar um problema impossível em um problema trivial, melhorando drasticamente o condicionamento da matriz.
+:::
+
+# Referências
+
+::: {.justify}
+1. D. S. Watkins, Fundamentals of Matrix Computations, New Jersey: John Wiley & Sons, 3. Ed, 2010
+2. [Documentação do pacote LinearAlgebra.jl](https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/)
+:::
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica, organização estrutural e aprimoramento da clareza do texto.
+:::
