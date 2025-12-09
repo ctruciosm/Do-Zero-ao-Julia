@@ -1,0 +1,394 @@
+---
+title: "Criando do jogo Snake com Gtk4 em Julia"
+description: |
+  Passo a passo para a criação do clássico "jogo da cobrinha" na linguagem julia.
+categories:
+  - Gráficos
+  - Aplicações
+  - Jogos
+author:
+  - name: Gabriel Cardoso
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/Gabriel-VC
+    orcid: 0009-0001-0954-4579
+date: "2025-12-01"
+image: imagens/gvc_snake_logo.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+draft: false
+---
+
+## Introdução
+
+Neste tutorial vamos construir uma versão do jogo **Snake** utilizando Julia e a biblioteca `Gtk4.jl` para a interface gráfica. A mecânica é simples: uma cobra se move em um tabuleiro, comendo "maçãs" que aparecem em posições aleatórias. Cada vez que a cobra come, ela cresce um bloco, e o jogo termina quando ela bate na parede ou em si mesma.
+
+## Interface Gráfica e Elementos do Jogo
+
+Para começar, vamos abaixar os pacotes necessários para criação desse jogo.
+
+```{julia}
+using Pkg
+Pkg.add("Gtk4")
+Pkg.add("Graphics")
+Pkg.add("Random")
+```
+
+Agora definimos o tamanho da janela, o tamanho das células do tabuleiro e as constantes de tempo.
+
+```{julia}
+using Gtk4
+using Graphics
+using Random
+
+const WIN_L = 800
+const WIN_A = 600
+
+const CELL_SIZE = 20.0
+const GRID_COLS = Int(floor(WIN_L / CELL_SIZE))
+const GRID_LINS = Int(floor(WIN_A / CELL_SIZE))
+
+#frequência de atualizacao
+const TIMER_MS = 30
+
+#ticks de espera para movimento
+const TICKS_MOVE = 8
+tick_count = 0
+```
+
+* `WIN_L`, `WIN_A` definem largura e altura da janela.
+* `CELL_SIZE` é o tamanho (em pixels) de cada célula do tabuleiro.
+* `GRID_COLS` e `GRID_LINS` são o número de colunas e linhas do grid.
+* `TIMER_MS` define a frequência com que o GTK chama a função de atualização.
+* `TICKS_MOVE` controla a velocidade real da cobra. Ou seja, quanto maior o `TICKS_MOVE`, mais lenta a cobra fica para o jogador.
+
+## Estado do jogo
+
+Agora definimos as variáveis que representam o estado do jogo.
+
+```{julia}
+snake = [
+    (Int(GRID_COLS ÷ 2), Int(GRID_LINS ÷ 2)),
+    (Int(GRID_COLS ÷ 2) - 1, Int(GRID_LINS ÷ 2)),
+    (Int(GRID_COLS ÷ 2) - 2, Int(GRID_LINS ÷ 2)),]
+
+#direçao atual e direção pendente
+direcao = (1, 0)    
+direcao_pendente = direcao
+
+food = (0, 0) #maça
+
+game_over = false
+score = 0
+
+#ver se o jogo esta rodando (esperando o ESPAÇO)
+game_running = false
+```
+
+* `snake` é um vetor de tuplas, representando cada segmento da cobra.
+* `direcao` é a direção atual (vetor 2D).
+* `direcao_pendente` guarda a direção escolhida pelo jogador, mas só é aplicada na hora correta (durante o update de jogo).
+* `food` guarda a posição da comida em coordenadas de célula.
+* `game_running` indica se o jogo está rodando ou esperando o jogador apertar `ESPAÇO`.
+
+## Funções básicas (conversão, comida e reset do jogo)
+
+### Conversão de célula para pixel
+
+Como padrão, o pacote `Gtk4` nos faz desenhar em pixels, mas para o jogo funcionar é necessário aglomerar os pixels em células.
+
+```{julia}
+function cell_to_pixel(col, lin)
+    x = (col - 1) * CELL_SIZE
+    y = (lin - 1) * CELL_SIZE
+    return x, y
+end
+```
+
+### Gerando nova comida
+
+A comida deve aparecer em uma célula livre, que não esteja ocupada pela cobra.
+
+```{julia}
+function place_food!()
+    global food
+    while true
+        fx = rand(1:GRID_COLS)
+        fy = rand(1:GRID_LINS)
+        
+        if !((fx, fy) in snake)
+            food = (fx, fy)
+            return
+        end
+    end
+end
+```
+
+### Resetando o jogo
+
+Quando o jogador perde, precisamos reiniciar tudo.
+
+```{julia}
+function reset_game!()
+    global snake, direcao, direcao_pendente, food,
+           game_over, score, game_running, tick_count
+
+    snake = [
+        (Int(GRID_COLS ÷ 2), Int(GRID_LINS ÷ 2)),
+        (Int(GRID_COLS ÷ 2) - 1, Int(GRID_LINS ÷ 2)),
+        (Int(GRID_COLS ÷ 2) - 2, Int(GRID_LINS ÷ 2)),
+    ]
+    direcao = (1, 0)
+    direcao_pendente = direcao
+    score = 0
+    game_over = false
+    game_running = false #volta parado
+    tick_count = 0
+    place_food!()
+end
+```
+
+## Criando a janela e o canvas
+
+Agora criamos o `GtkCanvas` onde o jogo será desenhado e a janela principal.
+
+```{julia}
+canvas = GtkCanvas()
+win = GtkWindow(canvas, "Snake com Gtk4", WIN_L, WIN_A)
+Gtk4.resizable(win, false)
+
+place_food!() # coloca a primeira comida
+```
+
+* `GtkCanvas()` é a área de desenho.
+* `GtkWindow(canvas, ...)` cria a janela mostrando esse canvas.
+* `Gtk4.resizable(win, false)` impede o redimensionamento da janela (para não bagunçar o grid).
+
+Os desenhos são feitos dentro do bloco `draw(canvas)`.
+
+```{julia}
+draw(canvas) do widget
+    ctx = getgc(canvas)
+    larg = width(canvas)
+    altu = height(canvas)
+
+    #fundo
+    set_source_rgb(ctx, 0, 0, 0)
+    rectangle(ctx, 0, 0, larg, altu)
+    fill(ctx)
+
+    #grade visual
+    set_source_rgb(ctx, 0.1, 0.1, 0.1)
+    for c in 0:GRID_COLS
+        x = c * CELL_SIZE
+        move_to(ctx, x, 0)
+        line_to(ctx, x, altu)
+    end
+    for r in 0:GRID_LINS
+        y = r * CELL_SIZE
+        move_to(ctx, 0, y)
+        line_to(ctx, larg, y)
+    end
+    stroke(ctx)
+
+    #maça
+    set_source_rgb(ctx, 1, 0, 0)
+    fx, fy = food
+    px, py = cell_to_pixel(fx, fy)
+    rectangle(ctx, px + 2, py + 2, CELL_SIZE - 4, CELL_SIZE - 4)
+    fill(ctx)
+
+    #snake
+    for (idx, (cx, cy)) in enumerate(snake)
+        sx, sy = cell_to_pixel(cx, cy)
+        if idx == 1
+            set_source_rgb(ctx, 0.2, 1.0, 0.2) #cabeça
+        else
+            set_source_rgb(ctx, 0.0, 0.6, 0.0) #corpo
+        end
+        rectangle(ctx, sx + 1, sy + 1, CELL_SIZE - 2, CELL_SIZE - 2)
+        fill(ctx)
+    end
+
+    #game over
+    if game_over
+        set_source_rgba(ctx, 0, 0, 0, 0.5)
+        rectangle(ctx, 0, 0, larg, altu)
+        fill(ctx)
+    elseif !game_running
+        set_source_rgba(ctx, 0, 0, 0, 0.4)
+        rectangle(ctx, 0, 0, larg, altu)
+        fill(ctx)
+    end
+end
+```
+
+Resumo do que acontece aqui:
+
+* Desenhamos o fundo preto.
+* Desenhamos uma grade de linhas finas para visualização.
+* Desenhamos a cobra com uma cor diferente para a cabeça.
+* Se o jogo estiver parado ou em `game_over`, escurecemos a tela.
+
+A interface gráfica deve ficar deste forma:
+
+![Imagem Snake Estático](imagens/gvc_snake_p1.png){fig-align="center"}
+
+## Loop do jogo
+
+A lógica principal roda dentro da função `update_game`, que é chamada periodicamente pelo timer.
+
+```{julia}
+function update_game()
+    global snake, direcao, direcao_pendente, food,
+           game_over, score, game_running, tick_count
+
+    if !game_running
+        draw(canvas)
+        return true
+    end
+
+    if game_over
+        draw(canvas)
+        return true
+    end
+
+    #contador de ticks para controlar velocidade
+    tick_count += 1
+    if tick_count < TICKS_MOVE
+        draw(canvas)
+        return true
+    end
+    
+    tick_count = 0
+
+    #direcao
+    direcao = direcao_pendente
+    dx, dy = direcao
+
+    head = snake[1]
+    new_head = (head[1] + dx, head[2] + dy)
+
+    #colisao com paredes
+    if new_head[1] < 1 || new_head[1] > GRID_COLS ||
+       new_head[2] < 1 || new_head[2] > GRID_LINS
+        game_over = true
+        game_running = false
+        println("Game Over! Pontuação: $score")
+        draw(canvas)
+        return true
+    end
+
+    #colisao com corpo
+    if new_head in snake
+        game_over = true
+        game_running = false
+        println("Game Over! Pontuação: $score")
+        draw(canvas)
+        return true
+    end
+
+    pushfirst!(snake, new_head) #move a cabeça
+
+    #verificando se comeu a comida
+    if new_head == food
+        score += 1
+        place_food!()
+    else
+        pop!(snake)
+    end
+    draw(canvas)
+    return true 
+end
+```
+
+Pontos importantes para se notar no código feito:
+
+* Usamos `tick_count` para desassociar a frequência do timer, da velocidade da cobra que o jogador vê, porque se usar o `TIMER_MS` como a velocidade para o jogador, a cobra pode ficar muito rápida para o jogador acompanhar.
+
+* Calculamos a nova posição da cabeça e verificamos colisões com as paredes (fora do grid) e com o próprio corpo.
+
+### Timer
+
+Agora linkamos essa função `update_game` á um timer para a movimentação do jogo ocorrer.
+
+```{julia}
+#chama update_game frequentemente
+Gtk4.g_timeout_add(update_game, TIMER_MS)
+```
+
+O GTK chamará `update_game` a cada `TIMER_MS` milissegundos enquanto o programa estiver rodando. Lembrando que a velocidade real do jogo (velocidade da cobra) não é determinada pelo Timer mas pelo Tick.
+
+## Controles via teclado
+
+Para controlar a cobra, usamos as teclas `W`, `A`, `S`, `D`. Para resetar o jogo usamos o `R` e `ESPAÇO` para iniciar o jogo após o reset.
+
+```{julia}
+eck = GtkEventControllerKey(win)
+
+signal_connect(eck, "key-pressed") do controller, keyval, keycode, state
+    global direcao_pendente, game_running
+
+    c = Char(keyval)
+
+    # direcoes
+    newdir = nothing
+    if c == 'w' || c == 'W'
+        newdir = (0, -1)
+    elseif c == 's' || c == 'S'
+        newdir = (0, 1)
+    elseif c == 'a' || c == 'A'
+        newdir = (-1, 0)
+    elseif c == 'd' || c == 'D'
+        newdir = (1, 0)
+    elseif c == 'r' || c == 'R' #tecla R reseta
+        reset_game!()
+        draw(canvas)
+        return nothing
+    elseif c == ' ' #ESPAÇO
+        if game_over
+            reset_game!()
+        end
+        game_running = true 
+        draw(canvas)
+        return nothing
+    end
+
+    if newdir !== nothing
+        #impede a cobra de andar 180° em um movimento
+        global direcao
+        dx, dy = direcao
+        ndx, ndy = newdir
+        if (ndx, ndy) != (-dx, -dy)
+            direcao_pendente = newdir
+        end
+    end
+
+    nothing
+end
+```
+
+No código temos que colocar duas limitações de extrema prioridade para o jogo funcionar:
+* `direcao_pendente` só é aplicado na função `update_game`, o que evita que a direção mude mais de uma vez no mesmo "passo".
+* Não permitimos a de virar com 180 graus (por exemplo, ir de direita para esquerda direto), para evitar que a cobra colida instantaneamente consigo mesma.
+
+## Inicializando o loop principal do Gtk
+
+Por fim, exibimos a janela e iniciamos o loop principal do GTK.
+
+```{julia}
+show(win)
+
+if !isinteractive()
+    Gtk4.start_main_loop()
+end
+```
+
+Com isso, temos a implementação completa do jogo Snake com Gtk4 em Julia. Colocamos todas as condições necessárias do jogo base e tornamos o jogo funcional pela implementação do Timer e Ticks. Caso você queira baixar o código do jogo inteiro, acesse meu [Github](https://github.com/Gabriel-VC/Do-Zero-ao-Julia)!
+
+::: {.callout-note}
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::
