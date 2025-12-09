@@ -1,0 +1,331 @@
+---
+title: "Criando Breakout com Gtk4 em Julia"
+description: |
+  Tutorial passo a passo para a criação da interface gráfica para o jogo.
+categories:
+  - Gráficos
+  - Aplicações
+  - Jogos
+author:
+  - name: Gabriel Cardoso
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/Gabriel-VC
+    orcid: 0009-0001-0954-4579
+date: "2025-12-01"
+image: imagens/gvc_breakout_logo.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+draft: false
+---
+
+## Introdução
+Neste tutorial vamos construir uma versão simplificada de **Breakout** um jogo de arcade lançado pela Atari em 1976 e desenvolvido por Nolan Bushnell, Steve Bristow e Steve Wozniak.
+O jogo tem mecânicas simples, você controla uma pequena barra (*paddle*) na parte inferior da tela, que se move apenas horizontalmente, enquanto uma bola rebate pelo tela. O objetivo do jogo é uma o *paddle* para rebater a bola contra tijolos localizados na parte superior da tela.
+Conforme o jogo avança, a bola ganha velocidade e a raquete pode diminuir de tamanho, aumentando a dificuldade.
+
+A ideia para este tutorial é:
+* usar Julia como linguagem de programação;
+* usar `Gtk4.jl` para criar a janela e o *canvas* de desenho;
+* usar `Graphics.jl` para desenhar bola, tijolos e *paddle*;
+* atualizar a lógica do jogo em um *loop* de animação.
+
+Ao final, idealmente, teremos uma versão simplificada de Breakout e uma boa base para experimentar
+com jogos 2D simples em Julia.
+
+## Interface Gráfica e Elementos do Jogo
+
+Antes de tudo, instalaremos os pacotes que serão utilizados na criação do jogo: `Gtk4` e `Graphics`.
+```{julia}
+using Pkg
+Pkg.add("Gtk4")
+Pkg.add("Graphics")
+```
+
+Vamos começar definindo o tamanho da janela e as características dos elementos do jogo (*paddle*, "bola" e tijolos).
+
+```{julia}
+using Gtk4
+using Graphics
+
+#janela
+const WIN_L = 800   #largura
+const WIN_A = 600   #altura
+
+#paddle
+const PADDLE_L = 80.0
+const PADDLE_A = 15.0
+const PADDLE_DIST_BORDA = 30.0 #dist da borda inferior
+
+paddle_x = (WIN_L - PADDLE_L)/2 #posição inicial do paddle
+
+#"bola"
+const BALL_SIZE = 12.0
+ball_vx = 3.0 #velocidade horizontal
+ball_vy = 3.0 #velocidade vertical
+
+ball_x  = paddle_x + PADDLE_L/2 - BALL_SIZE/2 #posição inicial "bola"
+ball_y  = WIN_A - PADDLE_DIST_BORDA - BALL_SIZE - 50.0 #posição inicial "bola"
+```
+
+### Tijolos
+
+Agora definimos a “parede” de tijolos, para indicar se cada tijolo ainda está "vivo" (na tela) ou já foi destruído.
+
+```{julia}
+#Tijolos
+const TIJOLO_LINS = 5
+const TIJOLO_COLS = 10
+const TIJOLO_A    = 20.0
+const TIJOLO_TOP  = 50.0 #altura onde começam os tijolos
+const TIJOLO_GAP  = 4.0  #espaçamento entre tijolos
+
+#matriz de "vivo" / "morto" para o tijolo
+TIJOLOs = fill(true, TIJOLO_LINS, TIJOLO_COLS)
+```
+
+Ademais, adicionamos uma constante de aceleração para a bola. Mais à frente no código faremos com que a velocidade da "bola" aumente cada tijolo destruído.
+
+```{julia}
+const ACELERACAO = 1.05
+restart_count = 0 #pra ver quantas vezes você perdeu a "bola"
+```
+
+## Funções básicas (Colisão e Reset da bola)
+
+Para verificar colisão entre a bola (o quadrado) e outros retângulos (*paddle* ou tijolos), usamos uma função de interseção entre retângulos:
+
+```{julia}
+function rect_intersects(ax, ay, aw, ah, bx, by, bw, bh)
+    ax < bx + bw && ax + aw > bx &&
+    ay < by + bh && ay + ah > by
+end
+```
+
+Também terá uma função para resetar a bola acima do *paddle* quando ela cai:
+
+```{julia}
+function reset_ball!()
+    global ball_x, ball_y, ball_vx, ball_vy
+    ball_x = paddle_x + PADDLE_L/2 - BALL_SIZE/2
+    ball_y = WIN_A - PADDLE_DIST_BORDA - BALL_SIZE - 50.0
+    ball_vx = 3.0
+    ball_vy = 3.0
+end
+```
+
+## Criando a janela
+
+Terminada a definição das constantes do jogo, vamos criar a janela Gtk e um `GtkCanvas` onde o jogo será desenhado.
+
+```{julia}
+canvas = GtkCanvas()
+win = GtkWindow(canvas, "Block Buster com Gtk4", WIN_L, WIN_A)
+Gtk4.resizable(win, false) 
+```
+
+Abaixo está o bloco de desenho do jogo.
+
+```{julia}
+draw(canvas) do widget
+    ctx = getgc(canvas)
+    larg = width(canvas)
+    altu = height(canvas)
+
+    #fundo branco
+    set_source_rgb(ctx, 1, 1, 1)
+    rectangle(ctx, 0, 0, larg, altu)
+    fill(ctx)
+
+    #Tijolos
+    TIJOLO_w = larg / TIJOLO_COLS
+    for i in 1:TIJOLO_LINS
+        for j in 1:TIJOLO_COLS
+            if TIJOLOs[i, j]
+                bx = (j-1) * TIJOLO_w + TIJOLO_GAP/2
+                by = TIJOLO_TOP + (i-1) * TIJOLO_A + TIJOLO_GAP/2
+
+                set_source_rgb(ctx, 0.2, 0.6, 0.9) 
+                rectangle(ctx, bx, by, TIJOLO_w - TIJOLO_GAP, TIJOLO_A - TIJOLO_GAP)
+                fill(ctx)
+            end
+        end
+    end
+
+    #"bola"
+    set_source_rgb(ctx, 1, 0, 0) #vermelho
+    rectangle(ctx, ball_x, ball_y, BALL_SIZE, BALL_SIZE)
+    fill(ctx)
+
+    #"paddle"
+    paddle_y = altu - PADDLE_DIST_BORDA
+    set_source_rgb(ctx, 0, 0, 1) #azul
+    rectangle(ctx, paddle_x, paddle_y, PADDLE_L, PADDLE_A)
+    fill(ctx)
+end
+```
+
+Resumo do que acontece no código:
+
+* Usamos `draw(canvas) do widget ... end` para registrar a função de desenho do jogo no `canvas`.
+
+* O `ctx = getgc(canvas)`, concentra o “estado” do desenho (cor atual, transformações, etc).
+
+* Para cada tijolo ainda vivo em `TIJOLOs`, desenhamos um retângulo azul claro. Calculamos a posição `(bx, by)` a partir dos índices da matriz (`i`, `j`), da largura total (`larg`) e dos parâmetros dos tijolos (`TIJOLO_COLS`, `TIJOLO_A`, `TIJOLO_TOP`, `TIJOLO_GAP`). A condição `if TIJOLOs[i, j]` garante que só são desenhados tijolos que ainda não foram destruídos na lógica do jogo.
+
+* Desenhamos a "bola", que é um retângulo de tamanho `BALL_SIZE × BALL_SIZE`.
+
+* Desenhamos o *paddle* como um retângulo azul próximo à parte inferior da tela.
+
+Caso tenha dado tudo certo, o jogo deve estar mais ou menos assim:
+
+![Imagem Breakout Estático](imagens/gvc_breakout_p1.png){fig-align="center"}
+
+
+## Loop do jogo
+
+Agora vem a parte fundamental do jogo: a função `update_game`, responsável por:
+
+1. mover a bola.
+2. verificar colisões com paredes, *paddle* e tijolos.
+3. reiniciar a bola se ela cai abaixo da tela.
+4. pedir para o programa reiniciar.
+
+```{julia}
+function update_game()
+    global ball_x, ball_y, ball_vx, ball_vy, TIJOLOs, restart_count
+
+    larg = width(canvas)
+    altu = height(canvas)
+
+    ball_x += ball_vx
+    ball_y += ball_vy
+
+    #colisao com paredes esquerda/direita
+    if ball_x < 0
+        ball_x = 0
+        ball_vx = -ball_vx
+    elseif ball_x + BALL_SIZE > larg
+        ball_x = larg - BALL_SIZE
+        ball_vx = -ball_vx
+    end
+
+    #colisao com topo
+    if ball_y < 0
+        ball_y = 0
+        ball_vy = -ball_vy
+    end
+
+    # colisão com paddle
+    paddle_y = altu - PADDLE_DIST_BORDA
+    if rect_intersects(ball_x, ball_y, BALL_SIZE, BALL_SIZE, paddle_x, paddle_y, PADDLE_L, PADDLE_A) &&
+       ball_vy > 0 
+        ball_y = paddle_y - BALL_SIZE - 1
+        ball_vy = -abs(ball_vy)
+
+        #varia o angulo conforme posição do impacto
+        hit_center    = ball_x + BALL_SIZE/2
+        paddle_center = paddle_x + PADDLE_L/2
+        offset = (hit_center - paddle_center) / (PADDLE_L/2)
+        ball_vx = 4.0 * offset
+    end
+
+    #colisao com tijolos
+    TIJOLO_w = larg / TIJOLO_COLS
+    hit = false
+    for i in 1:TIJOLO_LINS
+        for j in 1:TIJOLO_COLS
+            if TIJOLOs[i, j]
+                bx = (j-1) * TIJOLO_w + TIJOLO_GAP/2
+                by = TIJOLO_TOP + (i-1) * TIJOLO_A + TIJOLO_GAP/2
+                bw = TIJOLO_w - TIJOLO_GAP
+                bh = TIJOLO_A - TIJOLO_GAP
+
+                if rect_intersects(ball_x, ball_y, BALL_SIZE, BALL_SIZE,
+                                   bx, by, bw, bh)
+                    TIJOLOs[i, j] = false # destrói o tijolo
+                    ball_vy = -ball_vy # rebate verticalmente
+
+                    ball_vx *= ACELERACAO
+                    ball_vy *= ACELERACAO
+
+                    hit = true
+                    break
+                end
+            end
+        end
+        hit && break
+    end
+
+    #reiniciar
+    if ball_y > altu
+        restart_count += 1
+        println("Reinícios da bola: $restart_count")
+        reset_ball!()
+    end
+
+    draw(canvas)
+    return true 
+end
+```
+
+### Timer
+
+Para movimentar o jogo, precisamos chamar `update_game` várias vezes por segundo. Chamando `update_game` a cada ~16 ms temos o efeito do jogo estar a 60 fps e para isso, usamos `Gtk4.g_timeout_add`.
+
+```{julia}
+#chama update_game a cerca de 60 fps (1000/60 ≈ 16 ms)
+Gtk4.g_timeout_add(update_game, 16)
+```
+
+## Controle do *paddle*
+
+Para mover o *paddle*, vamos usar as teclas `A` (esquerda) e `D` (direita). Criamos um `GtkEventControllerKey` associado à janela e conectamos o sinal quando a tecla é precionada.
+
+```{julia}
+eck = GtkEventControllerKey(win)
+
+signal_connect(eck, "key-pressed") do controller, keyval, keycode, state
+    global paddle_x
+
+    c = Char(keyval)
+    step = 20.0  # quantos pixels o paddle anda
+
+    larg = width(canvas)
+
+    if c == 'd' || c == 'D'
+        paddle_x += step
+    elseif c == 'a' || c == 'A'
+        paddle_x -= step
+    end
+
+    paddle_x = clamp(paddle_x, 0, larg - PADDLE_L) #limita paddle dentro da tela
+
+    draw(canvas)
+    nothing
+end
+```
+
+Sempre que o jogador aperta `A` ou `D`, o `paddle_x` é atualizado e o canvas é redesenhado
+com o paddle na nova posição.
+
+## Inicializando o loop principal do Gtk
+
+Por fim, mostramos a janela e iniciamos o loop principal do Gtk, para que o jogo rode.
+
+```{julia}
+show(win)
+
+if !isinteractive()
+    Gtk4.start_main_loop()
+end
+```
+
+Aqui terminamos toda a implemetação do Breakout, aprendendo mais sobre o pacote `Gtk4` como: fazer animações básicas, movimentar objetos dentros das janelas por inputs de usuários e o truque do Timer, fazendo as janelas terem uma mudança natural de uma a outra. Caso você queira baixar o código do jogo inteiro, acesse meu [Github](https://github.com/Gabriel-VC/Do-Zero-ao-Julia)!
+
+::: {.callout-note} 
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::
