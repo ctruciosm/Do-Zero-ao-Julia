@@ -1,0 +1,408 @@
+---
+title: "O básico sobre Interfaces Gráficas no Julia com Gtk4.jl"
+description: |
+  Introdução ao pacote Gtk4.jl para criar interfaces gráficas em Julia usando a biblioteca GTK 4.
+categories:
+  - Pacotes
+  - Ferramentas
+author:
+  - name: Gabriel Cardoso
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/Gabriel-VC
+    orcid: 0009-0001-0954-4579
+date: "2025-12-01"
+image: imagens/gvc_gtk4_logo.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+draft: false
+---
+
+## Introdução
+
+Interfaces gráficas (GUIs) são uma forma mais intuitiva de interagir com programas do que utilizando, por exemplo, o *Command Prompt (cmd)*. Elas permitem que o usuário use janelas, botões, caixas de texto, menus e outros componentes visuais, sem precisar lidar diretamente a interface pouco amigável do *cmd*.
+
+Para o Julia, uma forma de criar GUIs é por meio da biblioteca [Gtk4.jl](https://juliagtk.github.io/Gtk4.jl/dev/). Este post irá apresentar os conceitos básicos do pacote em questão, desde a instalação até a construção de uma janela executável.
+
+## Criação de 'Window'
+
+Primeiramente precisamos instalar o pacote no ambiente Julia.
+
+```{julia}
+using Pkg
+Pkg.add("Gtk4")
+using Gtk4
+```
+
+Começando pela forma mais básica de criação de uma interfaces gráfica: uma janela com um botão que escreve uma mensagem no Terminal quando clicado.
+
+```{julia, eval: false}
+win = GtkWindow("Meu primeiro GUI", 400, 200) #cria a janela com título
+btn = GtkButton("CLICA!") #cria um botão
+
+push!(win, btn) #coloca o botão dentro da janela
+
+function botao_clicado(widget)
+    println("O botão foi clicado!")
+end
+
+signal_connect(botao_clicado, btn, "clicked")
+
+show(win)
+```
+
+![Imagem do GUI básico](imagens/gvc_gtk4_img1.png){fig-align="center"}
+
+Agora vamos analisar esse código:
+
+-   `GtkWindow("Título", largura, altura)`: cria uma nova janela principal.
+-   `GtkButton("Texto")`: cria um botão com o texto.
+-   `push!(win, btn)`: adiciona o botão como conteúdo da janela (no caso de janelas simples com um único widget).
+-   `signal_connect(botao_clicado, btn, "clicked")`: faz com que a função `botao_clicado` seja executada sempre que o botão for clicado.
+-   `show(win)`: exibe a janela na tela.
+
+Observação: Se você executar esse código diretamente no Terminal, a janela aparecerá e ficará responsiva enquanto a sessão Julia estiver executada.
+
+## Loop de eventos
+
+Quando estamos fazendo o código, podemos manter a janela aberta e ir modificando os comandos, o que faz com que a janela continue ativa naturalmente. Já em scripts (arquivos `.jl` executados pelo Terminal), o comportamento é simples: o script termina, a janela fecha.
+
+Para resolver esse terminado imediato, usamos um loop de eventos do GTK, garantindo que o programa continue rodando até que o usuário feche a janela.
+
+```{julia, eval: false}
+win = GtkWindow("Janela com loop de eventos", 400, 200)
+
+btn = GtkButton("Fechar")
+push!(win, btn)
+
+signal_connect(btn, "clicked") do widget
+    println("Encerrando aplicação...")
+    destroy(win)
+end
+
+show(win)
+
+if !isinteractive()
+    Gtk4.waitforsignal(win, close_request)
+end
+```
+
+![Imagem do GUI básico, com botão para fechar](imagens/gvc_gtk4_img2.png){fig-align="center"}
+
+Aqui: \* `Gtk4.waitforsignal(win, :close_request)` faz o script aguardar até que a janela emita um sinal de fechamento; \* O bloco `if !isinteractive()` garante que esse comportamento só seja usado em modo não interativo, ou seja, fecha a janela ao realizar uma ação.
+
+Esse padrão é útil quando queremos transformar o código em um aplicativo ou jogo.
+
+## Widgets
+
+Cada elemento visual de um GUI é chamado de **widget** (ou seja, botões, labels, caixas de texto, janelas, etc.). Esses widgets possuem propriedades, que podem ser acessadas e modificadas diretamente em Julia.
+
+```{julia, eval: false}
+win = GtkWindow("Propriedades em Gtk4.jl", 400, 200)
+label = GtkLabel("Texto inicial")
+
+push!(win, label)
+
+#alteração
+win.title = "Novo título da janela"
+label.label = "Texto atualizado"
+
+show(win)
+```
+
+![Imagem do GUI com texto atualizado](imagens/gvc_gtk4_img3.png){fig-align="center"}
+
+-   `win.title`: é a propriedade de título da janela.
+-   `label.label`: é a propriedade de texto exibido.
+
+## Layouts com GtkBox e GtkGrid
+
+Até agora foram apresentadas interfaces gráficas mais simples, com apenas um botão no centro da tela. Normalmente queremos criar janelas mais complexas, com vários widgets de forma estruturada e intuitiva para o usuário. Para isso, o GTK oferece diferentes *layouts*.
+
+Neste tutorial veremos dois: `GtkBox` e `GtkGrid`.
+
+### GtkBox
+
+`GtkBox` é uma "caixa": ela pode ser horizontal (`:h`) ou vertical (`:v`), empilhando os widgets lado a lado ou de cima para baixo.
+
+```{julia, eval: false}
+win = GtkWindow("Layout com GtkBox", 400, 100)
+hbox = GtkBox(:h) # empilhamento
+
+push!(win, hbox)
+
+btn_n_ok = GtkButton("Não OK")
+btn_ok = GtkButton("OK")
+
+push!(hbox, btn_n_ok)
+push!(hbox, btn_ok)
+
+hbox.spacing = 10 # espaçamento entre os widgets
+
+show(win)
+```
+
+![Imagem do GUI GtkBox](imagens/gvc_gtk4_img4.png){fig-align="center"}
+
+Algumas propriedades úteis para visualização no `GtkBox`:
+
+-   `widget.hexpand`: faz o widget expandir, para ocupar mais espaço horizontal.
+-   `widget.homogeneous`: faz todos os botões terem o mesmo tamanho.
+-   `GtkSeparator(:h)`: adicionando um separador horizontal.
+
+### GtkGrid
+
+O `GtkGrid` organiza os widgets em linhas e colunas, como se fosse uma planilha.
+
+```{julia, eval: false}
+win = GtkWindow("Exemplo GtkGrid", 400, 150)
+grid = GtkGrid()
+push!(win, grid)
+
+label_nome = GtkLabel("Nome:")
+entrada_nome = GtkEntry()
+
+label_idade   = GtkLabel("Idade:")
+entrada_idade = GtkEntry()
+
+btn_enviar = GtkButton("Enviar")
+
+# posicionando cada widget: grid[coluna, linha] = widget
+grid[1, 1] = label_nome
+grid[2, 1] = entrada_nome
+
+grid[1, 2] = label_idade
+grid[2, 2] = entrada_idade
+
+grid[1, 3] = btn_enviar
+
+slider = GtkScale(:h, 0:10)
+grid[1:2, 4] = slider # para o widget ocupar mais de uma coluna ou linha usamos intervalos
+
+show(win)
+```
+
+![Imagem do GUI GtkGrid](imagens/gvc_gtk4_img5.png){fig-align="center"}
+
+Algumas propriedades úteis para visualização no `GtkBox`:
+
+-   `grid.column_spacing` e `grid.row_spacing`: configura os espaçamentos dos widgets.
+-   `grid.column_homogeneous` e `grid.row_homogeneous`: faz todos os botões terem o mesmo tamanho.
+
+```{julia, eval: false}
+using Gtk4
+
+win = GtkWindow("Exemplo GtkGrid", 400, 150)
+grid = GtkGrid()
+push!(win, grid)
+
+label_nome   = GtkLabel("Nome:")
+entrada_nome = GtkEntry()
+
+label_idade   = GtkLabel("Idade:")
+entrada_idade = GtkEntry()
+
+btn_enviar = GtkButton("Enviar")
+
+# --- Ajustes de layout do grid ---
+grid.column_spacing = 10        # espaço entre colunas (em pixels)
+grid.row_spacing    = 5         # espaço entre linhas (em pixels)
+
+grid.column_homogeneous = true  # todas as colunas com a mesma largura
+grid.row_homogeneous    = false # linhas podem ter alturas diferentes (pode ser true se você quiser tudo igual)
+
+# --- Posicionando widgets: grid[coluna, linha] = widget ---
+grid[1, 1] = label_nome
+grid[2, 1] = entrada_nome
+
+grid[1, 2] = label_idade
+grid[2, 2] = entrada_idade
+
+grid[1, 3] = btn_enviar
+
+slider = GtkScale(:h, 0:10)
+grid[1:2, 4] = slider  # ocupa as colunas 1 e 2 na linha 4
+
+show(win)
+
+if !isinteractive()
+    Gtk4.GLib.start_main_loop()
+end
+
+```
+
+![Imagem do GUI GtkGrid, com um melhor espaçamento de widgets](imagens/gvc_gtk4_img6.png){fig-align="center"}
+
+## Sinais
+
+Para que uma interface gráfica responda a ações do usuário (cliques, mudança de texto, fechar janela, etc.), usamos um sistema de sinais do GTK. Um sinal é emitido por um widget conectado a alguma função no programa.
+
+### Sinais usando `do`
+
+Tal qual foi mostrado na seção Loop de eventos, um padrão de sinal simples é usar o comando `signal_connect` com um bloco `do`:
+
+```{julia, eval: false}
+btn = GtkButton("Clique")
+win = GtkWindow(btn, "callbacks", 300, 100)
+
+signal_connect(btn, "clicked") do widget
+    println("botão clicado")
+end
+
+show(win)
+```
+
+![Imagem do GUI callbacks](imagens/gvc_gtk4_img7.png){fig-align="center"}
+
+Nesse exemplo:
+
+-   O sinal `"clicked"` é emitido quando o botão é pressionado;
+-   O widget que emitiu o sinal (o botão) é passado para o bloco `do`;
+-   Dentro do bloco, usamos `widget.label` para acessar o texto atual do botão.
+
+### Sinais de mudança de propriedade
+
+Propriedades também podem emitir sinais quando mudam de valor. Um padrão comum é usar sinais `notify::nome_da_propriedade`. Por exemplo, para reagir quando o título da janela for alterado:
+
+```{julia, eval: false}
+win = GtkWindow("Título inicial", 400, 400)
+
+signal_connect(win, "notify::title") do obj, pspec
+    println("Novo título da janela: ", obj.title)
+end
+
+show(win)
+win.title = "Título atualizado" # alterar o título, gerando o sinal
+```
+
+## Exemplo: mini calculadora
+
+Considerando o que foi vista antes, vamos criar uma pequena calculadora que soma dois números. A interface será:
+
+1.  Dois campos de texto (`GtkEntry`) para os valores `A` e `B`;
+2.  Um botão `Somar`;
+3.  Um `GtkLabel` exibindo o resultado da soma ou uma mensagem de erro.
+
+### Construindo a interface
+
+```{julia, eval: false}
+using Gtk4
+
+win  = GtkWindow("Somador", 400, 140)
+grid = GtkGrid()
+
+push!(win, grid)
+
+#widgets
+lbl_a = GtkLabel("A:")
+inp_a = GtkEntry()
+
+lbl_b = GtkLabel("B:")
+inp_b = GtkEntry()
+
+btn_sum = GtkButton("Somar")
+lbl_res = GtkLabel("Resultado: 0")
+
+#posicionando no grid
+grid[1, 1] = lbl_a
+grid[2, 1] = inp_a
+
+grid[1, 2] = lbl_b
+grid[2, 2] = inp_b
+
+grid[1, 3] = btn_sum
+grid[2, 3] = lbl_res
+
+#layout
+grid.column_spacing = 10
+grid.row_spacing    = 5
+grid.column_homogeneous = true
+
+show(win)
+```
+
+Aqui foi criado a parte visual. Os campos de texto não fazem nada quando o usuário clica em “Somar”.
+
+### Adicionando a lógica de soma
+
+Vamos criar um callback para o botão, lendo os valores das entradas, fazendo a soma e exibindo o resultado:
+
+```{julia, eval: false}
+function on_sum_clicked(widget)
+    #converter as entradas para Float
+    a = tryparse(Float64, inp_a.text)
+    b = tryparse(Float64, inp_b.text)
+
+    if a === nothing || b === nothing
+        lbl_res.label = "Coloque Números"
+    else
+        lbl_res.label = "Resultado: $(a + b)"
+    end
+end
+
+signal_connect(on_sum_clicked, btn_sum, "clicked")
+```
+
+### Tornando o script executável
+
+Se quisermos rodar essa calculadora como um script completo, podemos adicionar o padrão do loop de eventos:
+
+```{julia, eval: false}
+using Gtk4
+
+win  = GtkWindow("Somador", 400, 140)
+grid = GtkGrid()
+push!(win, grid)
+
+lbl_a = GtkLabel("A:")
+inp_a = GtkEntry()
+
+lbl_b = GtkLabel("B:")
+inp_b = GtkEntry()
+
+btn_sum = GtkButton("Somar")
+lbl_res = GtkLabel("Resultado: 0")
+
+grid[1, 1] = lbl_a
+grid[2, 1] = inp_a
+
+grid[1, 2] = lbl_b
+grid[2, 2] = inp_b
+
+grid[1, 3] = btn_sum
+grid[2, 3] = lbl_res
+
+grid.column_spacing = 10
+grid.row_spacing    = 5
+grid.column_homogeneous = true
+
+function on_sum_clicked(widget)
+    a = tryparse(Float64, inp_a.text)
+    b = tryparse(Float64, inp_b.text)
+
+    if a === nothing || b === nothing
+        lbl_res.label = "Entrada inválida"
+    else
+        lbl_res.label = "Resultado: $(a + b)"
+    end
+end
+
+signal_connect(on_sum_clicked, btn_sum, "clicked")
+
+show(win)
+
+if !isinteractive()
+    Gtk4.waitforsignal(win, :close_request)
+end
+```
+
+![Imagem da calculadora básica](imagens/gvc_gtk4_img8.png){fig-align="center"}
+
+Esse arquivo pode ser salvo, por exemplo, como `somador_gtk4.jl` e executado via linha de comando com `julia somador_gtk4.jl`.
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::
