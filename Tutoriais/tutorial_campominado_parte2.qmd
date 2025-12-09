@@ -3,7 +3,6 @@ title: "Campo Minado em Julia, Parte 2: Lógica do jogo, flood-fill e interface 
 description: |
   Continuação do tutorial sobre o jogo Campo Minado em Julia. Agora implementamos a lógica de jogadas, o algoritmo de flood-fill e o processamento de comandos.
 categories:
-  - Gráficos
   - Aplicações
   - Jogos
 author:
@@ -11,8 +10,8 @@ author:
     affiliation: "Universidade Estadual de Campinas"
     url: https://github.com/Gabriel-VC
     orcid: 0009-0001-0954-4579
-date: "2025-12-05"
-image: imagens/gvc_campominadop2_logo.png
+date: "2025-11-28"
+image: imagens/gvc_campominadop1_logo.png
 lang: pt
 format:
   html:
@@ -470,5 +469,6 @@ E, no fim do arquivo, chamamos a função `main()` para rodar o jogo.
 Para conseguir rodar esse jogo nós precisamos ativa-lo pelo terminal, mas não se preocupe, isso é bem fácil.
 
 ![Imagem para rodar campo minado no terminal](imagens/gvc_campominado_p2.png){fig-align="center"}
+
 
 Ou seja, no primeiro fazemos o caminho para onde o arquivo do jogo está localizado (encontramos isso olhando nas "propriedades" do arquivo do JOGO) e depois abrimos o arquivo com o julia! Com isso, completamos o nosso Campo Minado em Julia. Caso você queira baixar o código do jogo inteiro, acesse meu [Github](https://github.com/Gabriel-VC/Do-Zero-ao-Julia)!
