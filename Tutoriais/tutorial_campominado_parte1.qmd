@@ -3,7 +3,6 @@ title: "Campo Minado em Julia, Parte 1: Modelando o estado do jogo e montando o 
 description: |
   Passo a passo da modelação dos dados e construção do tabuleiro do jogo Campo Minado em Julia.
 categories:
-  - Gráficos
   - Aplicações
   - Jogos
 author:
@@ -11,7 +10,7 @@ author:
     affiliation: "Universidade Estadual de Campinas"
     url: https://github.com/Gabriel-VC
     orcid: 0009-0001-0954-4579
-date: "2025-12-01"
+date: "2025-11-27"
 image: imagens/gvc_campominadop1_logo.png
 lang: pt
 format:
@@ -278,4 +277,5 @@ Nesta primeira parte, estruturamos o tabuleiro do Campo Minado. Na Parte 2, vamo
 
 * Implementar a lógica de jogo (revelar célula, flood-fill, bandeiras, condição de vitória).
 * Construir a interface textual completa (imprimir o tabuleiro, mostrar tempo, comandos).
+
 * Criar o loop principal que permite jogar Campo Minado no terminal do início ao fim.
