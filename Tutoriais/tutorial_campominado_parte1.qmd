@@ -1,0 +1,281 @@
+---
+title: "Campo Minado em Julia, Parte 1: Modelando o estado do jogo e montando o tabuleiro"
+description: |
+  Passo a passo da modelação dos dados e construção do tabuleiro do jogo Campo Minado em Julia.
+categories:
+  - Gráficos
+  - Aplicações
+  - Jogos
+author:
+  - name: Gabriel Cardoso
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/Gabriel-VC
+    orcid: 0009-0001-0954-4579
+date: "2025-12-01"
+image: imagens/gvc_campominadop1_logo.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+draft: false
+---
+
+## Introdução.
+
+Neste tutorial vamos começar a construir o jogo Campo Minado em Julia, rodando diretamente no terminal. O objetivo desta parte 1 é montar toda a base do jogo:
+
+* Representar uma célula e o estado completo do jogo.
+* Definir cores para deixar a interface de texto mais bonita.
+* Implementar as funções que lerão os *inputs* do usuário.
+* Criar um "menu principal" com níveis pré-definidos e um modo de customização.
+* Gerar as funções de: cálculos de células vizinhas, sorteio aleatório das minas e a contagem de minas ao redor de cada célula.
+
+## Modelando o estado do jogo.
+
+Começamos importando três pacotes da linguagem Julia:
+
+```{julia}
+using Random
+using Dates
+using Printf
+```
+
+* `Random` é usado para distribuir as minas de forma aleatória.
+* `Dates` será utilizado para medir o tempo de jogo.
+* `Printf` fornece funções de formatação de strings, úteis para deixar a interface do jogo mais legível ao usuário.
+
+Primeiramente, antes de sequer pensar na interface do jogo, precisamos decidir como representar as variáveis do Campo Minado.
+
+### A estrutura das `Celula`.
+
+Cada (linha, coluna) do tabuleiro será chamado de `Celula`. Nela devem conter as informações: se tem uma mina, se já foi revelada, se está marcada com bandeira e quantas minas existem nas células vizinhas.
+
+```{julia}
+#Representa o estado de uma célula
+mutable struct Celula
+    eh_mina::Bool
+    revelada::Bool
+    marcada::Bool
+    minas_ao_redor::Int
+end
+```
+
+### A estrutura `EstadoJogo`.
+
+Aqui tem uma estrutura que resume o jogo inteiro.
+
+```{julia}
+#Variáveis do jogo
+mutable struct EstadoJogo
+    tabuleiro::Matrix{Celula}
+    num_linhas::Int
+    num_colunas::Int
+    num_minas::Int
+    num_bandeiras::Int
+    jogo_acabou::Bool
+    jogo_ganho::Bool
+    inicio_jogo::Union{DateTime, Nothing}
+    num_movimentos::Int
+    mostrar_solucao::Bool
+    mina_que_explodiu::Union{Tuple{Int, Int}, Nothing}
+end
+```
+
+
+* `tabuleiro::Matrix{Celula}`: Matriz 2D com todas as células do jogo.
+
+* `num_linhas`, `num_colunas`: Tamanho do tabuleiro, para evitar “magias” como números soltos no código.
+
+* `num_minas`: Quantidade total de minas colocadas no tabuleiro.
+
+* `num_bandeiras`: Conta quantas bandeiras o jogador colocou.
+
+* `jogo_acabou`, `jogo_ganho`: Informação do termino de jogo e se o jogador venceu.
+
+* `inicio_jogo::Union{DateTime, Nothing}` Guarda o momento em que o jogador faz o primeiro movimento, para calcular o tempo de jogo.
+
+* `num_movimentos::Int`: Quantidade de ações relevantes que o jogador já fez (revelar célula, por exemplo).
+
+* `mostrar_solucao::Bool`: Para mostrar o tabuleiro inteiro revelado em caso de derrota.
+
+* `mina_que_explodiu::Union{Tuple{Int, Int}, Nothing}`: Guarda a posição da mina que o jogador clicou.
+
+Escolhi usar `mutable struct`, ao invés de, por exemplo, uma lista para armazenar essas informações, pois o `struct` facilita a compreenção das variáveis no código.
+
+## Cores no terminal. 
+
+Na primeira versão desse jogo eu não utilizei nenhuma cor no terminal e eu percebi algo meio óbvio. O jogo era cinza e triste. Podemos usar algo chamado "sequências ANSI" para colorir texto e fundo, fazer negrito, etc. Caso você esteja curioso sobre como mudar as cores no terminal usando o "ANSI" de forma mais aprofundada veja essa [thread](https://stackoverflow.com/questions/4842424/list-of-ansi-color-escape-sequences) no Stackoverflow.
+
+```{julia}
+const COR_RESET = "\033[0m"
+const COR_NEGRITO = "\033[1m"
+const COR_CINZA = "\033[1;90m"
+const COR_VERMELHO = "\033[1;31m"
+const COR_VERDE = "\033[1;32m"
+const COR_AMARELO = "\033[1;33m"
+const COR_AZUL = "\033[1;34m"
+const COR_MAGENTA = "\033[1;35m"
+const COR_CIANO = "\033[1;36m"
+const COR_BRANCO = "\033[1;37m"
+const COR_BG_AMARELO_TXT_VERMELHO   = "\033[1;31;43m" # fundo amarelo, texto vermelho
+```
+
+## Leitura de inputs do usuário.
+
+O jogador vai precisar informar números (como o tamanho do tabuleiro ou a quantidade de minas). Mas não podemos receber respostas do usuário que não sejam números inteiros.
+
+```{julia}
+function ler_inteiro(texto_pergunta::String, minimo::Int, maximo::Int)
+    while true
+        print(texto_pergunta)
+        entrada = strip(readline())
+        valor = tryparse(Int, entrada)
+        if valor !== nothing && minimo <= valor <= maximo
+            return valor
+        else
+            println("Entrada inválida. Digite um número entre $minimo e $maximo.")
+        end
+    end
+end
+```
+
+De forma básica, lemos o *input* do jogador, se a conversão para inteiro falhar, o resultado é `nothing` e perguntamos de novo. Se der certo, retornamos um `Int`.
+
+## Menu Principal.
+
+Agora criamos o menu inicial para a escolha entre 3 níveis pré-definidos ou uma configuração customizada pelo próprio jogador.
+
+```{julia}
+function obter_configuracoes_jogo()
+    println("~~~ Bem-vindo ao Campo Minado (Julia) ~~~")
+    println("Escolha um nível:")
+    println("1: Fácil   (9x9, 10 minas)")
+    println("2: Médio   (16x16, 40 minas)")
+    println("3: Difícil (16x30, 99 minas)")
+    println("4: Customizado")
+
+    while true
+        print("Escolha (1-4): ")
+        escolha = strip(readline())
+        if escolha == "1"
+            return 9, 9, 10
+        elseif escolha == "2"
+            return 16, 16, 40
+        elseif escolha == "3"
+            return 16, 30, 99
+        elseif escolha == "4"
+            num_linhas  = ler_inteiro("Linhas: ", 5, 50)   
+            num_colunas = ler_inteiro("Colunas: ", 5, 50)  
+            max_minas   = (num_linhas * num_colunas) - 1
+            num_minas   = ler_inteiro("Minas: ", 1, max_minas)
+            return num_linhas, num_colunas, num_minas
+        else
+            println("Entrada inválida. Tente novamente.")
+        end
+    end
+end
+```
+
+Detalhe importante, as restrições de 5 a 50 são para facilitar a visualização e tornar o jogo minimimente jogável. Além de 50 colunas, o tabuleiro fica ruim de visualizar no terminal e com menos de 5, o jogo termina em um click.
+
+## Construção do tabuleiro.
+
+### Calculando vizinhos.
+
+Cada célula pode ter até 8 vizinhos (acima, abaixo, esquerda, direita e diagonais).
+
+```{julia}
+#Lista das coordenadas das células vizinhas
+function obter_vizinhos(linha::Int, coluna::Int, num_linhas::Int, num_colunas::Int)
+    vizinhos = Tuple{Int, Int}[]
+    for desloc_linha in -1:1, desloc_coluna in -1:1
+        if desloc_linha == 0 && desloc_coluna == 0
+            continue 
+        end
+        nova_linha  = linha  + desloc_linha
+        nova_coluna = coluna + desloc_coluna
+
+        if 1 <= nova_linha <= num_linhas && 1 <= nova_coluna <= num_colunas
+            push!(vizinhos, (nova_linha, nova_coluna))
+        end
+    end
+    return vizinhos
+end
+```
+
+Como funciona:
+* Percorremos todos os deslocamentos de linha e coluna em `-1:1`, ou seja, vemos ao redor.
+* Pulamos o caso `(0, 0)` (a própria célula).
+* Somamos os deslocamentos para obter `(nova_linha, nova_coluna)`.
+* Só adicionamos ao vetor `vizinhos` se as coordenadas estiverem dentro dos limites do tabuleiro.
+
+### Inicializanção do tabuleiro.
+
+Agora implementamos a função que realmente cria o campo minado.
+
+```{julia}
+#Cria o EstadoJogo, planta minas e coloca os números de cada célula
+function inicializar_jogo(num_linhas::Int, num_colunas::Int, num_minas::Int)
+    
+    tabuleiro = Matrix{Celula}(undef, num_linhas, num_colunas)
+    for linha in 1:num_linhas, coluna in 1:num_colunas
+        tabuleiro[linha, coluna] = Celula(false, false, false, 0)
+    end
+
+    #Planta as minas
+    todas_coordenadas = [(linha, coluna) for linha in 1:num_linhas for coluna in 1:num_colunas]
+    shuffle!(todas_coordenadas)
+
+    coordenadas_minas = todas_coordenadas[1:num_minas]
+    for (linha, coluna) in coordenadas_minas
+        tabuleiro[linha, coluna].eh_mina = true
+    end
+
+    #calcula o num de minas ao redor
+    for linha in 1:num_linhas, coluna in 1:num_colunas
+        if !tabuleiro[linha, coluna].eh_mina
+            contador = 0
+            for (linha_viz, coluna_viz) in obter_vizinhos(linha, coluna, num_linhas, num_colunas)
+                if tabuleiro[linha_viz, coluna_viz].eh_mina
+                    contador += 1
+                end
+            end
+            tabuleiro[linha, coluna].minas_ao_redor = contador
+        end
+    end
+
+    return EstadoJogo(
+        tabuleiro,
+        num_linhas,
+        num_colunas,
+        num_minas,
+        0,
+        false,
+        false,
+        nothing,
+        0,
+        false,
+        nothing
+    )
+end
+```
+
+Passo a passo do código:
+* Criamos um tabuleiro vazio
+* Plantamos as minas aleatoriamente, a forma feita foi bem básica: colocamos todas as coordenadas em uma lista, embaralhamos essa lista com o comando `shuffle!` e as primeiras `num_minas` posições marcamos como mina.
+* Calculamos o número de minas ao redor pela função `obter_vizinhos`, criada anteriormente.
+* Retornamos a estrutura `EstadoJogo`
+
+Com isso, temos um campo minado completo pronto para ser utilizado pelo jogador. Mas nós ainda não temos a lógica completa do jogo somente o tabuleiro, então não podemos jogar.
+
+![Imagem tabuleiro campo minado (Fácil)](imagens/gvc_campominado_p1.png){fig-align="center"}
+
+## Termino da Parte 1
+
+Nesta primeira parte, estruturamos o tabuleiro do Campo Minado. Na Parte 2, vamos usar essa base para:
+
+* Implementar a lógica de jogo (revelar célula, flood-fill, bandeiras, condição de vitória).
+* Construir a interface textual completa (imprimir o tabuleiro, mostrar tempo, comandos).
+* Criar o loop principal que permite jogar Campo Minado no terminal do início ao fim.

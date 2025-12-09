@@ -1,0 +1,474 @@
+---
+title: "Campo Minado em Julia, Parte 2: Lógica do jogo, flood-fill e interface de texto"
+description: |
+  Continuação do tutorial sobre o jogo Campo Minado em Julia. Agora implementamos a lógica de jogadas, o algoritmo de flood-fill e o processamento de comandos.
+categories:
+  - Gráficos
+  - Aplicações
+  - Jogos
+author:
+  - name: Gabriel Cardoso
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/Gabriel-VC
+    orcid: 0009-0001-0954-4579
+date: "2025-12-05"
+image: imagens/gvc_campominadop2_logo.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+draft: false
+---
+
+## Introdução.
+
+Na Parte 1 deste tutorial nós preparamos toda a base do nosso Campo Minado em Julia: modelamos as structs `Celula` e `EstadoJogo`, definimos constantes de cores para deixar a saída no terminal mais bonita, criamos funções de leitura e validação de entrada e implementamos a criação do tabuleiro, incluindo o sorteio das minas e o cálculo das minas ao redor de cada célula.
+Nesta Parte 2, vamos usar essa base para tornar o jogo jogavél.
+
+* Validar coordenadas e controlar as *flags*.
+* Implementar uma função revelação de células e *flood-fill*.
+* Processar comandos do jogador.
+* Construir o loop principal.
+
+## Validação de coordenadas e bandeiras.
+
+### Validando coordenadas.
+
+Sempre que o usuário digita algo como `r 3 5` ou `f 2 4`, precisamos checar se a entrada foi convertida corretamente para inteiros e se as coordenadas estão dentro dos limites do tabuleiro.
+
+```{.julia}
+function coordenada_valida(linha::Union{Int, Nothing},
+                           coluna::Union{Int, Nothing},
+                           num_linhas::Int,
+                           num_colunas::Int)
+    return linha !== nothing && coluna !== nothing &&
+           1 <= linha <= num_linhas && 1 <= coluna <= num_colunas
+end
+```
+
+### Colocando e removendo bandeiras.
+
+O jogador marca possíveis minas com bandeiras. A mesma ação deve servir para marcar e desmarcar as *flags*.
+
+```{.julia}
+function alternar_bandeira(estado::EstadoJogo, linha::Int, coluna::Int)
+    celula = estado.tabuleiro[linha, coluna]
+    if celula.revelada
+        println("Não é possível marcar uma célula já revelada.")
+        return
+    end
+
+    celula.marcada = !celula.marcada
+
+    #Atualiza o contador de bandeiras
+    if celula.marcada
+        estado.num_bandeiras = estado.num_bandeiras + 1
+    else
+        estado.num_bandeiras = estado.num_bandeiras - 1
+    end
+end
+
+```
+
+## Revelando células e flood-fill
+
+### Comportamento ao revelar uma célula
+
+Quando o jogador faz um comando `r linha coluna`, várias coisas podem acontecer:
+
+* O primeiro movimento do jogador, iniciamos o cronômetro.
+* A célula já estava revelada, ignoramos.
+* A célula está marcada com bandeira, removemos a bandeira.
+* A célula é vazia (0 minas ao redor), revelar as outras células ao redor em efeito “cascata” (*flood-fill*).
+* A célula é uma mina (Morte).
+
+```{.julia}
+function revelar_celula(estado::EstadoJogo, linha::Int, coluna::Int)
+    #Inicia o cronômetro
+    if estado.inicio_jogo === nothing
+        estado.inicio_jogo = Dates.now()
+    end
+
+    estado.num_movimentos += 1
+
+    celula = estado.tabuleiro[linha, coluna]
+
+    if celula.revelada
+        estado.num_movimentos -= 1 #clicar em uma célula já revelada não conta como movimento
+        return
+    end
+
+    if celula.marcada
+        println("A célula $(linha),$(coluna) está marcada com bandeira. Remova a bandeira primeiro (use 'f $linha $coluna').")
+        estado.num_movimentos -= 1
+        return
+    end
+
+    if celula.eh_mina
+        estado.jogo_acabou = true
+        estado.jogo_ganho = false
+        estado.mina_que_explodiu = (linha, coluna)
+        return
+    end
+
+    #Flood-fill
+    pilha_revelacao = [(linha, coluna)]
+
+    while !isempty(pilha_revelacao)
+        (linha_atual, coluna_atual) = pop!(pilha_revelacao)
+        celula_atual = estado.tabuleiro[linha_atual, coluna_atual]
+
+        #Ignora se já estiver revelada ou marcada
+        if celula_atual.revelada || celula_atual.marcada
+            continue
+        end
+
+        celula_atual.revelada = true
+
+        #se for uma casa "vazia" (sem minas ao redor), adiciona vizinhos
+        if celula_atual.minas_ao_redor == 0
+            for (linha_viz, coluna_viz) in obter_vizinhos(linha_atual, coluna_atual,
+                                                          estado.num_linhas, estado.num_colunas)
+                celula_vizinha = estado.tabuleiro[linha_viz, coluna_viz]
+                if !celula_vizinha.revelada
+                    push!(pilha_revelacao, (linha_viz, coluna_viz))
+                end
+            end
+        end
+    end
+end
+```
+
+Alguns detalinhos presentes no código:
+
+* O tempo só começa quando `estado.inicio_jogo` é `nothing`, ou seja, na primeira jogada.
+
+* Não incrementamos o número de movimentos se a célula já estava revelada ou marcada por *flag*.
+
+## Verificando se o jogador ganhou.
+
+No Campo Minado, a condição de vitória é ver se todas as célula sem mina foram reveladas. Não é obrigatório que todas as minas estejam marcadas corretamente com bandeiras para a vitória.
+
+```{.julia}
+function verificar_vitoria(estado::EstadoJogo)
+    for linha in 1:estado.num_linhas, coluna in 1:estado.num_colunas
+        celula = estado.tabuleiro[linha, coluna]
+        if !celula.eh_mina && !celula.revelada
+            return false
+        end
+    end
+    return true
+end
+```
+
+## Processamento de inputs do usuário.
+
+A interação no terminal é baseada em texto. Os comandos que o jogador pode digitar são:
+
+* `r x y` = revelar célula em (x, y).
+* `f x y` = colocar/remover bandeira em (x, y).
+* `s` = alternar visualização da solução.
+* `h` = ver ajuda.
+* `q` = sair.
+
+```{.julia}
+function processar_comando(estado::EstadoJogo, linha::String)
+    partes = split(lowercase(strip(linha)))
+    if isempty(partes)
+        return
+    end
+    comando = partes[1]
+
+    if comando == "q" || comando == "quit"
+        estado.jogo_acabou = true
+
+    elseif comando == "h" || comando == "help"
+        imprimir_ajuda()
+
+    elseif comando == "s" || comando == "show"
+        estado.mostrar_solucao = !estado.mostrar_solucao
+        println("Modo solução: $(estado.mostrar_solucao ? "ON" : "OFF")")
+
+    elseif comando == "f" || comando == "flag"
+        if length(partes) == 3
+            linha_cel  = tryparse(Int, partes[2])
+            coluna_cel = tryparse(Int, partes[3])
+            if coordenada_valida(linha_cel, coluna_cel, estado.num_linhas, estado.num_colunas)
+                alternar_bandeira(estado, linha_cel, coluna_cel)
+            else
+                println("Coordenadas inválidas. Use índices a partir de 1: f <linha> <coluna>")
+            end
+        else
+            println("Uso: f <linha> <coluna>")
+        end
+
+    elseif comando == "r" || comando == "reveal"
+        if length(partes) == 3
+            linha_cel  = tryparse(Int, partes[2])
+            coluna_cel = tryparse(Int, partes[3])
+            if coordenada_valida(linha_cel, coluna_cel, estado.num_linhas, estado.num_colunas)
+                revelar_celula(estado, linha_cel, coluna_cel)
+            else
+                println("Coordenadas inválidas. Use índices a partir de 1: r <linha> <coluna>")
+            end
+        else
+            println("Uso: r <linha> <coluna>")
+        end
+
+    else
+        println("Comando desconhecido: '$comando'. Digite 'h' para ajuda.")
+    end
+end
+```
+
+Contando com algum erro de input por parte do usuário nos removemos espaços extras nas pontas e deixamos tudo em minúsculo.
+
+## Interface de texto no terminal.
+
+### Números coloridos.
+
+Cada número de minas ao redor aparece com uma cor diferente.
+
+```{.julia}
+#Retorna o numero com a cor correspondente
+function caractere_numero(n::Int)
+    if n == 0
+        return " "  # 0 vira espaço em branco
+    elseif n == 1
+        return "$(COR_AZUL)1$(COR_RESET)"
+    elseif n == 2
+        return "$(COR_VERDE)2$(COR_RESET)"
+    elseif n == 3
+        return "$(COR_VERMELHO)3$(COR_RESET)"
+    elseif n == 4
+        return "$(COR_MAGENTA)4$(COR_RESET)"
+    elseif n == 5
+        return "$(COR_AMARELO)5$(COR_RESET)"
+    elseif n == 6
+        return "$(COR_CIANO)6$(COR_RESET)"
+    elseif n == 7
+        return "$(COR_BRANCO)7$(COR_RESET)"
+    elseif n == 8
+        return "$(COR_CINZA)8$(COR_RESET)"
+    else
+        return "?" 
+    end
+end
+```
+
+### Cronômetro.
+
+O tempo de jogo é exibido no formato "mm:ss".
+
+```{.julia}
+function formatar_tempo(estado::EstadoJogo)
+    if estado.inicio_jogo === nothing
+        return "00:00"
+    end
+
+    duracao = Dates.now() - estado.inicio_jogo  
+    total_milisegundos = Dates.value(duracao)
+    total_segundos = total_milisegundos ÷ 1000
+
+    minutos = total_segundos ÷ 60
+    segundos = total_segundos % 60
+
+    return @sprintf("%02d:%02d", minutos, segundos)
+end
+```
+
+Esperamos o jogador fazer a primeira jogada para iniciar o timer, depois do primeiro clique:
+
+* Calculamos o tempo decorrido de uma jogada a outra.
+* Usamos `Dates.value` para obter o valor em milissegundos e dividimos por `1000` para obter segundos.
+* Calculado os minutos e segundos e colocamos em formato de "mm:ss".
+
+### Decidindo o símbolo da célula.
+
+A função decide como mostrar cada célula dependendo da situação do jogo (se o jogo acabou ou se ainda está em curso).
+
+```{.julia}
+function caractere_celula(celula::Celula, linha::Int, coluna::Int, estado::EstadoJogo)
+    explodida = (linha, coluna) == estado.mina_que_explodiu
+
+    #Exibicão final (derrota)
+    if estado.mostrar_solucao || (estado.jogo_acabou && !estado.jogo_ganho)
+        if explodida
+            return "$(COR_BG_AMARELO_TXT_VERMELHO)X$(COR_RESET)" #mina explodiu
+        elseif celula.eh_mina && !celula.marcada
+            return "$(COR_VERMELHO)*$(COR_RESET)" #mina não marcada
+        elseif celula.eh_mina && celula.marcada
+            return "$(COR_VERDE)F$(COR_RESET)" #mina marcada certo
+        elseif !celula.eh_mina && celula.marcada
+            return "$(COR_AMARELO)W$(COR_RESET)" #bandeira errada
+        else
+            return caractere_numero(celula.minas_ao_redor) #célula normal
+        end
+    end
+
+    #Exibicão durante o jogo
+    if celula.marcada
+        return "$(COR_AMARELO)F$(COR_RESET)" #bandeira
+    elseif !celula.revelada
+        return "$(COR_CINZA).$(COR_RESET)" #célula coberta
+    else
+        return caractere_numero(celula.minas_ao_redor) #célula revelada
+    end
+end
+```
+
+### Desenhando o tabuleiro.
+
+Aqui juntamos tudo para mostrar a situação atual do jogo. Mostramos um cabeçalho com as Minas faltantes, os Movimentos e o Tempo. Ademais, desenhamos o cabeçalho das colunas e linhas.
+
+```{.julia}
+#Imprime o tabuleiro com as estatísticas do jogo
+function imprimir_tabuleiro(estado::EstadoJogo)
+    print("\033[2J\033[H")
+    println("--- $(COR_NEGRITO)Campo Minado (Julia Edition)$(COR_RESET) ---")
+
+    minas_restantes = estado.num_minas - estado.num_bandeiras
+    tempo_str = formatar_tempo(estado)
+
+    println("Minas: $(COR_AMARELO)$(minas_restantes)$(COR_RESET)  |  Movimentos: $(COR_CIANO)$(estado.num_movimentos)$(COR_RESET)  |  Tempo: $(COR_CIANO)$(tempo_str)$(COR_RESET)")
+    println("-------------------------------------")
+
+    #Cabeçalho das colunas
+    print("    ")
+    for coluna in 1:estado.num_colunas
+        Printf.@printf " %2d" coluna
+    end
+    println()
+    print("   --")
+    for _ in 1:estado.num_colunas
+        print("---")
+    end
+    println()
+
+    #Cabeçalho das linhas
+    for linha in 1:estado.num_linhas
+        Printf.@printf "%2d |" linha
+        for coluna in 1:estado.num_colunas
+            caractere = caractere_celula(estado.tabuleiro[linha, coluna], linha, coluna, estado)
+            Printf.@printf " %s " caractere
+        end
+        println()
+    end
+
+    println("-------------------------------------")
+    println("Comandos: 'r <linha> <coluna>', 'f <linha> <coluna>', 'h' (ajuda), 'q' (sair)")
+end
+```
+
+### Tela de ajuda.
+
+Ao digitar `h` ou `help`, o jogador vê um mini manual de comandos:
+
+```{.julia}
+#Mensagem de help
+function imprimir_ajuda()
+    println("\n--- Ajuda do Campo Minado ---")
+    println("Os comandos usam índices baseados em inteiros (linha, coluna).")
+    println("Ao clicar em uma célua, um número aparece. Esse número indica quantas minas existem nas 8 casas vizinhas (tocando lados e diagonais).")
+    println("Exemplo: se você vê o número 1, isso significa que existe somente uma mina ou redor. Se ele toca apenas um quadrado não revelado, aquele quadrado devinitivamente é a mina.")
+    println("Comandos disponíveis:")
+    println("  r <l> <c>   (ou revelar) - Revela a célula em (linha l, coluna c)")
+    println("  f <l> <c>   (ou flag)   - Coloca/Remove bandeira em (l, c)")
+    println("  h           (ou help)   - Mostra essa tela")
+    println("  q           (ou quit)   - Sai do jogo")
+    print("\nPressione Enter para continuar.")
+    readline()
+end
+```
+
+## Loop principal do jogo.
+
+Este é o loop que coordena se o jogo ainda está em curso ou se ele já acabou.
+
+```{.julia}
+function loop_jogo(estado::EstadoJogo)
+    while !estado.jogo_acabou
+        imprimir_tabuleiro(estado)  #mostra o estado atual
+
+        #Checa vitória
+        if verificar_vitoria(estado)
+            estado.jogo_acabou = true
+            estado.jogo_ganho = true
+            break
+        end
+
+        print("\n> ")
+        linha_comando = ""
+        try
+            linha_comando = readline()
+        catch erro
+            if erro isa EOFError || erro isa InterruptException
+                println("\nSaindo...")
+                estado.jogo_acabou = true
+                break
+            else
+                rethrow(erro)
+            end
+        end
+
+        processar_comando(estado, linha_comando)
+    end
+
+    #Mensagem de fim de jogo
+    println("\n--- Fim de Jogo ---")
+    if estado.jogo_ganho
+        println("$(COR_VERDE) VOCÊ VENCEU! $(COR_RESET)")
+    elseif estado.mina_que_explodiu !== nothing
+        println("$(COR_VERMELHO) BOOM! Você selecionou uma mina.$(COR_RESET)")
+    else
+        println("Jogo encerrado.")
+    end
+
+    #Mostra o tabuleiro revelado se perdeu
+    if !estado.jogo_ganho
+        estado.mostrar_solucao = true
+    end
+
+    imprimir_tabuleiro(estado) 
+    println("Tempo final: $(formatar_tempo(estado))  |  Movimentos: $(estado.num_movimentos)")
+end
+```
+
+Por fim, precisamos de uma função que junte toda lógica do jogo:
+
+* Pergunte ao usuário as configurações do jogo.
+* Inicialize o tabuleiro.
+* Chama o loop principal com tratamento de erros.
+
+```{.julia}
+#Ponto de entrada do jogo
+function main()
+    try
+        num_linhas, num_colunas, num_minas = obter_configuracoes_jogo()
+        estado = inicializar_jogo(num_linhas, num_colunas, num_minas)
+        loop_jogo(estado)
+
+    catch erro
+        if erro isa InterruptException
+            println("\nJogo interrompido. Saindo.")
+        else
+            println("\nOcorreu um erro inesperado:")
+            rethrow(erro)
+        end
+    end
+end
+
+main()
+```
+
+E, no fim do arquivo, chamamos a função `main()` para rodar o jogo.
+
+## Conclusão
+
+Para conseguir rodar esse jogo nós precisamos ativa-lo pelo terminal, mas não se preocupe, isso é bem fácil.
+
+![Imagem para rodar campo minado no terminal](imagens/gvc_campominado_p2.png){fig-align="center"}
+
+Ou seja, no primeiro fazemos o caminho para onde o arquivo do jogo está localizado (encontramos isso olhando nas "propriedades" do arquivo do JOGO) e depois abrimos o arquivo com o julia! Com isso, completamos o nosso Campo Minado em Julia. Caso você queira baixar o código do jogo inteiro, acesse meu [Github](https://github.com/Gabriel-VC/Do-Zero-ao-Julia)!
