@@ -1,0 +1,307 @@
+---
+title: "Análise de Sobrevivência em Julia"
+description: |
+  Um guia introdutório e prático sobre análise de sobrevivência (Kaplan–Meier, Nelson–Aalen e Cox Proportional Hazards) em Julia, com intuição estatística, simulação de dados, visualização e implementação com o pacote Survival.jl, além de extensões e boas práticas.
+categories:
+  - Estatística
+  - Modelagem Estatística
+  - Análise de Sobrevivência
+author:
+  - name: Henrique Anunciação Velloso Silva
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/henriqueavelloso
+    orcid: 0009-0002-8262-031X
+date: "2025-12-12"
+image: imagens/analise_sobrevivencia_julia.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+engine: julia
+draft: true
+---
+
+# Introdução
+
+::: {.justify}
+**Análise de sobrevivência** (ou *time-to-event*) estuda o tempo até a ocorrência de um evento de interesse (falha de um componente, recaída clínica, churn de clientes), levando em conta **censura**, quando o evento não é observado completamente para todas as unidades.  
+O caso mais comum é a **censura à direita**, quando sabemos apenas que o evento não ocorreu até certo tempo.
+
+Neste tutorial, percorremos um fluxo completo:
+
+1. Simulação de dados com censura  
+2. Estimadores não-paramétricos (Kaplan–Meier e Nelson–Aalen)  
+3. Comparação entre grupos  
+4. Modelo de Cox Proportional Hazards  
+5. Interpretação estatística e extensões
+:::
+
+# Por que Julia?
+
+::: {.justify}
+Julia combina desempenho e legibilidade, sendo ideal para simulação, modelagem estatística e reprodutibilidade científica.
+:::
+
+# Pacotes utilizados
+
+```{julia}
+#| echo: false
+import Pkg;
+
+redirect_stdout(devnull) do
+    redirect_stderr(devnull) do
+        Pkg.add(["Random", "Statistics", "StatsModels", "Survival",
+                 "Plots", "DataFrames", "Distributions"])
+    end;
+end;
+```
+
+```{julia}
+using Random, Statistics
+using DataFrames, StatsModels
+using Survival
+using Plots, Distributions
+
+Random.seed!(42) # Tornando o código reprodutível
+```
+
+# Conceitos fundamentais
+
+::: {.justify}
+- **Função de sobrevivência**: $S(t) = P(T > t)$
+- **Função de risco**: $h(t)$ — risco instantâneo de ocorrência do evento
+- **Risco cumulativo**: $H(t) = \int_0^t h(u)du$
+- **Censura à direita**: evento não observado até o fim do acompanhamento
+
+Kaplan–Meier estima diretamente $S(t)$, enquanto Nelson–Aalen estima $H(t)$. O modelo de Cox relaciona covariáveis ao risco.
+:::
+
+# Simulação de dados com censura
+
+::: {.justify}
+Vamos gerar dados sintéticos com:
+
+- Dois grupos (Controle e Tratamento)
+- Covariável contínua (idade)
+- Efeito do tratamento via *hazard ratio*
+:::
+
+```{julia}
+n = 400
+
+group = rand(["Controle", "Tratamento"], n)
+age   = rand(Uniform(20, 70), n)
+
+λ0 = 0.08                 # risco basal
+hr_treat = 0.6            # efeito do tratamento
+λ = λ0 .* ifelse.(group .== "Tratamento", hr_treat, 1.0)
+
+time_true = rand.(Exponential.(λ)) |> x -> reduce(vcat, x)
+
+censor_time = rand(Exponential(0.05), n)
+
+event = time_true .<= censor_time
+time  = min.(time_true, censor_time)
+
+df = DataFrame(
+    time = time,
+    event = event,
+    group = group,
+    age = age
+)
+
+df.eventtime = EventTime.(df.time, df.event)
+
+first(df, 5)
+```
+
+# Análise exploratória inicial
+
+```{julia}
+describe(df)
+```
+
+```{julia}
+bar([sum(df.event), sum(.!df.event)],
+    label=["Evento observado" "Censurado"],
+    title="Proporção de censura",
+    legend=:top)
+```
+
+::: {.justify}
+Observa-se uma proporção considerável de observações censuradas, o que é comum em estudos de sobrevivência reais. A presença de censura reforça a inadequação de métodos tradicionais de regressão e motiva o uso de ferramentas específicas, como Kaplan–Meier, Nelson–Aalen e o modelo de Cox.
+:::
+
+# Kaplan–Meier (global)
+
+```{julia}
+km_global = fit(KaplanMeier, df.time, df.event)
+
+plot(km_global.events.time,
+     km_global.survival;
+     seriestype = :steppre,
+     lw = 2,
+     xlabel = "Tempo",
+     ylabel = "S(t)",
+     title = "Curva de Kaplan–Meier (Global)")
+```
+
+::: {.justify}
+A curva de **Kaplan–Meier** apresenta o comportamento esperado de uma função de sobrevivência: é **não crescente** e possui formato em **degraus**, refletindo os tempos discretos em que os eventos ocorreram. Cada queda na curva corresponde à ocorrência de um ou mais eventos naquele instante.
+:::
+
+# Kaplan–Meier por grupo
+
+```{julia}
+plt = plot(xlabel="Tempo", ylabel="S(t)",
+           title="Kaplan–Meier por grupo",
+           legend=:bottomleft)
+
+for g in unique(df.group)
+    sub = df[df.group .== g, :]
+    km = fit(KaplanMeier, sub.time, sub.event)
+    plot!(km.events.time, km.survival;
+          seriestype=:steppre, lw=2, label=g)
+end
+
+plt
+```
+
+::: {.justify}
+Ao comparar as curvas estratificadas por grupo, observa-se que o grupo **Tratamento** apresenta sistematicamente maiores probabilidades de sobrevivência ao longo do tempo em relação ao grupo **Controle**.
+:::
+
+# Nelson–Aalen (risco cumulativo)
+
+```{julia}
+na = fit(NelsonAalen, df.time, df.event)
+
+plot(na.events.time, na.chaz;
+     seriestype=:steppre, lw=2,
+     xlabel="Tempo",
+     ylabel="H(t)",
+     title="Estimador de Nelson–Aalen")
+```
+
+::: {.justify}
+O estimador de Nelson–Aalen fornece uma estimativa do risco cumulativo $H(t)$ que cresce monotonicamente ao longo do tempo. Diferentemente da função de sobrevivência, valores mais altos de $H(t)$ indicam maior acúmulo de risco até o tempo $t$.
+:::
+
+# Comparação visual entre grupos (NA)
+
+```{julia}
+plt = plot(xlabel="Tempo", ylabel="H(t)",
+           title="Nelson–Aalen por grupo",
+           legend=:topleft)
+
+for g in unique(df.group)
+    sub = df[df.group .== g, :]
+    na_g = fit(NelsonAalen, sub.time, sub.event)
+    plot!(na_g.events.time, na_g.chaz;
+          seriestype=:steppre, lw=2, label=g)
+end
+
+plt
+```
+
+::: {.justify}
+A comparação entre os grupos mostra que o risco cumulativo cresce mais rapidamente no grupo **Tratamento**, enquanto o grupo **Controle** apresenta uma acumulação de risco mais lenta.
+:::
+
+# Modelo de Cox Proportional Hazards
+
+::: {.justify}
+O modelo de Cox assume:
+
+$h(t | x) = h_0(t) \exp(\beta^T x)$
+
+onde:
+
+- $h_0(t)$ é o risco basal
+- $\exp(\beta)$ são *hazard ratios*
+:::
+
+```{julia}
+cox_model = coxph(@formula(eventtime ~ group + age), df)
+cox_model
+```
+
+::: {.justify}
+O modelo de Cox permite quantificar o efeito das covariáveis sobre o risco, mantendo o risco basal não especificado. Isso o torna particularmente atraente em aplicações práticas, onde a forma funcional do risco ao longo do tempo é desconhecida.
+:::
+
+## Interpretando os coeficientes
+
+::: {.justify}
+- Coeficientes estão na escala **log-hazard**
+- Hazard Ratio (HR) < 1 → efeito protetor  
+- Hazard Ratio (HR) > 1 → aumento do risco
+
+O coeficiente estimado para o grupo **Tratamento** está na escala de *log-hazard*. Ao aplicar a transformação exponencial, obtém-se o *hazard ratio*, isto é, $HR=exp(β)$.
+
+Nesse caso, o *hazard ratio* associado ao **Tratamento** é inferior a 1, indicando que, mantidas as demais covariáveis constantes, esse grupo apresenta menor risco instantâneo de ocorrência do evento em relação ao grupo **Controle**. Esse resultado é coerente com a simulação realizada e com as evidências visuais observadas nos estimadores não paramétricos.
+
+Para a covariável **idade**, o coeficiente estimado possui pequena magnitude, resultando em um *hazard ratio* próximo de 1, o que indica efeito marginal sobre o risco, conforme esperado pelo processo de simulação.
+:::
+
+```{julia}
+exp.(coef(cox_model))
+```
+
+# Predição de risco relativo
+
+```{julia}
+# Matriz de desenho do modelo
+X = modelmatrix(cox_model)
+
+# Coeficientes (beta)
+β = coef(cox_model)
+
+# Risco relativo: exp(Xβ)
+risk_scores = exp.(X * β)
+
+histogram(risk_scores, bins=30,
+          xlabel="Risco relativo",
+          title="Distribuição do risco relativo predito")
+```
+
+::: {.justify}
+No modelo de Cox, não se predizem diretamente tempos de sobrevivência, mas sim risco relativo, dado por $exp(X\beta)$. Esse escore representa o quão maior (ou menor) é o risco de uma observação em relação ao risco basal.
+:::
+
+# Conclusão
+
+::: {.justify}
+Um aspecto particularmente interessante do uso de `Julia` é a transparência dos objetos estatísticos. Diferentemente de ambientes mais “fechados”, é possível acessar diretamente componentes como a matriz de desenho, coeficientes e estimativas intermediárias, facilitando diagnósticos, simulações adicionais e extensões metodológicas.
+
+A análise de sobrevivência é essencial quando o **tempo até o evento importa** e há censura nos dados. `Julia` permite conduzir análises completas, reprodutíveis e interpretáveis, integrando estatística sólida com código claro e eficiente.
+:::
+
+# Referências
+
+::: {.justify}
+1. Kleinbaum, D. G., & Klein, M. (2012).  
+   *Survival Analysis: A Self-Learning Text* (3rd ed.). Springer.
+
+2. Cox, D. R. (1972).  
+   Regression Models and Life-Tables.  
+   *Journal of the Royal Statistical Society: Series B*, 34(2), 187–220.
+
+3. Nelson, W. (1972).  
+   Theory and applications of hazard plotting for censored failure data.  
+   *Technometrics*, 14(4), 945–966.
+
+4. Aalen, O. O. (1978).  
+   Nonparametric inference for a family of counting processes.  
+   *Annals of Statistics*, 6(4), 701–726.
+
+5. JuliaStats.  
+    *Survival.jl Documentation*.  
+    https://github.com/JuliaStats/Survival.jl
+:::
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica, organização estrutural e aprimoramento da clareza do texto.
+:::
