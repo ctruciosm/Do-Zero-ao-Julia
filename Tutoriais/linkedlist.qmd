@@ -1,0 +1,527 @@
+---
+title: "Introdução à Estruturas de Dados em Julia: Listas Encadeadas"
+description: |
+  Listas encadeadas são estruturas de dados lineares que armazenam dados sequencialmente relacionados, porém não-contíguos na memória. Nesse post, discutiremos como implementar listas encadeadas em Julia e como a estrutura se compara em diferentes linguagens.
+categories:
+  -  Estruturas de Dados
+  -  Benchmarks
+author:
+  - name: João Vitor Hartung Toppa
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/jvtoppa
+date: "2026-01-18"
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+execute:
+  echo: true
+  warning: false
+#jupyter: julia
+draft: false
+---
+
+
+# Introdução
+
+:::{justify}
+Este tutorial é o primeiro de uma série de posts sobre análise e implementação de diferentes ``estruturas de dados``. O objetivo, nesse sentido, será comparar diferentes implementações da mesma estrutura de dados em linguagens diferentes - incluindo uma implementação em Julia. Após a leitura desse tutorial, você será capaz de:
+
+- Criar estruturas de listas encadeadas e suas operações em Julia
+- Resolver problemas com listas encadeads
+- Comparar estruturas de dados em diferentes linguagens
+- Compreender peculiaridades de Julia, principalmente o conceito de *Pass by Sharing*.
+:::
+## Pré-requisitos
+
+:::{justify}
+Este texto é indicado para pessoas com conhecimento prévio em:
+
+- Laços
+- Apontadores
+- Conhecimentos básicos sobre funcionamento da memória do computador
+
+:::
+
+# Listas Encadeadas
+
+:::{justify}
+
+Listas encadeadas são estruturas lineares de elementos na qual sua ordem não é equivalente à representação física na memória do computador. Ao invés disso, cada elemento da lista (chamado de "nó"), somente aponta para a posição do próximo nó da sequência. Listas encadeadas são uma das estruturas de dados mais simples e comuns, sendo ferramenta de suma importância para modelagens de sistemas.
+
+Algumas das operações mais comuns em listas encadeadas incluem:
+
+- Inserção no começo (`O(1)`)
+- Remoção no começo (`O(1)`)
+- Remoção no final (se implementado cuidadosamente: `O(1)`, senão, `O(n)`)
+- Inserção em uma posição qualquer (`O(n)`)
+- Remoção em posição qualquer (`O(n)`)
+- Busca por um nó (`O(n)`)
+:::
+
+:::callout-note
+
+A notação Big-O representa um importante conceito em análise algoritmica chamado comportamento assintótico. Em termos gerais, significa: para uma entrada suficientemente grande, quão demorado seria para uma função ser completa. Em outras palavras, Big-O indica a taxa de crescimento do algoritmo para entradas suficientemente grandes, ignorando constantes e termos de menor ordem. Por exemplo, uma função de comportamento assintótico O(n) garante que o tempo gasto para uma operação possui relação linear com o tamanho da entrada.
+:::
+
+## Adjetivos para Listas Encadeadas
+
+:::{justify}
+
+Listas encadeadas podem ser simples ou duplamente encadeadas. Isso significa, essencialmente, a adição de um elemento de apontador "para trás" e "para frente" em cada um dos nós da lista. A grande vantagem nesse tipo de estrutura é a capacidade de travessia de mão dupla, que diminui o custo para percorrer a lista em algumas ocasiões. Troca-se memória por tempo de execução, algo comum em estruturas de dados e algoritmos.
+
+Listas encadeadas também podem ser circulares. Neste caso, o apontador do último elemento da lista aponta para o primeiro elemento da lista. Esse tipo de lista encadeada, portanto, não possui começo ou fim.
+
+Por último, listas encadeadas podem ser multiníveis. A diferença essencial neste tipo é a capacidade de ordenamento hierárquico entre elementos da lista. Para cada elemento de lista encadeada, possuímos uma lista encadeada dentro do seu nó.
+
+Neste tutorial, focaremos essencialmente em listas simplesmente encadeadas. Porém, com simples modificações, os mesmos algoritmos aplicam-se para outros tipos de lista encadeada.
+
+:::
+
+# Criando a lista encadeada
+:::{justify}
+
+Em linguagens como ``C`` ou ``C++``, temos um conceito importante com relação à como funções interagem que se chama "Passagem por Referência" (ou, em inglês, *Pass by Reference*). Quando criamos uma função nestas linguagens e preenchemos o campo da função com alguma variável, o valor a ser passado para dentro do ambiente da variável na verdade corresponde a uma cópia da variável original, e qualquer modificação feita dentro do escopo da função na variável não influencia na representação da mesma variável fora do escopo da função. Para tanto, estas linguagens utilizam de um artifício denominado "Operador Endereço", na qual permite a criação de um novo tipo que representa a posição na memória de um certo elemento de dado.
+
+``Julia`` utiliza outra estratégia de avaliação para suas funções, chamada de "Passagem por Compartilhamento" (ou *Pass by Sharing*). Ao invés de cada um dos objetos deverem ser expostos como referências, somente uma classe específica de valores possuem semântica de referência, e são os endereços desses valores que são passados para as funções. Este mesmo tipo de estratégia é vista em outras linguagens de programação, como ``Python``.
+
+``Julia``, diferentemente de ``Python``, permite a criação de um tipo mais primitivo de classe, chamado de *Struct*. Portanto, começamos definindo a estrutura de lista encadeada da seguinte maneira:
+
+```{julia}
+mutable struct ll_node
+
+    elem::Int
+    next::Union{ll_node, Nothing}
+
+end
+```
+
+Note que, na definição do nó seguinte, utilizamos o tipo abstrato ``Union{}``. Este tipo permite sugerir ao compilador que ``next`` somente pode ser dos tipos ``ll_node`` (auto-definido pelo *Struct*) ou ``Nothing``. Também é importante notar que o elemento a ser inserido em um nó pode ser de qualquer tipo - inclusive, podem-se incluir quantos elementos forem necessários para sua implementação.
+
+Em seguida, precisamos criar os elementos da lista encadeada. Definiremos uma função de criação e, dentro dela, realizaremos a inserção de nós ordenados. Essa função de criação é somente um exemplo, sendo modificável para a inserção de elementos de um vetor, por exemplo. Definimos um elemento nulo ``head``, que representa o último nó da lista encadeada, e inserimos ``amount`` nós.
+
+```{julia}
+function construct_ll(amount)
+    head = nothing
+    for elem in amount:-1:1
+        head = ll_node(elem, head)
+    end
+    return head
+end
+```
+
+Por fim, temos nossa estrutura de dados montada - como representado abaixo:
+
+:::
+```{mermaid}
+graph LR
+    1 --> 2
+    2 --> 3
+    3 --> 4
+    4 --> ...
+    ... --> amount
+    amount --> nothing
+    
+    style ... fill:#FFF9C4,stroke:#FFD54F,color:#000,font-style:italic
+    style nothing fill:#f5f5f7,stroke:#d1d1d6,color:#8e8e93
+```
+# Operações
+
+## Iteração
+
+:::{justify}
+
+Iterar por uma lista encadeada segue um certo padrão: como cada elemento está associado com um espaço de memória não-contíguo, não podemos somente percorrer a lista encadeada por meio de um iterador comum (como ocorre quando iteramos em um vetor, por exemplo). Dessa forma, iterar sobre uma lista encadeada envolve percorrer os apontadores dos nós.
+
+```{julia}
+current_node = ll
+while current_node !== nothing
+    current_node = current_node.next
+end
+```
+
+Este padrão é de suma importância para o estudo de listas encadeadas, pois qualquer operação repetitiva que ocorrer na lista deverá ter esse tipo de formato.
+:::
+
+## Inserção
+:::{justify}
+A operação de inserção pode ser realizada de duas maneiras diferentes: 
+
+- Inserção em qualquer posição;
+- Inserção no começo.
+
+Essas operações se diferenciam pelo tempo de execução. Inserir em uma posição n qualquer de uma lista encadeada envolver percorrer os n - 1 nós precedentes. Dessa forma, dizemos que o comportamento assintótico da inserção em qualquer posição é O(n). Isso também nos indica, de certo modo, como o algoritmo deve se comportar. 
+
+```{julia}
+function insert_anynode(ll, position, amount)
+    current = ll
+    prev = nothing
+    pos = 0
+
+    while pos !== position && current !== nothing
+        prev = current
+        pos += 1
+        current  = current.next
+    end
+
+    if current === nothing && pos !== position
+        return nothing
+    end
+
+    new_node = ll_node(amount, prev)
+    new_node.next = current
+    
+    if prev !== nothing
+        prev.next = new_node    
+    else
+        ll = new_node
+    end
+
+    return ll
+end
+```
+
+Como a lista é simplesmente encadeada, não temos acesso à posição de um nó anterior. Portanto, precisamos iterar sobre a lista procurando a posição ``position`` e guardando o nó anterior na memória. Quando encontramos a posição desejada, precisamos ajustar os apontadores para inserir o novo nó entre o nó anterior e o nó atual. Dois casos de borda são pontuados também no algoritmo: o caso em que não encontramos a posição (ou seja, está fora dos limites da nossa lista encadeada) e o caso em que a inserção do nó ocorre no início da lista. No segundo caso, como estamos alterando o nó cabeça, é preciso atualizar o objeto que mantém a referência para o início da lista, o que significa que devemos retornar o novo nó cabeça para a função que invocou a operação.
+:::
+
+## Remoção
+:::{justify}
+A operação de remoção é muito similar à operação de inserção. Existem três diferentes casos para remoção:
+
+- Remoção em qualquer posição (O(n));
+- Remoção no fim (O(1) ou O(n));
+- Remoção no começo(O(1));
+
+Abaixo, um algoritmo para remoção.
+
+```{julia}
+function remove_node(ll, pos)
+    current = ll
+    prev = nothing
+    position = 0
+    while pos !== position && current !== nothing
+        prev = current
+        position += 1
+        current = current.next
+    end
+
+    if current === nothing
+        return nothing
+    end
+
+    if prev === nothing
+        ll = current.next
+        return ll
+    end
+
+    prev.next = current.next
+        return ll
+
+end
+```
+
+Basicamente, percorre-se cada elemento da lista encadeada até encontrar o nó da posição desejada a ser removida. Em seguida, arrumamos os apontadores do nó anterior e do nó seguinte. A lógica é similar à inserção.
+:::
+
+## Busca
+
+:::{justify}
+
+Por último, a operação de encontrar elemento engloba iterar sobre a lista, checando se o valor do nó é equivalente ao valor `n` que está sendo procurado. Se iterarmos por toda a lista e não encontrarmos o elemento, devolvemos uma resposta de que o elemento não foi encontrado.
+
+```{julia}
+
+function find_element(ll, n)
+    current = ll.head
+    while current !== nothing
+        if current.elem == n
+            println("Found!")
+            return current
+        end
+        current = current.next
+    end
+    println("Not found...")
+    return nothing
+end
+
+```
+
+:::
+
+# Possiveis Otimizações
+:::{justify}
+A atual implementação possui comportamento assintótico O(n) para remoção/inserção no fim da lista encadeada. Podemos otimizar esta implementação mantendo o elemento final da lista na memória, sem ganhos concretos em uso de memória (um novo apontador). Para isso, podemos criar um *Struct* de mais alto nível:
+
+```{julia}
+mutable struct linked_list
+
+    last::Union{ll_node, Nothing}
+    head::Union{ll_node, Nothing}
+    
+end
+```
+
+E, agora, basta modificar as outras funções para aceitar este novo *Struct*. 
+```{julia}
+function construct_ll(amount)
+    head = nothing
+    last = nothing
+    for elem in amount:-1:1
+        head = ll_node(elem, head)
+        if last === nothing #Mudança: Precisamos manter em vista qual a posição do último elemento
+            last = head
+        end
+    end
+
+    list = linked_list(head, last) #Mudança: Agora, a construção envolve o novo Struct
+    println("Constructed linked list.")
+    return list
+end
+
+function insert_anynode(ll, position, amount)
+    current = ll.head #Mundaça: ll.head representa nossa lista encadeada
+    prev = nothing
+    pos = 0
+    while pos !== position && current !== nothing
+        prev = current
+        pos += 1
+        current  = current.next
+    end
+
+    if current === nothing && pos !== position
+        return nothing
+    end
+
+    new_node = ll_node(amount, current)
+    
+    if prev !== nothing
+        prev.next = new_node  
+    else
+        ll.head = new_node #Mudança: Novamente, atualizando em head
+    end
+
+    #Mudança: Devemos checar se estamos adicionando no último nó da lista
+    #para atualizar o apontador .last
+    if current === nothing
+        ll.last = new_node
+    end
+
+    return ll
+end
+```
+
+Para tanto, sempre que quisermos modificar o começo ou final da lista, podemos simplesmente utilizar os respectivos apontadores presentes no objeto do tipo ``linked_list``.
+:::
+
+# Comparações
+
+:::{justify}
+
+Listas encadeadas são estruturas facilmente implementáveis em qualquer linguagem de programação. Dessa forma, torna-se natural comparar o uso de memória e tempo de construção da estrutura em diferentes linguagens. Abaixo, apresentamos comparações entre o desempenho da nossa implementação em Julia e outras implementações em C++ e Python. Também apresentamos o desempenho de uma operação de iteração por todos os nós da lista.
+
+## C++ 
+:::{justify}
+
+C++ é conhecido por sua velocidade para realização de operações e baixo uso de memória *overhead*. Portanto, seguimos implementando a estrutura de lista encadeada similarmente à nossa implementação em ``Julia``.
+
+```{cpp}
+
+struct node
+{
+    int elem;
+    node* next;
+};
+
+
+node* construct_ll(int amount)
+{
+    node* head = nullptr;
+    for (int i = 0; i < amount; i++)
+    {
+        node* created = new node;
+        created->elem = i;
+        created->next = head;
+        head = created;
+        
+    }
+    return head;
+}
+
+
+node* find_element(int n, node* ll)
+{
+    node* current = ll;
+    while(current != nullptr)
+    {
+        if(current->elem == n)
+        {
+            cout << "Found!\n";
+            return current;
+        }
+        current = current->next;
+    }
+    cout << "Not found.\n";
+    return nullptr;
+}
+```
+
+Note que a estrutura é extremamente similar à implementação em Julia - com o detalhe do uso de apontadores para criação da lista encadeada.
+
+Para medir performance em C++, podemos utilizar duas diferentes bibliotecas: ``malloc.h``, nativa de ``C`` e especializada em medição de alocações e uso de memória de pico, e ``<chrono>``, biblioteca de ``C++`` capaz de medir tempo entre diferentes operações.
+
+## Python
+
+
+``Python`` é uma linguagem particularmente conhecida pela praticidade. Diferentemente de ``C++`` e ``Julia``, ``Python`` não permite a criação de objetos mais primitivos, como *Structs*. Portanto, devemos inicializar cada nó como um objeto de uma classe. Com relação ao algoritmo de criação da lista encadeada, os mesmos princípios se mantém.
+
+```{python}
+
+class node:
+    def __init__(self, elem: int, next=None):
+        self.elem = elem
+        self.next = next
+
+
+
+def construct_ll(amount):
+    head = None
+    for elem in range(0, amount):
+        head = node(elem, head)
+
+    return head
+
+def find_element(ll, elemn):
+    current = ll
+    while current != None:
+        if current.elem == elemn:
+            print("Found!")
+            return current
+        
+        current = current.next
+
+    return None
+```
+
+Para medir a performance da estrutura de dado em ``Python``, utilizaremos as bibliotecas ``time`` e ``tracemalloc``.
+
+:::
+
+## Resultados:
+
+Para avaliar a performance das três linguagens, comparamos o uso de mémoria de pico e tempo médio para construção de uma lista encadeada de 1 milhão de nós. Também realizamos uma operação de `find_element()` com o tamanho máximo da lista (ou seja, iteramos sobre todos os elementos das listas) e comparamos o tempo médio de execução por linguagem.
+
+```{=html}
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; margin: 30px 0;">
+
+  <!-- Tempo de Inserção -->
+  <div style="background: #FFF3E0; padding: 20px; border-radius: 10px; border-left: 5px solid #FF9800;">
+    <h4 style="margin-top: 0; color:rgb(0, 0, 0);"> Inserção (1.000.000 nós)</h4>
+    
+    <div style="margin: 15px 0;">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+        <span style="font-weight: bold; color: #D32F2F;">C++</span>
+        <span>39 ms</span>
+      </div>
+      <div style="height: 25px; background: #FFCDD2; border-radius: 5px; overflow: hidden;">
+        <div style="height: 100%; width: 4%; background: #D32F2F;"></div>
+      </div>
+    </div>
+    
+    <div style="margin: 15px 0;">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+        <span style="font-weight: bold; color: #1976D2;">Julia</span>
+        <span>22 ms </span>
+      </div>
+      <div style="height: 25px; background: #BBDEFB; border-radius: 5px; overflow: hidden;">
+        <div style="height: 100%; width: 2.2%; background: #1976D2;"></div>
+      </div>
+    </div>
+    
+    <div style="margin: 15px 0;">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+        <span style="font-weight: bold; color: #388E3C;">Python</span>
+        <span>979 ms </span>
+      </div>
+      <div style="height: 25px; background: #C8E6C9; border-radius: 5px; overflow: hidden;">
+        <div style="height: 100%; width: 100%; background: #388E3C;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Memória -->
+  <div style="background: #E3F2FD; padding: 20px; border-radius: 10px; border-left: 5px solid #2196F3;">
+    <h4 style="margin-top: 0; color:rgb(0, 0, 0);"> Memória (1.000.000 de nós)</h4>
+    
+    <div style="margin: 15px 0;">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+        <span style="font-weight: bold; color: #D32F2F;">C++</span>
+        <span>32.1 MB</span>
+      </div>
+      <div style="height: 25px; background: #FFCDD2; border-radius: 5px; overflow: hidden;">
+        <div style="height: 100%; width: 30%; background: #D32F2F;"></div>
+      </div>
+    </div>
+    
+    <div style="margin: 15px 0;">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+        <span style="font-weight: bold; color: #1976D2;">Julia</span>
+        <span>30.8 MB </span>
+      </div>
+      <div style="height: 25px; background: #BBDEFB; border-radius: 5px; overflow: hidden;">
+        <div style="height: 100%; width: 29%; background: #1976D2;"></div>
+      </div>
+    </div>
+    
+    <div style="margin: 15px 0;">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+        <span style="font-weight: bold; color: #388E3C;">Python</span>
+        <span>106.8 MB </span>
+      </div>
+      <div style="height: 25px; background: #C8E6C9; border-radius: 5px; overflow: hidden;">
+        <div style="height: 100%; width: 100%; background: #388E3C;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Busca -->
+  <div style="background:rgb(210, 240, 208); padding: 20px; border-radius: 10px; border-left: 5px solid rgb(29, 153, 15);">
+    <h4 style="margin-top: 0; color:rgb(0, 0, 0);">Tempo de Execução de find_element(1000000) (ms)</h4>
+    
+    <div style="margin: 15px 0;">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+        <span style="font-weight: bold; color: #D32F2F;">C++</span>
+        <span>0.0006 ms</span>
+      </div>
+      <div style="height: 25px; background: #FFCDD2; border-radius: 5px; overflow: hidden;">
+        <div style="height: 100%; width: 1px; min-width: 1px; background: #D32F2F;"></div>
+      </div>
+    </div>
+    
+    <div style="margin: 15px 0;">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+        <span style="font-weight: bold; color: #1976D2;">Julia</span>
+        <span>0.011 ms </span>
+      </div>
+      <div style="height: 25px; background: #BBDEFB; border-radius: 5px; overflow: hidden;">
+        <div style="height: 100%; width: 2px; min-width: 2px; background: #1976D2;"></div>
+      </div>
+    </div>
+    
+    <div style="margin: 15px 0;">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+        <span style="font-weight: bold; color: #388E3C;">Python</span>
+        <span>52 ms </span>
+      </div>
+      <div style="height: 25px; background: #C8E6C9; border-radius: 5px; overflow: hidden;">
+        <div style="height: 100%; width: 100%; background: #388E3C;"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+```
+
+# Conclusão
+
+Listas encadeadas são estruturas fundamentais no estudo de teoria da computação, algoritmos e estruturas de dados. ``Julia``, em particular, possibilita a implementação de estruturas complexas como listas encadeadas de forma concisa. Conforme evidenciado pelos resultados apresentados, a linguagem demonstra capacidade de gerar código de alta performance capaz de rivalizar com gigantes da indústria, como ``C++``, enquanto mantém a simplicidade sintática característica de linguagens como Python. Em alguns casos, como na performance de ``find_element()``, ``Julia`` demonstrou performance quase 9.000x superior à de Python - feito impressionante para uma linguagem com sintaxe tão similar.
