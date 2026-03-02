@@ -14,6 +14,9 @@ author:
     affiliation: "Universidade Estadual de Campinas"
     url: https://ctruciosm.github.io
     orcid: 0000-0001-8746-8877
+  - name: Rafael Seixas
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/seixasr
 date: "2025-10-07"
 image: imagens/eqdiff_capa.png
 lang: pt
@@ -31,7 +34,7 @@ draft: true
 ::: justify
 O mundo é dinâmico. Populações crescem, reações químicas acontecem e doenças se espalham. Para descrever como essas quantidades mudam ao longo do tempo, usamos **Equações Diferenciais**.
 
-Enquanto a estatística tradicional muitas vezes olha para "retratos" estáticos dos dados, a modelagem dinâmica tenta descrever o "filme". No ecossistema Julia, a biblioteca `DifferentialEquations.jl` é a ferramenta definitiva para isso, oferecendo velocidade superior a concorrentes em Python (Scipy) ou MATLAB, além de recursos avançados como sensibilidade de parâmetros e integração com redes neurais.
+Enquanto a estatística tradicional muitas vezes olha para "retratos" estáticos dos dados, a modelagem dinâmica tenta descrever o "filme". No ecossistema Julia, a biblioteca `DifferentialEquations.jl` é a ferramenta definitiva para isso, oferecendo velocidade superior a concorrentes em Python *(SciPy)* ou MATLAB, além de recursos avançados como sensibilidade de parâmetros e integração com redes neurais.
 
 Neste tutorial, vamos modelar uma epidemia utilizando o clássico modelo **SIR**. Veremos como pequenas mudanças nas taxas de contágio podem alterar drasticamente o destino de uma população.
 :::
@@ -41,9 +44,9 @@ Neste tutorial, vamos modelar uma epidemia utilizando o clássico modelo **SIR**
 ::: justify
 O modelo SIR divide a população em três compartimentos que variam no tempo $t$:
 
-1.  **Suscetíveis (**$S$): Pessoas saudáveis que podem pegar a doença.
-2.  **Infectados (**$I$): Pessoas doentes que transmitem a doença.
-3.  **Recuperados (**$R$): Pessoas que se curaram (ou faleceram) e não transmitem mais.
+1.  **Suscetíveis** ($S$): Pessoas saudáveis que podem pegar a doença.
+2.  **Infectados** ($I$): Pessoas doentes que transmitem a doença.
+3.  **Recuperados** ($R$): Pessoas que se curaram (ou faleceram) e não transmitem mais.
 
 A dinâmica é regida pelo seguinte sistema de Equações Diferenciais Ordinárias (EDOs):
 :::
@@ -57,7 +60,9 @@ $$
 $$
 
 ::: justify
-Onde: \* $\beta$ (beta): Taxa de transmissão (contágio). \* $\gamma$ (gama): Taxa de recuperação.
+Onde: 
+- $\beta$ (beta): Taxa de transmissão (contágio).
+- $\gamma$ (gama): Taxa de recuperação.
 :::
 
 ## Instalação
@@ -142,7 +147,7 @@ O gráfico acima conta a história clássica de uma epidemia sem controle: o nú
 ## Análise de Cenários: "Achatando a Curva"
 
 ::: justify
-Como estatísticos e cientistas de dados, nosso interesse é simular casos "E se?".Vamos comparar o cenário anterior com um cenário onde medidas de distanciamento social são aplicadas.Isso reduz o parâmetro $\beta$ (transmissão).Vamos reduzir $\beta$ de $0.5$ para $0.25$ e ver o impacto no pico de infectados.
+Como estatísticos e cientistas de dados, nosso interesse é simular casos "E se?". Vamos comparar o cenário anterior com um cenário em que medidas de distanciamento social são aplicadas. Isso reduz o parâmetro $\beta$ (transmissão). Vamos reduzir $\beta$ de $0.5$ para $0.25$ e ver o impacto no pico de infectados.
 :::
 
 ```{julia}
@@ -171,7 +176,10 @@ A diferença é brutal. Embora a doença ainda exista no cenário azul, o pico �
 ## O Número Básico de Reprodução
 
 ::: justify
-Na epidemiologia, um parâmetro crítico derivado desse modelo é o $R_0$ ("R-zero"), calculado como:$$ R_0 = \frac{\beta}{\gamma} $$
+Na epidemiologia, um parâmetro crítico derivado desse modelo é o $R_0$ ("R-zero"), calculado como:
+$$ 
+R_0 = \frac{\beta}{\gamma} 
+$$
 
 Ele indica quantas pessoas, em média, um único infectado contamina.
 
@@ -179,13 +187,13 @@ Ele indica quantas pessoas, em média, um único infectado contamina.
 
 -   Se $R_0 < 1$: A doença desaparece sozinha.
 
-No nosso primeiro cenário: $R_0 = 0.5 / 0.1 = 5$ (crescimento explosivo).No segundo cenário: $R_0 = 0.25 / 0.1 = 2.5$ (ainda cresce, mas mais devagar).
+No nosso primeiro cenário: $R_0 = 0.5 / 0.1 = 5$ (crescimento explosivo). No segundo cenário: $R_0 = 0.25 / 0.1 = 2.5$ (ainda cresce, mas mais devagar).
 :::
 
 ## Conclusão
 
 ::: justify
-O DifferentialEquations.jl permitiu simular um sistema dinâmico complexo com poucas linhas de código.Partimos das equações matemáticas fundamentais, resolvemos o sistema numericamente e visualizamos o impacto de intervenções de saúde pública.Este é apenas o começo. O pacote SciML permite expandir esse modelo para incluir:
+O DifferentialEquations.jl permitiu simular um sistema dinâmico complexo com poucas linhas de código. Partimos das equações matemáticas fundamentais, resolvemos o sistema numericamente e visualizamos o impacto de intervenções de saúde pública. Este é apenas o começo. O pacote SciML permite expandir esse modelo para incluir:
 
 -   Vacinação: Adicionando um fluxo direto de $S$ para $R$.
 
