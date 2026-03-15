@@ -1,0 +1,284 @@
+---
+title: "Pilhas e Filas em Julia"
+description:
+  Neste tutorial, abordaremos as estruturas de dados Pilhas e Filas em Julia, suas implementações e aplicações práticas.
+categories:
+  - Estrutura de dados
+  - Benchmarks
+author:
+  - name: Rafael Seixas
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/seixasr
+  - name: Carlos Trucíos
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://ctruciosm.github.io
+    orcid: 0000-0001-8746-8877
+date: "2026-02-05"
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+engine: julia
+draft: true
+---
+
+## Introdução
+
+::: justify
+No mundo da computação, organização e eficiência são vitais para garantir que um código execute suas funções corretamente e produza resultados em tempo razoável.  
+
+Para isso, utilizamos **estruturas de dados**, que são formas específicas de armazenar e manipular informações dependendo do problema.
+
+Neste tutorial, abordaremos duas das estruturas mais clássicas e importantes:
+
+- **Pilhas (Stacks)**
+- **Filas (Queues)**
+
+Veremos suas operações, implementações em Julia e aplicações reais em algoritmos.
+:::
+
+## Conceito
+
+::: justify
+Pilhas e filas são estruturas lineares, ou seja, organizam os dados em sequência.  
+
+A diferença está na ordem em que os elementos entram e saem:
+
+- Pilhas seguem o princípio **LIFO** (*Last In, First Out*)
+- Filas seguem o princípio **FIFO** (*First In, First Out*)
+
+Essas estruturas aparecem em diversas aplicações como parsing, backtracking, grafos e sistemas de filas.
+:::
+
+## Pilhas
+
+::: justify
+Uma **pilha** funciona como uma pilha de pratos: adicionamos elementos no topo e removemos também pelo topo.
+
+A regra é:
+
+> O último elemento inserido será o primeiro a ser removido (**LIFO**).
+:::
+
+### Implementação com `Vector`
+
+::: justify
+Em Julia, um `Vector` já é suficiente para implementar uma pilha de forma eficiente.
+:::
+
+```{julia}
+stack = Int[]
+
+push!(stack, 10)
+push!(stack, 20)
+push!(stack, 30)
+
+println(stack)
+
+removedItem = pop!(stack)
+println("Elemento removido: ", removedItem)
+println("Pilha atual: ", stack)
+
+top = stack[end]
+println("Topo da pilha: ", top)
+
+```
+::: justify
+Neste exemplo, utilizando parametros e estruturas simples, podemos criar uma pilha, remover um item e checar seu topo,
+respeitando as regras de Estrutura de Dados
+:::
+
+## Filas
+::: justify
+Uma **fila** segue a lógica de uma fila no mundo real:
+
+> O primeiro elemento inserido será o primeiro a ser removido (FIFO).
+:::
+
+### Implementação com `Vector`
+::: justify
+Podemos usar um Vector, mas remover do início é custoso, pois exige reorganizar os elementos. Mais a frente deste tutorial, abordaremos formas mais efeicientes de se construir uma fila.
+:::
+```{julia}
+queue = Int[]
+
+push!(queue, 1)
+push!(queue, 2)
+push!(queue, 3)
+
+println(queue)
+
+x = popfirst!(queue)
+
+println("Elemento removido: ", x)
+println("Fila atual: ", queue)
+```
+::: justify
+Note que, popfirst! possui um custo O(n), uma vez que todos os elementos restantes precisam ser deslocados uma posição para a esquerda.
+Pensando nisso podemos realizar uma Implementação mais eficiente de filas utilizando **DataStructures.jl**. 
+Nessa biblioteca, encontramos **Deque** como uma estrutura a ser implementada.
+:::
+
+### Importando DataStructures
+```{julia}
+using Pkg
+Pkg.add("DataStructures")
+```
+
+### Implementação de Deque via DataStructures
+```{julia}
+using DataStructures
+
+queue = Deque{Int}()
+
+push!(queue, 10)
+push!(queue, 20)
+push!(queue, 30)
+
+println(queue)
+
+removedItem = popfirst!(queue)
+println("Elemento removido: ", removedItem)
+println("Fila atual: ", queue)
+```
+:::justify
+Nesse caso, por queue ser uma estrutura definida por Deque, a operação popfirst! terá um custo O(1), bem mais eficiente que a implementação por Vector.
+:::
+
+## Exemplos práticos
+::: justify
+Pilhas e Filas aparecem em diversas situações cotidianas no mundo da programação, como:
+- Pilhas: parsing, recursão, backtracking
+- Filas: grafos, BFS, sistemas de atendimento
+Vamos exemplificar dois usos dessas estruturas, parsing para Pilhas e BFS para Filas.
+:::
+
+### Backtracking: Uma aplicação real
+
+::: justify
+Backtracking é uma técnica muito utilizada em algoritmos de busca e otimização.  
+A ideia central é simples:
+
+- Tentamos um caminho possível
+- Caso ele falhe, desfazemos a escolha
+
+Vamos aplicar esse processo para a resolução de labirintos. Precisamos encontrar um caminho em um labirinto representado por uma matriz, onde:
+
+- `0` representa um caminho livre
+- `1` representa uma parede
+- `2` marcará o caminho encontrado pelo algoritmo
+
+O algoritmo tenta se mover em quatro direções e, caso encontre um beco sem saída, retorna e tenta outra rota.
+
+:::
+
+```{julia}
+function resolver_labirinto!(maze, x, y, destino)
+    n, m = size(maze)
+
+    # Verifica limites da matriz
+    if x < 1 || x > n || y < 1 || y > m
+        return false
+    end
+
+    # Verifica se é parede ou já visitado
+    if maze[x, y] != 0
+        return false
+    end
+
+    # Chegou no destino
+    if (x, y) == destino
+        maze[x, y] = 2
+        return true
+    end
+
+    # Marca posição atual como parte do caminho
+    maze[x, y] = 2
+
+    # Tenta mover em quatro direções
+    if resolver_labirinto!(maze, x + 1, y, destino) ||   # baixo
+       resolver_labirinto!(maze, x - 1, y, destino) ||   # cima
+       resolver_labirinto!(maze, x, y + 1, destino) ||   # direita
+       resolver_labirinto!(maze, x, y - 1, destino)      # esquerda
+        return true
+    end
+
+    # Backtracking: desfaz o caminho se não funcionar
+    maze[x, y] = 0
+    return false
+end
+```
+
+```{julia}
+maze = [
+    0 1 0 0 0;
+    0 1 0 1 0;
+    0 0 0 1 0;
+    1 1 0 0 0;
+    0 0 0 1 0
+]
+
+inicio  = (1, 1)
+destino = (5, 5)
+
+println("Labirinto inicial:")
+println(maze)
+
+println("\\nProcurando caminho...\\n")
+
+if resolver_labirinto!(maze, inicio[1], inicio[2], destino)
+    println("✅ Caminho encontrado!")
+else
+    println("❌ Nenhum caminho possível.")
+end
+
+println("\\nLabirinto resolvido:")
+println(maze)
+```
+
+### BFS: Uma aplicação real
+::: justify
+A Busca em Largura (Breadth-First Search) é um algoritmo fundamental em grafos.
+Ela explora os nós em camadas e depende diretamente de uma fila.
+:::
+
+```{julia}
+function bfs(start)
+    queue = Deque{Int}()
+    visited = Set{Int}()
+
+    push!(queue, start)
+
+    while !isempty(queue)
+        node = popfirst!(queue)
+
+        if node in visited
+            continue
+        end
+
+        println("Visitando nó: $node")
+        push!(visited, node)
+
+        # Aqui entraríamos com os vizinhos do nó
+    end
+end
+bfs(1)
+```
+
+## Conclusão
+
+::: justify
+Neste módulo, exploramos duas estruturas essenciais da computação:
+
+- Pilhas, baseadas em LIFO
+- Filas, baseadas em FIFO
+- Vimos como implementá-las em Julia usando Vector e como utilizar estruturas mais eficientes como Deque.
+
+Esses conceitos são fundamentais para compreender algoritmos clássicos e aplicações reais em ciência da computação.
+:::
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::
