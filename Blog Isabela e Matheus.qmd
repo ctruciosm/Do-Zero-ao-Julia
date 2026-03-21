@@ -1,0 +1,110 @@
+---
+title: "Blog Isabela e Matheus"
+format: html
+engine: julia
+---
+
+## Erros comuns de quem vem do R ou Python para Julia
+
+### Introdução
+Migrar de linguagens como R ou Python para Julia pode parecer natural por causa da sintaxe acessível e da familiaridade com conceitos de programação. No entanto, certos hábitos consolidados nessas linguagens, podem levar a código em Julia que é ineficiente, confuso ou até incorreto.
+
+Neste blog, vamos analisar os erros mais comuns que programadores trazem de R e Python para Julia, explicando porquê eles surgem e como evitá-los, com foco em desempenho e legibilidade.
+
+### Evitar for é um erro em Julia
+Em linguagens como R e Python, é comum evitar laços for por motivos de desempenho. Nesses ambientes, a recomendação tradicional é substituir loops explícitos por operações vetorizadas, que delegam o trabalho a código nativo mais eficiente. Esse hábito é frequentemente carregado para Julia de forma automática.
+
+Em Julia, no entanto, essa lógica não se aplica. Os laços for são compilados, eficientes e fazem parte do estilo idiomático da linguagem. O exemplo abaixo ilustra uma operação simples que dobra os valores de um vetor:
+
+```{julia}
+function dobrar_valores!(y, x)
+    for i in eachindex(x)
+        y[i] = x[i] * 2
+    end
+end
+
+# Testando a função
+x = [1, 2, 3]
+y = [0, 0, 0]
+dobrar_valores!(y, x)
+
+# Exibe o resultado final
+y
+```
+Nesse caso, o uso de for deixa explícito o que está sendo feito em cada posição do vetor, sem penalizar o desempenho. Em Julia, escrever código iterativo claro e direto é frequentemente a melhor escolha.
+
+### Broadcasting não é o mesmo que vetorização
+Em Julia, operações elemento a elemento não acontecem automaticamente. Diferentemente do que ocorre em R ou em bibliotecas como NumPy, aplicar uma função a um vetor não implica, por padrão, aplicar essa função a cada um de seus elementos.
+
+Para esse tipo de operação, Julia utiliza o mecanismo de broadcasting, indicado explicitamente pelo operador .. Esse operador informa ao compilador que a operação deve ser realizada posição a posição, evitando ambiguidades sobre o significado do código.
+
+Um erro comum de quem migra de R ou Python é assumir que a vetorização ocorre de forma implícita, o que pode resultar em erros de execução ou em comportamento inesperado. Por exemplo:
+
+```{julia}
+log([1.0, 10.0, 100.0])
+```
+
+Nesse caso, a função não é aplicada ao vetor como um todo. Para realizar a operação elemento a elemento, é necessário escrever:
+
+```{julia}
+log.([1.0, 10.0, 100.0])
+```
+
+Ao exigir essa notação explícita, Julia favorece códigos mais claros e previsíveis, deixando evidente quando uma operação é vetorial e quando não é.
+
+### Tipos importam
+Em Julia, o fato de a linguagem ser dinamicamente tipada não elimina a importância dos tipos durante a execução do programa. O desempenho do código está diretamente ligado à capacidade do compilador de inferir tipos de forma estável, mesmo quando eles não são explicitamente declarados.
+
+Quem vem de R ou Python costuma escrever funções sem se preocupar com o tipo das variáveis intermediárias ou com a consistência do valor retornado. Porém, na linguagem Julia, esse padrão pode introduzir incerteza para o compilador e dificultar otimizações, ainda que o código funcione corretamente.
+
+Um caso típico ocorre quando uma função pode retornar valores de naturezas distintas:
+
+```{julia}
+function resultado(x)
+    x > 0 ? x : 0.0
+end
+
+# Testando com um valor positivo (retorna Int) e negativo (retorna Float)
+println("Para 10: ", typeof(resultado(10)))
+println("Para -1: ", typeof(resultado(-1)))
+```
+
+Embora esse exemplo seja simples, variações desse padrão com tipos incompatíveis levam o compilador a tratar o retorno como genérico. Em Julia, escrever funções com comportamento tipado previsível é uma prática central para manter eficiência e clareza no código.
+
+### Código no escopo global deixa Julia lenta
+Outro erro frequente, especialmente em scripts e notebooks, é executar código computacionalmente pesado diretamente no escopo global. Ainda que isso seja comum em R e Python, em Julia essa prática compromete o desempenho.
+
+No escopo global, o compilador tem dificuldade em inferir tipos de forma estável, o que resulta em código menos otimizado. Como consequência, operações simples podem parecer artificialmente lentas.
+
+Considere o exemplo abaixo executado fora de uma função:
+
+```{julia}
+s = 0.0
+for i in 1:10^6
+    global s += i
+end
+# Mostra o resultado do loop global
+s
+```
+
+Ao encapsular o mesmo código dentro de uma função, a inferência de tipos é preservada e o desempenho melhora significativamente:
+
+```{julia}
+function soma()
+    total = 0.0
+    for i in 1:10^6
+        total += i
+    end
+    return total
+end
+
+# Executa a função e mostra o resultado
+soma()
+```
+
+Em Julia, escrever funções vai além de ser apenas uma questão de organização, é uma prática fundamental para obter código rápido e confiável.
+
+### Conclusão
+Migrar para o Julia não é apenas aprender uma nova sintaxe, mas sim adotar uma nova mentalidade de desenvolvimento. Enquanto em R e Python fomos ensinados a "esconder" a lógica em funções vetorizadas para ganhar velocidade, no Julia somos encorajados a escrever o código de forma clara e explícita.
+
+Ao entender que os laços for são seus aliados, que o broadcasting traz clareza e que a estabilidade de tipos e o uso de funções são os pilares da performance, você deixa de lutar contra a linguagem e passa a extrair o máximo do seu potencial. O Julia oferece a liberdade de escrever código que parece um script simples, mas que roda com o desempenho de linguagens de baixo nível.
