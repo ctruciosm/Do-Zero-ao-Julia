@@ -235,17 +235,18 @@ Agora vamos adicionar um novo tipo:
 ```{julia}
 struct DottedLine <: SpatialObject
     end1::PointR3
-    end2::Float64
+    end2::PointR3
     numDots::Int
 end
 
 function points(l::DottedLine)
-    ret = Set()
-    for i in range(numDots)
-        ret.include(PointR3(
-            end1.x*(1/i)+end2.x*(1-1/i),
-            end1.y*(1/i)+end2.y*(1-1/i),
-            end1.z*(1/i)+end2.z*(1-1/i)
+    ret = Set{PointR3}()
+    for i in 1:l.numDots
+        t = i / (l.numDots - 1)
+        push!(ret, PointR3(
+            l.end1.x*t+l.end2.x*(1-t),
+            l.end1.y*t+l.end2.y*(1-t),
+            l.end1.z*t+l.end2.z*(1-t)
         ))
     end
     return ret
@@ -259,7 +260,7 @@ end21 = PointR3(0.0, 1.0, 0.0)
 end22 = PointR3(3.0, 1.0, 0.0)
 l2 = DottedLine(end21, end22, 10)
 
-printl("Distância entre l1 e l2: ", distance(l1, l2))
+println("Distância entre l1 e l2: ", distance(l1, l2))
 ```
 
 Sem alterar nenhum código existente, o sistema passa a suportar esse novo objeto.
@@ -297,6 +298,7 @@ Esse modelo é amplamente usado em áreas como:
 - Sistemas distribuídos
 
 ## Desafio
+
 Note que por conta do modo como foi implementado `distance` para `SpatialObject`, um objeto novo como `DottedLine` apenas tem `distance` automaticamente definida com relação a outros objetos do mesmo tipo. Você consegue criar uma arquitetura em que se torne possível definir um espaço (como R3) e então poder definir objetos nele de modo que a função distância já funcione imediatamente entre quais quers objetos do espaço?
 
 ::: callout-note
