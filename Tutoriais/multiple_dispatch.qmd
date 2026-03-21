@@ -1,0 +1,304 @@
+---
+title: "Multiple dispatch em Julia"
+description: |
+  Multiple dispatch é uma feature nativa de julia e permite usar uma mesma função para tratar diferentes casos com parâmetros de diferentes tipos tornando o código mais simples e menos acoplado.
+categories:
+  - Aplicação
+  - Features nativas
+author:
+  - name: Mateus Cleto
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/MateusCleto
+
+date: "2026-03-18"
+image: imagens/multiple_dispatch_capa.png
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+draft: false
+engine: knitr
+---
+
+## Introdução
+
+Uma das características mais marcantes da linguagem Julia é o multiple dispatch. Diferente de muitas linguagens orientadas a objetos, onde o comportamento de uma função depende apenas do tipo do objeto que a invoca, em Julia o comportamento pode depender dos tipos de todos os argumentos ao mesmo tempo.
+
+Neste tutorial, vamos entender como isso funciona construindo um pequeno exemplo usando o conceito de distância.
+
+## O que é Multiple Dispatch?
+
+Em Julia funções não pertencem a classes, elas são entidades independentes que podem ter múltiplos métodos, cada um definido para diferentes combinações de tipos.
+
+Por exemplo, podemos definir a mesma função distance para diferentes tipos de objetos:
+
+```{julia}
+distance(a, b) = error("distance não implementada")
+```
+
+E depois especializar:
+
+```{julia}
+distance(a::Float64, b::Float64) = abs(a - b)
+```
+
+Quando chamamos a função, a linguagem escolhe automaticamente o método mais específico com base nos tipos dos argumentos.
+
+## Definindo tipos
+
+Vamos começar criando alguns tipos básicos:
+
+```{julia}
+struct PointR2
+    x::Float64
+    y::Float64
+end
+
+struct ObjectR2
+    points::Set{PointR2}
+end
+```
+
+Aqui temos:
+
+- PointR2: representa um par ordenado de números reais, um ponto no plano
+- ObjectR2: representa um conjunto de pares ordenados reais, um objeto no plano
+
+## Definindo interações
+
+Agora podemos definir distância entre diferentes objetos.
+
+```{julia}
+# Ponto com ponto
+function distance(a::PointR2, b::PointR2)
+    return sqrt((a.x-b.x)^2 + (a.y-b.y)^2)
+end
+
+# Ponto com objeto
+function distance(p::PointR2, o::ObjectR2)
+    min = Inf
+    for point in o.points
+        dist = distance(p, point)
+        if dist < min
+            min = dist
+        end
+    end
+    return min
+end
+
+# Objeto com ponto (ordem invertida!)
+function distance(o::ObjectR2, p::PointR2)
+    return distance(p, o)
+end
+
+# Objeto com objeto
+function distance(o1::ObjectR2, o2::ObjectR2)
+    min = Inf
+    for p in o1.points
+        dist = distance(p, o2)
+        if dist < min
+            min = dist
+        end
+    end
+    return min
+end
+```
+
+Note que a ordem dos argumentos importa. Em Julia (PontR2, ObjectR2) e (ObjectR2, PointR2) são considerados casos diferentes.
+
+```{julia}
+# Testando o comportamento
+p1 = PointR2(2.0, 5.0)
+p2 = PointR2(3.0, 3.0)
+p3 = PointR2(6.0, 7.0)
+p4 = PointR2(1.0, -1.0)
+o1 = ObjectR2(Set([p1, p2]))
+o2 = ObjectR2(Set([p3, p4]))
+
+println("Distância entre p1 e p2: ", distance(p1, p2))
+println("Distância entre p1 e o1: ", distance(p1, o1))
+println("Distância entre o1 e p1: ", distance(o1, p1))
+println("Distância entre o1 e o2: ", distance(o1, o2))
+```
+
+## Como o método é escolhido?
+
+Quando você chama:
+
+```{julia}
+#| eval: false
+distance(p1, o1)
+```
+
+Julia analisa os tipos:
+
+- `p1::PointR2`
+- `o1::ObjectR2`
+
+E procura o método mais específico que corresponda exatamente a essa assinatura: `distance(::PointR2, ::ObjectR2)`
+
+Esse processo é feito em tempo de execução, mas é altamente otimizado pelo compilador JIT.
+
+## Generalizando com tipos abstratos
+
+Podemos melhorar nosso modelo introduzindo um tipo abstrato:
+
+```{julia}
+abstract type SpatialObject end
+
+points(o::SpatialObject) = error("points não implementado")
+
+function distance(o1::T, o2::T) where {T <: SpatialObject}    
+    min = Inf
+    for p1 in points(o1)
+        for p2 in points(o2)
+            dist = distance(p1, p2)
+            if dist < min
+                min = dist
+            end
+        end
+    end
+    return min
+end
+```
+
+Agora basta definir `points` e implementar `SpatialObject` para um novo tipo ter a função `distance` definida:
+
+```{julia}
+struct PointR3
+    x::Float64
+    y::Float64
+    z::Float64
+end
+
+function distance(p1::PointR3, p2::PointR3)
+    return sqrt((p1.x-p2.x)^2+(p1.y-p2.y)^2+(p1.z-p2.z)^2)
+end
+
+struct ObjectR3 <: SpatialObject
+    points::Set{PointR3}
+end
+
+function points(o::ObjectR3)
+    return o.points
+end
+```
+
+Testando o comportamento:
+
+```{julia}
+p1 = PointR3(1.0, 1.0, 1.0)
+p2 = PointR3(2.0, 1.0, 1.0)
+p3 = PointR3(1.0, 3.0, 1.0)
+p4 = PointR3(1.0, 1.0, 3.0)
+o1 = ObjectR3(Set([p1, p2]))
+o2 = ObjectR3(Set([p3, p4]))
+
+println("Distância entre o1 e o2: ", distance(o1, o2))
+```
+
+## Vantagem sobre orientação a objetos tradicional
+
+Em linguagens orientadas a objetos clássicas sem sobrecarga de parâmetros, você normalmente escreveria algo como: `obj1.distance(obj2)`, o problema é que isso considera apenas o tipo de obj1. O comportamento depende de decisões internas ou verificações condicionais.
+
+Em Julia, você escreve: `distance(obj1, obj2)` e o sistema de dispatch decide com base nos dois tipos simultaneamente, sem precisar de if ou switch.
+
+Sem multiple dispatch a função ficaria:
+
+```{julia}
+#| eval: false
+function distance(a, b)
+    if a isa PointR2 && b isa PointR2
+        ...
+    elseif a isa ObjectR2 && b isa ObjectR2
+        ...
+    end
+end
+```
+
+Isso rapidamente se torna difícil de manter. Com multiple dispatch, basta adicionar novos métodos:
+
+```{julia}
+#| eval: false
+distance(a::Particle, b::Particle) = ...
+distance(a::Particle, b::Wall) = ...
+distance(a::Wall, b::Particle) = ...
+```
+
+O código fica mais desacoplado, modular, extensível e legível.
+
+## Extensibilidade: adicionando novos tipos
+
+Agora vamos adicionar um novo tipo:
+
+```{julia}
+struct DottedLine <: SpatialObject
+    end1::PointR3
+    end2::Float64
+    numDots::Int
+end
+
+function points(l::DottedLine)
+    ret = Set()
+    for i in range(numDots)
+        ret.include(PointR3(
+            end1.x*(1/i)+end2.x*(1-1/i),
+            end1.y*(1/i)+end2.y*(1-1/i),
+            end1.z*(1/i)+end2.z*(1-1/i)
+        ))
+    end
+    return ret
+end
+
+end11 = PointR3(0.0, 0.0, 0.0)
+end12 = PointR3(3.0, 0.0, 0.0)
+l1 = DottedLine(end11, end12, 10)
+
+end21 = PointR3(0.0, 1.0, 0.0)
+end22 = PointR3(3.0, 1.0, 0.0)
+l2 = DottedLine(end21, end22, 10)
+
+printl("Distância entre l1 e l2: ", distance(l1, l2))
+```
+
+Sem alterar nenhum código existente, o sistema passa a suportar esse novo objeto.
+
+Um detalhe importante: se você definir métodos muito genéricos, pode criar ambiguidades:
+
+```{julia}
+#| eval: false
+distance(a::PointR2, b::SpatialObject) = ...
+distance(a::SpatialObject, b::ObjectR2) = ...
+```
+
+Ao chamar `distance(p, o)` Julia pode não saber qual método escolher. Nesses casos, você precisa definir um método mais específico:
+
+```{julia}
+#| eval: false
+distance(a::PointR2, b::ObjectR2) = ...
+```
+
+## Conclusão
+
+Multiple dispatch é uma das ideias centrais de Julia e muda profundamente a forma como organizamos código. Neste tutorial, vimos que:
+
+- Funções podem ter múltiplos métodos baseados em tipos
+- A escolha do método depende de todos os argumentos
+- Isso elimina condicionais complexas
+- O código se torna mais modular e extensível
+- É especialmente poderoso para modelar sistemas com múltiplos tipos interagindo
+
+Esse modelo é amplamente usado em áreas como:
+
+- Computação científica
+- Álgebra linear
+- Simulações físicas
+- Sistemas distribuídos
+
+## Desafio
+Note que por conta do modo como foi implementado `distance` para `SpatialObject`, um objeto novo como `DottedLine` apenas tem `distance` automaticamente definida com relação a outros objetos do mesmo tipo. Você consegue criar uma arquitetura em que se torne possível definir um espaço (como R3) e então poder definir objetos nele de modo que a função distância já funcione imediatamente entre quais quers objetos do espaço?
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::
