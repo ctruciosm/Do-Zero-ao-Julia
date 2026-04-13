@@ -1,0 +1,31 @@
+---
+title: "Introdução a Julia - Palestra Professor x "
+description: |
+  Neste blog, vamos explorar os conceitos básicos da linguagem Julia, suas principais características e como ela se destaca em relação a outras linguagens de programação.
+categories:
+  - Julia
+  - Palestra
+author:
+  - name: Rafael Santos Seixas Figueiredo
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://linkedin.com/in/rafael-santos-seixas-figueiredo
+  - name: João Vitor Toppa
+    affiliation: "Universidade Estadual de Campinas"
+---
+
+## Introdução
+Na noite do dia 07/04, tivemos a oportunidade de assistir a uma palestra de introdução a Julia ministrada pelo Professor Alexandre Umpierre, Engenheiro Químico e PhD em Química pela UFRGS, professor junto ao IQ/UnB desde 2009, com atuação principal junto ao curso de Engenharia Química. Esse blog tem como objetivo falar sobre os tópicos aborados pelo professor, além do material disponibilizado por ele, para que possamos compartilhar o conhecimento adquirido com outros interessados na linguagem Julia.
+
+## O que é Julia?
+Julia é a linguagem de programação moderna, de código livre e aberto.
+Dinamicamente tipada e compilada just-in-time, Julia foi desenvolvida para ser amigável como Python e Matlab e para oferecer alto desempenho como C e FORTRAN.
+
+## Controle de Fluxo
+
+## Despachos Multiplos
+
+## Distribuições de Probabilidade
+
+## Código Limpo
+
+## Encerramento
