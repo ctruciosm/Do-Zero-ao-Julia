@@ -1,0 +1,37 @@
+---
+title: "Introdução a Julia - Palestra Professor Alexandre Umpierre"
+description: |
+  Neste blog, vamos explorar os conceitos básicos da linguagem Julia, apresentados na Palestra do Professor Alexandre Umpierre.
+categories:
+  - Julia
+  - Palestra
+author:
+  - name: Rafael Santos Seixas Figueiredo
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://linkedin.com/in/rafael-santos-seixas-figueiredo
+  - name: João Vitor Toppa
+    affiliation: "Universidade Estadual de Campinas"
+---
+
+## Introdução
+Na noite do dia 07/04, tivemos a oportunidade de assistir a uma palestra de introdução a Julia ministrada pelo Professor Alexandre Umpierre, Engenheiro Químico e PhD em Química pela UFRGS, professor junto ao IQ/UnB desde 2009, com atuação principal junto ao curso de Engenharia Química. Esse blog tem como objetivo falar sobre os tópicos aborados pelo professor, além do material disponibilizado por ele, para que possamos compartilhar o conhecimento adquirido com outros interessados na linguagem Julia.
+
+## O que é Julia?
+O professor começou posicionando Julia no meio das linguagens modernas: open source, sintaxe simples e desempenho bem próximo de linguagens compiladas como C e FORTRAN. A proposta da linguagem é justamente essa: juntar a facilidade de uso de Python/Matlab com performance de alto nível. Nos exemplos, ficou claro como Julia funciona bem tanto pra scripts rápidos quanto pra aplicações científicas mais pesadas.
+
+## Controle de Fluxo
+O tema de controle de fluxo foi apresentado de forma bastante visual, com exemplos de código executados ao vivo. O professor demonstrou o uso de condicionais (if, elseif, else) e laços de repetição (for, while), destacando a clareza da sintaxe de Julia. Ele também abordou comandos como continue e break, mostrando como eles podem ser usados para controlar o fluxo de execução de loops. A palestra trouxe exemplos comparando diferentes formas de estruturar decisões e repetições.
+
+## Despachos Multiplos
+Para apresentar Despachos Multiplos, o professor mostrou como funções podem ter múltiplas implementações dependendo dos tipos dos argumentos, permitindo que o mesmo nome de função seja usado para diferentes tipos de dados. Ele mostrou exemplos simples e depois foi evoluindo pra casos com tipos definidos pelo usuário, o que deixa o código mais flexível e performático. É um diferencial bem grande em relação a outras linguagens mais populares. O professor também destacou como isso facilita a escrita de código genérico e reutilizável, além de melhorar a legibilidade e manutenção do código.
+
+## Distribuições de Probabilidade
+A palestra também abordou o uso de Julia para análise estatística e modelagem de distribuições de probabilidade. O professor apresentou o pacote `Distributions.jl` e demonstrou como gerar amostras, ajustar distribuições e calcular estatísticas como média e desvio padrão. Foram discutidas as principais distribuições (uniforme, normal, binomial, Poisson), sempre com exemplos de código e visualizações gráficas. Ele mostrou como Julia facilita a manipulação de dados e a realização de análises estatísticas.
+
+## Código Limpo
+No final, ele comentou sobre boas práticas. A principal ideia foi não travar demais no conceito de “código perfeito” no começo, mas focar em clareza. Mostrou exemplos de código confuso com condicionais aninhadas e alternativas mais legíveis. Nomear bem variáveis e funções também apareceu como ponto importante. No fim, código claro é o que você consegue ler depois — e outras pessoas também.
+
+## Encerramento
+A palestra do Professor Alexandre Umpierre foi uma excelente introdução à linguagem Julia, combinando teoria, prática e dicas valiosas para quem está começando. O material apresentado, aliado à didática do professor, certamente contribui para o desenvolvimento de novos programadores e entusiastas da linguagem. Para quem deseja se aprofundar, o material completo da palestra está disponível em: (https://pluto.land/n/31r28ik1)
+
+Agradecemos ao professor pela palestra e por compartilhar seu conhecimento conosco, onde pudemos aprender com a experiência de um especialista na área.
