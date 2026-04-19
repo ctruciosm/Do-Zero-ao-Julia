@@ -17,15 +17,19 @@ author:
 Na noite do dia 07/04, tivemos a oportunidade de assistir a uma palestra de introdução a Julia ministrada pelo Professor Alexandre Umpierre, Engenheiro Químico e PhD em Química pela UFRGS, professor junto ao IQ/UnB desde 2009, com atuação principal junto ao curso de Engenharia Química. Esse blog tem como objetivo falar sobre os tópicos aborados pelo professor, além do material disponibilizado por ele, para que possamos compartilhar o conhecimento adquirido com outros interessados na linguagem Julia.
 
 ## O que é Julia?
-Julia é a linguagem de programação moderna, de código livre e aberto.
-Dinamicamente tipada e compilada just-in-time, Julia foi desenvolvida para ser amigável como Python e Matlab e para oferecer alto desempenho como C e FORTRAN.
+O professor iniciou contextualizando Julia no cenário das linguagens de programação modernas, ressaltando seu caráter open source, a sintaxe acessível e o desempenho comparável ao de linguagens compiladas como C e FORTRAN. Ele enfatizou que Julia foi criada para unir o melhor de dois mundos: a facilidade de uso de linguagens como Python e Matlab, e a performance de linguagens tradicionais de alto desempenho. Durante a palestra, exemplos simples mostraram como Julia pode ser utilizada tanto para scripts rápidos quanto para aplicações científicas robustas.
 
 ## Controle de Fluxo
+O tema de controle de fluxo foi apresentado de forma bastante visual, com exemplos de código executados ao vivo. O professor demonstrou o uso de condicionais (if, elseif, else) e laços de repetição (for, while), destacando a clareza da sintaxe de Julia. Ele também abordou comandos como continue e break, mostrando como eles podem ser usados para controlar o fluxo de execução de loops. A palestra trouxe exemplos comparando diferentes formas de estruturar decisões e repetições, incentivando o uso de compreensões de listas para tornar o código mais expressivo e idiomático.
 
 ## Despachos Multiplos
+Para apresentar Despachos Multiplos, o professor mostrou como funções podem ter múltiplas implementações dependendo dos tipos dos argumentos, permitindo que o mesmo nome de função seja usado para diferentes tipos de dados. Exemplos práticos ilustraram como criar funções especializadas para tipos compostos definidos pelo usuário, tornando o código mais flexível e eficiente. Essa abordagem foi destacada como um diferencial de Julia em relação a outras linguagens populares.
 
 ## Distribuições de Probabilidade
+A palestra também abordou o uso de Julia para análise estatística e modelagem de distribuições de probabilidade. O professor apresentou o pacote `Distributions.jl` e demonstrou como gerar amostras, ajustar distribuições e calcular estatísticas como média e desvio padrão. Foram discutidas as principais distribuições (uniforme, normal, binomial, Poisson), sempre com exemplos de código e visualizações gráficas. O enfoque foi mostrar como Julia facilita a experimentação e a análise de dados, tornando essas tarefas acessíveis mesmo para iniciantes.
 
 ## Código Limpo
+Por fim, o professor dedicou um tempo para discutir boas práticas de programação, ressaltando que iniciantes não devem se preocupar excessivamente com "código limpo", mas sim buscar clareza e bom senso. Ele apresentou exemplos de funções com condicionais aninhados e mostrou alternativas mais legíveis, incentivando o uso de nomes sugestivos para variáveis e funções. A mensagem principal foi que um código claro é mais fácil de manter, compartilhar e evoluir.
 
 ## Encerramento
+A palestra do Professor Alexandre Umpierre foi uma excelente introdução à linguagem Julia, combinando teoria, prática e dicas valiosas para quem está começando. O material apresentado, aliado à didática do professor, certamente contribui para o desenvolvimento de novos programadores e entusiastas da linguagem. Para quem deseja se aprofundar, o material completo da palestra está disponível em: (https://pluto.land/n/31r28ik1)
