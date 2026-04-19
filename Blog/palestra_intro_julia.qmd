@@ -1,7 +1,7 @@
 ---
 title: "Introdução a Julia - Palestra Professor x "
 description: |
-  Neste blog, vamos explorar os conceitos básicos da linguagem Julia, suas principais características e como ela se destaca em relação a outras linguagens de programação.
+  Neste blog, vamos explorar os conceitos básicos da linguagem Julia, apresentados na Palestra do Professor Alexandre Umpierre.
 categories:
   - Julia
   - Palestra
