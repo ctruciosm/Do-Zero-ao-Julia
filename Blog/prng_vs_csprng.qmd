@@ -1,0 +1,110 @@
+---
+title: "PRNG vs CSPRNG: Entendendo as Diferenças e Aplicações em Julia"
+description: |
+  Entenda as diferenças entre essas duas classes de algoritmos de geração numérica pseudoaleatórios e como utiliza-los em julia.
+categories:
+  - Ferramentas
+  - Pacotes
+  - Criptografia
+author:
+  - name: Mateus Cleto
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/MateusCleto
+date: "2026-02-24"
+image: imagens/prng_vs_csprng_capa.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+engine: knitr
+draft: false
+---
+
+## Introdução
+
+Algoritmos de geração de números pseudoaleatórios são muito utilizados em códigos em geral, mas quais as diferenças entre eles? Vamos explorar as diferenças entre CSPRNG e PRNG, como e quando utilizar algoritmos de cada uma dessas classes.
+
+## Números aleatórios e pseudoaleatórios
+
+Apesar de números aleatórios serem muito úteis em uma infinidade de casos, a computação enfrenta um grande problema com relação à sua geração: gerar algo de fato randômico a partir de um algoritmo procedural e determinístico é na verdade impossível. Portanto para se obter um número aleatório é necessário hardware especializados que monitore eventos físicos randômicos, exemplos de eventos que podem ser utilizados são flutuações elétricas geradas pela agitação térmica dos elétrons, decaímento radioativo, entre outros. Mas hardwares desse tipo são caros e normalmente não geram um fluxo rápido de dados.
+
+A solução para isso é usar algoritmos que recebem seeds e gerem outputs maiores modo que pareça aleatório para um observador, esses são os PRNGs (pseudo random number generators). Algoritmos PRNG buscam gerar saídas uniformes e que estatisticamente são similares a saídas verdadeiramente aleatórias.
+
+Os PRNGs podem então ser usados com seeds de fato randômicas como as mencionadas anteriormente ou com seeds baseadas em eventos caóticos estatisticamente aleatórios como dados de estado da máquina que está executando o código, movimentos do mouse, variações em tempo de execução de operações, entre outros.
+
+## Números aleatórios criptograficamente seguros
+
+Para um algoritmo ser PRNG adequado basta que ele passe em testes estatísticos, mas isso não garante que seja impossível que um observador astuto preveja o seu comportamento a partir de padrões complexos emergentes. O que significa que apesar de PRNG serem úteis para processos como simulações estatísticas e chave de bancos de dados, quando existem potenciais atacantes interessados nos valores gerados, esse critério apenas pode não ser o suficiente.
+
+Um CSPRNG (criptographically secure random number generator) é um PRNG que cumpre não apenas alguns critérios estatísticos, mas que seja de fato impossível de ser diferenciado de uma fonte de fato aleatória por um observador empregando qualquer estratégia computacional de complexidade polinomial. Isso significa que se houver algum método para prever os números gerados, ela será computacionalmente muito cara e tomará longos períodos de tempo.
+
+| Característica  | PRNG                | CSPRNG                          |
+|-----------------|---------------------|---------------------------------|
+| Determinístico  | Sim                 | Sim                             |
+| Avaliação       | Testes estatísticos | Segurança computacional         |
+| Previsibilidade | Pode ser previsível | Computacionalmente imprevisível |
+| Uso típico      | Simulações, jogos   | Criptografia, tokens            |
+
+## PRNGs e CSPRNG em julia
+
+A biblioteca random de julia nos permite criar valores pseudoaleatórios. Para gerar um número aleatório basta usar:
+
+```{julia}
+using Random
+
+random_number = rand()
+println(random_number)
+```
+
+É possível definir qual seed usar:
+
+```{julia}
+using Random
+
+# setando seed
+println("Primeiro batch\n")
+Random.seed!(1234)
+for i in 1:5
+    println(rand())
+end
+
+# em qualquer execução a sequencia de números gerados será a mesma
+println("\n\nSegundo batch\n")
+Random.seed!(1234)
+for i in 1:5
+    println(rand())
+end
+```
+
+Note que a seed é setada apenas uma vez, o PRNG gera um output e atualiza a seed para ser usada na próxima iteração, muito útil para elaboração de testes predeterminísticos.
+
+É possível também escolher qual PRNG usar para a geração:
+
+```{julia}
+using Random
+
+# 1234 é a seed sendo utilizada
+mersene = MersenneTwister(1234)
+xoshiro = Xoshiro(1234)
+random_device = RandomDevice()
+
+println(rand(mersene))
+println(rand(xoshiro))
+println(rand(random_device))
+```
+
+- `MersenneTwister` é um PRNG muito conhecido que utiliza transformações lineares, ele é muito rápido e tem ótima qualidade estatistica, mas é criptograficamente inseguro.
+- `Xoshiro` é o PRNG padrão usado pelo método `rand` quando nenhum é especificado, mas também não é criptograficamente seguro.
+- `RandomDevice` é o método criptograficamente seguro disponivel no pacote Random. Ele na verdade não é um PRNG, mas chama um PRNG gerenciado pelo sistema operacional da máquina. Por motivos de segurança ele não permite o uso de seeds próprias, ela é sempre gerada e mantida pelo proprio sistema operacional.
+
+## Conclusão
+
+Números pseudoaleatórios são fundamentais em diversos programas modernos, vimos os princípios básicos dos algoritmos que os geram e que guiam as práticas pra se escrever códigos criptograficamente seguros e rápidos.
+
+## Leituras recomendadas
+
+- [Documentação do pacote Random](https://docs.julialang.org/en/v1/stdlib/Random/)
+- The art of computer programming vol. 2, capitulo 3
+- Introduction to Modern Cryptography, capitulo 3.3
