@@ -1,0 +1,240 @@
+---
+title: "Tópicos relevantes de código limpo"
+description: |
+  No mundo da programação, mais do que uma boa lógica, o código deve ser legível e fácil de entender. Neste blog, vamos explorar alguns tópicos relevantes relacionados ao conceito de código limpo, destacando práticas e dicas para escrever código mais claro e eficiente.
+categories:
+  - Código Limpo
+  - Boas Práticas
+author:
+  - name: Rafael Santos Seixas Figueiredo
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/Seixasr
+date: "2026-04-30"
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+engine: julia
+draft: false
+---
+
+## Introdução
+No mundo da programação, mais do que uma boa lógica, o código deve ser legível e fácil de entender. O conceito de código limpo é fundamental para garantir que o software em questão possa ser mantido, atualizado e compreendido por outros desenvolvedores ao longo do tempo. Essa noção se faz mais necessária a cada dia, com mais equipe e projetos colaborativos e com uso de código legado(código escrito por outros). Neste blog, vamos explorar alguns tópicos relevantes relacionados ao conceito de código limpo, destacando práticas e dicas para escrever código mais claro e eficiente.
+
+## O que é código limpo?
+O conceito de código limpo foi popularizado por Robert C. Martin, também conhecido como "Uncle Bob", em seu livro "Clean Code". Ele define código limpo como aquele que é fácil de ler, entender e modificar. Um código limpo é organizado, consistente e segue boas práticas de programação, o que facilita a colaboração entre desenvolvedores e a manutenção do software ao longo do tempo.
+
+Quando se tem um código com diversas funções, classes, módulos e variáveis, é importante que ele seja estruturado de maneira clara e lógica. Isso não apenas ajuda outros desenvolvedores a entenderem o código, mas também torna mais fácil identificar e corrigir bugs, adicionar novas funcionalidades e refatorar o código quando necessário.
+
+Em Julia, contamos com a tecnologia de múltiplos despachos (mesmo nome de função para diferentes tipos de dados). Isso pode ajudar a manter o código mais organizado, mas caso, não seja nomeado corretamente, pode levar a erros e incoerências. Vamos entender os pilares dessa metodologia e aplicar isso em Julia.
+
+As bases do código limpo consistem em princípios como:
+- **Legibilidade**: o código deve ser fácil de ler e entender, mesmo para alguém que não o escreveu.
+- **Simplicidade**: o código deve ser o mais simples possível, evitando complexidade desnecessária.
+- **Responsabilidade única**: cada função ou módulo deve ter uma única responsabilidade, facilitando a manutenção e a compreensão do código.
+- **Nomes significativos**: variáveis, funções e classes devem ter nomes que descrevam claramente seu propósito e uso.
+- **Evitar duplicação**: o código duplicado pode levar a inconsistências e dificuldades de manutenção, portanto, é importante evitar a repetição de código.
+
+Vamos tratar esses pontos de forma mais detalhada a seguir.
+
+## Nomes
+
+Dar bons nomes é provavelmente a prática mais simples — e ao mesmo tempo mais negligenciada — em código limpo. Nomes devem ser **descritivos, consistentes e sem ambiguidade**. Em Julia, isso é ainda mais importante por conta do uso de múltiplos despachos: a mesma função pode ter comportamentos diferentes dependendo do tipo, então o nome precisa comunicar bem a intenção.
+
+Evite abreviações desnecessárias e nomes genéricos:
+
+```julia
+# Ruim
+function calc(x, y)
+    return x * y
+end
+
+# Melhor
+function calcular_area_retangulo(largura, altura)
+    return largura * altura
+end
+```
+
+Além disso, siga as convenções da linguagem:
+
+* `snake_case` para funções e variáveis
+* `CamelCase` para tipos
+
+---
+
+## Simplicidade
+
+A ideia central aqui é: **não complique o que pode ser simples**. Em Julia, muitas vezes conseguimos escrever código expressivo com poucas linhas.
+
+```julia
+# Complexo desnecessariamente
+function soma_pares(lista)
+    resultado = 0
+    for i in 1:length(lista)
+        if lista[i] % 2 == 0
+            resultado += lista[i]
+        end
+    end
+    return resultado
+end
+
+# Simples e idiomático
+soma_pares(lista) = sum(x for x in lista if iseven(x))
+```
+---
+
+## Responsabilidade única
+
+Cada função deve ter **um único propósito**. Se uma função faz muitas coisas, ela se torna difícil de entender, testar e reutilizar.
+
+```julia
+# Ruim: faz muitas coisas
+function processar_dados(dados)
+    dados_filtrados = filter(x -> x > 0, dados)
+    media = sum(dados_filtrados) / length(dados_filtrados)
+    println("Média: ", media)
+    return media
+end
+
+# Melhor: responsabilidades separadas
+filtrar_positivos(dados) = filter(>(0), dados)
+
+calcular_media(dados) = sum(dados) / length(dados)
+
+function exibir_media(dados)
+    media = calcular_media(dados)
+    println("Média: ", media)
+end
+```
+
+Isso facilita:
+
+* Reutilização
+* Testes unitários
+* Evolução do código
+
+---
+
+## Duplicações
+
+Repetir código é um dos principais inimigos da manutenção. Se uma regra muda, você precisa lembrar de alterar em vários lugares.
+
+```julia
+# Ruim: duplicação
+function area_circulo(r)
+    return pi * r^2
+end
+
+function volume_cilindro(r, h)
+    return pi * r^2 * h
+end
+
+# Melhor: reutilização
+area_circulo(r) = pi * r^2
+
+volume_cilindro(r, h) = area_circulo(r) * h
+```
+
+Julia também favorece reutilização com múltiplos métodos:
+
+```julia
+area(x::Float64) = pi * x^2
+area(x::Int) = pi * float(x)^2
+```
+
+---
+
+## Testes
+
+Código limpo é código testável. Julia possui o módulo padrão `Test`, que facilita a criação de testes.
+
+```julia
+using Test
+
+@test calcular_area_retangulo(2, 3) == 6
+@test soma_pares([1,2,3,4]) == 6
+```
+
+Boas práticas:
+
+* Testar casos simples e extremos
+* Testar comportamento esperado (não implementação)
+* Automatizar testes sempre que possível
+
+---
+
+## Tratamento de erros
+
+Um bom código não ignora erros — ele os trata de forma clara e previsível.
+
+```julia
+# Ruim
+function dividir(a, b)
+    return a / b
+end
+
+# Melhor
+function dividir(a, b)
+    if b == 0
+        error("Divisão por zero não é permitida")
+    end
+    return a / b
+end
+```
+
+Ou utilizando exceções:
+
+```julia
+function dividir(a, b)
+    b == 0 && throw(ArgumentError("b não pode ser zero"))
+    return a / b
+end
+```
+
+Isso torna o comportamento do código mais seguro e explícito.
+
+---
+
+## Comentários
+
+Comentários devem explicar por que algo foi feito, e não apenas o que o código faz — isso deve ser evidente pelo próprio código. Prefira código autoexplicativo e use comentários para justificar decisões, limitações ou contextos especiais.
+
+Evite:
+
+* Comentários redundantes
+* Comentários desatualizados
+
+Prefira:
+
+* Código autoexplicativo
+* Documentação quando necessário
+
+Em Julia, também podemos usar docstrings:
+
+```julia
+"""
+Calcula a média de um vetor de números.
+
+# Argumentos
+- dados: vetor numérico
+
+# Retorno
+- média dos valores
+"""
+function calcular_media(dados)
+    return sum(dados) / length(dados)
+end
+```
+
+---
+
+## Conclusão
+
+Escrever código limpo não é apenas uma questão de estética — é uma prática essencial para garantir a **qualidade, manutenção e evolução** de um software. Em Julia, com recursos como múltiplos despachos e uma sintaxe expressiva, temos ferramentas poderosas para escrever código elegante — mas isso exige disciplina.
+
+Ao aplicar princípios como bons nomes, simplicidade, responsabilidade única e testes, você não apenas melhora seu código, mas também facilita a vida de qualquer pessoa que venha a trabalhar com ele no futuro — inclusive você mesmo.
+
+
+## Extra
+Caso queira se aprofundar mais no assunto, o livro "Clean Code" é uma excelente leitura para entender os princípios e práticas de código limpo.
