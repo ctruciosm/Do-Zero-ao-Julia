@@ -1,5 +1,5 @@
 ---
-title: Simulação em Julia: SIm Julia 
+title: "Simulação em Julia: SIm Julia"
 description: Como realizar simulações computacionais na linguagem Julia com o pacote SimJulia, ideal para modelar sistemas baseados em eventos discretos como filas, processos industriais e redes. Entenda por que Julia é uma das melhores escolhas para simulação científica, unindo velocidade, clareza e produtividade.
 
 categories:

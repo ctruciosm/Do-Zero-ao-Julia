@@ -1,5 +1,5 @@
 ---
-title: Otimização: minimizando ou maximizando com Optim.jl
+title: "Otimização: minimizando ou maximizando com Optim.jl"
 description: Aprenda como realizar otimização numérica na linguagem Julia usando o pacote Optim.jl. Veja um exemplo prático com a função de Rosenbrock e entenda como aplicar métodos como BFGS para encontrar mínimos de funções matemáticas de forma eficiente.
 
 categories:
