@@ -28,7 +28,7 @@ engine: knitrNet
 
 ## Sua Jornada em Julia Começa Aqui: Um Guia para Iniciantes
 
-Você já ouviu falar de uma linguagem de programação que promete a **velocidade do C** com a **simplicidade do Python**? Se isso soa como música para os seus ouvidos, então você precisa conhecer a Julia!
+Você já ouviu falar de uma linguagem de programação que promete a **velocidade do C**, com a **simplicidade do Python**? Se isso soa como música para os seus ouvidos, então você precisa conhecer Julia!
 
 Seja você um estudante, um cientista de dados ou apenas um curioso por tecnologia, este guia foi feito para te dar o pontapé inicial no universo da Julia, sem complicações. Vamos lá?
 
@@ -44,7 +44,7 @@ Com Julia, você escreve um código fácil de ler e, na maioria das vezes, ele j
 
 -   **Sintaxe Amigável:** A sintaxe é limpa e se assemelha muito com a notação matemática tradicional, o que a torna intuitiva.
 
--   **Tipagem Dinâmica:** Como em Python, você não precisa declarar o tipo de uma variável, mas pode, se quiser, para otimizar o desempenho.
+-   **Tipagem Dinâmica:** Assim como em Python, você não precisa declarar o tipo de uma variável, mas pode, se quiser, para otimizar o desempenho.
 
 -   **Comunidade Ativa:** Possui uma comunidade acadêmica e científica vibrante e em constante crescimento.
 
@@ -52,7 +52,7 @@ Com Julia, você escreve um código fácil de ler e, na maioria das vezes, ele j
 
 A maneira mais fácil de começar é baixar a versão oficial em [juliang.org](https://www.google.com/search?q=https://juliang.org/downloads/). A instalação é direta em Windows, macOS e Linux.
 
-Após instalar, abra o seu terminal (ou prompt de comando) e digite `julia`. Você será recebido pelo **REPL** (Read-Eval-Print Loop), o ambiente interativo da Julia. É aqui que a mágica acontece!
+Após instalar, abra o seu terminal (ou prompt de comando) e digite `julia`. Você será recebido pelo **REPL** (Read-Eval-Print Loop), o ambiente interativo de Julia. É aqui que a mágica acontece!
 
 O REPL é seu playground. Sinta-se à vontade para testar todos os comandos aqui.
 
@@ -100,11 +100,11 @@ Ou a forma compacta, muito útil para funções simples:
 subtrair(a, b) = a - b
 ```
 
-Para chamar uma função, basta usar seu nome seguido de parênteses: `somar(10, 5)`.
+Para chamar uma função, basta usar seu nome seguido de parênteses, local onde os parâmetros da função são indicados, como em: `somar(10, 5)`.
 
 ### Exemplo Prático: Analisando a Área de um Terreno
 
-Vamos juntar tudo o que aprendemos em um exemplo prático. Imagine que precisamos criar uma função que calcula a área de um terreno retangular e nos diz se ele é pequeno, médio ou grande.
+Vamos juntar tudo o que aprendemos em um exemplo prático. Imagine que precisemos criar uma função que calcula a área de um terreno retangular e nos diz se ele é pequeno, médio ou grande.
 
 Copie e cole o código abaixo diretamente no seu REPL para ver funcionando!
 
@@ -120,7 +120,7 @@ function analisar_terreno(largura, comprimento)
     # Agora, usamos uma estrutura condicional (if-elseif-else) para classificar o tamanho
     if area < 100
         println("Este é um terreno PEQUENO.")
-    elseif area >= 100 && area <= 500 # '&&' significa 'E'
+    elseif area >= 100 && area <= 500 # '&&' significa 'E' (ambas condições devem ser satisfeitas)
         println("Este é um terreno MÉDIO.")
     else
         println("Este é um terreno GRANDE.")
@@ -164,4 +164,4 @@ Você acabou de dar seus primeiros passos em Julia! Viu como a sintaxe é limpa 
 
 O verdadeiro poder da Julia aparece quando você começa a explorar seu ecossistema de pacotes para áreas como visualização de dados (`Plots`), machine learning (`Flux`) e manipulação de dados (`DataFrames`).
 
-O convite está feito: continue explorando, teste novas ideias no seu REPL e não tenha medo de errar. A jornada é desafiadora, mas extremamente recompensadora. Bem-vindo à comunidade Julia!
+O convite está feito: continue explorando, teste novas ideias no seu REPL e não tenha medo de errar. A jornada é desafiadora, mas extremamente recompensadora. Bem-vindo(a) à comunidade Julia!
