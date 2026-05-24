@@ -79,7 +79,7 @@ function soma_pares(lista)
     return resultado
 end
 
-# Simples e idiomático
+# Simples e mesma funcionalidade
 soma_pares(lista) = sum(x for x in lista if iseven(x))
 ```
 ---
