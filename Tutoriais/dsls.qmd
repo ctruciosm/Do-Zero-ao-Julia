@@ -1,0 +1,372 @@
+---
+title: "Construindo DSLs em Julia com Macros e Metaprogramação"
+description: |
+  Aprenda passo a passo como criar linguagens específicas de domínio (DSLs) em Julia utilizando macros. Neste tutorial, construiremos uma DSL simples, exploraremos a estrutura de expressões (`Expr`) e veremos como transformar sintaxe personalizada em código Julia executável.
+categories:
+  - Tutoriais
+  - Julia
+  - Metaprogramação
+  - Macros
+author:
+  - name: Mateus Cleto
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/MateusCleto
+
+date: "2026-05-29"
+image: imagens/dsls_capa.png
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+draft: true
+engine: knitr
+---
+
+## Introdução
+
+Uma das aplicações mais poderosas de macros em Julia é a criação de DSLs (Domain Specific Languages). Uma DSL é uma "mini linguagem" criada para um domínio específico, a ideia é permitir que o código fique mais próximo da forma como pensamos no problema.
+
+Por exemplo, na biblioteca JuMP:
+
+```julia
+@variable(model, x >= 0)
+@constraint(model, x + y <= 10)
+```
+
+As comparações não são computadas, elas servem para adicionar uma restrição ao sistema, isso parece muito mais matemática do que código tradicional. Internamente, essas macros interpretam as expressões escritas pelo usuário e geram código Julia automaticamente.
+
+Neste post vamos construir uma pequena DSL em Julia para entender como interpretar expressões e criar sintaxes customizadas.
+
+Antes de continuar, recomendo ler o post anterior sobre metaprogramação e macros em Julia.
+
+## Construindo nossa primeira DSL
+
+Vamos primeiro criar algo parecido com:
+
+```julia
+@check x + y <= 10
+```
+
+A ideia é avaliar a condição e lançar um erro automaticamente caso ela falhe.
+
+Queremos transformar:
+
+```julia
+@check x + y <= 10
+```
+
+Em algo equivalente a:
+
+```julia
+if !(x + y <= 10)
+    error("Condição falhou: x + y <= 10")
+end
+```
+
+Para isso podemos usar uma macro, pois ela nos permite acessar a própria expressão e printá-la:
+
+```{julia}
+# o bloco quote cria um código, da mesma forma que :( expr )
+macro check(expr)
+    msg = "Condição falhou: $(string(expr))"
+    return quote
+        if !($(expr))
+            println($msg)
+            # usei println ao invés de error para não dar erro na página do blog
+        end
+    end
+end
+```
+
+Ao usar `check`:
+
+```{julia}
+x = 3
+y = 20
+
+@check x + y <= 10
+```
+
+A macro recebe `:(x + y <= 10)` como o parâmetro `expr` então cria o texto de erro usando a expressão em `expr`. Isso precisa ser feito fora do `quote`, para estar no contexto da macro.
+
+```julia
+msg = "Condição falhou: $(string(expr))"
+```
+
+Depois avalia a expressão e checa se é verdadeira.
+
+```julia
+if !($(expr))
+    ...
+```
+
+E caso for falsa, printa a mensagem com a string gerada.
+
+```julia
+println($msg)
+```
+
+## Inspecionando a expansão
+
+Podemos visualizar o código gerado usando:
+
+```{julia}
+@macroexpand @check x + y <= 10
+```
+
+Quando a macro é expandida, esse código substitui a chamada original.
+
+## Entendendo `Expr`
+
+Agora vamos explorar diretamente a estrutura da expressão.
+
+`expr.head` retorna qual é o tipo da expressão, nesse caso uma chamada de função/operação.
+
+```{julia}
+expr = :(x + y <= 10)
+
+expr.head
+```
+
+E `expr.args` retorna os componentes internos da expressão:
+
+```{julia}
+string(expr.args)
+```
+
+Nesse caso (em que temos um `:call`):
+
+1. Operador: `<=`
+2. Lado esquerdo: `:(x + y)`
+3. Lado direito: `10`
+
+Note que uma expressão pode conter outras expressões recursivamente.
+
+Isso permite interpretar de modo costumizado a sintaxe do usuário dentro de macros.
+
+---
+
+## Aceitando múltiplas condições
+
+Agora vamos tornar nossa DSL mais interessante.
+
+Queremos suportar:
+
+```julia
+@check begin
+    x > 0
+    y < 10
+    z != 0
+end
+```
+
+O `begin ... end` gera uma expressão com `expr.head == :block` e cada linha fica em `expr.args`.
+
+Vamos usar isso para criar as novas funcionalidades:
+
+```{julia}
+macro check(expr)
+
+    conditions = expr.head == :block ? expr.args : [expr]
+
+    checks = []
+
+    for cond in conditions
+        msg = "Condição falhou: $(string(cond))"
+
+        push!(checks, quote
+            if !($(cond))
+                println($msg)
+            end
+        end)
+    end
+
+    return Expr(:block, checks...)
+end
+```
+
+Primeiro a macro checa se expr é um bloco. Se for define conditions como o array com os elementos do bloco, se não define como um array com a expressão passada.
+
+```julia
+conditions = expr.head == :block ? expr.args : [expr]
+```
+
+Depois para cada elemento de conditions cria um código que checa se a condição é verdadeira e printa o erro caso contrário.
+
+```julia
+for cond in conditions
+    msg = "Condição falhou: $(string(cond))"
+
+    push!(checks, quote
+        if !($(cond))
+            println($msg)
+        end
+    end)
+end
+```
+
+E retorna o bloco de expressão contendo todos os códigos de checagem.
+
+## Debugging
+Agora testando a macro:
+
+```julia
+x = 1
+y = 20
+z = 5
+
+@check begin
+    x > 0
+    y < 10
+    z != 0
+end
+```
+
+Obteríamos o erro `ERROR: MethodError: no method matching !(::Nothing)`.
+
+Vamos usar a `@macroexpand` para debugar:
+
+```{julia}
+@macroexpand @check begin
+    x > 0
+    y < 10
+    z != 0
+end
+```
+
+Note que estão sendo gerados mais elementos no bloco final do que o esperado e alguns estão vazios. Isso acontece porque blocos em Julia não guardam apenas as expressões visíveis. Além das linhas que escrevemos, o Julia também insere objetos do tipo `LineNumberNode`, usados internamente para guardar informações de linha e arquivo. Eles aparecem no `@macroexpand` como comentários do tipo `#= REPL[2]:2 =#`.
+
+Ou seja, ao iterar diretamente sobre `expr.args`, nossa macro também está tentando transformar essas marcações de linha em condições. Por isso surgem blocos “vazios” e erros como:
+
+```julia
+MethodError: no method matching !(::Nothing)
+```
+
+A solução é filtrar esses elementos antes de gerar os testes:
+
+```{julia}
+macro check(expr)
+
+    conditions = expr.head == :block ? expr.args : [expr]
+
+    conditions = filter(cond -> !(cond isa LineNumberNode), conditions)
+
+    checks = []
+
+    for cond in conditions
+        msg = "Condição falhou: $(string(cond))"
+
+        push!(checks, quote
+            if !($(cond))
+                println($msg)
+            end
+        end)
+    end
+
+    return Expr(:block, checks...)
+end
+```
+
+Agora, ao testar:
+
+```{julia}
+x = 1
+y = 20
+z = 5
+
+@check begin
+    x > 0
+    y < 10
+    z != 0
+end
+```
+
+A macro ignora as informações de linha e gera código apenas para as condições reais:
+
+```julia
+x > 0
+y < 10
+z != 0
+```
+
+Esse exemplo mostra um ponto importante da metaprogramação em Julia: a árvore sintática real pode conter mais elementos do que aquilo que vemos no código escrito. Por isso, ao criar macros mais elaboradas, é comum inspecionar a expressão com `dump`, `@macroexpand` e filtrar nós que não fazem parte da lógica principal.
+
+## Por que isso é uma DSL?
+
+Porque criamos uma sintaxe especializada:
+
+```julia
+@check begin
+    ...
+end
+```
+
+que parece uma nova linguagem, entende regras próprias e é traduzida para Julia comum internamente.
+
+## DSLs reais em Julia
+
+Muitas bibliotecas famosas usam exatamente essa técnica.
+
+### JuMP
+
+```julia
+@variable(model, x >= 0)
+```
+
+A macro interpreta:
+
+```julia
+:(x >= 0)
+```
+
+E extrai nome da variável, limite inferior e restrições.
+
+### Testes
+
+A própria biblioteca padrão usa DSLs:
+
+```{julia}
+using Test
+
+x = 3
+@test x == 3
+```
+
+## Conclusão
+
+DSLs são uma das aplicações mais impressionantes da metaprogramação em Julia. Com macros, conseguimos analisar código, transformar sintaxe, criar novas abstrações e aproximar código da linguagem do domínio.
+
+É isso que permite bibliotecas como JuMP parecerem quase matemática.
+
+## Desafio
+
+Implemente:
+
+```julia
+@trace expr
+```
+
+Que imprime:
+
+- Expressão original;
+- Valor calculado;
+- Tempo de execução.
+
+Exemplo:
+
+```julia
+@trace sum(rand(1000))
+```
+
+Saída esperada:
+
+```julia
+Executando: sum(rand(1000))
+Resultado: ...
+Tempo: ...
+```
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica, aprimoramento do texto e criação de imagens.
+:::

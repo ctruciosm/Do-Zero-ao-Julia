@@ -1,0 +1,488 @@
+---
+title: "Inferência de Tipos e Otimização de Código em Julia"
+description: |
+    Aprenda como a inferência de tipos funciona em Julia e descubra, na prática, como identificar problemas de performance usando ferramentas como @code_warntype, @time e BenchmarkTools.
+categories:
+  - Julia
+  - Performance
+  - Inferência de Tipos
+author:
+  - name: Mateus Cleto
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/MateusCleto
+
+date: "2026-05-29"
+image: imagens/inferencia_de_tipos_capa.png
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+draft: true
+engine: knitr
+---
+
+## Introdução
+
+Julia costuma chamar atenção pela combinação entre sintaxe simples e alta performance. Em muitos casos, programas escritos em Julia conseguem desempenho próximo ao de C ou Fortran, mas sem abrir mão da interatividade típica de linguagens dinâmicas.
+
+Grande parte disso acontece por causa da inferência de tipos. Embora Julia seja dinamicamente tipada, o compilador tenta descobrir automaticamente os tipos das variáveis e expressões antes da execução do código. Quando ele consegue fazer isso com precisão, pode gerar código extremamente eficiente.
+
+Neste post vamos explorar como esse processo funciona, como ele afeta a performance dos programas e quais padrões ajudam o compilador a gerar código melhor.
+
+## Um primeiro exemplo
+
+Considere a seguinte função:
+
+```{julia}
+f(x) = 2x + 1
+```
+
+Ela parece completamente genérica. Não especificamos se `x` é inteiro, float, número complexo ou qualquer outro tipo numérico.
+
+Mesmo assim:
+
+```{julia}
+f(3)
+```
+
+```{julia}
+f(3.0)
+```
+
+```{julia}
+f(big(3))
+```
+
+funcionam corretamente.
+
+Isso acontece porque Julia compila versões especializadas da função para cada tipo utilizado. Podemos enxergar parte desse processo usando `@code_typed`:
+
+```{julia}
+@code_typed f(3)
+```
+
+O resultado mostra uma versão da função já especializada para `Int64`.
+
+Se fizermos:
+
+```{julia}
+@code_typed f(3.0)
+```
+
+veremos outra versão especializada, agora para `Float64`.
+
+Essa especialização automática é um dos pilares da performance de Julia.
+
+## O que é inferência de tipos?
+
+Quando Julia compila uma função, o compilador tenta prever quais serão os tipos produzidos em cada etapa da computação.
+
+Veja esta função:
+
+```{julia}
+function g(x)
+    y = x + 1
+    z = y * 2
+    return z
+end
+```
+
+Se chamarmos `g(10)`, o compilador consegue deduzir que:
+
+* `x` é um `Int64`
+* `y` também será `Int64`
+* `z` também será `Int64`
+
+Como todos os tipos são conhecidos previamente, Julia consegue gerar código muito eficiente.
+
+Esse processo recebe o nome de inferência de tipos.
+
+Em muitos casos, o compilador consegue acompanhar os tipos ao longo de toda a execução da função. Quando isso acontece, quase não existe custo associado ao dinamismo da linguagem.
+
+## Type stability
+
+Um dos conceitos mais importantes relacionado à performance em Julia é chamado de type stability.
+
+Uma função é considerada type-stable quando o tipo retornado depende apenas dos tipos das entradas, e não dos valores específicos.
+
+Por exemplo:
+
+```{julia}
+f(x) = x > 0 ? x : zero(x)
+```
+
+Se `x` for um inteiro, o retorno será inteiro. Se `x` for um float, o retorno será float.
+
+Agora compare com:
+
+```{julia}
+function h(x)
+    if x > 0
+        return x
+    else
+        return 0.0
+    end
+end
+```
+
+Nesse caso:
+
+```{julia}
+h(3)
+```
+
+retorna um `Int64`, enquanto:
+
+```{julia}
+h(-3)
+```
+
+retorna um `Float64`.
+
+O compilador não consegue prever exatamente qual será o tipo retornado apenas olhando os tipos de entrada. Isso dificulta otimizações e frequentemente introduz alocações de memória desnecessárias.
+
+## Investigando código com `@code_warntype`
+
+Uma das ferramentas mais úteis para entender como Julia enxerga nosso código é a macro `@code_warntype`.
+
+Quando executamos:
+
+```julia
+@code_warntype f(args...)
+```
+
+Julia mostra uma representação intermediária da função depois de realizar a inferência de tipos. Em outras palavras, ela nos mostra quais tipos o compilador conseguiu deduzir para cada variável e para o valor retornado pela função.
+
+À primeira vista a saída pode parecer intimidadora. Ela contém muitos detalhes internos do compilador e do funcionamento da linguagem. Felizmente, para analisar a qualidade da inferência, não precisamos entender tudo que aparece ali.
+
+O mais importante é responder a duas perguntas:
+
+1. Julia sabe qual é o tipo das variáveis usadas nos cálculos?
+2. Julia sabe qual é o tipo retornado pela função?
+
+Para responder a essas perguntas, devemos observar principalmente as variáveis que armazenam dados do problema que estamos resolvendo. Variáveis criadas internamente pelo compilador, geralmente com nomes como `@_3`, `%15` ou `%23`, raramente precisam ser analisadas.
+
+Por exemplo, considere a função:
+
+```{julia}
+function bad(n)
+    s = 0
+
+    for i in 1:n
+        s += rand()
+    end
+
+    return s
+end
+```
+
+Vamos analisar sua inferência:
+
+```{julia}
+@code_warntype bad(10)
+```
+
+Observe principalmente as linhas:
+
+```julia
+Locals
+  @_3::Union{Nothing, Tuple{Int64, Int64}}
+  s::Union{Int64, Float64}
+  i::Int64
+
+Body::Union{Int64, Float64}
+```
+
+A linha `s::Union{Int64, Float64}` nos diz que Julia não conseguiu determinar um único tipo para a variável `s`. Em alguns momentos ela pode ser um inteiro e em outros um número de ponto flutuante.
+
+Depois a linha `Body::Union{Int64, Float64}` mostra que o mesmo problema afeta o valor retornado pela função. O compilador não consegue afirmar com certeza qual será o tipo do resultado final.
+
+Isso ocorre por conta da inicialização de `s`, o valor `0` atribuido à ela possui tipo `Int64`. Porém, dentro do laço fazemos `s += rand()` e como `rand()` retorna um `Float64`, a variável passa a armazenar valores de outro tipo.
+
+Do ponto de vista da inferência, a variável começa como inteiro e depois se transforma em float. O compilador então precisa considerar ambas as possibilidades.
+
+Podemos corrigir isso facilmente:
+
+```{julia}
+function good(n)
+    s = 0.0
+
+    for i in 1:n
+        s += rand()
+    end
+
+    return s
+end
+```
+
+Agora vamos analisar novamente:
+
+```{julia}
+@code_warntype good(10)
+```
+
+A saída passa a conter as linhas:
+
+```julia
+Locals
+  @_3::Union{Nothing, Tuple{Int64, Int64}}
+  s::Float64
+  i::Int64
+
+Body::Float64
+```
+
+Agora os tipos de todas as variáveis usadas nos calculos na função e do retorno são concretos, isso significa que Julia conseguiu determinar exatamente quais serão os tipos envolvidos na computação.
+
+Ainda aparecem alguns tipos `Union` na saída, como:
+
+```julia
+@_3::Union{Nothing, Tuple{Int64, Int64}}
+```
+
+Esse tipo de informação normalmente não indica um problema de inferência. Nesse caso específico, o `Union` está associado ao mecanismo interno usado para implementar o laço `for`.
+
+Em Julia, a função `iterate` retorna uma tupla quando ainda existem elementos para percorrer e retorna `nothing` quando a iteração termina. Como ambas as situações podem ocorrer, o compilador representa o resultado como:
+
+```julia
+Union{Nothing, Tuple{Int64, Int64}}
+```
+
+Ao analisar a inferência de uma função, devemos concentrar nossa atenção principalmente nas variáveis que armazenam os dados do cálculo e no tipo indicado por `Body`. Se essas informações aparecem com tipos concretos como `Int64`, `Float64`, `Vector{Float64}` ou outros tipos específicos, geralmente é um sinal de que a inferência está funcionando bem.
+
+## Variáveis globais
+
+Um dos primeiros problemas de performance que muitos iniciantes encontram em Julia está relacionado ao uso de variáveis globais. Para entender o motivo, precisamos lembrar que o compilador tenta prever os tipos das variáveis antes da execução do programa. Quanto mais informação ele possui, melhor será o código gerado.
+
+Considere o seguinte exemplo:
+
+```julia
+a = 10
+
+f(x) = x + a
+```
+
+À primeira vista, não há nada de errado. Sabemos que `a` vale `10`, então pode parecer natural imaginar que Julia também saiba disso. O problema é que `a` foi definida no escopo global. Em Julia, variáveis globais podem ser modificadas a qualquer momento e até mesmo mudar de tipo durante a execução do programa.
+
+Por exemplo, depois de definir a função acima, ainda poderíamos fazer:
+
+```julia
+a = 3.5
+```
+
+ou até mesmo:
+
+```julia
+a = "hello"
+```
+
+Quando o compilador analisa a função `f`, ele não pode assumir que `a` continuará sendo um inteiro. Como consequência, perde parte da sua capacidade de inferir tipos e gerar código especializado.
+
+Uma forma simples de resolver esse problema é declarar que a variável é constante:
+
+```julia
+const a = 10
+```
+
+Nesse caso, Julia sabe que a ligação entre o nome `a` e o objeto armazenado não mudará. Isso fornece muito mais informação ao compilador e geralmente resulta em código mais eficiente.
+
+Apesar disso, a solução mais comum em Julia é evitar depender de variáveis globais dentro de código computacional. Em vez disso, costuma-se passar explicitamente os dados como argumentos das funções. Dessa forma, o compilador conhece os tipos de entrada no momento da especialização e consegue otimizar melhor o programa.
+
+## Containers abstratos
+
+Outro padrão que frequentemente dificulta a inferência é o uso de containers com tipos excessivamente genéricos.
+
+Considere a criação do vetor:
+
+```julia
+v = Vector{Any}()
+```
+
+O tipo `Any` é o supertipo de praticamente todos os tipos em Julia. Isso significa que esse vetor pode armazenar qualquer objeto:
+
+```julia
+push!(v, 1)
+push!(v, "hello")
+push!(v, π)
+```
+
+Essa flexibilidade pode parecer conveniente, mas ela tem um custo. Quando Julia encontra um elemento desse vetor, não sabe previamente se está lidando com um inteiro, uma string, um número de ponto flutuante ou qualquer outro objeto. Como consequência, muitas otimizações deixam de ser possíveis.
+
+Imagine, por exemplo, que queremos somar todos os elementos de um vetor. Se Julia sabe que todos são `Float64`, ela pode gerar um único algoritmo especializado para trabalhar diretamente com números de ponto flutuante. Porém, se os elementos possuem tipo `Any`, o compilador precisa descobrir o tipo de cada elemento durante a execução, o que torna a operação mais lenta.
+
+Compare com:
+
+```julia
+v = Float64[]
+```
+
+Agora o compilador sabe exatamente qual será o tipo de todos os elementos armazenados. Isso permite representar os dados de forma mais compacta na memória, reduzir verificações durante a execução e gerar código especializado para operações numéricas. Em aplicações científicas e numéricas, essa diferença pode ter um impacto bastante significativo.
+
+## Alocações de memória
+
+Nem todo problema de performance está relacionado ao tempo gasto em cálculos. Muitas vezes o verdadeiro gargalo está na quantidade de memória que o programa cria e descarta durante a execução.
+
+Sempre que Julia precisa criar novos objetos, pode ser necessário reservar espaço na memória. Posteriormente, quando esses objetos deixam de ser utilizados, o coletor de lixo (garbage collector) precisa recuperar esse espaço. Embora esse mecanismo seja extremamente útil, ele também possui um custo.
+
+Podemos medir a quantidade de memória alocada por uma expressão usando:
+
+```julia
+@allocated sum(rand(100))
+```
+
+Em geral, programas que realizam menos alocações tendem a ser mais rápidos.
+
+Um exemplo clássico envolve operações vetorizadas. Considere:
+
+```julia
+x = rand(10^6)
+
+sin.(x) + cos.(x)
+```
+
+À primeira vista, parece que estamos apenas calculando uma expressão matemática simples. Entretanto, Julia primeiro cria um vetor contendo `sin.(x)` e depois cria outro vetor para armazenar o resultado da soma. Esses arrays intermediários exigem memória adicional.
+
+Uma alternativa é escrever:
+
+```julia
+sin.(x) .+ cos.(x)
+```
+
+Nesse caso, Julia utiliza um mecanismo chamado broadcast fusion. Em vez de criar arrays intermediários, o compilador combina todas as operações em um único laço que percorre os elementos de `x` apenas uma vez. O resultado costuma envolver menos alocações e melhor desempenho.
+
+Esse comportamento é uma das razões pelas quais operações com broadcasting em Julia frequentemente apresentam desempenho próximo ao de laços escritos manualmente.
+
+## Function barriers
+
+Nem sempre é possível escrever todo o programa usando apenas tipos concretos. Em aplicações reais frequentemente precisamos ler arquivos, interpretar entradas do usuário, processar dados heterogêneos ou lidar com informações cujo tipo só será conhecido durante a execução.
+
+Nesses casos, uma técnica muito utilizada em Julia é separar a parte dinâmica do programa da parte computacionalmente intensiva. Essa técnica é conhecida como function barrier.
+
+Considere o exemplo:
+
+```julia
+function process(data)
+    x = parse(Int, data)
+    return kernel(x)
+end
+
+function kernel(x::Int)
+    s = 0
+
+    for i in 1:x
+        s += i
+    end
+
+    return s
+end
+```
+
+A função `process` recebe uma string e precisa interpretá-la. Nesse momento ainda estamos lidando com dados cujo formato pode variar. Entretanto, após executar `parse`, obtemos um inteiro concreto.
+
+A partir desse ponto, delegamos o trabalho pesado para `kernel`. Como essa função recebe um argumento do tipo `Int`, o compilador consegue inferir todos os tipos envolvidos na computação e gerar código altamente otimizado.
+
+A ideia central de uma function barrier é justamente criar uma fronteira entre a parte do programa que lida com informações dinâmicas e a parte responsável pelos cálculos. Isso ajuda o compilador a concentrar suas otimizações onde elas realmente importam.
+
+## Tipos paramétricos
+
+Outro recurso que contribui fortemente para a inferência em Julia são os tipos paramétricos. Eles permitem que um tipo carregue informações adicionais sobre os dados que armazena.
+
+Considere a seguinte estrutura:
+
+```julia
+struct Point{T}
+    x::T
+    y::T
+end
+```
+
+O símbolo `T` funciona como um parâmetro que será substituído por um tipo concreto quando um objeto for criado.
+
+Por exemplo:
+
+```julia
+Point(1.0, 2.0)
+```
+
+gera um objeto do tipo:
+
+```julia
+Point{Float64}
+```
+
+enquanto
+
+```julia
+Point(1, 2)
+```
+
+gera:
+
+```julia
+Point{Int64}
+```
+
+Observe que o próprio tipo do objeto já informa quais tipos estão armazenados em seus campos. Isso significa que, ao acessar `x` ou `y`, o compilador não precisa fazer nenhuma descoberta adicional. Toda a informação necessária já está disponível.
+
+Grande parte das estruturas utilizadas na biblioteca padrão e nos principais pacotes do ecossistema Julia seguem exatamente essa filosofia. Em vez de armazenar dados de tipos arbitrários, elas procuram carregar o máximo possível de informação no próprio sistema de tipos.
+
+## Medindo performance
+
+Antes de tentar otimizar qualquer programa, é importante aprender a medir seu desempenho corretamente. Muitas vezes uma alteração aparentemente importante produz um ganho mínimo, enquanto uma mudança simples pode eliminar a maior parte do tempo de execução.
+
+A ferramenta mais básica para isso é a macro `@time`:
+
+```{julia}
+myrand() = rand(10^6) 
+@time sum(myrand())
+```
+
+Ao executar esse código, Julia exibe informações como o tempo gasto e a quantidade de memória alocada durante a execução.
+
+Entretanto, existe um detalhe importante. Julia utiliza compilação just-in-time, o que significa que a primeira execução de uma função inclui também o custo da compilação. Por esse motivo, é comum observar que a primeira medição é muito mais lenta do que as seguintes.
+
+Por exemplo:
+
+```{julia}
+@time sum(myrand())
+@time sum(myrand())
+```
+
+Os últimos resultados provavelmente são mais rápidos que os da célula anterior. Normalmente a segunda execução fornece uma estimativa muito mais próxima do desempenho real do código.
+
+Para medições mais precisas, a comunidade costuma utilizar o pacote `BenchmarkTools`:
+
+```{julia}
+using BenchmarkTools
+```
+
+A macro `@btime` executa o código diversas vezes, reduz o impacto de flutuações do sistema operacional e produz resultados mais confiáveis:
+
+```{julia}
+@btime sum(myrand())
+```
+
+Em muitas situações a diferença entre duas implementações é pequena demais para ser percebida visualmente, mas aparece claramente quando utilizamos ferramentas de benchmark.
+
+## Quando otimizar?
+
+Depois de aprender sobre inferência de tipos, é comum surgir a tentação de otimizar cada linha de código. Entretanto, essa raramente é a melhor estratégia.
+
+Uma das maiores vantagens de Julia é que o compilador já realiza muitas otimizações automaticamente. Em diversos casos, um código simples e bem estruturado já apresenta desempenho excelente sem exigir nenhum esforço adicional.
+
+Por esse motivo, normalmente vale a pena começar escrevendo uma solução clara e correta. Somente depois de identificar gargalos reais devemos investir tempo em otimizações mais específicas.
+
+Ferramentas como `@code_warntype`, `@time`, `@allocated` e `@btime` ajudam justamente nesse processo. Em vez de tentar adivinhar onde está o problema, podemos medir o comportamento do programa e concentrar nossos esforços nas partes que realmente afetam o desempenho.
+
+## Conclusão
+
+Ao longo deste post vimos que a inferência de tipos é um dos mecanismos centrais responsáveis pela performance de Julia. Quando o compilador consegue determinar com precisão os tipos envolvidos em uma computação, ele pode gerar código altamente especializado e eliminar grande parte do custo normalmente associado a linguagens dinâmicas.
+
+Na prática, muitas recomendações de performance em Julia podem ser entendidas como formas de ajudar o compilador a inferir melhor os tipos do programa. Evitar variáveis globais, preferir containers com tipos concretos, utilizar tipos paramétricos e separar partes dinâmicas de partes computacionais são exemplos dessa ideia.
+
+Com o tempo, torna-se natural enxergar a performance sob essa perspectiva. Em vez de pensar apenas em algoritmos mais rápidos, passamos também a considerar quanta informação estamos fornecendo ao compilador. Quanto melhor Julia compreender o nosso código, melhores serão as otimizações que ela poderá realizar automaticamente.
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica, aprimoramento do texto e criação de imagens.
+:::

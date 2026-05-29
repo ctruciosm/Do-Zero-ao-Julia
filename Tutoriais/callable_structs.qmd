@@ -1,0 +1,281 @@
+---
+title: "Callable Structs em Julia"
+description: |
+  Aprenda a criar callable structs em Julia e descubra como representar comportamento através de tipos explícitos. Neste tutorial, construiremos transformações composáveis, exploraremos múltiplo dispatch para otimizações e compararemos essa abordagem com closures tradicionais.
+categories:
+  - Tutoriais
+  - Programação
+  - Múltiplo Dispatch
+author:
+  - name: Mateus Cleto
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/MateusCleto
+
+date: "2026-05-29"
+image: imagens/callable_structs_capa.png
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+draft: true
+engine: knitr
+---
+
+## Introdução
+
+Uma das características mais interessantes de Julia é que funções não ocupam um lugar “especial” na linguagem. Elas são objetos como quaisquer outros e participam naturalmente do sistema de múltiplo dispatch. Isso permite construir APIs extremamente flexíveis, onde comportamento e dados podem ser combinados de maneira muito natural.
+
+Nesse contexto surgem as callable structs: objetos que podem ser chamados como funções através da sobrecarga do operador `()`.
+
+À primeira vista isso pode parecer apenas uma curiosidade sintática. No entanto, callable structs aparecem constantemente no ecossistema Julia porque permitem modelar comportamento de forma explícita, composável e especializada pelo compilador.
+
+Neste post vamos construir um pequeno sistema de transformações matemáticas usando callable structs e comparar essa abordagem com closures tradicionais. Ao longo do caminho veremos por que esse padrão é tão comum em bibliotecas idiomáticas da linguagem.
+
+## Motivação
+
+Considere a seguinte função:
+
+```{julia}
+function scaler(a)
+    x -> a * x
+end
+```
+
+Aqui estamos retornando uma closure que captura a variável `a`. O resultado é bastante elegante:
+
+```{julia}
+f = scaler(2)
+
+f(10)
+```
+
+Apesar disso funcionar muito bem para casos simples, a situação começa a mudar quando queremos construir algo maior. Imagine que desejamos representar transformações matemáticas reutilizáveis e combináveis. Talvez queiramos compor operações, inspecionar seus parâmetros, otimizar combinações específicas ou definir comportamentos especializados usando dispatch.
+
+Com closures, toda essa estrutura fica escondida dentro de funções anônimas geradas pelo compilador. O comportamento existe, mas sua representação explícita praticamente desaparece da API.
+
+Callable structs resolvem exatamente esse problema ao transformar comportamento em um objeto estruturado e nomeado.
+
+## Implementando `Scale{T}`
+
+Vamos começar implementando uma transformação simples que multiplica um valor por uma constante.
+
+```{julia}
+struct Scale{T}
+    factor::T
+end
+
+(s::Scale)(x) = s.factor * x
+```
+
+A sintaxe pode parecer estranha inicialmente. O que estamos fazendo é definir um método para o operador `()` cujo primeiro argumento é um objeto do tipo `Scale`.
+
+Agora podemos usar a struct como se fosse uma função:
+
+```{julia}
+s = Scale(2)
+
+s(10)
+```
+
+O interessante aqui é que `Scale(2)` não é apenas uma função. Ele é um objeto estruturado que possui identidade própria, parâmetros explícitos e um tipo concreto conhecido pelo compilador.
+
+Além disso, como usamos um tipo paramétrico `Scale{T}`, a transformação funciona naturalmente com diferentes representações numéricas:
+
+```{julia}
+Scale(2)
+Scale(2.0)
+Scale(big"2")
+```
+
+Julia especializa automaticamente o código para cada caso.
+
+## Comparação com Closure
+
+A implementação usando closure parecia inicialmente mais simples:
+
+```{julia}
+function scaler(a)
+    x -> a * x
+end
+```
+
+Mas existe uma diferença conceitual importante entre as duas abordagens.
+
+Na closure, o estado fica capturado implicitamente. Existe algum objeto interno armazenando `a`, mas isso não aparece claramente na API. Já na callable struct, o estado faz parte explícita do modelo:
+
+```{julia}
+Scale(2)
+```
+
+Isso muda bastante a forma como podemos trabalhar com o comportamento. Agora temos um tipo nomeado, parametrizado e acessível diretamente pelo sistema de dispatch.
+
+Essa diferença começa a ficar muito mais relevante quando construímos composições maiores.
+
+## Construindo `Shift{T}` e `Compose{F,G}`
+
+Vamos adicionar uma segunda transformação:
+
+```{julia}
+struct Shift{T}
+    offset::T
+end
+
+(s::Shift)(x) = x + s.offset
+```
+
+Agora podemos representar escalas e translações separadamente:
+
+```{julia}
+Scale(2)
+Shift(3)
+```
+
+O próximo passo é permitir composição entre transformações. Em vez de criar novas closures anônimas, vamos representar explicitamente a estrutura da composição.
+
+```{julia}
+struct Compose{F,G}
+    f::F
+    g::G
+end
+
+(c::Compose)(x) = c.f(c.g(x))
+```
+
+Agora podemos construir pipelines reutilizáveis:
+
+```{julia}
+pipeline = Compose(
+    Shift(3),
+    Scale(2)
+)
+
+pipeline(10)
+```
+
+O resultado corresponde a:
+
+```text
+Shift(3)(Scale(2)(10))
+```
+
+ou seja:
+
+```text
+(10 * 2) + 3 = 23
+```
+
+A grande diferença é que a composição agora possui estrutura explícita. Não estamos apenas criando “mais uma função”. Estamos construindo uma árvore de transformações que pode ser analisada, modificada e otimizada.
+
+## Implementando Dispatch Especializado e Otimizando Composição
+
+Como as transformações possuem tipos explícitos, podemos usar múltiplo dispatch para criar otimizações estruturais.
+
+Primeiro definimos o dispatch `compose` para argumentos genericos:
+```{julia}
+compose(f, g) = Compose(f, g)
+```
+
+Agora compor duas escalas consecutivas pode ser reduzido a apenas uma escala:
+
+```{julia}
+compose(f::Scale, g::Scale) = Scale(f.factor * g.factor)
+```
+
+Da mesma forma, duas translações podem ser fundidas:
+
+```{julia}
+compose(f::Shift, g::Shift) = Shift(f.offset + g.offset)
+```
+
+Isso nos permite transformar:
+
+```{julia}
+compose(Scale(2), Scale(3))
+```
+
+em:
+
+```{julia}
+Scale(6)
+```
+
+Observe como essa otimização surge naturalmente do fato de termos uma representação explícita das operações. Com closures tradicionais, o comportamento existe apenas como código executável encapsulado dentro de funções anônimas. Já aqui as transformações são objetos estruturados sobre os quais podemos aplicar regras algébricas.
+
+Essa é exatamente a ideia usada em muitos frameworks que manipulam grafos computacionais, pipelines de transformação ou sistemas simbólicos.
+
+## Introspecção
+
+Outro benefício importante aparece quando queremos inspecionar a estrutura da computação.
+
+Como `Compose` armazena explicitamente suas transformações internas, podemos acessá-las diretamente:
+
+```{julia}
+pipeline.f
+pipeline.g
+```
+
+Também podemos verificar seus tipos:
+
+```{julia}
+typeof(pipeline)
+```
+
+Essa informação é extremamente valiosa tanto para o compilador quanto para o usuário. Em Julia, tipos carregam significado semântico importante, e callable structs aproveitam isso de maneira muito natural.
+
+## Comparação com Closure
+
+Se tivéssemos implementado toda a pipeline usando apenas closures, acabaríamos com algo parecido com:
+
+```{julia}
+f = x -> (x * 2) + 3
+```
+
+Isso resolve o problema computacional imediato, mas praticamente elimina qualquer estrutura intermediária.
+
+Não conseguimos facilmente responder perguntas como:
+
+* quais transformações compõem a pipeline?
+* existe alguma otimização possível?
+* duas escalas consecutivas podem ser fundidas?
+* quais parâmetros cada operação possui?
+
+Tudo isso fica escondido dentro de funções anônimas geradas dinamicamente.
+
+Callable structs transformam comportamento em dados estruturados. Isso permite que o próprio programa raciocine sobre as transformações que está manipulando.
+
+## Implementação de Closures
+
+Existe ainda um detalhe curioso: internamente, closures em Julia frequentemente são implementadas de forma parecida com structs geradas automaticamente pelo compilador.
+
+Ou seja, quando escrevemos:
+
+```{julia}
+x -> a * x
+```
+
+Julia normalmente cria algo conceitualmente semelhante a:
+
+```{julia}
+struct AnonymousClosure
+    a
+end
+
+(c::AnonymousClosure)(x) = c.a * x
+```
+
+A diferença é que esse tipo é anônimo, gerado internamente e pouco acessível ao usuário.
+
+Callable structs não são um “hack” estranho da linguagem. Pelo contrário, elas expõem explicitamente um modelo que já existe internamente no próprio sistema de funções de Julia.
+
+## Conclusão
+
+Callable structs são uma das ideias mais elegantes do ecossistema Julia porque unem dados, comportamento e múltiplo dispatch em uma única abstração simples.
+
+Em problemas pequenos, closures continuam sendo excelentes e extremamente convenientes. Porém, quando o comportamento passa a possuir identidade própria, precisa ser composto, otimizado ou especializado, callable structs frequentemente oferecem uma arquitetura muito mais clara e extensível.
+
+Essa abordagem aparece constantemente em bibliotecas idiomáticas da linguagem justamente porque combina muito bem com a filosofia de Julia: representar comportamento através de tipos explícitos e deixar o múltiplo dispatch organizar o restante.
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica, aprimoramento do texto e criação de imagens.
+:::

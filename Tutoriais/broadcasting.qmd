@@ -1,0 +1,282 @@
+---
+title: "Broadcasting em Julia"
+description: |
+  Broadcasting é uma feature nativa de julia que permite aplicar funções a arrays sem a nescessidade de loops explícitos. Neste tutorial vamos entender como ele funciona e como usá-lo. 
+categories:
+  - Aplicação
+  - Features nativas
+author:
+  - name: Mateus Cleto
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/MateusCleto
+
+date: "2026-05-29"
+image: imagens/broadcasting_capa.png
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+draft: true
+engine: knitr
+---
+
+## Introdução
+
+Uma das formas mais simples de trabalhar com arrays em Julia é através do broadcasting. Ele permite aplicar funções a coleções de forma concisa, eficiente e sem a necessidade de escrever loops explícitos.
+
+Neste tutorial, vamos entender o que é broadcasting, como funciona e como utilizá-lo.
+
+## Aplicando funções em coleções
+
+Dado um vetor, para elevar cada elemento ao quadrado normalmente seria usado um loop:
+
+```{julia}
+v = [1, 2, 3, 4]
+result = []
+for x in v
+    push!(result, x^2)
+end
+println(result)
+```
+
+Ou então um `map`:
+
+```{julia}
+println(map(x -> x^2, v))
+```
+
+Ambos os modos funcionam, mas Julia oferece uma forma ainda mais simples o broadcasting. Podemos aplicar uma função elemento a elemento usando um ponto (`.`):
+
+```{julia}
+println(v .^ 2)
+```
+
+O operador `.^` aplica a operação `^` a cada elemento do vetor. Qualquer função pode ser usada com broadcasting (inclusive funções definidas pelo usuário):
+
+```{julia}
+println(sqrt.(v))
+```
+
+Ainda é possível atribuir novos valores para variáveis a partir do broadcast de coleções:
+
+```{julia}
+x = [0, 0, 0, 0]
+x .= v .^ 2
+println(x)
+```
+
+Não é o mesmo que:
+
+```{julia}
+x = v .^ 2
+println(x)
+```
+
+O primeiro caso aplica a operação elemento a elemento e escreve o resultado diretamente em x. O segundo cria um novo vetor e reatribui x, o que realiza mais operações por conta da alocação de memoria.
+
+## Múltiplos argumentos
+
+Broadcasting também funciona com funções de vários argumentos:
+
+```{julia}
+a = [1, 2, 3]
+b = [10, 20, 30]
+
+println(a .+ b)
+```
+
+E caso a função receba uma coleção e seja passado um escalar, ele é expandido automaticamente:
+
+```{julia}
+println(v .+ 10)
+```
+
+O número `10` é somado a todos os elementos de `v`.
+
+Ele também funciona para coleções de dimensões maiores:
+
+```{julia}
+A = [1 2; 3 4]
+
+println(A .* 2)
+println(A .+ [1 ; 2])
+println(A .+ [1 2])
+```
+
+Quando há apenas um elemento em uma das dimensões de um dos vetores, o broadcast o expande ao longo dessa dimensão assim como no caso do escalar.
+
+## Limites do broadcasting
+
+Broadcasting funciona apenas quando as dimensões das estruturas envolvidas são compatíveis.
+
+Por exemplo:
+
+```{julia}
+[1, 2, 3] .+ [10, 20, 30]
+```
+
+Funciona porque ambos os vetores possuem o mesmo tamanho.
+
+Mas:
+
+```julia
+[1, 2, 3] .+ [10, 20]
+```
+
+Gera erro `DimensionMismatch` pois Julia não consegue alinhar os elementos corretamente.
+
+## A Macro `@.`
+
+Quando usamos muitas operações broadcasted na mesma expressão, escrever `.` repetidamente pode ficar verboso:
+
+```{julia}
+y = sin.(x) .+ cos.(x) .+ x.^2
+```
+
+Julia fornece a macro `@.` para aplicar broadcasting automaticamente em toda a expressão:
+
+```{julia}
+y = @. sin(x) + cos(x) + x^2
+```
+
+A macro adiciona `.` nas chamadas de função e operadores:
+
+```julia
+@. f(g(x) + h(x))
+```
+
+Equivale aproximadamente a:
+
+```julia
+f.(g.(x) .+ h.(x))
+```
+
+Isso é especialmente útil em expressões longas e numéricas.
+
+Também é comum combinar `@.` com atribuição em arrays já existentes:
+
+```{julia}
+@. y = sin(x) + cos(x) + x^2
+```
+
+Julia escreve diretamente em `y`, evitando alocações desnecessárias e fundindo todas as operações em um único loop.
+
+## Implementação
+
+O operador `.` possui algumas otimizações internas e sua implementação não é trivial.
+
+### A função broadcast
+
+Vamos entender como funciona a função nativa `broadcast(f, args...)`, que é chamada quando o operador `.` é usado. Ela recebe uma função como primeiro parâmetro e recebe no args os valores para os quais a função será aplicada termo a termo, ajustando para torná-los compatíveis. Esse ajuste ocorre a partir da expansão das dimensões de tamanho 1, permitindo operar sobre estruturas de tamanhos diferentes.
+
+Veja uma implementação simplificada:
+
+```{julia}
+function simple_broadcast(f, a, b)
+    is_array(x) = isa(x, AbstractArray)
+
+    len_a = is_array(a) ? length(a) : 1
+    len_b = is_array(b) ? length(b) : 1
+
+    if len_a != len_b && len_a != 1 && len_b != 1
+        error("Incompatible lengths")
+    end
+
+    len = max(len_a, len_b)
+    result = Vector{Any}(undef, len)
+
+    for i in 1:len
+        x = is_array(a) ? a[min(i, len_a)] : a
+        y = is_array(b) ? b[min(i, len_b)] : b
+
+        result[i] = f(x, y)
+    end
+
+    return result
+end
+
+println(simple_broadcast(+, [1, 2, 3, 4], 5))
+```
+
+Note que essa implementação não cobre casos multidimensionais. A implementação real do Julia trabalha com os eixos (axes) dos arrays, e não apenas com seus tamanhos, o que permite suportar estruturas mais gerais.
+
+### Fusion (fusão de operações)
+
+Quando você escreve `f.(x)` ou `a .+ b` isso não é apenas uma abreviação simples, a transformação é mais complexa para poder realizar a fusão de operadores.
+
+O parser transforma expressões com . em chamadas de broadcast, e a infraestrutura de broadcasting do Julia consegue fundir múltiplas operações em uma única iteração. Tome o exemplo: `v .^ 2 .+ 3 .* v`
+
+Em vez de fazer:
+
+```julia
+tmp1 = v .^ 2
+tmp2 = 3 .* v
+result = tmp1 .+ tmp2
+```
+
+Julia faz:
+
+```julia
+for i in eachindex(v)
+    result[i] = v[i]^2 + 3*v[i]
+end
+```
+
+Em um único loop e sem arrays intermediários.
+
+Para entender melhor como Julia consegue implementar esse tipo de otimização, vale a pena ler o artigo [More Dots: Syntactic Loop Fusion in Julia](https://julialang.org/blog/2017/01/moredots/), que explica em detalhes o conceito de loop fusion e as decisões de projeto relacionadas ao uso do operador `.` na linguagem.
+
+## Como tipos personalizados participam do broadcasting
+
+O sistema de broadcasting de Julia é extensível e permite que tipos personalizados definam como devem participar de operações elemento a elemento.
+
+Considere a seguinte estrutura:
+
+```{julia}
+struct MinhaStruct
+    x
+end
+```
+
+Se tentarmos utilizá-la diretamente em uma operação broadcasted:
+
+```julia
+[1, 2, 3] .+ MinhaStruct(10)
+```
+
+Julia gera o erro `MethodError: no method matching length(::MinhaStruct)`. Isso acontece porque o sistema de broadcasting tenta interpretar `MinhaStruct` como algo que pode ser percorrido elemento a elemento.
+
+Podemos indicar que o objeto deve ser tratado como um valor escalar implementando `broadcastable`:
+
+```{julia}
+Base.broadcastable(m::MinhaStruct) = Ref(m)
+```
+
+O uso de `Ref` informa ao sistema de broadcast que o objeto deve ser reutilizado como um único valor, em vez de ser iterado.
+
+Ainda precisamos definir a operação que será aplicada durante o broadcast:
+
+```{julia}
+Base.:+(i::Int, m::MinhaStruct) = i + m.x
+```
+
+Agora a operação funciona normalmente:
+
+```{julia}
+[1, 2, 3] .+ MinhaStruct(10)
+```
+
+Entretanto, tratar um objeto como escalar é diferente de implementar uma estrutura array-like completa, quando um tipo deseja participar do broadcasting como uma coleção propriamente dita, preservando seu formato e seu tipo no resultado, é necessário implementar outras partes da interface de broadcast, especialmente `Base.BroadcastStyle` e `Base.similar`.
+
+Esses mecanismos são utilizados extensivamente no ecossistema Julia para integrar arrays customizados, estruturas lazy e arrays em GPU ao sistema de broadcasting da linguagem.
+
+## Conclusão
+
+Broadcasting é um conceito chave em Julia, que torna os códigos mais simples e limpos sem comprometer eficiência. Ele pode ser usado em filtragens, com operações lógicas v\[v .\> 2\], na aplicação de funções elemento a elemento como sqrt.(v), e na combinação de estruturas de diferentes dimensões de forma natural e expressiva.
+
+Além disso, graças ao mecanismo de fusion, múltiplas operações com . são combinadas em um único loop, evitando alocações intermediárias e mantendo a performance próxima à de implementações manuais.
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica, aprimoramento do texto e criação de imagens.
+:::

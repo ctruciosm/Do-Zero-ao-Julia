@@ -1,0 +1,309 @@
+---
+title: "Traits e Holy Traits em Julia"
+description: |
+    Aprenda passo a passo como implementar o padrão Holy Traits em Julia para representar capacidades e comportamentos independentes da hierarquia de tipos. Entenda como traits funcionam, por que são amplamente utilizadas na Base da linguagem e como aproveitam a inferência de tipos para gerar código eficiente.
+categories:
+  - Julia
+  - Multiple Dispatch
+  - Design de APIs
+author:
+  - name: Mateus Cleto
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/MateusCleto
+
+date: "2026-05-29"
+image: imagens/traits_capa.png
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+draft: true
+engine: knitr
+---
+
+## Introdução
+
+Uma das ideias mais importantes em Julia é que comportamento não está preso a objetos. A linguagem gira em torno de funções genéricas e multiple dispatch, e isso muda bastante a arquitetura dos programas.
+
+Em linguagens orientadas a objetos tradicionais, é comum representar capacidades usando herança. Um tipo pode herdar de uma classe "iterável", "serializável" ou "indexável". Esse modelo funciona bem enquanto existe apenas uma dimensão de classificação, mas rapidamente começa a ficar desconfortável quando um tipo possui várias propriedades independentes.
+
+Julia normalmente resolve esse problema usando traits. Apesar da linguagem não possuir uma sintaxe especial para elas, existe um padrão extremamente comum conhecido como Holy Traits, amplamente utilizado na Base do Julia e em diversas bibliotecas do ecossistema.
+
+Neste post vamos construir esse padrão do zero, entender por que ele é tão poderoso e ver como ele aparece em interfaces reais da linguagem.
+
+## O problema da hierarquia
+
+Vamos imaginar uma função genérica que trabalha com coleções indexáveis. Algumas estruturas possuem acesso aleatório eficiente, permitindo recuperar diretamente o elemento em uma posição arbitrária. Outras suportam apenas acesso sequencial, exigindo percorrer os elementos até encontrar o índice desejado.
+
+Queremos escolher algoritmos diferentes dependendo dessa capacidade.
+
+Uma primeira tentativa seria colocar isso diretamente na hierarquia de tipos:
+
+```{julia}
+abstract type RandomAccessCollection end
+abstract type SequentialCollection end
+
+struct MyVector <: RandomAccessCollection
+    data::Vector{Int}
+end
+```
+
+O problema aparece rapidamente. O modo de acesso aos elementos é apenas uma propriedade da coleção, não sua identidade principal. Além disso, outras características independentes podem surgir ao longo do tempo. Talvez também queiramos distinguir estruturas com tamanho rápido de estruturas com tamanho lento, ou coleções reiteráveis de streams consumíveis.
+
+Quando usamos herança para representar capacidades ortogonais, a hierarquia começa a se tornar artificial. Traits aparecem justamente para desacoplar essas propriedades da estrutura principal dos tipos.
+
+## A ideia central dos Holy Traits
+
+O padrão Holy Traits é bem simples. A ideia é representar propriedades usando tipos auxiliares e então utilizar dispatch sobre esses tipos.
+
+Em vez de fazer dispatch diretamente sobre o tipo principal do objeto, primeiro consultamos uma função responsável por informar quais capacidades aquele tipo possui. Essa informação então participa do dispatch normalmente.
+
+Vamos construir o exemplo da seção anterior usando estruturas array-like.
+
+Primeiro definimos uma trait responsável por representar o tipo de acesso suportado pela coleção:
+
+```{julia}
+abstract type AccessTrait end
+
+struct RandomAccess <: AccessTrait end
+struct SequentialAccess <: AccessTrait end
+```
+
+Agora criamos dois tipos diferentes de coleção. O primeiro encapsula um `Vector`, permitindo acesso eficiente por índice. O segundo será uma linked list simples, onde acessar um índice arbitrário exige percorrer a estrutura elemento por elemento.
+
+```{julia}
+struct FastVector{T}
+    data::Vector{T}
+end
+
+struct Node{T}
+    value::T
+    next::Union{Node{T}, Nothing}
+end
+
+struct LinkedList{T}
+    head::Union{Node{T}, Nothing}
+end
+```
+
+A próxima etapa é definir a função que associa cada tipo à sua trait:
+
+```{julia}
+accesstrait(::Type) = SequentialAccess()
+
+accesstrait(::Type{<:FastVector}) = RandomAccess()
+```
+
+Aqui estamos dizendo que, por padrão, coleções possuem apenas acesso sequencial, mas `FastVector` suporta acesso aleatório eficiente.
+
+Agora podemos implementar uma função genérica `get`, responsável por retornar o elemento em um índice específico.
+
+A função pública apenas consulta a trait e redireciona o dispatch:
+
+```{julia}
+get(xs, i) = get(accesstrait(typeof(xs)), xs, i)
+```
+
+Para estruturas com acesso aleatório, basta usar indexação direta:
+
+```{julia}
+function get(::RandomAccess, xs, i)
+    println("Acesso rápido")
+    return xs.data[i]
+end
+```
+
+Já no caso de uma linked list, precisamos caminhar pela estrutura até encontrar o elemento desejado:
+
+```{julia}
+function get(::SequentialAccess, xs, i)
+    println("Acesso sequencial")
+    current = xs.head
+
+    i < 1 && throw(BoundsError())
+
+    for _ in 1:(i - 1)
+        current === nothing && throw(BoundsError())
+        current = current.next
+    end
+
+    current === nothing && throw(BoundsError())
+
+    return current.value
+end
+```
+
+O ponto importante é que `FastVector` nunca precisou herdar de uma hierarquia especial. A propriedade "possui acesso aleatório eficiente" foi adicionada externamente através da trait.
+
+Agora testando os comportamentos:
+
+```{julia}
+v = FastVector([10, 20, 30])
+l = LinkedList(Node(10, Node(20, Node(30, nothing))))
+
+get(v, 3)
+get(l, 3);
+```
+
+## Por que isso funciona tão bem em Julia
+
+À primeira vista, pode parecer que estamos adicionando uma camada extra de indireção. Em muitas linguagens isso realmente teria custo adicional, mas Julia normalmente consegue inferir completamente o resultado da trait.
+
+Podemos investigar isso usando:
+
+```{julia}
+v = FastVector([10, 20, 30])
+
+@code_warntype get(v, 2)
+```
+
+A linha `%5 = (%2)(%4)::Core.Const(RandomAccess())` indica que que o compilador percebe que `accesstrait(typeof(v))` sempre retorna `RandomAccess()`. Isso significa que o dispatch final é resolvido estaticamente durante compilação.
+
+Na prática, o código gerado é equivalente ao que seria obtido escrevendo diretamente uma implementação especializada para `FastVector`, mas agora a lógica foi organizada em torno de capacidades algorítmicas, e não da hierarquia principal dos tipos.
+
+Esse detalhe é importante porque traits normalmente representam propriedades ortogonais do objeto. Um tipo pode simultaneamente possuir acesso aleatório, tamanho rápido, iteração infinita ou mutabilidade estrutural, e essas propriedades não precisam ficar acopladas em uma única árvore de herança.
+
+Essa combinação entre dispatch múltiplo e inferência de tipos é uma das razões pelas quais Holy Traits funcionam tão naturalmente em Julia.
+
+## Outras dimensões de comportamento
+
+Depois que começamos a usar traits, fica natural perceber que uma mesma coleção pode possuir várias propriedades independentes.
+
+Além de `AccessTrait`, poderíamos também representar o custo de calcular o tamanho da coleção:
+
+```{julia}
+abstract type SizeTrait end
+
+struct HasFastSize <: SizeTrait end
+struct HasSlowSize <: SizeTrait end
+```
+
+Nesse caso, `FastVector` possui acesso constante ao tamanho, enquanto `LinkedList` precisaria percorrer toda a estrutura:
+
+```{julia}
+sizetrait(::Type) = HasSlowSize()
+
+sizetrait(::Type{<:FastVector}) = HasFastSize()
+```
+
+Outra possibilidade é representar características da própria iteração:
+
+```{julia}
+abstract type IterationTrait end
+
+struct Reiterable <: IterationTrait end
+struct SinglePass <: IterationTrait end
+struct InfiniteIteration <: IterationTrait end
+```
+
+Nossos dois tipos continuam sendo reiteráveis:
+
+```{julia}
+iterationtrait(::Type{<:FastVector}) = Reiterable()
+
+iterationtrait(::Type{<:LinkedList}) = Reiterable()
+```
+
+Mas agora conseguimos imaginar outras estruturas diferentes. Um stream de dados vindo de um socket talvez fosse `SinglePass`, enquanto um gerador infinito poderia retornar `InfiniteIteration`.
+
+O ponto importante é que essas propriedades são independentes entre si. `FastVector` e `LinkedList` não precisam participar de uma hierarquia complicada para representar todas essas capacidades. Cada trait descreve apenas uma dimensão específica do comportamento do objeto.
+
+## Traits na Base do Julia
+
+Depois que começamos a reconhecer esse padrão, ele aparece em toda parte na Base do Julia.
+
+A interface de iteração, por exemplo, utiliza traits para descobrir propriedades dos iteradores:
+
+```{julia}
+Base.IteratorSize(Vector)
+```
+
+Outros iteradores podem retornar `SizeUnknown()` ou `IsInfinite()`. Essas informações permitem que funções genéricas escolham algoritmos diferentes automaticamente.
+
+Arrays também usam traits extensivamente. O sistema de indexação possui:
+
+```{julia}
+Base.IndexStyle(Array)
+```
+
+Enquanto outras estruturas podem utilizar `IndexCartesian()`.
+
+O sistema de broadcasting segue exatamente a mesma ideia. Quando escrevemos:
+
+```julia
+A .+ B
+```
+
+Julia precisa decidir como combinar os containers envolvidos, qual estrutura produzir e quais otimizações aplicar. Tudo isso acontece através de dispatch sobre traits.
+
+## Traits booleanas vs tipos
+
+Uma dúvida comum é por que traits normalmente são representadas por tipos ao invés de simplesmente retornar `Bool`.
+
+No caso de `AccessTrait`, talvez isso ainda pareça desnecessário. Poderíamos imaginar algo como:
+
+```{julia}
+hasrandomaccess(::Type{<:FastVector}) = true
+```
+
+E então escrever:
+
+```julia
+if hasrandomaccess(typeof(xs))
+    ...
+else
+    ...
+end
+```
+
+Mas essa abordagem começa a quebrar assim que a propriedade deixa de ser binária.
+
+Considere a trait de iteração:
+
+```julia
+abstract type IterationTrait end
+
+struct Reiterable <: IterationTrait end
+struct SinglePass <: IterationTrait end
+struct InfiniteIteration <: IterationTrait end
+```
+
+Agora já não existe uma pergunta booleana natural que capture corretamente todos os casos. Um iterador infinito não é simplesmente "reiterável" ou "não reiterável". Um stream consumível também possui restrições diferentes de uma sequência infinita.
+
+Traits representadas por tipos permitem categorizar múltiplos comportamentos semanticamente distintos usando dispatch múltiplo normal. Isso mantém o código extensível e evita cadeias crescentes de condicionais especiais espalhadas pelo sistema.
+
+Esse padrão aparece constantemente na própria Base do Julia. Por exemplo, `Base.IteratorSize` não retorna um booleano informando apenas se o tamanho é conhecido ou não. Em vez disso, ele utiliza diferentes tipos para representar situações semanticamente diferentes, como `HasShape`, `SizeUnknown` e `IsInfinite`.
+
+## Quando usar traits
+
+Traits funcionam especialmente bem quando queremos descrever capacidades ou propriedades algorítmicas independentes da identidade principal do tipo.
+
+No exemplo anterior, `FastVector` e `LinkedList` continuam sendo coleções conceitualmente parecidas, mas possuem diferenças importantes relacionadas a acesso, iteração e custo de certas operações. Essas propriedades não formam naturalmente uma única hierarquia de tipos. Um objeto pode simultaneamente possuir acesso aleatório, tamanho rápido e iteração infinita, e tentar representar todas essas combinações usando apenas herança rapidamente leva a estruturas artificiais.
+
+Traits permitem separar essas dimensões de comportamento em classificações independentes. Em vez de perguntar "o que esse objeto é?", estamos perguntando algo mais específico, como: "esse objeto possui acesso aleatório?" ou "o tamanho pode ser calculado eficientemente?".
+
+Já relações conceituais fortes normalmente continuam sendo melhor representadas por `abstract types`.
+
+Por exemplo:
+
+```{julia}
+abstract type Animal end
+```
+
+Faz sentido porque "Animal" representa a própria categoria conceitual do objeto. Traits, por outro lado, costumam representar capacidades adicionais que atravessam múltiplas hierarquias diferentes.
+
+Em geral, uma boa heurística é pensar que `abstract types` modelam identidade semântica, enquanto traits modelam comportamento.
+
+
+## Conclusão
+
+Holy Traits são um dos padrões mais importantes do ecossistema Julia. Eles permitem separar comportamento de hierarquia, escrever APIs altamente extensíveis e aproveitar completamente o multiple dispatch da linguagem.
+
+O mais interessante é que traits não são um recurso especial do compilador. Elas surgem naturalmente da combinação entre tipos, funções genéricas e inferência de tipos.
+
+Depois que começamos a enxergar esse padrão, passamos a reconhecê-lo em praticamente toda biblioteca bem escrita em Julia.
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica, aprimoramento do texto e criação de imagens.
+:::
