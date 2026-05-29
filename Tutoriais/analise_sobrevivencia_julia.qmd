@@ -20,7 +20,7 @@ format:
     toc-depth: 3
     self-contained: false
 engine: julia
-draft: true
+draft: false
 ---
 
 # Introdução
@@ -31,11 +31,11 @@ O caso mais comum é a **censura à direita**, quando sabemos apenas que o event
 
 Neste tutorial, percorremos um fluxo completo:
 
-1. Simulação de dados com censura  
-2. Estimadores não-paramétricos (Kaplan–Meier e Nelson–Aalen)  
-3. Comparação entre grupos  
-4. Modelo de Cox Proportional Hazards  
-5. Interpretação estatística e extensões
+1. Simulação de dados com censura;
+2. Estimadores não-paramétricos (Kaplan–Meier e Nelson–Aalen);  
+3. Comparações entre grupos;
+4. Modelo de Cox Proportional Hazards;
+5. Interpretação estatística e extensões.
 :::
 
 # Por que Julia?
@@ -64,7 +64,7 @@ using DataFrames, StatsModels
 using Survival
 using Plots, Distributions
 
-Random.seed!(42) # Tornando o código reprodutível
+Random.seed!(42) # Tornando o código reprodutível pois os dados gerados serão os mesmos a cada execução
 ```
 
 # Conceitos fundamentais
@@ -83,35 +83,53 @@ Kaplan–Meier estima diretamente $S(t)$, enquanto Nelson–Aalen estima $H(t)$.
 ::: {.justify}
 Vamos gerar dados sintéticos com:
 
-- Dois grupos (Controle e Tratamento)
-- Covariável contínua (idade)
-- Efeito do tratamento via *hazard ratio*
+- Dois grupos (Controle e Tratamento);
+- Covariável contínua (idade);
+- Efeito do tratamento via *hazard ratio*.
 :::
 
 ```{julia}
+# Número de observações (indivíduos simulados)
 n = 400
 
+# Grupos "Controle" e "Tratamento"
 group = rand(["Controle", "Tratamento"], n)
-age   = rand(Uniform(20, 70), n)
 
-λ0 = 0.08                 # risco basal
-hr_treat = 0.6            # efeito do tratamento
+# Idades aleatórias
+age = rand(Uniform(20, 70), n)
+
+# Taxa de risco basal (hazard baseline)
+λ0 = 0.08
+
+# Hazard Ratio do tratamento
+hr_treat = 0.6
+
+# Taxa de risco individual λ para cada pessoa
+# "Tratamento":
+#   λ = λ0 * 0.6
+# "Controle":
+#   λ = λ0 * 1.0
 λ = λ0 .* ifelse.(group .== "Tratamento", hr_treat, 1.0)
 
+# Tempo verdadeiro até o evento
 time_true = rand.(Exponential.(λ)) |> x -> reduce(vcat, x)
 
+# Tempos de censura
 censor_time = rand(Exponential(0.05), n)
 
 event = time_true .<= censor_time
-time  = min.(time_true, censor_time)
+
+# Tempo observado no estudo
+time = min.(time_true, censor_time)
 
 df = DataFrame(
-    time = time,
-    event = event,
-    group = group,
-    age = age
+    time = time,     # tempo observado
+    event = event,   # indicador de evento/censura
+    group = group,   # grupo experimental
+    age = age        # idade
 )
 
+# Objeto de Survival.jl para análise de sobrevivência
 df.eventtime = EventTime.(df.time, df.event)
 
 first(df, 5)
@@ -126,7 +144,7 @@ describe(df)
 ```{julia}
 bar([sum(df.event), sum(.!df.event)],
     label=["Evento observado" "Censurado"],
-    title="Proporção de censura",
+    title = "Eventos observados vs censura",
     legend=:top)
 ```
 
@@ -189,7 +207,7 @@ plot(na.events.time, na.chaz;
 O estimador de Nelson–Aalen fornece uma estimativa do risco cumulativo $H(t)$ que cresce monotonicamente ao longo do tempo. Diferentemente da função de sobrevivência, valores mais altos de $H(t)$ indicam maior acúmulo de risco até o tempo $t$.
 :::
 
-# Comparação visual entre grupos (NA)
+# Comparação visual entre grupos (Nelson–Aalen)
 
 ```{julia}
 plt = plot(xlabel="Tempo", ylabel="H(t)",
