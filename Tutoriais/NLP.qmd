@@ -14,6 +14,9 @@ author:
     affiliation: "Universidade Estadual de Campinas"
     url: https://ctruciosm.github.io
     orcid: 0000-0001-8746-8877
+  - name: Rafael Santos Seixas Figueiredo
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/seixasr
 date: "2025-11-01"
 image: imagens/nlp.png
 lang: pt
@@ -31,7 +34,7 @@ draft: true
 ::: justify
 A maior parte dos dados do mundo não está em planilhas, mas em formato de texto não estruturado: e-mails, contratos, tweets, artigos médicos e livros. A área da Ciência de Dados que lida com isso é o **Processamento de Linguagem Natural (NLP)**.
 
-Em Julia, o pacote `TextAnalysis.jl` fornece uma suíte completa para transformar texto bruto em dados matemáticos (matrizes), enquanto o `WordCloud.jl` permite criar visualizações artísticas de alta qualidade.
+Em Julia, o pacote `TextAnalysis.jl` fornece uma suíte robusta para transformar texto bruto em dados matemáticos adequados para análise computacional, enquanto o `WordCloud.jl` permite criar visualizações artísticas de alta qualidade.
 
 Neste tutorial, faremos uma análise literária computacional. Vamos baixar o clássico **"Dom Casmurro"**, de Machado de Assis, e utilizar técnicas de mineração de texto para responder: quais são as palavras que definem esta obra?
 :::
@@ -55,7 +58,7 @@ Pkg.add([
 ## Coleta de Dados
 
 ::: justify
-O Project Gutenberg disponibiliza milhares de livros em domínio público. Vamos baixar o arquivo .txt de Dom Casmurro direto da fonte.
+O Project Gutenberg disponibiliza milhares de livros em domínio público. Vamos baixar o arquivo .txt de Dom Casmurro direto do repositório.
 :::
 
 ```{julia}
@@ -136,7 +139,7 @@ println("Limpeza concluída. Amostra do texto limpo:")
 println(first(text(doc), 200)) # text(doc) recupera a string processada
 ```
 
-## Análise de Frequência (N-Grams)
+## Análise de Frequência
 
 ::: justify
 Agora que o texto está limpo, podemos contar as palavras. Uma abordagem comum é criar uma Matriz de Termos (Lexicon), que mapeia cada palavra única para sua contagem.
@@ -152,7 +155,7 @@ update_lexicon!(crps)
 # Obtém o dicionário de frequências
 lexico = lexicon(crps)
 
-# Vamos pegar as top 10 palavras mais frequentes?
+# Vamos obter as 10 palavras mais frequentes
 # Convertemos o dicionário para um vetor e ordenamos
 palavras_freq = sort(collect(lexico), by = x -> x[2], rev=true)
 
@@ -169,7 +172,7 @@ Olhando o Top 10, vemos nomes como "capitu" e "mãe" (Dona Glória) dominando a 
 ## Visualização: WordCloud
 
 ::: justify
-Tabelas são úteis, mas Nuvens de Palavras capturam a essência de forma imediata. O WordCloud.jl é um pacote nativo do Julia extremamente poderoso. Diferente de bibliotecas em Python que apenas "colam" palavras, ele usa algoritmos de otimização para encaixar as palavras de forma densa e estética.
+Tabelas são úteis, mas nuvens de palavras capturam a essência de forma imediata. O WordCloud.jl é um pacote nativo do Julia extremamente poderoso. Diferente de bibliotecas em Python que apenas "colam" palavras, ele usa algoritmos de otimização para encaixar as palavras de forma densa e estética.
 :::
 
 ```{julia}

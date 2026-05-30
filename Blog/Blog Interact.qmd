@@ -10,10 +10,9 @@ author:
     affiliation: "Universidade Estadual de Campinas"
     url: https://github.com/C4mpovill4
 
-  - name: 
-    affiliation: 
-    url: 
-    orcid: 
+  - name: Rafael Santos Seixas Figueiredo
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/seixasr
 
 date: "2025-08-26"
 image: imagens/Interact.jpeg
@@ -76,7 +75,7 @@ A integração mais comum é com Jupyter notebooks, perfeita para:
 
 ### **2. VS Code**
 
-A extensão Julia para VS Code suporta totalmente o Interact.jl, oferecendo uma experiência de desenvolvimento integrada.
+A extensão Julia para VS Code oferece suporte ao Interact.jl em diversos cenários de uso, embora algumas funcionalidades dependam da integração com o WebIO.
 
 ### **3. Aplicações Web Standalone**
 
@@ -90,7 +89,7 @@ Com **WebIO.jl**, você pode embutir suas interações em páginas web ou dashbo
 
 3.  **Integração**: Funciona com todo o ecossistema Julia (Plots.jl, Makie.jl, etc.)
 
-4.  **Flexibilidade**: Do protótipo à aplicação web completa
+4.  **Flexibilidade**: Pode ser utilizado desde protótipos exploratórios até interfaces web simples
 
 ## **Limitações e Considerações**
 
@@ -100,4 +99,4 @@ Com **WebIO.jl**, você pode embutir suas interações em páginas web ou dashbo
 
 ## **Conclusão**
 
-O Interact.jl facilita a criação de interfaces interativas no Julia, tornando-a acessível para qualquer pessoa que queira explorar dados e modelos de forma mais dinâmica.
+O Interact.jl facilita a criação de interfaces interativas em Julia, tornando esse processo acessível para qualquer pessoa que queira explorar dados e modelos de forma mais dinâmica.
