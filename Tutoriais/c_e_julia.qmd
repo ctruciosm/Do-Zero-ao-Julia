@@ -1,0 +1,334 @@
+---
+title: "Chamando Bibliotecas C em Julia"
+description: |
+    Aprenda passo a passo como utilizar `ccall` para integrar Julia com bibliotecas escritas em C. Neste tutorial, veremos como chamar funções externas, trabalhar com tipos compatíveis, ponteiros, arrays, estruturas e bibliotecas compartilhadas.
+categories:
+  - Julia
+  - Interoperabilidade
+  - Programação de Sistemas
+author:
+  - name: Mateus Cleto
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/MateusCleto
+
+date: "2026-05-29"
+image: imagens/c_e_julia_capa.png
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+draft: true
+engine: knitr
+---
+
+## Introdução
+
+Uma das características que diferenciam Julia de muitas linguagens de alto nível é sua capacidade de interagir diretamente com bibliotecas escritas em C. Isso permite reutilizar décadas de desenvolvimento acumulado em bibliotecas científicas, ferramentas de sistema operacional, frameworks gráficos e inúmeras outras aplicações sem a necessidade de reescrever código já existente.
+
+Essa capacidade recebe o nome de interoperabilidade. Em termos simples, interoperabilidade é a habilidade de dois sistemas diferentes trabalharem juntos. No contexto deste artigo, significa permitir que um programa Julia execute funções escritas em C como se elas fossem parte da própria linguagem.
+
+Vamos ver como Julia realiza essa integração, como representar tipos compatíveis com C, como passar strings e arrays para funções externas e quais cuidados devem ser tomados ao lidar com ponteiros e memória.
+
+## Por que chamar código C?
+
+À primeira vista, pode parecer estranho querer chamar C a partir de Julia. Afinal, Julia já foi projetada para oferecer alto desempenho. O objetivo, entretanto, não é substituir Julia por C, mas aproveitar o enorme ecossistema de bibliotecas já existente.
+
+Grande parte das bibliotecas fundamentais utilizadas atualmente foi escrita em C ou fornece uma interface compatível com C. Isso inclui bibliotecas numéricas, algoritmos de otimização, ferramentas de processamento de imagens, bibliotecas criptográficas e até mesmo funções do próprio sistema operacional.
+
+Em vez de reimplementar essas funcionalidades, podemos simplesmente utilizá-las diretamente.
+
+Essa abordagem é tão comum que muitos pacotes Julia funcionam essencialmente como uma camada intermediária entre o usuário e uma biblioteca externa. Essa camada intermediária recebe o nome de wrapper.
+
+Um wrapper esconde detalhes de baixo nível e apresenta uma interface mais natural para quem está programando em Julia. O usuário interage apenas com funções Julia comuns, enquanto o pacote se encarrega de realizar as chamadas para a biblioteca externa.
+
+## A função `ccall`
+
+O principal mecanismo utilizado por Julia para chamar funções escritas em C é a função especial `ccall`.
+
+Ela permite especificar qual função deve ser chamada, qual é o tipo do valor retornado, quais são os tipos dos argumentos e quais valores devem ser passados para a função.
+
+Considere o exemplo abaixo:
+
+```julia
+s = "hello"
+
+len = ccall(
+    :strlen,
+    Csize_t,
+    (Cstring,),
+    s
+)
+```
+
+Esse código chama a função `strlen`, presente na biblioteca padrão de C.
+
+A função `strlen` recebe uma string e retorna seu comprimento. Em C, sua assinatura é aproximadamente:
+
+```c
+size_t strlen(const char *s);
+```
+
+Vamos analisar a chamada em Julia com mais cuidado.
+
+O símbolo `:strlen` identifica a função que desejamos executar. O valor `Csize_t` informa o tipo retornado pela função. Em seguida aparece a tupla `(Cstring,)`, que descreve os tipos dos argumentos esperados. Por fim, fornecemos o valor efetivamente passado para a função, que neste caso é a string armazenada em `s`.
+
+Embora a sintaxe pareça um pouco incomum no começo, ela reflete exatamente as informações necessárias para que Julia consiga conversar com uma função externa de maneira segura.
+
+## Tipos compatíveis com C
+
+Quando chamamos uma função escrita em C, é importante utilizar tipos compatíveis com aqueles esperados pela biblioteca.
+
+Julia fornece diversos tipos especiais para representar os tipos mais comuns da linguagem C.
+
+Por exemplo:
+
+```julia
+Cint
+Cdouble
+Cfloat
+Cchar
+Csize_t
+```
+
+Esses tipos existem porque os tamanhos utilizados por C podem variar entre plataformas.
+
+Por exemplo, embora frequentemente um `int` possua 32 bits, a linguagem C não exige explicitamente esse tamanho. Ao utilizar `Cint`, deixamos que Julia escolha a representação correta para a plataforma atual.
+
+Da mesma forma:
+
+```julia
+x = Cint(10)
+y = Cdouble(3.14)
+```
+
+produzem valores compatíveis com os tipos `int` e `double` de C.
+
+Essa prática torna o código mais portável e reduz a chance de erros difíceis de diagnosticar.
+
+## Imprimindo texto com uma função C
+
+Vamos usar como exemplo a função `puts`, também pertencente à biblioteca padrão de C.
+
+Sua assinatura é aproximadamente:
+
+```c
+int puts(const char *s);
+```
+
+Em Julia:
+
+```{julia}
+ccall(
+    :puts,
+    Cint,
+    (Cstring,),
+    "Hello from Julia!"
+)
+```
+
+A chamada imprime a mensagem na saída padrão e retorna um inteiro indicando se a operação foi bem-sucedida.
+
+Embora esse exemplo seja bastante simples, ele já demonstra o mecanismo fundamental utilizado por Julia para interagir com bibliotecas externas. A partir do momento em que conseguimos chamar uma função como `puts`, também podemos chamar funções muito mais sofisticadas presentes em bibliotecas científicas, bibliotecas gráficas ou até mesmo em APIs do próprio sistema operacional.
+
+## Ponteiros
+
+Algumas funções C recebem ponteiros para variáveis. Isso permite que a função escreva resultados diretamente em um endereço de memória fornecido pelo usuário ou modifique valores passados como parâmetros. Esse padrão é comum quando uma função precisa retornar mais de um valor ou modificar um valor fornecido pelo usuário.
+
+Podemos ver isso usando a função `frexp`, da biblioteca matemática de C. Essa função decompõe um número de ponto flutuante na forma:
+
+```text
+x = m * 2^e
+```
+
+onde `m` é a mantissa e `e` é um expoente inteiro. A mantissa é retornada diretamente pela função, enquanto o expoente é escrito em uma variável passada por ponteiro.
+
+A assinatura em C é aproximadamente:
+
+```c
+double frexp(double x, int *exp);
+```
+
+Em Julia:
+
+```{julia}
+x = 8.0
+expoente = Ref{Cint}()
+
+mantissa = ccall(
+    :frexp,
+    Cdouble,
+    (Cdouble, Ref{Cint}),
+    x,
+    expoente
+)
+
+mantissa, expoente[]
+```
+
+Aqui, `Ref{Cint}()` cria uma pequena região de memória capaz de armazenar um valor do tipo `Cint`. Ao passarmos `expoente` para `ccall`, a função C recebe um ponteiro para essa região e pode escrever nela.
+
+Depois da chamada, acessamos o valor armazenado usando:
+
+```{julia}
+expoente[]
+```
+
+O par retornado deve satisfazer:
+
+```{julia}
+mantissa * 2.0^expoente[] # = 8
+```
+
+Esse exemplo mostra um uso importante de ponteiros sem precisar manipular endereços manualmente. Em muitos casos, `Ref` é a forma mais simples e segura de fornecer a uma função C um local onde ela possa escrever um resultado.
+
+## Arrays
+
+Quando trabalhamos com bibliotecas C, é comum encontrar funções que recebem arrays. Em C, um array costuma ser passado para uma função por meio de um ponteiro para seu primeiro elemento. Se a função precisa saber quantos elementos deve ler, essa informação normalmente é passada separadamente.
+
+Um exemplo simples é a função `memcmp`, da biblioteca padrão de C. Ela compara dois blocos de memória byte a byte. Sua assinatura é aproximadamente:
+
+```c
+int memcmp(const void *s1, const void *s2, size_t n);
+```
+
+Os dois primeiros argumentos são ponteiros para os blocos de memória que serão comparados. O terceiro argumento, `n`, informa quantos bytes devem ser lidos.
+
+Em Julia, podemos chamá-la assim:
+
+```{julia}
+a = UInt8[1, 2, 3]
+b = UInt8[1, 2, 4]
+
+resultado = ccall(
+    :memcmp,
+    Cint,
+    (Ptr{UInt8}, Ptr{UInt8}, Csize_t),
+    a,
+    b,
+    length(a)
+)
+
+resultado
+```
+
+Nesse exemplo, `a` e `b` são vetores de bytes. Como cada elemento do tipo `UInt8` ocupa exatamente um byte, podemos passar `length(a)` como o número de bytes a comparar.
+
+Observe que a assinatura do `ccall` usa `Ptr{UInt8}`, mas passamos os vetores diretamente. Durante a chamada, Julia converte esses arrays para ponteiros para seus dados internos. Isso funciona porque arrays densos em Julia são armazenados de forma contínua na memória (assim como arrays em C).
+
+A função retorna `0` quando os dois blocos comparados são iguais. Quando há diferença, o retorno indica a comparação entre o primeiro par de bytes diferentes. No exemplo acima, os dois primeiros bytes são iguais, mas o terceiro byte de `a` é `3`, enquanto o terceiro byte de `b` é `4`, então o resultado deve ser negativo.
+
+## Estruturas
+
+Além de números, strings, arrays e ponteiros simples, bibliotecas C frequentemente utilizam estruturas. Uma estrutura, ou `struct`, agrupa vários campos em um único valor. Em Julia, também podemos definir tipos compostos compatíveis com structs C, desde que a organização dos campos seja compatível.
+
+Um exemplo prático pode ser feito com a função `gmtime_r`, disponível em sistemas Unix. Essa função recebe um tempo em segundos desde 1 de janeiro de 1970 e preenche uma estrutura `tm` com informações como ano, mês, dia, hora, minuto e segundo.
+
+A estrutura `tm` pode ser representada em Julia criando campos de mesmo nome e tipo que a estrutura original e na mesma ordem em que na estrutura original.
+
+```{julia}
+struct TmStruct
+    tm_sec::Cint
+    tm_min::Cint
+    tm_hour::Cint
+    tm_mday::Cint
+    tm_mon::Cint
+    tm_year::Cint
+    tm_wday::Cint
+    tm_yday::Cint
+    tm_isdst::Cint
+end
+```
+
+A ordem é importante porque funções C não enxergam os nomes dos campos, apenas sua disposição na memória. Se a ordem dos campos for alterada, a biblioteca poderá interpretar incorretamente os dados recebidos.
+
+Como `gmtime_r` precisa modificar a estrutura recebida, usaremos `Ref` para criar uma referência mutável:
+
+```{julia}
+tempo = Ref{Clong}(0)
+resultado = Ref{TmStruct}()
+
+ccall(
+    :gmtime_r,
+    Ptr{TmStruct},
+    (Ref{Clong}, Ref{TmStruct}),
+    tempo,
+    resultado
+)
+
+resultado[]
+```
+
+O valor `0` representa o instante inicial da contagem Unix, isto é, `1970-01-01 00:00:00` em UTC. Após a chamada, `resultado[]` contém a estrutura preenchida pela função C.
+
+Podemos acessar seus campos normalmente:
+
+```{julia}
+data = resultado[]
+
+ano = data.tm_year + 1900
+mes = data.tm_mon + 1
+dia = data.tm_mday
+
+ano, mes, dia
+```
+
+Os ajustes no ano e no mês são necessários por causa da convenção usada pela estrutura `tm` em C: o campo `tm_year` armazena o número de anos desde 1900, enquanto `tm_mon` armazena os meses começando em `0`.
+
+## Bibliotecas externas
+
+Até agora utilizamos funções da biblioteca padrão de C, que normalmente podem ser chamadas apenas informando o nome da função.
+
+Quando a função pertence a uma biblioteca externa, também é necessário informar onde ela está localizada. Isso é feito fornecendo uma tupla contendo o nome da função e o nome da biblioteca:
+
+```julia
+ccall(
+    (:cos, "libm"),
+    Cdouble,
+    (Cdouble,),
+    1.0
+)
+```
+
+Nesse exemplo, `cos` é obtida da biblioteca matemática do sistema, tradicionalmente chamada `libm`.
+
+O nome exato da biblioteca pode variar entre sistemas operacionais. Por esse motivo, aplicações reais costumam utilizar constantes definidas no módulo `Base` de Julia para localizar automaticamente a biblioteca correta. Para a biblioteca matemática do sistema, por exemplo, Julia fornece a constante `Base.Math.libm`.
+
+O mesmo mecanismo pode ser utilizado para chamar funções definidas em bibliotecas criadas pelo próprio usuário. Suponha que o arquivo `mylib.c` contenha a função:
+
+```c
+double square(double x) {
+    return x * x;
+}
+```
+
+Após compilar esse código como uma biblioteca compartilhada, por exemplo:
+
+```bash
+gcc -shared -fPIC mylib.c -o libmylib.so
+```
+
+podemos chamar a função em Julia usando:
+
+```julia
+ccall(
+    (:square, "./libmylib.so"),
+    Cdouble,
+    (Cdouble,),
+    3.0
+)
+```
+
+O resultado será `9.0`.
+
+## Conclusão
+
+A interoperabilidade com C é uma das características que tornam Julia particularmente poderosa. Em vez de exigir a reimplementação de bibliotecas já existentes, Julia permite reutilizar diretamente uma enorme quantidade de software desenvolvido ao longo de décadas.
+
+Neste artigo vimos que essa integração ocorre principalmente por meio da função `ccall`, que permite chamar funções externas especificando explicitamente seus tipos de entrada e saída. Também vimos a importância dos tipos compatíveis com C, como `Cint` e `Cdouble`, e utilizamos funções da biblioteca padrão de C para ilustrar o mecanismo de chamada.
+
+Dominar os fundamentos apresentados aqui é o primeiro passo para compreender como Julia consegue combinar a produtividade de uma linguagem de alto nível com a capacidade de aproveitar bibliotecas de baixo nível já consolidadas.
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica, aprimoramento do texto e criação de imagens.
+:::

@@ -1,0 +1,257 @@
+---
+title: "Funções e Closures em Julia"
+description: |
+    Aprenda passo a passo como Julia trata funções como valores, como closures capturam variáveis do ambiente e como investigar o impacto dessas construções na inferência de tipos e na performance.
+categories:
+  - Julia
+  - Funções
+  - Closures
+author:
+  - name: Mateus Cleto
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/MateusCleto
+
+date: "2026-05-29"
+image: imagens/closures_capa.png
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+draft: true
+engine: knitr
+---
+
+## Introdução
+
+Uma das características mais poderosas da linguagem Julia é a forma como ela trata funções.
+
+Em Julia, funções são objetos de primeira classe. Isso significa que como qualquer outro valor elas podem ser atribuídas a variáveis, passadas como argumentos, retornadas por outras funções e armazenadas em estruturas de dados.
+
+Esse modelo torna possível escrever código mais expressivo e reutilizável. Neste post vamos explorar como Julia trata funções como valores, o que são closures e como utilizá-las.
+
+## Funções como argumentos
+
+Como funções são valores comuns em Julia, podemos passá-las para outras funções, isso é extremamente comum na linguagem e aparece em várias APIs do ecossistema.
+
+Por exemplo, a função `map` recebe uma função e uma coleção e aplica ela em todos os elementos:
+
+```{julia}
+map(x -> x^2, [1, 2, 3, 4]) # recebe a função x -> x^2
+```
+
+Ou também as funções `filter` e `reduce`:
+
+```{julia}
+println(filter(isodd, 1:10))
+println(reduce(+, [1, 2, 3, 4]))
+```
+
+Isso separa "o que queremos fazer" de "como os elementos são percorridos" e permite apenas descrever a transformação desejada sem a necessidade de escrever os loops manualmente.
+
+## Funções anônimas
+
+Em muitos casos, não vale a pena criar uma função nomeada apenas para um uso pequeno e local. Para isso Julia possui funções anônimas.
+
+A sintaxe é:
+
+```julia
+argumentos -> retorno
+```
+
+Por exemplo:
+
+```julia
+x -> x^2
+```
+
+Ou com múltiplos argumentos:
+
+```julia
+(x, y) -> x + y
+```
+
+Essas funções são especialmente úteis quando usadas inline:
+
+```julia
+map(x -> x^2, [1, 2, 3])
+
+# versus
+
+square(x) = x^2
+map(square, [1, 2, 3])
+```
+
+A primeira versão evita criar uma função nomeada que talvez nunca seja reutilizada.
+
+## Retornando funções
+
+Como funções são valores comuns, também podemos retorná-las de outras funções.
+
+Por exemplo:
+
+```{julia}
+function power(n)
+    x -> x^n
+end
+```
+
+Agora podemos criar funções dinamicamente:
+
+```{julia}
+square = power(2)
+cube = power(3)
+
+println(square(5))
+println(cube(2))
+```
+
+Mas isso levanta uma pergunta interessante: como a função retornada ainda "lembra" o valor de `n`, mesmo após a execução de `power` ter terminado? A resposta está nas closures.
+
+## O que são closures
+
+Uma closure é uma função que captura variáveis do ambiente onde ela foi criada. Em outras palavras uma closure é uma função junto do estado que ela capturou.
+
+Veja um exemplo simples:
+
+```{julia}
+function counter()
+    x = 0
+
+    return () -> begin
+        x += 1
+    end
+end
+```
+
+Agora podemos criar um contador:
+
+```{julia}
+c = counter()
+
+println(c())
+println(c())
+println(c())
+```
+
+Mesmo após a função `counter` terminar, a variável `x` continua existindo dentro da closure.
+
+Cada closure possui seu próprio estado:
+
+```{julia}
+c1 = counter()
+c2 = counter()
+
+println(c1())
+println(c1())
+println(c2())
+```
+
+Isso permite encapsular estado sem precisar criar structs ou classes explicitamente.
+
+## Performance
+
+Em algumas linguagens, closures possuem custo de processamento elevado. Mas em Julia normalmente são bastante eficientes, o compilador consegue especializar closures e otimizar seu código da mesma forma que funções comuns. O problema mais comum aparece quando elas capturam variáveis globais.
+
+Considere:
+
+```{julia}
+a = 2
+f(x) = a * x
+```
+
+Aqui, `a` é uma variável global. O problema é que variáveis globais em Julia podem mudar de tipo a qualquer momento:
+
+```julia
+a = 2
+a = 2.5
+a = "hello"
+```
+
+Como o compilador não consegue garantir qual será o tipo de `a`. Isso prejudica a inferência de tipos, que é uma das principais responsáveis pela performance da linguagem, e perde capacidade de otimização.
+
+Uma alternativa melhor é capturar a variável em um escopo local:
+
+```{julia}
+g = let a = 2
+    x -> a * x
+end
+
+g(10)
+```
+
+Agora `a` pertence ao ambiente da closure e possui tipo conhecido e estável, nesse caso o compilador consegue gerar código muito mais eficiente.
+
+Também é comum resolver isso usando constantes globais:
+
+```julia
+const A = 2
+h(x) = A * x
+```
+
+Como `A` não pode mudar de tipo, a inferência melhora significativamente.
+
+Para entender melhor sobre a quebra de inferência de tipos em closures, a seção *Performance of captured variable* da [página de dicas de performance](https://docs.julialang.org/en/v1/manual/performance-tips/#man-performance-captured) da documentção de julia tem uma explicação bem detalhada.
+
+## Investigando inferência
+
+Julia fornece ferramentas extremamente úteis para investigar problemas de performance.
+
+Uma das mais importantes é `@code_warntype`:
+
+```{julia}
+@code_warntype f(10)
+```
+
+Essa macro mostra o código inferido pelo compilador e destaca pontos onde o tipo de alguma variável não pôde ser determinado com precisão.
+
+Por exemplo: quando existe type instability o output costuma mostrar trechos marcados como `Any`. Isso geralmente é um sinal de alerta, pois operações envolvendo `Any` tendem a impedir otimizações importantes. O objetivo não é decorar toda a saída de `@code_warntype`, mas aprender a identificar quando o compilador perdeu informação de tipo.
+
+## Implementando um memoize simples
+
+Uma aplicação muito interessante de closures é implementar memoization. Memoization consiste em armazenar resultados previamente computados para evitar recomputações.
+
+Vamos criar uma versão simples:
+
+```{julia}
+function memoize(f)
+    cache = Dict()
+
+    return function(x)
+        if haskey(cache, x)
+            return cache[x]
+        end
+
+        result = f(x)
+        cache[x] = result
+
+        return result
+    end
+end
+```
+
+Agora podemos usar:
+
+```{julia}
+fib(n) = n <= 2 ? 1 : fib(n-1) + fib(n-2)
+fib_memo = memoize(fib)
+```
+
+A closure retornada captura o dicionário `cache`, permitindo que ele persista entre chamadas.
+
+Então ao chamar uma primeira vez:
+```{julia}
+fib_memo(6)
+```
+
+A função é avaliada e armazena o resultado no dicionário. Agora se ela for chamada novamente para esse valor, ela apenas retorna o valor armazenado no dicionário.
+
+## Conclusão
+
+Neste post vimos como Julia trata funções como objetos de primeira classe e como isso permite construir abstrações extremamente poderosas.
+
+Closures aparecem com frequência em código idiomático de Julia e são fundamentais em diversas áreas da linguagem. Entender esses conceitos ajuda bastante a ler e escrever código mais expressivo em Julia.
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica, aprimoramento do texto e criação de imagens.
+:::

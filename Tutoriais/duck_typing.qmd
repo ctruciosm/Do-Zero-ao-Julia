@@ -1,0 +1,267 @@
+---
+title: "Duck Typing e Interfaces em Julia"
+description: |
+    Aprenda passo a passo como funcionam duck typing, interfaces implícitas e múltiplo dispatch em Julia. Neste tutorial, você construirá tipos personalizados que funcionam naturalmente com iteração, broadcasting e diversas funcionalidades da Base.
+categories:
+  - Julia
+  - Duck Typing
+  - Interfaces
+author:
+  - name: Mateus Cleto
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/MateusCleto
+
+date: "2026-05-29"
+image: imagens/duck_typing_capa.png
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+draft: true
+engine: knitr
+---
+
+## Introdução
+
+Uma das características mais interessantes de Julia é como tipos diferentes conseguem funcionar naturalmente com o restante da linguagem. Muitas vezes basta implementar alguns métodos e imediatamente ganhamos integração com funções como `sum`, `map`, `collect`, broadcasting, iteração e muito mais. Isso acontece porque Julia utiliza fortemente duck typing, múltiplo dispatch e interfaces implícitas.
+
+Neste post vamos entender como esse modelo funciona e como podemos criar nossos próprios tipos que participam naturalmente do ecossistema da linguagem.
+
+## O que é Duck Typing
+
+Duck typing é uma filosofia de design que se baseia em comportamento. A ideia costuma ser resumida pela frase: "Se anda como um pato e grasna como um pato, então tratamos como um pato."
+
+Em linguagens com duck typing, normalmente importa menos a hierarquia de tipos e mais quais operações um objeto consegue realizar.
+
+Por exemplo:
+
+```julia
+struct Dog end
+struct Person end
+
+speak(::Dog) = "au au"
+speak(::Person) = "olá"
+
+make_noise(x) = speak(x)
+````
+
+Agora:
+
+```julia
+make_noise(Dog())
+make_noise(Person())
+```
+
+A função `make_noise` não exige herança ou interface formal, apenas assume que existe um método `speak` compatível. Esse é o espírito do duck typing em Julia.
+
+## Interfaces Implícitas
+
+Em muitas linguagens existe algum mecanismo explícito de interface e se um tipo ou classe os implementa, isso deve ser declarado na sua definição. Julia funciona de maneira diferente.
+
+Uma interface em Julia normalmente é apenas um conjunto esperado de métodos. Por exemplo, a interface de iteração é baseada principalmente em:
+
+```julia
+Base.iterate(x)
+Base.iterate(x, state)
+```
+
+Se um tipo implementa esses métodos corretamente, ele passa a funcionar com diversas funcionalidades da linguagem, não existe um tipo especial chamado `Iterator` que precise ser herdado.
+
+O sistema não verifica formalmente se o tipo implementa a interface, as funções simplesmente tentam usar os métodos esperados. Por isso a interface é dita implícita.
+
+## Criando Tipo Iterável
+
+Vamos criar nosso próprio tipo iterável.
+
+```{julia}
+struct Squares
+    n::Int
+end
+```
+
+Queremos que ele produza:
+
+```text
+1, 4, 9, 16, ...
+```
+
+Para isso implementamos `Base.iterate`.
+
+```{julia}
+function Base.iterate(s::Squares, state=1)
+
+    state > s.n && return nothing
+
+    return (state^2, state + 1)
+end
+
+Base.length(s::Squares) = s.n
+```
+
+Agora o tipo já funciona com `for`.
+
+```{julia}
+for x in Squares(5)
+    println(x)
+end
+```
+
+Mas o mais interessante vem agora, nosso tipo automaticamente passa a funcionar com várias funções da Base:
+
+```{julia}
+println(collect(Squares(5)))
+println(sum(Squares(5)))
+println(map(x -> 2x, Squares(5)))
+```
+
+Isso funciona mesmo sem implementarmos `sum`, `map` e `collect`, essas funções apenas utilizam a interface de iteração.
+
+Por exemplo, `collect` internamente faz algo conceitualmente parecido com:
+
+```julia
+next = iterate(obj)
+```
+
+Então, se `iterate` estiver implementado corretamente, o restante do ecossistema consegue reutilizar o comportamento.
+
+No caso de tipos iteráveis ainda é possível, e importante, definir a função opcional `Base.eltype`:
+
+```julia
+Base.eltype(::Type{Squares}) = Int
+```
+
+Ela permite que o compilador melhore as otimizações e melhora a performance do código.
+
+## Criando Tipo Parcialmente Iterável
+
+Interfaces em Julia costumam ser incrementais, por isso podemos implementar apenas parte da interface. Por exemplo:
+
+```{julia}
+struct Counter
+    max::Int
+end
+
+function Base.iterate(c::Counter, state=1)
+
+    state > c.max && return nothing
+
+    return (state, state + 1)
+end
+```
+
+Agora `sum` funciona:
+
+```{julia}
+sum(Counter(5))
+```
+
+Mas `collect` gera erro:
+
+```julia
+collect(Counter(5))
+```
+
+Isso acontece porque ainda não implementamos `Base.length`, se adicionamos:
+
+```{julia}
+Base.length(c::Counter) = c.max
+```
+
+`collect` passa a funcinar:
+
+```{julia}
+collect(Counter(5))
+```
+
+Esse modelo incremental é muito comum em Julia, pequenos métodos destravam funcionalidades adicionais e a interface cresce gradualmente.
+
+## Interfaces Implícitas vs Tipos Abstratos
+
+Uma confusão comum é pensar que:
+
+```julia
+abstract type Metric end
+```
+
+Define uma interface. Mas isso não é exatamente verdade, tipos abstratos em Julia criam principalmente:
+
+- Agrupamentos nominais
+- Famílias de tipos
+- Restrições de dispatch
+
+Por exemplo:
+
+```julia
+abstract type Metric end
+
+struct Euclidean <: Metric end
+```
+
+Agora permite:
+
+```julia
+describe(::Metric) = "isso é uma métrica"
+```
+
+Mas isso NÃO obriga `Euclidean` a implementar nenhum método específico.
+
+Por outro lado:
+
+```julia
+distance(metric, x, y)
+```
+
+Define uma interface implícita baseada em comportamento, qualquer tipo que implemente um método compatível pode participar (mesmo sem herdar de `Metric`):
+
+```julia
+struct Manhattan end
+
+distance(::Manhattan, x, y) = ...
+```
+
+## Papel do Multiple Dispatch
+
+O modelo de interfaces implícitas de Julia funciona muito bem porque a linguagem é centrada em múltiplo dispatch. Em vez de associar métodos a objetos específicos, Julia organiza o comportamento através de funções genéricas que podem possuir diferentes implementações dependendo dos tipos recebidos.
+
+Por exemplo:
+
+```{julia}
+struct Circle
+    r
+end
+
+struct Rectangle
+    w
+    h
+end
+
+area(c::Circle) = π * c.r^2
+
+area(r::Rectangle) = r.w * r.h
+```
+
+Quando chamamos:
+
+```{julia}
+println(area(Circle(2)))
+println(area(Rectangle(3, 4)))
+```
+
+Isso se conecta diretamente às interfaces implícitas. Funções como `sum`, `collect` e `map` não precisam conhecer antecipadamente todos os tipos existentes no ecossistema. Elas apenas assumem que determinados métodos do protocolo esperado foram implementados. Quando criamos um novo tipo e definimos `iterate`, por exemplo, essas funções passam automaticamente a funcionar com ele através do dispatch dos métodos apropriados.
+
+Essa combinação entre múltiplo dispatch e interfaces implícitas é uma das principais ideias da arquitetura de Julia. Ela permite que pacotes diferentes interoperem naturalmente e que novos tipos sejam integrados ao ecossistema sem modificar código já existente.
+
+## Conclusão
+
+Em vez de contratos formais rígidos Julia usa protocolos baseados em métodos, múltiplo dispatch e composição de comportamentos, o que permite escrever código genérico e reutilizável.
+
+Por isso, entender interfaces implícitas e a filosofia de duck typing é fundamental para compreender o modelo de programação de Julia e escrever código idiomático na linguagem.
+
+## Leitura complementar
+
+Além disso Julia possui várias interfaces implícitas importantes, vale a pena ver a [documentação](https://docs.julialang.org/en/v1/manual/interfaces/) que aborda algumas delas e explica quais métodos são necessários para implementá-las.
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica, aprimoramento do texto e criação de imagens.
+:::

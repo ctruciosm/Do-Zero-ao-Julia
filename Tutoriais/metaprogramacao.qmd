@@ -1,0 +1,240 @@
+---
+title: "Macros e Metaprogramação em Julia"
+description: |
+    Aprenda passo a passo como criar, expandir e utilizar macros em Julia. Entenda como expressões são manipuladas, como funciona a interpolação com `$`, o papel de `esc` e quando a metaprogramação é a ferramenta certa para resolver um problema.
+categories:
+  - Julia
+  - Metaprogramação
+  - Macros
+author:
+  - name: Mateus Cleto
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/MateusCleto
+
+date: "2026-05-29"
+image: imagens/metaprogramacao_capa.png
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+draft: true
+engine: knitr
+---
+
+## Introdução
+
+Uma das características mais poderosas da linguagem Julia é seu suporte nativo à metaprogramação, a capacidade de escrever código que gera código.
+
+Se você já usou macros como `@time`, `@show` ou `@threads`, então já se beneficiou desse mecanismo. Mas entender como elas funcionam e como criá-las ajuda a reduzir boilerplate, melhorar performance e escrever código mais expressivo.
+
+Neste post, vamos explorar o que são macros e como cria-las e usa-las em Julia.
+
+
+## O que é uma macro?
+
+Uma macro é uma função que recebe código como entrada e retorna código transformado.
+
+Definição básica:
+
+```julia
+macro nome(args...)
+    # retorna uma expressão
+end
+```
+
+Exemplo simples:
+
+```{julia}
+macro hello()
+    return :(println("Olá, mundo!"))
+end
+```
+
+Uso:
+
+```{julia}
+@hello
+```
+
+
+## Estrutura geral
+
+Para entender macros em Julia, basta fixar três ideias fundamentais:
+
+1. Macros recebem expressões (código)
+2. Macros retornam expressões (código)
+3. Usamos `:(...)` para construir código e `$` para inserir valores nele
+
+### Macros recebem código
+
+Macros são executadas no momento do parsing do código, antes da execução (runtime). E por isso quando você chama uma macro, os argumentos não são avaliados. Eles chegam como expressões.
+
+```julia
+macro inspect(x)
+    return x
+end
+````
+
+```julia
+@inspect 1 + 2
+```
+
+Aqui, `x` não é `3`, mas sim a expressão:
+
+```julia
+:(1 + 2)
+```
+
+### Macros retornam código
+
+Uma macro deve retornar uma expressão que será executada depois:
+
+```{julia}
+macro add1(x)
+    return :( $x + 1 )
+end
+
+@add1 3
+```
+
+A macro transforma o código antes da execução:
+
+```{julia}
+@macroexpand @add1 3
+```
+
+### Construindo expressões com `:(...)`
+
+O operador `:` (na forma `:(...)`) é usado para construir código como dado, sem executá-lo.
+
+Por exemplo:
+
+```julia
+:(1 + 2)
+```
+
+Não calcula 3. Ele cria a expressão "(1 + 2)". Ao se usar simbolos na expressão, como em:
+
+```julia
+:(x + 1)
+```
+
+É criada uma expressão literal com o símbolo `x`. Ou seja, isso gera o código "(x + 1)", onde x é o simbolo x e não o valor da variável x.
+
+Para usar o valor de uma variável ou expressão, precisamos interpolar com `$`. `$` recebe uma expressão e insere seu conteúdo na nova expressão (no momento da expansão da macro).
+
+```{julia}
+# Recebe a expressão x e insere na macro o seu valor
+# Nesse caso, o valor é a expressão passada como parametro para a macro
+macro exemplo1(x)
+    return :( $x + 1 )
+end
+
+# usa o simbolo literal x (a variavel x no escopo onde a macro foi chamada)
+macro exemplo2(x)
+    return :( x + 1 )
+end
+
+```
+
+Note a diferença de outputs:
+```{julia}
+x = 1
+println(@exemplo1 3)
+println(@exemplo2 3)
+```
+
+### esc e definição de variaveis em macros
+
+Em macros se uma variável recebe uma atribuição (`x = ...`) em qualquer parte do código gerado, isso é interpretado como uma declaração de variável local e ela passa a ser tratada como uma variável definida no escopo da macro.
+
+Mesmo que usemos `$x`, isso apenas insere o conteúdo de `x` na expressão gerada. Isso não é suficiente para dizer que a variável pertence ao escopo do usuário:
+
+```{julia}
+macro exemplo3(x)
+    return :($(x) = 10)
+end
+
+x=1
+@exemplo3 x
+println(x)
+```
+
+A macro recebe x como o símbolo :x e o insere no lado esquerdo da atribuição. Porém, como não usamos esc, Julia ainda aplica hygiene e trata esse x como uma variável local introduzida pela macro. E como consequência, todas as ocorrências de x nesse bloco passam a se referir a essa variável local.
+
+Para alterar o x do usuário, precisamos escapar a expressão:
+
+```{julia}
+macro exemplo4(x)
+    return :($(esc(x)) = 10)
+end
+
+x=1
+@exemplo4 x
+println(x)
+```
+
+O esc(x) serve para forçar a utilização da variável do escopo do usuário.
+
+Em resumo:
+
+- $x controla o que é inserido na expressão
+- esc(x) controla em qual escopo esse código será resolvido
+
+## Exemplo real: recriando o operador &&
+
+Considere a função:
+```julia
+function myand(a, b)
+    return a ? b : false
+end
+
+myand(false, error("Isso não deveria rodar"))
+```
+
+Gera erro pois o segundo parametro é avaliado mesmo que o primeiro parametro seja falso. Isso ocorre porque o que é passado como parametro para a função é justamente o resultado da avaliação.
+
+Agora vamos usar macros para criar um lazy and (que caso o primeiro parametro seja falso, ele não executa o segundo):
+
+```{julia}
+macro myand(a, b)
+    return :( $a ? $b : false )
+end
+
+@myand false error("Isso não deveria rodar")
+```
+
+## Inspecionando macros com `@macroexpand`
+
+`@macroexpand` retorna a expressão gerada pela macro antes da execução e é muito util para debugar e entender o que uma macro faz:
+
+```{julia}
+@macroexpand @myand false error("Isso não deveria rodar")
+```
+
+
+## Quando usar macros?
+
+Macros são poderosas, mas não devem ser usadas sempre.
+
+Use macros quando:
+
+- Precisa manipular código antes da execução
+- Quer criar nova sintaxe
+- Precisa evitar avaliação prematura
+- Quer gerar código eficiente automaticamente
+
+Evite macros quando:
+
+- Pode ser feito naturalmente com uma função
+- A lógica pode ser feita em runtime
+- A legibilidade sofre
+
+## Conclusão
+
+Macros são uma das features muito poderosas de Julia que permitem manipulações impossíveis em muitas outras linguagens. Mas é importante cautela, priorize clareza e sempre teste com `@macroexpand`.
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica, aprimoramento do texto e criação de imagens.
+:::

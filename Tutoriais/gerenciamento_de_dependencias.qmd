@@ -1,0 +1,348 @@
+---
+title: "Gerenciando Ambientes e Dependências em Julia"
+description: |
+    Aprenda passo a passo como criar ambientes isolados em Julia, instalar e remover pacotes, entender os papéis dos arquivos Project.toml e Manifest.toml e compartilhar projetos de forma reproduzível entre diferentes máquinas.
+categories:
+  - Julia
+  - Gerenciamento de Pacotes
+  - Ambientes
+author:
+  - name: Mateus Cleto
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/MateusCleto
+
+date: "2026-05-29"
+image: imagens/gerenciamento_de_dependencias_capa.png
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+draft: true
+engine: knitr
+---
+
+## Introdução
+
+Ao começar a utilizar Julia, é comum escrever pequenos scripts e instalar pacotes diretamente no ambiente padrão da linguagem. Durante algum tempo isso funciona bem, mas à medida que os projetos crescem surge um problema bastante conhecido no desenvolvimento de software: como garantir que outras pessoas consigam executar exatamente o mesmo código que funciona na nossa máquina?
+
+Imagine que você escreveu uma análise utilizando diversos pacotes. Alguns meses depois, uma nova versão de uma dessas dependências é lançada e altera parte do comportamento utilizado pelo seu programa. Ou então um colega tenta executar o projeto pela primeira vez e descobre que possui versões diferentes das bibliotecas necessárias. Situações desse tipo são extremamente comuns em praticamente todas as linguagens.
+
+Para resolver esse problema, Julia utiliza um sistema de ambientes e gerenciamento de dependências integrado à própria linguagem. Esse sistema permite isolar projetos, controlar versões de pacotes e reproduzir ambientes completos em diferentes máquinas.
+
+Neste tutorial vamos aprender como funcionam os ambientes de Julia, qual é o papel dos arquivos `Project.toml` e `Manifest.toml`, como instalar e remover dependências e como compartilhar projetos de forma reproduzível.
+
+## O que é um ambiente?
+
+Um ambiente é uma coleção de pacotes e versões associadas a um determinado projeto.
+
+Quando Julia precisa carregar um pacote através de um comando como:
+
+```julia
+using JSON
+```
+
+Ela não procura simplesmente em todos os pacotes instalados na máquina. Em vez disso, Julia consulta o ambiente atualmente ativo para descobrir quais dependências estão disponíveis e quais versões devem ser utilizadas.
+
+Podemos verificar o ambiente ativo através do gerenciador de pacotes. Para acessá-lo, basta pressionar `]` no REPL de Julia.
+
+```text
+(@v1.12) pkg>
+```
+
+O texto entre parênteses indica o ambiente atualmente ativo. Em uma instalação recém-configurada geralmente estaremos utilizando o ambiente global da versão correspondente da linguagem.
+
+Podemos visualizar os pacotes disponíveis nesse ambiente usando:
+
+```julia
+using Pkg
+
+Pkg.status()
+```
+
+Ou:
+
+```text
+(@v1.12) pkg> st
+```
+
+À medida que avançarmos, veremos que é possível criar ambientes independentes para cada projeto, evitando conflitos entre dependências distintas.
+
+## Criando um projeto do zero
+
+Vamos criar um diretório vazio para representar um novo projeto. Esse diretório será o lugar onde ficarão o código, os arquivos de configuração e as informações sobre as dependências utilizadas.
+
+```bash
+mkdir meu_projeto
+cd meu_projeto
+```
+
+Depois de entrar no diretório, iniciamos Julia e acessamos o gerenciador de pacotes pressionando `]`. Em seguida, ativamos o ambiente local:
+
+```text
+pkg> activate .
+```
+
+O ponto (`.`) representa o diretório atual. Portanto, esse comando diz a Julia que queremos usar o diretório `meu_projeto` como ambiente ativo. O prompt passa a indicar isso:
+
+```text
+(meu_projeto) pkg>
+```
+
+É importante observar que ativar um ambiente não significa necessariamente criar arquivos imediatamente. Se o diretório estiver vazio, Julia apenas passa a tratá-lo como o ambiente atual da sessão. Os arquivos de configuração aparecem quando fazemos alguma operação que precisa ser registrada, como adicionar uma dependência ao projeto.
+
+Vamos adicionar o pacote `JSON`:
+
+```text
+pkg> add JSON
+```
+
+Nesse momento, Julia consulta o registro de pacotes, escolhe uma versão compatível, faz o download dos arquivos necessários e registra a dependência no ambiente atual. Embora cada projeto possua seu próprio ambiente, Julia normalmente armazena os arquivos dos pacotes em um cache compartilhado. Assim, diferentes projetos podem reutilizar a mesma instalação de um pacote sem precisar baixá-lo novamente.
+
+Depois de adicionar o pacote ao ambiente, podemos carregá-lo em uma sessão:
+
+```julia
+using JSON
+
+JSON.json(Dict("nome" => "Julia"))
+```
+
+## Add vs Using
+
+Aqui aparece uma distinção importante. O comando `add` e o comando `using` não fazem a mesma coisa. Quando executamos:
+
+```text
+pkg> add JSON
+```
+
+estamos modificando o ambiente do projeto. Em outras palavras, estamos dizendo que esse projeto depende do pacote `JSON`. Essa informação fica registrada em `Project.toml` e `Manifest.toml`, de modo que o projeto possa ser reconstruído depois na mesma máquina ou em outra.
+
+Já quando executamos:
+
+```julia
+using JSON
+```
+
+estamos carregando o pacote na sessão atual de Julia. Julia procura `JSON` no ambiente ativo, inicializa o módulo e torna seus nomes disponíveis para o código que será executado naquela sessão. Portanto, `add` é uma operação de configuração do projeto, enquanto `using` é uma operação de uso do pacote durante a execução do programa.
+
+Essa diferença fica mais clara com um exemplo. Depois de executar `pkg> add JSON`, o ambiente já sabe que o projeto depende de `JSON`, mas a sessão atual ainda não tem o módulo carregado. Se tentarmos chamar diretamente:
+
+```julia
+JSON.json(Dict("x" => 1))
+```
+
+Julia retornará um erro, pois o nome `JSON` ainda não foi introduzido na sessão. Para usar as funções do pacote, precisamos antes escrever:
+
+```julia
+using JSON
+
+JSON.json(Dict("x" => 1))
+```
+
+Essa separação é útil porque as dependências de um projeto são registradas uma vez, enquanto os pacotes são carregados apenas quando o programa precisa deles. Em um projeto real, podemos ter várias dependências instaladas no ambiente, mas cada arquivo ou script carrega explicitamente apenas os pacotes que utiliza.
+
+## Os arquivos de ambiente
+
+Depois da primeira alteração do ambiente (no nosso caso adicionar o pacote `JSON`), aparecem os arquivos:
+
+```text
+Project.toml
+Manifest.toml
+```
+
+Esses dois arquivos guardam as informações do ambiente e vamos ver a seguir suas diferenças e o papel de cada um deles.
+
+### Entendendo o Project.toml
+
+Após adicionar uma dependência, o conteúdo de `Project.toml` será parecido com:
+
+```toml
+[deps]
+JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
+```
+
+Esse arquivo funciona como uma descrição do projeto.
+
+Ele informa quais pacotes são necessários para que o código funcione, mas não registra todos os detalhes das versões instaladas.
+
+Em projetos maiores também podem aparecer informações como:
+
+```toml
+name = "MeuProjeto"
+uuid = "..."
+version = "0.1.0"
+
+[deps]
+...
+```
+
+Esses campos se tornam especialmente importantes quando transformamos um projeto em um pacote reutilizável.
+
+Por enquanto, basta entender que o `Project.toml` descreve as dependências diretas do projeto.
+
+### Entendendo o Manifest.toml
+
+Além do `Project.toml`, Julia cria outro arquivo chamado:
+
+```text
+Manifest.toml
+```
+
+Embora os dois arquivos pareçam semelhantes à primeira vista, eles possuem objetivos diferentes. O `Project.toml` descreve o que o projeto precisa, enquanto o `Manifest.toml` registra exatamente o que foi instalado.
+
+Quando adicionamos o pacote `JSON`, Julia não instala apenas esse pacote. Diversas dependências internas também podem ser necessárias. O arquivo `Manifest.toml` registra toda essa árvore de dependências, incluindo versões exatas.
+
+Por esse motivo ele costuma ser muito maior que o `Project.toml`.
+
+A principal consequência prática é que duas pessoas que possuam o mesmo `Project.toml` podem acabar instalando versões ligeiramente diferentes das dependências. Já duas pessoas que compartilham também o mesmo `Manifest.toml` reproduzem exatamente o mesmo ambiente.
+
+## Reproduzindo um ambiente em outra máquina
+
+Uma das maiores vantagens desse sistema aparece quando compartilhamos um projeto.
+
+Suponha que enviemos para outra pessoa os arquivos:
+
+```text
+Project.toml
+Manifest.toml
+```
+
+Essa pessoa não precisa instalar manualmente cada dependência.
+
+Basta ativar o ambiente:
+
+```text
+pkg> activate .
+```
+
+e solicitar a instalação das dependências registradas:
+
+```text
+pkg> instantiate
+```
+
+O comando `instantiate` lê os arquivos do ambiente e instala automaticamente tudo o que for necessário.
+
+Quando executamos scripts diretamente pela linha de comando, também é importante garantir que o ambiente correto esteja ativo. Uma forma simples de fazer isso é iniciar Julia com a opção `--project`:
+
+```bash
+julia --project=. script.jl
+```
+
+Nesse exemplo, o ponto `.` indica que Julia deve utilizar o ambiente definido no diretório atual. Assim, qualquer comando `using` presente em `script.jl` procurará os pacotes registrados nos arquivos `Project.toml` e `Manifest.toml` daquele projeto. Essa prática evita depender do ambiente global da instalação e garante que o script seja executado com as mesmas dependências utilizadas durante o desenvolvimento.
+
+Se não especificarmos a opção `--project`, Julia utilizará o ambiente padrão da instalação. Isso significa que comandos como `using JSON` procurarão o pacote entre as dependências registradas nesse ambiente global, e não no diretório do projeto atual.
+
+## Atualizando dependências
+
+Com o passar do tempo, novas versões dos pacotes são disponibilizadas.
+
+Podemos atualizar as dependências do ambiente através de:
+
+```text
+pkg> update
+```
+
+Julia procurará versões mais recentes compatíveis com as restrições definidas pelo projeto.
+
+Após a atualização, o arquivo `Manifest.toml` será modificado para refletir as novas versões instaladas.
+
+Em geral, é recomendável atualizar dependências de forma consciente e testar o projeto após mudanças importantes.
+
+## Removendo dependências
+
+Se um pacote deixar de ser necessário, podemos removê-lo:
+
+```text
+pkg> rm JSON
+```
+
+O pacote será retirado das dependências do projeto e os arquivos do ambiente serão atualizados automaticamente. Note que o comando remove apenas a dependência do ambiente atual, os arquivos do pacote permanecem armazenados no cache global de Julia e podem continuar sendo utilizados por outros projetos.
+
+Isso ajuda a manter o projeto organizado e evita dependências desnecessárias.
+
+## Ambientes temporários
+
+Durante testes ou experimentos rápidos, nem sempre queremos criar um diretório específico para armazenar um ambiente.
+
+Nesses casos podemos utilizar um ambiente temporário:
+
+```text
+pkg> activate --temp
+```
+
+Julia cria um ambiente descartável que existe apenas durante aquela sessão.
+
+Esse recurso é particularmente útil para reproduzir problemas, testar pacotes ou executar exemplos sem alterar os ambientes utilizados em outros projetos.
+
+## Trabalhando com múltiplos projetos
+
+Uma vantagem importante dos ambientes é a possibilidade de manter projetos completamente independentes.
+
+Imagine os diretórios:
+
+```text
+simulacao/
+analise/
+```
+
+Cada um deles pode possuir seu próprio conjunto de dependências e versões.
+
+Ao entrar em cada diretório e executar:
+
+```text
+pkg> activate .
+```
+
+Julia passa a utilizar o ambiente correspondente.
+
+Dessa forma, projetos distintos podem utilizar versões diferentes do mesmo pacote sem interferir uns nos outros.
+
+Esse isolamento elimina uma categoria inteira de problemas relacionados a conflitos de dependências.
+
+## Compatibilidade de versões
+
+Em muitos projetos não queremos aceitar qualquer versão futura de uma dependência.
+
+Por exemplo, uma nova versão pode introduzir mudanças incompatíveis com o código existente.
+
+Para controlar isso, Julia utiliza a seção `[compat]` dentro de `Project.toml`.
+
+Um exemplo simples é:
+
+```toml
+[compat]
+JSON = "1"
+```
+
+Essa configuração indica que o projeto é compatível com versões da série 1.x do pacote.
+
+Quando alguém instalar ou atualizar dependências, Julia respeitará essas restrições ao resolver as versões adequadas.
+
+Embora o sistema de compatibilidade possua diversos detalhes, sua função principal é garantir que atualizações futuras não quebrem projetos existentes.
+
+## Boas práticas
+
+Ao trabalhar com Julia, é recomendável criar um ambiente específico para cada projeto. Isso mantém dependências isoladas e reduz significativamente a chance de conflitos entre bibliotecas.
+
+Também é importante compreender que o ambiente global deve ser utilizado com moderação. Embora seja conveniente para testes rápidos, projetos reais costumam se beneficiar muito mais de ambientes próprios.
+
+Outra prática valiosa é versionar os arquivos do ambiente juntamente com o restante do código. Dessa forma, qualquer pessoa que obtenha o projeto poderá reproduzir exatamente o mesmo conjunto de dependências utilizado durante o desenvolvimento.
+
+Finalmente, ao clonar um projeto existente, vale a pena lembrar do comando:
+
+```text
+pkg> instantiate
+```
+
+Ele é o mecanismo responsável por reconstruir automaticamente todo o ambiente necessário.
+
+## Conclusão
+
+O sistema de ambientes de Julia foi projetado para tornar projetos reproduzíveis e independentes uns dos outros. Em vez de depender de configurações globais ou instalações manuais de pacotes, cada projeto passa a carregar explicitamente as dependências de que necessita.
+
+Ao longo deste tutorial vimos como criar ambientes, instalar e remover pacotes, compreender os papéis de `Project.toml` e `Manifest.toml` e reproduzir projetos completos em diferentes máquinas.
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica, aprimoramento do texto e criação de imagens.
+:::

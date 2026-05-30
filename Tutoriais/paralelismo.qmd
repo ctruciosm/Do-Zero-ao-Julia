@@ -1,0 +1,406 @@
+---
+title: "Concorrência e Paralelismo em Julia"
+description: |
+    Aprenda passo a passo como construir aplicações concorrentes e paralelas em Julia utilizando Tasks, Channels, Threads e processos distribuídos. Neste tutorial, exploramos os principais mecanismos da linguagem para coordenar trabalho, compartilhar dados e aproveitar melhor os recursos do hardware.
+categories:
+  - Julia
+  - Concorrência
+  - Paralelismo
+author:
+  - name: Mateus Cleto
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/MateusCleto
+
+date: "2026-05-29"
+image: imagens/paralelismo_capa.png
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+draft: true
+engine: knitr
+---
+
+## Introdução
+
+Quando começamos a escrever programas, é natural pensar neles como uma sequência de instruções executadas uma depois da outra. Primeiro lemos um arquivo, depois processamos os dados, depois salvamos o resultado, e assim por diante. Esse modelo sequencial é simples e funciona muito bem para muitos problemas.
+
+Mas nem todo problema precisa ser resolvido dessa forma. Imagine que temos centenas ou milhares de arquivos para processar. Se o processamento de um arquivo não depende do resultado dos outros, por que esperar um terminar para começar o próximo?
+
+É aqui que entram duas ideias importantes: concorrência e paralelismo.
+
+Concorrência é sobre lidar com várias tarefas ao mesmo tempo. Isso não significa necessariamente que elas estejam executando simultaneamente em diferentes núcleos da CPU. Pode significar apenas que o programa alterna entre tarefas: enquanto uma espera uma leitura de arquivo terminar, outra pode continuar executando.
+
+Paralelismo, por outro lado, é sobre executar tarefas literalmente ao mesmo tempo, normalmente usando múltiplos núcleos do processador ou múltiplos processos.
+
+Neste post, vamos construir progressivamente uma pequena pipeline para processar vários arquivos. Para simplificar, vamos simular arquivos usando números e simular leitura ou processamento usando `sleep`.
+
+## Começando com uma versão sequencial
+
+Vamos começar com uma função simples que representa o processamento de um arquivo.
+
+```{julia}
+function process_file(id)
+    sleep(1)
+    return id^2
+end
+```
+
+Aqui, `sleep(1)` simula uma operação demorada. Em um programa real, isso poderia representar leitura de disco, acesso a uma API, consulta a um banco de dados ou algum processamento numérico.
+
+A versão mais direta do programa seria esta:
+
+```{julia}
+results = Int[]
+
+for i in 1:5
+    push!(results, process_file(i))
+end
+
+results
+```
+
+Esse código funciona, mas ele é completamente sequencial. O segundo arquivo só começa a ser processado depois que o primeiro termina. O terceiro só começa depois do segundo, e assim por diante.
+
+Se cada arquivo demora aproximadamente um segundo, cinco arquivos demoram aproximadamente cinco segundos.
+
+O problema é que, durante boa parte desse tempo, o programa pode estar apenas esperando. Se a função está aguardando uma operação de entrada e saída, como leitura de arquivo, a CPU poderia estar fazendo outra coisa.
+
+Essa é a primeira motivação para usar concorrência.
+
+## Concorrência com `Task` e `@async`
+
+Em Julia, uma forma básica de representar uma computação concorrente é usando uma `Task`.
+
+Uma `Task` em Julia representa uma computação que pode ser interrompida e retomada pelo runtime da linguagem. Em vez de executar uma única sequência linear de instruções do começo ao fim, o programa pode manter várias tasks “em andamento” ao mesmo tempo e alternar entre elas conforme necessário.
+
+Tasks são estruturas leves usadas para organizar computações concorrentes. Isso permite criar milhares delas sem o custo normalmente associado à criação de milhares de threads reais. Elas são usadas para organizar programas concorrentes, especialmente quando diferentes partes do código passam tempo esperando operações demoradas terminarem.
+
+A macro `@async` cria uma task assíncrona.
+
+```{julia}
+tasks = []
+
+for i in 1:5
+    t = @async process_file(i)
+    push!(tasks, t)
+end
+
+results = fetch.(tasks)
+```
+
+Aqui criamos uma task para cada arquivo. A expressão:
+
+```julia
+t = @async process_file(i)
+```
+
+cria uma nova task e a agenda imediatamente para execução. Isso significa que, depois dessa linha, a nova task já pode começar a executar concorrentemente com o restante do programa.
+
+As tasks criadas são armazenadas no vetor tasks. Depois disso, usamos:
+
+```julia
+results = fetch.(tasks)
+```
+
+A notação `fetch.(tasks)` aplica fetch a cada elemento do vetor. A função fetch espera uma task terminar e retorna o valor produzido por ela.
+
+Essa versão é concorrente, enquanto uma task está parada em uma operação que permite troca de contexto, outra task é rodada. Isso é especialmente útil quando uma parte do programa precisa esperar alguma operação demorada terminar. Enquanto uma task aguarda leitura de disco, resposta de rede ou algum outro evento externo, é executada outra task que esteja pronta para continuar. Assim, o processador passa menos tempo ocioso.
+
+As operações que permitem troca de contexto em tasks são, em geral, operações que envolvem espera. Isso inclui operações de entrada e saída, como leitura de arquivos, comunicação de rede e timers (`sleep`), além de mecanismos de sincronização como `Channel`, `wait` e `yield()`. Quando uma task chega a esse tipo de operação, ela cede controle ao scheduler de Julia, permitindo que outra task pronta para executar continue a execução.
+
+## Separando o programa em etapas
+
+Até agora, cada task faz tudo: recebe um identificador, processa e devolve um resultado. Essa abordagem funciona para exemplos pequenos, mas programas reais normalmente são organizados em etapas independentes.
+
+Podemos imaginar um pipeline assim:
+
+```text
+descobrir arquivos -> processar arquivos -> agregar resultados
+```
+
+A primeira etapa é responsável apenas por descobrir quais arquivos precisam ser processados. A segunda realiza o processamento pesado. A terceira recebe os resultados produzidos e faz agregações finais, salva dados ou gera relatórios.
+
+Separar o programa dessa forma traz várias vantagens. Primeiro, cada parte do código passa a ter uma responsabilidade mais clara. Isso facilita manutenção, testes e reutilização. Além disso, diferentes etapas podem executar concorrentemente. Enquanto uma parte do programa ainda está descobrindo novos arquivos, outra já pode começar a processar os arquivos encontrados anteriormente.
+
+Essa estrutura também permite escalar melhor o sistema. Se o processamento for muito mais lento que a leitura dos arquivos, podemos adicionar múltiplos workers apenas na etapa de processamento sem precisar alterar o restante do pipeline.
+
+A primeira etapa produz `jobs`. A segunda consome esses `jobs` e produz resultados. A terceira agrega os resultados finais.
+
+### Comunicação com `Channel`
+
+Um `Channel` em Julia funciona como uma fila concorrente. Uma parte do programa coloca valores no canal usando `put!`, enquanto outra parte retira valores usando `take!` ou itera diretamente sobre o canal.
+
+O código a seguir usa o channel `jobs` para realizar a separação de tarefas discutida anteriormente, um código concorrente popula `jobs` enquanto outro código consome o seu conteúdo.
+```{julia}
+jobs = Channel{Int}(10)
+
+@async begin
+    for i in 1:20
+        put!(jobs, i)
+    end
+
+    close(jobs)
+end
+
+results = Int[]
+
+for job in jobs
+    push!(results, process_file(job))
+end
+
+results
+```
+
+A linha abaixo cria um canal chamado `jobs`:
+
+```julia
+jobs = Channel{Int}(10)
+```
+
+Esse canal aceita apenas valores do tipo `Int`, por causa de `Channel{Int}`. O número `10` indica o tamanho do buffer interno. Ou seja, o canal pode guardar até dez valores esperando para serem consumidos. Podemos pensar em `jobs` como uma fila de trabalhos: uma parte do programa coloca trabalhos nessa fila, e outra parte retira trabalhos dela.
+
+Em seguida, temos o bloco assíncrono:
+
+```julia
+@async begin
+    for i in 1:20
+        put!(jobs, i)
+    end
+
+    close(jobs)
+end
+```
+
+Esse bloco cria uma nova task. Essa task percorre os números de `1` a `20` e coloca cada um deles no canal usando `put!`. Enquanto esse bloco está produzindo valores, o restante do programa pode continuar executando. Assim, `jobs` vai sendo preenchido aos poucos com os valores produzidos.
+
+Se o canal ainda tiver espaço no buffer, `put!(jobs, i)` insere o valor imediatamente. Se o buffer estiver cheio, a task produtora pausa até que algum consumidor retire elementos do canal. No final, `close(jobs)` indica que nenhum novo valor será colocado ali. Isso não apaga os valores que ainda estão no canal; apenas sinaliza que, depois que todos forem consumidos, a iteração pode terminar.
+
+A parte consumidora aparece aqui:
+
+```julia
+for job in jobs
+    push!(results, process_file(job))
+end
+```
+
+Iterar sobre um `Channel` significa retirar seus valores um por um. A cada passo do `for`, Julia pega um valor disponível em `jobs` e o associa à variável `job`. Se o canal estiver vazio, mas ainda não tiver sido fechado, o loop espera até que algum novo valor seja produzido. Se o canal estiver fechado e não houver mais valores para consumir, o loop termina.
+
+Essa iteração é uma forma conveniente de escrever repetidas chamadas a `take!`. Poderíamos escrever uma versão mais explícita assim:
+
+```julia
+while isopen(jobs) || isready(jobs)
+    job = take!(jobs)
+    push!(results, process_file(job))
+end
+```
+
+A função `take!` retira um único valor do canal. Se houver algum valor disponível, ela o retorna imediatamente. Se o canal estiver vazio, ela bloqueia a execução até que um novo valor seja colocado no canal. Quando queremos consumir todos os valores produzidos por um canal até ele ser fechado, a forma com `for job in jobs` costuma ser mais simples e segura.
+
+### Vários consumidores
+
+O próximo passo natural é ter mais de um consumidor. Afinal, se temos muitos arquivos, queremos processar vários deles ao mesmo tempo.
+
+Podemos criar algumas tasks consumidoras lendo do mesmo canal.
+
+```{julia}
+jobs = Channel{Int}(20)
+results = Channel{Int}(20)
+
+@async begin
+    for i in 1:20
+        put!(jobs, i)
+    end
+
+    close(jobs)
+end
+
+for _ in 1:4
+    @async begin
+        for job in jobs
+            put!(results, process_file(job))
+        end
+    end
+end
+```
+
+Agora temos quatro tasks consumidoras. Cada uma pega trabalhos do canal `jobs` e coloca resultados no canal `results`.
+
+Esse é um padrão comum em programação concorrente: produtor-consumidor com múltiplos workers.
+
+Ainda assim, se o processamento for pesado em CPU, essa abordagem pode não ser suficiente. As tasks ajudam muito quando há espera, mas não executam o trabalho em vários núcleos.
+
+Para isso, precisamos de paralelismo com threads.
+
+## Paralelismo com threads
+
+Paralelismo significa executar computações simultaneamente. Em uma máquina com vários núcleos, isso geralmente significa usar múltiplas threads.
+
+Para iniciar Julia com múltiplas threads, podemos usar:
+
+```bash
+julia -t auto
+```
+
+ou definir explicitamente:
+
+```bash
+JULIA_NUM_THREADS=8 julia
+```
+
+Dentro de Julia, podemos verificar quantas threads estão disponíveis com:
+
+```{julia}
+Threads.nthreads()
+```
+
+O ambiente usado neste tutorial disponibiliza apenas uma thread de execução. Por isso, os exemplos com Threads.@threads não exibem paralelismo real durante a execução do notebook. Ainda assim, todos os códigos apresentados continuam corretos e foram escritos de forma genérica. Em um ambiente iniciado com múltiplas threads, as iterações seriam distribuídas automaticamente entre elas e executadas em paralelo.
+
+Por isso, é recomendável testar os exemplos localmente com múltiplas threads. Isso permite observar melhor a distribuição do trabalho entre threads e os efeitos do paralelismo nos tempos de execução.
+
+Uma forma simples de paralelizar um loop é usar `Threads.@threads`.
+
+```julia
+Threads.@threads for i in 1:10
+    println((i, Threads.threadid()))
+end
+```
+
+Aqui, as iterações do loop podem ser distribuídas entre diferentes threads. Diferentemente de `@async`, agora estamos falando de paralelismo real, com múltiplas threads executando ao mesmo tempo.
+
+Podemos usar essa ideia para processar vários arquivos em paralelo.
+
+```{julia}
+results = Vector{Int}(undef, 20)
+
+Threads.@threads for i in 1:20
+    results[i] = process_file(i)
+end
+
+results
+```
+
+Essa versão é simples e funciona bem quando todos os trabalhos são parecidos e independentes. Cada posição de `results` é escrita por uma única thread, então evitamos conflitos de escrita.
+
+Mas nem sempre o problema é tão simples. Quando várias threads modificam a mesma variável, podemos ter erros difíceis de perceber.
+
+## Condições de corrida
+
+Considere o seguinte contador:
+
+```{julia}
+processed = 0
+
+Threads.@threads for i in 1:1000
+    global processed += 1
+end
+
+processed
+```
+
+Seria natural esperar que `processed` terminasse com valor `1000`. Mas isso pode não acontecer.
+
+O motivo é que `processed += 1` não é uma operação indivisível. Ela envolve ler o valor atual, somar um e escrever o novo valor. Se duas threads fazem isso ao mesmo tempo, uma atualização pode sobrescrever a outra.
+
+Esse tipo de bug é chamado de condição de corrida, ou race condition. Ele acontece quando o resultado do programa depende da ordem exata em que diferentes threads acessam dados compartilhados.
+
+### Usando locks
+
+Uma solução direta é proteger a região crítica com um lock.
+
+```{julia}
+processed = 0
+lk = ReentrantLock()
+
+Threads.@threads for i in 1:1000
+    @lock lk begin
+        global processed += 1
+    end
+end
+
+processed
+```
+
+O lock resolve o problema transformando esse trecho em uma região crítica. Quando uma thread entra no bloco protegido por:
+
+```julia
+@lock lk begin
+```
+
+ela “adquire” o lock. Enquanto esse lock estiver adquirido, nenhuma outra thread pode entrar em outro bloco protegido pelo mesmo lock. As outras threads ficam esperando até que o lock seja liberado no final do bloco.
+
+Na prática, isso faz com que o trecho:
+
+```julia
+global processed += 1
+```
+
+se comporte como se estivesse sendo executado por apenas uma thread por vez. Isso elimina a race condition e torna o resultado correto.
+
+Apesar de resolver o problema, locks possuem custo. Enquanto uma thread está dentro da região crítica, todas as outras threads interessadas naquele lock ficam paradas esperando. Se muitas threads disputam o mesmo lock, parte do paralelismo desaparece.
+
+Por isso, programas paralelos eficientes normalmente tentam minimizar regiões críticas e reduzir ao máximo o compartilhamento de estado mutável entre threads.
+
+### Reduções paralelas
+
+No caso de uma soma, em vez de várias threads atualizarem a mesma variável global, podemos dividir o trabalho em partes independentes e combinar os resultados apenas no final.
+
+```{julia}
+chunks = collect(Iterators.partition(1:1000, 100))
+partial = zeros(Int, length(chunks))
+
+Threads.@threads for k in eachindex(chunks)
+    partial[k] = sum(chunks[k])
+end
+
+sum(partial)
+```
+
+A primeira linha divide o intervalo `1:1000` em blocos menores:
+
+```julia
+chunks = collect(Iterators.partition(1:1000, 100))
+```
+
+Nesse caso, cada bloco tem até `100` elementos. O primeiro bloco contém os números de `1` a `100`, o segundo contém os números de `101` a `200`, e assim por diante. Em vez de pensar em mil somas individuais, passamos a pensar em dez somas menores e independentes.
+
+Depois criamos um vetor para armazenar os resultados parciais:
+
+```julia
+partial = zeros(Int, length(chunks))
+```
+
+Esse vetor terá uma posição para cada bloco. Como temos dez blocos, `partial` terá dez posições. Cada posição será preenchida com a soma de um bloco diferente.
+
+O loop paralelo aparece aqui:
+
+```julia
+Threads.@threads for k in eachindex(chunks)
+    partial[k] = sum(chunks[k])
+end
+```
+
+A macro `Threads.@threads` distribui as iterações do loop entre as threads disponíveis. Cada iteração escolhe um índice `k`, calcula a soma do bloco `chunks[k]` e salva o resultado em `partial[k]`.
+
+O ponto importante é que cada iteração escreve em uma posição diferente do vetor `partial`. Uma iteração escreve em `partial[1]`, outra em `partial[2]`, outra em `partial[3]`, e assim por diante. Como não há duas iterações tentando modificar a mesma posição, evitamos a race condition do exemplo anterior.
+
+No final, temos um vetor com somas parciais. Para obter a soma total, basta somar esse vetor:
+
+```julia
+sum(partial)
+```
+
+Essa técnica é chamada de redução porque reduzimos vários valores a um único resultado final. Primeiro reduzimos cada bloco a uma soma parcial; depois reduzimos as somas parciais a uma soma total.
+
+A ideia geral é muito comum em programação paralela. Em vez de várias threads disputarem acesso à mesma variável compartilhada, cada uma calcula um resultado independente. Só depois combinamos esses resultados em uma etapa final pequena e simples.
+
+## Conclusão
+
+Neste post vimos que um programa sequencial pode desperdiçar tempo esperando operações demoradas. Depois usamos `Task` e `@async` para permitir concorrência. Em seguida, introduzimos `Channel` para organizar a comunicação entre etapas do pipeline. E por fim quando o gargalo passou a ser CPU, usamos threads para obter paralelismo real.
+
+A principal ideia é que concorrência e paralelismo não são apenas truques para acelerar código. Eles também são formas de estruturar programas. Em Julia, essas ferramentas são integradas à linguagem e permitem escrever código expressivo sem abandonar o desempenho.
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica, aprimoramento do texto e criação de imagens.
+:::
