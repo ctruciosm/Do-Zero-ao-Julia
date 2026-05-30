@@ -14,6 +14,9 @@ author:
     affiliation: "Universidade Estadual de Campinas"
     url: https://ctruciosm.github.io
     orcid: 0000-0001-8746-8877
+  - name: Rafael Santos Seixas Figueiredo
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/seixasr
 date: "2025-12-01"
 image: imagens/grafos.png
 lang: pt
@@ -31,7 +34,7 @@ draft: true
 ::: justify
 Muitos problemas reais não cabem em planilhas. Relações sociais, transações financeiras, rotas logísticas e interações biológicas são melhor representadas como **Grafos** (ou Redes). Enquanto ferramentas tradicionais focam em analisar linhas individuais de dados, a Teoria dos Grafos foca nas **conexões**.
 
-Em Julia, o pacote `Graphs.jl` oferece uma interface leve e de altíssima performance para lidar com milhões de nós e arestas. Neste tutorial, vamos fugir dos exemplos abstratos e analisar um caso real de poder e influência: as **Famílias Florentinas** da Renascença. Vamos descobrir matematicamente por que os *Medici* se tornaram tão poderosos, usando métricas de centralidade e algoritmos de detecção de comunidades.
+Em Julia, o pacote `Graphs.jl` oferece uma interface leve e eficiente para trabalhar com grafos de grande porte. Neste tutorial, vamos fugir dos exemplos abstratos e analisar um caso real de poder e influência: as **Famílias Florentinas** da Renascença. Vamos descobrir matematicamente por que os *Medici* se tornaram tão poderosos, usando métricas de centralidade e algoritmos de detecção de comunidades.
 :::
 
 ## Instalação
@@ -127,7 +130,7 @@ first(df_resultados, 5)
 ```
 
 ::: justify
-Observe o resultado. Os Medici apareçam no topo da intermediação. Historicamente, isso explica sua ascensão: mesmo não sendo a família com mais dinheiro ou exércitos no início, eles eram a "cola" que unia famílias desconexas, permitindo-lhes arbitrar conflitos e consolidar poder.
+Observe o resultado. Os Medici aparecem no topo da intermediação. Historicamente, isso explica sua ascensão: mesmo não sendo a família com mais dinheiro ou exércitos no início, eles eram a "cola" que unia famílias desconexas, permitindo-lhes arbitrar conflitos e consolidar poder.
 :::
 
 ## Detecção de Comunidades
@@ -200,7 +203,7 @@ O Graphs.jl nos permitiu, com poucas linhas, reconstruir uma estrutura social hi
 
 -   Calcular métricas avançadas como Grau e Intermediação.
 
--   Aplicar algoritmos não-supervisionados de detecção de comunidades.
+-   Aplicar algoritmos de detecção de comunidades..
 
 -   Visualizar essas dimensões complexas com GraphMakie.
 
