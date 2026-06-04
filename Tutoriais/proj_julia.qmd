@@ -19,7 +19,7 @@ format:
     toc: true
     self-contained: false
 engine: julia
-draft: true
+draft: false
 ---
 
 # Introdução
@@ -29,9 +29,9 @@ Este tutorial é um **passo a passo didático**, pensado para quem **nunca criou
 
 A ideia é aprender fazendo! No final deste tutorial, iremos terminar com:
 
-* um projeto `Julia` organizado
-* documentação em formato de **site acadêmico**
-* exemplos **executáveis e reproduzíveis**
+* Um projeto em `Julia` organizado;
+* Documentação em formato de **site acadêmico**;
+* Exemplos **executáveis e reproduzíveis**.
 
 > Se você já escreveu relatórios em `LaTeX` ou `RMarkdown`, pense nisso como um **livro online vivo**.
 :::
@@ -43,9 +43,9 @@ A ideia é aprender fazendo! No final deste tutorial, iremos terminar com:
 ::: {.justify}
 Ao final deste tutorial, teremos:
 
-* um projeto `Julia` chamado `MeuPrimeiroProjeto`
-* uma função simples (didática)
-* um site de documentação gerado com **Documenter.jl**
+* um projeto em `Julia` chamado `MeuPrimeiroProjeto`;
+* uma função simples (didática);
+* um site de documentação gerado com **Documenter.jl**.
 
 Estrutura final:
 :::
@@ -73,9 +73,9 @@ MeuPrimeiroProjeto/
 ::: {.justify}
 Antes de começar, você precisa ter:
 
-* Julia instalado (versão ≥ 1.9)
-* Um terminal, **VS Code** ou outra IDE
-* Conhecimento **básico** de `Julia` (funções e vetores já é suficiente)
+* Julia instalado (versão ≥ 1.9);
+* Um terminal, **VS Code** ou outra IDE;
+* Conhecimento **básico** de `Julia` (funções e vetores já devem ser suficientes).
 :::
 
 ---
@@ -85,7 +85,7 @@ Antes de começar, você precisa ter:
 ## Passo 1 — Criando o projeto Julia
 
 ::: {.justify}
-Abra o terminal do seu computador na pasta onde deseja criar o projeto e execute:
+Abra o terminal do seu computador na pasta onde deseja criar o projeto e execute o seguinte comando:
 :::
 
 ```bash
@@ -93,7 +93,7 @@ C:\Users\Alunx\caminho_para_projeto> julia --project=.
 ```
 
 ::: {.justify}
-No REPL do Julia, ative o gerenciador de pacotes:
+No REPL do Julia, ative o gerenciador de pacotes e entre no modo `pkg` digitando:
 :::
 
 ```julia
@@ -129,10 +129,11 @@ Abra o arquivo `src/MeuPrimeiroProjeto.jl` na sua IDE e edite para algo assim:
 :::
 
 ```julia
+# Módulo do projeto
 module MeuPrimeiroProjeto
 
 export media_simples
-
+# Docstring da função
 """
     media_simples(x)
 
@@ -148,8 +149,8 @@ end
 ::: {.justify}
 📌 Aqui já fizemos algo **importante**:
 
-* criamos um módulo
-* escrevemos uma **docstring** (documentação!)
+* criamos um módulo;
+* escrevemos uma **docstring** (documentação!).
 :::
 
 ---
@@ -177,9 +178,7 @@ Se retornar `2.5`, tudo certo ✅
 ## Passo 4 — Criando a pasta de documentação
 
 ::: {.justify}
-Agora vem a parte nova.
-
-Agora, ainda na pasta 'MeuPrimeiroProjeto', execute no terminal:
+Agora vem a parte nova. Ainda na pasta 'MeuPrimeiroProjeto', execute no terminal:
 :::
 
 ```bash
@@ -265,7 +264,7 @@ media_simples([10, 20, 30])
 ## Passo 7 — Arquivo `make.jl`
 
 ::: {.justify}
-Na pasta `docs\`, crie o arquivo `make.jl` e coloque:
+Na pasta `docs\`, crie o arquivo `make.jl`, que irá unir essas informações e coloque:
 :::
 
 ```julia
@@ -296,7 +295,7 @@ pkg> dev ..
 ```
 
 ::: {.justify}
-Assim o `Julia` entenderá que o projeto docs que você criou na pasta `MeuPrimeiroProjeto` está dentro de um *outro* projeto.
+Assim, o `Julia` entenderá que o projeto docs que você criou na pasta `MeuPrimeiroProjeto` está dentro de um *outro* projeto.
 
 Agora, no mesmo local, execute:
 :::
@@ -336,7 +335,7 @@ Abra o `index.html` no navegador.
 ::: {.justify}
 Além de funções simples, é muito comum trabalharmos com **dados reais** e **visualizações** em projetos acadêmicos.
 
-Vamos ver um exemplo completo.
+Vamos ver um exemplo completo, no passo a passo.
 :::
 
 ## Passo 1 - Novas dependências
@@ -353,7 +352,7 @@ pkg> add CSV DataFrames Plots
 ## Passo 2 - Adicionando os dados
 
 ::: {.justify}
-Na pasta `docs/src/`, crie um arquivo chamado `dados.csv` e escreva:
+Na pasta `docs/src/`, crie um arquivo chamado `dados.csv` e escreva as seguintes coordenadas:
 :::
 
 ````csv
@@ -376,9 +375,9 @@ Agora adicione ao final do arquivo `exemplos.md`:
 
 Vamos agora:
 
-1. Ler um arquivo `.csv`
-2. Visualizar os dados
-3. Criar um gráfico simples
+1. Ler um arquivo `.csv`;
+2. Visualizar os dados;
+3. Criar um gráfico simples.
 
 ```@setup exemplos
 using CSV
@@ -412,7 +411,7 @@ plot(
 ::: {.justify}
 > Nesse caso usamos o `@setup` que garante que nossa variável `df` seja guardada na memória da rodagem. Usando `@example` cada bloco é executado em um módulo isolado, do zero.
 
-Note também que usamos uma chave para guardar os resultados do bloco de `@setup`, que é `exemplos`, e assim precisamos adicionar essa chave em todos os blocos que quisermnos que usem a informação guardada no bloco de `@setup`.
+Note também que usamos uma chave para guardar os resultados do bloco de `@setup`, que nesse caso foi `exemplos`, e assim precisamos adicionar essa chave em todos os blocos que quisermos que usem a informação guardada no bloco criado, `@setup`.
 :::
 
 ## Passo 4 - Resultado final
@@ -428,10 +427,10 @@ julia> include("make.jl")
 ::: {.justify}
 O site terá:
 
-- ✔ tabela renderizada
-- ✔ gráfico embutido
-- ✔ código executado
-- ✔ tudo reproduzível
+- ✔ Tabela renderizada
+- ✔ Gráfico embutido
+- ✔ Código executado
+- ✔ Tudo reproduzível
 :::
 
 ## Passo 5 (Opcional) - Testando função + dados
@@ -452,31 +451,31 @@ media_simples(df.y)
 ````
 
 ::: {.justify}
-e repita o **Passo 4**.
+e repita o **Passo 4** para adicionar esse exemplo ao site.
 :::
 
-# O que aprendemos até aqui
+# O que aprendemos
 
 ::: {.justify}
 Neste tutorial você aprendeu:
 
-* criar um projeto Julia do zero
-* estruturar código como módulo
-* escrever docstrings
-* criar documentação acadêmica com Documenter.jl
-* gerar um site reproduzível
+* Criar um projeto de Julia do zero
+* Estruturar códigos como módulos
+* Escrever docstrings
+* Criar uma documentação acadêmica com Documenter.jl
+* Gerar um site reproduzível
 
-Esse tipo de estrutura contribui para um projeto acadêmico **bem organizado** e **sustentável**.
+Esse tipo de estrutura contribui para um projeto acadêmico **bem organizado** e **sustentável**, sendo conceitos fundamentais para esses projetos.
 :::
 
 ---
 
 ## Próximos passos sugeridos
 
-* Adicionar mais funções
-* Criar páginas para metodologia
-* Integrar gráficos mais complexos e tabelas
-* Publicar no GitHub Pages
+* Adicionar e explorar ainda mais funções.
+* Criar páginas para metodologia.
+* Integrar gráficos mais complexos e tabelas.
+* Publicar no GitHub Pages.
 
 ---
 
@@ -485,7 +484,7 @@ Esse tipo de estrutura contribui para um projeto acadêmico **bem organizado** e
 ::: {.justify}
 Documentar desde o início é uma **boa prática acadêmica**, e `Julia` torna isso natural.
 
-No *Do Zero ao Julia*, a ideia é exatamente essa: aprender certo desde o começo 🚀
+No *Do Zero ao Julia*, a ideia é exatamente essa: aprender o certo desde o começo 🚀
 :::
 
 # Referências
