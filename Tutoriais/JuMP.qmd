@@ -22,8 +22,8 @@ format:
     toc: true
     toc-depth: 3
     self-contained: false
-engine: knitr
-draft: true
+engine: julia
+draft: false
 ---
 
 ## Introdução
@@ -39,12 +39,16 @@ Neste tutorial, vamos explorar os conceitos fundamentais do JuMP resolvendo um p
 ## Instalação e Arquitetura
 
 ::: justify
-Para usar o JuMP, precisamos instalar dois componentes: 1. O pacote **JuMP** (a interface de modelagem). 2. Um **Solver** (o algoritmo que efetivamente encontra a solução).
+Para usar o JuMP, precisamos instalar dois componentes: 
 
-Neste guia, utilizaremos o `HiGHS`, um solver de alta performance e código aberto, capaz de lidar com Programação Linear (LP) e Programação Inteira Mista (MIP).
+1. O pacote **JuMP** (a interface de modelagem). 
+2. Um **Solver** (o algoritmo que efetivamente encontra a solução).
+
+Neste guia, utilizaremos o `HiGHS`, um solver de alta performance e código aberto, capaz de lidar com Programação Linear (LP) e Programação Inteira Mista (MIP). Ambos os pacotes podem ser instalados facilmente usando o gerenciador de pacotes do Julia, dessa forma:
 :::
 
 ```{julia}
+#| output: false
 using Pkg
 Pkg.add(["JuMP", "HiGHS"])
 ```
@@ -187,7 +191,7 @@ println("Lucro:    R\$ ", objective_value(model_int))
 ```
 
 ::: justify
-Note que, ao forçar as variáveis a serem inteiras, o lucro máximo pode cair levemente, pois perdemos a flexibilidade dos números fracionários. Essa diferença é o "custo da integridade".
+Ao forçar as variáveis a serem inteiras, o lucro máximo pode cair levemente, pois perdemos a flexibilidade dos números fracionários, que poderiam ser utilizados para maximizar o lucro. Essa diferença é chamada de "custo da integridade".
 :::
 
 ## Vetorização e Escalabilidade
@@ -217,7 +221,7 @@ model_vec = Model(HiGHS.Optimizer)
 @constraint(model_vec, matriz_tecnica * x .<= limites)
 
 optimize!(model_vec)
-println("Solução Vetorial: ", value.(x))
+println("Solução Vetorial (variáveis x_1 e x_2): ", value.(x))
 ```
 
 ## Conclusão
@@ -225,17 +229,13 @@ println("Solução Vetorial: ", value.(x))
 ::: justify
 O JuMP.jl combina a legibilidade da notação matemática com a performance da linguagem Julia. Neste tutorial, vimos como:
 
-Instalar e configurar o JuMP com o solver HiGHS.
+- Instalar e configurar o JuMP com o solver HiGHS.
+- Traduzir um problema de texto para uma formulação matemática.
+- Implementar o modelo passo-a-passo.
+- Lidar com restrições de números inteiros, para problemas onde as variáveis devem ser inteiras.
+- Utilizar a forma vetorial para escalar o problema, sem declarar variáveis individualmente.
 
-Traduzir um problema de texto para uma formulação matemática.
-
-Implementar o modelo passo-a-passo.
-
-Lidar com restrições de números inteiros.
-
-Utilizar a forma vetorial para escalar o problema.
-
-Este é apenas o começo. O JuMP também suporta otimização não-linear, cônica, estocástica e até otimização robusta, tornando-o uma das ferramentas mais versáteis disponíveis para Cientistas de Dados e Pesquisadores Operacionais hoje.
+Este é apenas o começo. O JuMP também suporta otimização não-linear, cônica, estocástica e até otimização robusta, tornando-o uma das ferramentas mais versáteis disponíveis para Cientistas de Dados e Pesquisadores Operacionais atualmente, e agora você já sabe como utilizá-lo. Pratique com outros problemas clássicos, como o Problema do Caixeiro Viajante (TSP) ou o Problema de Alocação de Recursos, e explore as inúmeras possibilidades que o JuMP oferece para modelar e resolver problemas complexos do mundo real.
 :::
 
 ::: callout-note
