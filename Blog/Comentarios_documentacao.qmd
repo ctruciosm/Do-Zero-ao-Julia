@@ -1,0 +1,135 @@
+---
+title: "Comentários e documentação em um código"
+description: |
+  Estrutura e boas práticas para escrever comentários e documentação útil para o seu código.
+categories:
+  - Código Limpo
+  - Boas Práticas
+  - Documentação
+  - Comentários
+author:
+  - name: Rafael Seixas
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://www.linkedin.com/in/rafael-santos-seixas-figueiredo/
+date: "2026-05-08"
+image: imagens/doc_comment.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+draft: false
+engine: julia
+---
+
+# Introdução
+Escrever comentários e documentação é tão importante quanto escrever código correto. Comentários explicam intenções e decisões, enquanto docstrings e documentos externos explicam como usar a API e o projeto.
+Este post organiza conceitos práticos sobre comentários e documentação em Julia, com exemplos, recomendações e um checklist para facilitar a adoção.
+
+## Visão geral: por que documentar?
+Documentação e comentários ajudam a:
+
+- Esclarecer decisões de implementação;
+- Tornar o comportamento esperado explícito;
+- Permitir que outras pessoas (ou você mesmo no futuro) usem o código corretamente;
+- Melhorar a experiência interativa no REPL e a geração de documentação automática (por exemplo, com `Documenter.jl`).
+
+## Comentários: quando e como usar
+Comentários complementam o código; não substituem código legível.
+
+Quando usar comentários:
+
+- Explicar a intenção de um trecho difícil;
+- Registrar premissas, invariantes ou limitações;
+- Justificar escolhas não óbvias;
+- Marcar passos importantes em algoritmos complexos.
+
+Evite comentários redundantes que descrevem apenas o óbvio.
+
+### Sintaxe em Julia
+Julia usa `#` para comentários de linha única e `#= =#` para comentários de bloco.
+
+```julia
+# Comentário de linha única
+x = 42
+
+#= Comentário
+   de bloco =#
+```
+
+### Exemplo — comentar o porquê
+```julia
+# Evitar: comenta algo que já é evidente
+x = x + 1  # incrementa x em 1
+
+# Melhor: explica por que o incremento é necessário
+# atualiza o índice do laço para a próxima iteração
+x = x + 1
+```
+
+## Docstrings e ajuda interativa
+Docstrings (usando `"""..."""`) documentam funções, tipos, macros e módulos. Elas são exibidas com `?` no REPL e servem de fonte para geradores de documentação.
+
+```julia
+"""
+Calcula a média de um vetor numérico.
+
+# Argumentos
+- `dados`: um array de números
+
+# Retorno
+- média dos valores
+"""
+function calcular_media(dados)
+  return sum(dados) / length(dados)
+end
+```
+
+### O que documentar com docstrings
+
+- Propósito da função/tipo;
+- Argumentos e tipos esperados;
+- Valores de retorno;
+- Exceções lançadas;
+- Exemplos de uso em `# Examples`.
+
+```julia
+"""Representa um ponto no plano cartesiano."""
+struct Ponto
+  x::Float64
+  y::Float64
+end
+```
+
+## Documentação de módulos, pacotes e README
+Em projetos maiores, combine docstrings com documentação externa.
+
+- `README.md`: primeiro contato do repositório. Deve conter visão geral, instalação, exemplos básicos e links para a documentação completa.
+- `docs/`, `manual.md` ou `GUIDE.md`: explicam arquitetura, decisões de design, fluxos de uso e guias para contribuidores.
+
+O `README.md` deve ser objetivo e prático; a documentação externa pode ser mais detalhada e técnica.
+
+Ferramentas como `Documenter.jl` transformam docstrings e arquivos em sites de documentação, incluindo testes de exemplos (doctests).
+
+## Boas práticas gerais
+
+- Prefira código claro antes de escrever comentários;
+- Use nomes significativos para funções, variáveis e tipos;
+- Documente contratos: pré-condições e pós-condições;
+- Mantenha comentários e docstrings atualizados;
+- Escreva exemplos simples e reais;
+- Separe documentação de uso (README/manual) da documentação de API (docstrings).
+
+## Checklist rápido
+
+- [ ] `README.md` com instalação e exemplo básico
+- [ ] Docstrings para as funções públicas
+- [ ] Exemplos testados em docstrings
+- [ ] `docs/` ou `GUIDE.md` para arquitetura e decisões
+- [ ] Comentários explicando o *porquê* em trechos complexos
+
+## Conclusão
+Comentários e documentação aumentam a qualidade e a usabilidade do código. Em Julia, docstrings tornam a API descoberta e `README`/docs explicam o contexto do projeto.
+
+Manter a documentação junto com o código reduz o esforço no futuro e facilita a colaboração.
