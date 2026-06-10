@@ -1,7 +1,7 @@
 ---
-title: "Comentários e documentação em um código?"
+title: "Comentários e documentação em um código"
 description: |
-  Estrutura e boas práticas para escrever comentários 
+  Estrutura e boas práticas para escrever comentários e documentações úteis para o seu código.
 categories:
   - Código Limpo
   - Boas Práticas
