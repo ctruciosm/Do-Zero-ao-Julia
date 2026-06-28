@@ -18,8 +18,8 @@ format:
     toc: true
     toc-depth: 3
     self-contained: false
-engine: knitr
-draft: true
+engine: julia
+draft: false
 ---
 
 ## Introdução
@@ -52,17 +52,21 @@ using DataFrames
 Para um XGBoost do tipo regressão, a variável resposta deve ser numérica. Vamos criar o vetor `Y` com a variável resposta e o DataFrame `X` com as covariáveis:
 :::
 ```{julia}
+#| output: false
 Random.seed!(123)
 X1 = rand(Normal(20, 1), 100)
 X2 = rand(Normal(0, 1), 100)
 X3 = rand(Normal(-5, 1), 100)
+```
+```{julia}
 Y = X1 .+ X2.*X3
 X = DataFrame(X1 = X1, X2 = X2, X3 = X3)
 ```
 ::: justify
-Agora, vamos seprar os dados em treino e teste utilizando a função `partition`. No caso, vamos deixar 80% dos dados para treino e os demais para teste.
+Agora, vamos separar os dados em treino e teste utilizando a função `partition`. No caso, vamos deixar 80% dos dados para treino e os demais para teste.
 :::
 ```{julia}
+#| output: false
 Random.seed!(123)
 treino, teste = partition(eachindex(Y), 0.8, shuffle=true)
 ```
@@ -85,6 +89,7 @@ xgboost_regressao = XGBoostRegressor(num_round = 50,
 Dessa forma, podemos utilizar as funções `machine` e `fit` para o ajuste do modelo.
 :::
 ```{julia}
+#| output: false
 machine_xgboost_regressao = machine(xgboost_regressao, X, Y)
 fit!(machine_xgboost_regressao, rows=treino)
 ```
@@ -107,10 +112,13 @@ rms(Y[teste], predict(machine_xgboost_regressao, rows=teste))
 Também podemos utilizar a floresta aleatória para classificação, isto é, quando nossa variável resposta é categórica. Para isso, vamos criar um vetor `Y` contendo as categorias e um DataFrame `X` contendo as covariáveis. É interessante ressaltar que a função `categorical` especifica o tipo do vetor da variável resposta como categórico, que é exigido para o ajuste do modelo.
 :::
 ```{julia}
+#| output: false
 Random.seed!(123)
 X1 = vcat([rand(Normal(mu, 1), 50) for mu in [2, 2, 17, 15]]...)
 X2 = vcat([rand(Normal(mu, 1), 50) for mu in [3, 4, 14, 16]]...)
 X3 = vcat([rand(Normal(mu, 1), 50) for mu in [3, 1, 13, 15]]...)
+```
+```{julia}
 Y = categorical(repeat(["A", "B", "C", "D"], inner=50))
 X = DataFrame(X1 = X1, X2 = X2, X3 = X3)
 ```
@@ -118,6 +126,7 @@ X = DataFrame(X1 = X1, X2 = X2, X3 = X3)
 Assim como no caso anterior, podemos dividir em treino e teste utilizando a função `partition`.
 :::
 ```{julia}
+#| output: false
 Random.seed!(123)
 treino, teste = partition(eachindex(Y), 0.8, shuffle=true)
 ```
@@ -133,6 +142,7 @@ xgboost_classificacao = XGBoostClassifier(num_round = 50,
 Com isso, ajustamos o modelo utilizando as funções `machine` e `fit`.
 :::
 ```{julia}
+#| output: false
 machine_xgboost_classificacao = machine(xgboost_classificacao, X, Y)
 fit!(machine_xgboost_classificacao, rows=treino)
 ```
@@ -151,7 +161,7 @@ mode.(predict(machine_xgboost_classificacao, rows=treino))
 mode.(predict(machine_xgboost_classificacao, rows=teste))
 ```
 ::: justify
-Também podemos calcular métricas de erro para o nosso modelo, por exemplo, podemos calcular a acurácia utilizando a função `accuracy`.
+Também podemos calcular métricas de erro para o nosso modelo, por exemplo, podemos calcular a acurácia com que as predições estão corretas utilizando a função `accuracy`.
 :::
 ```{julia}
 accuracy(mode.(predict(machine_xgboost_classificacao, rows=treino)), Y[treino])
@@ -186,18 +196,18 @@ Com isso, para especificar os valores de cada hiperparâmetro a serem testados, 
 :::
 ```{julia}
 Random.seed!(123)
-
 valores_eta = range(xgboost_classificacao, :eta, lower = 0.1, upper = 0.5)
 valores_max_depth = range(xgboost_classificacao, :max_depth, lower = 2, upper = 3)
 xgboost_escolher_k = TunedModel(model=xgboost_classificacao,
                                resampling=CV(nfolds=5),
-                               range=[valores_eta, valores_eta],
+                               range=[valores_eta, valores_max_depth],
                                measure=accuracy)
 ```
 ::: justify
 Para ajustar o modelo, novamente utilizamos as funções `machine` e `fit`.
 :::
 ```{julia}
+#| output: false
 machine_escolher_k = machine(xgboost_escolher_k, X, Y)
 fit!(machine_escolher_k)
 ```
