@@ -210,7 +210,7 @@ valores_max_depth = range(floresta_classificacao, :max_depth, lower = 2, upper =
 #output: false
 floresta_escolher_k = TunedModel(model=floresta_classificacao,
                                resampling=CV(nfolds=5),
-                               range=[valores_n_trees, valores_n_trees],
+                               range=[valores_n_trees, valores_max_depth],
                                measure=accuracy)
 ```
 ::: justify
