@@ -1,0 +1,386 @@
+---
+title: "Raytracing com Julia (Parte 1)"
+description: |
+  Raytracing é um esquema de de renderização de imagens com base no lançamento de raios que refletem em diferentes superfícies. Esse tutorial corresponde à primeira parte da construção de um Raytracer. Muniremos nosso programa com o básico de um Raytracer utilizando um ferramental criado em Julia.
+categories:
+  -  Raytracing
+  -  Algebra Linear
+  -  Imagens
+  -  Projeção
+author:
+  - name: João Vitor Hartung Toppa
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/jvtoppa
+date: "2026-04-04"
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+execute:
+  echo: true
+  warning: false
+#jupyter: julia
+draft: false
+---
+```{julia}
+using Pkg
+Pkg.add("FileIO")
+Pkg.add("ImageMagick")
+Pkg.add("ImageIO")
+```
+
+# Introdução
+
+Esse tutorial é baseado no livro Raytracing in a Weekend do Prof. Dr. Peter Shirley, mas portado para Julia. O Raytracing (RT) é uma técnica para modelar o transporte de luz, utilizada em uma ampla variedade de algoritmos de renderização para geração de imagens digitais.
+
+Em um espectro de custo computacional e fidelidade visual, as técnicas de renderização baseadas em RT, como ray casting, RT recursivo, RT por distribuição, mapeamento de fótons e RT de caminhos, são geralmente mais lentas e oferecem maior fidelidade do que os métodos de renderização por varredura de linhas. O que será descrito nesse tutorial é, em suma, um RT de caminhos (Path Tracer).
+
+# Tópicos
+
+Nesse tutorial cobriremos:
+
+- A criação de imagens do tipo PPM
+
+- Implementações de operações vetoriais em Julia
+
+- Projeção em espaços de diferentes dimensões para geração de imagens
+
+Com relação à pré-requisitos, conhecimentos básicos de geometria analítica e álgebra linear são importantes. Uma certa familiaridade com a linguagem também ajudaria.
+
+
+# Imagens PPM
+
+Sempre que você precisa implementar um renderizador, necessitamos de uma maneira de visualizar uma imagem. A maneira mais simples é gravá-la em um arquivo ppm de texto simples. Basicamente, guardamos "P3" para indicar que as cores são gravadas em ASCII plaintext, seguido de uma nova linha com "n m", sendo n o número de colunas e m o número de linhas e triplas de RGB. Vamos escrever um código que gera um arquivo como este e salva no computador. Para isso, iremos aplicar uma transformação linear para projetar nosso intervalo em (0,255):
+
+
+```{julia}
+#| echo: true
+function gen()
+
+    io = open("image.ppm", "w")
+    image_width = 200
+    image_height = 200
+
+    write(io, "P3\n$image_width $image_height\n255\n")
+
+    for j in 1:image_height
+        for i in 1:image_width
+            r = 255 * (i - 1) / (image_width - 1)
+            g = 255 * (j - 1) / (image_height - 1)
+            b = 0
+
+            println(io, "$(Int(round(r))) $(Int(round(g))) $b")
+        end
+    end
+
+    close(io)
+end
+
+
+```
+```{julia}
+using FileIO
+
+gen()
+img = load("image.ppm")
+save("image.png", img)
+
+img
+```
+
+Se o seu arquivo PPM não estiver como este, verifique novamente o código de formatação. Se estiver como este, mas não renderizar, pode haver diferenças nas quebras de linha ou algo semelhante que esteja confundindo o visualizador de imagens. 
+
+# A classe vec3
+
+Quase todos os programas gráficos possuem alguma maneira para armazenar vetores geométricos e cores. Em muitos sistemas, esses vetores são 4D (posição 3D mais uma coordenada homogênea para geometria, ou RGB mais um componente de transparência alfa para cores). Para nossos propósitos, três coordenadas são suficientes. Usaremos a mesma classe `vec3` para cores, localizações, direções, deslocamentos, etc.
+
+ Declaramos dois aliases para `vec3`: `point3` e `color`. Como esses dois tipos são apenas aliases para `vec3`, você terá problemas se passar uma cor para uma função que espera um `point3`, e nada impede que você adicione um `point3` a uma cor, mas isso torna o código um pouco mais fácil de ler e entender.
+
+ Vamos criar um documento `vec3.jl` para guardar nossas funções de manipulação vetorial. Um ponto de destaque é o uso dos módulos de Julia. Eles permitem que utilizemos funções definidas em um arquivo num outro programa qualquer. Para isso, basta usar `module <nome>` e exportar as funções a serem utilizadas em outros lugares.
+
+
+```{julia}
+#| echo: true
+
+struct vec3
+    x::Float32
+    y::Float32
+    z::Float32
+end
+
+vec3(x::Real, y::Real, z::Real) = vec3(Float32(x), Float32(y), Float32(z))
+
+const color = vec3
+const point3 = vec3
+
+@inline function Base.:+(v1::vec3, v2::vec3)
+    return vec3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z)
+end
+
+@inline function Base.:-(v1::vec3, v2::vec3)
+    return vec3(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z)
+end
+
+@inline function Base.:-(v::vec3)
+    return vec3(-v.x, -v.y, -v.z)
+end
+
+@inline function Base.:*(v1::vec3, v2::vec3)
+    return vec3(v1.x * v2.x, v1.y * v2.y, v1.z * v2.z)
+end
+
+@inline function Base.:*(t::Float32, v::vec3)
+    return vec3(t * v.x, t * v.y, t * v.z)
+end
+
+@inline function Base.:*(v::vec3, t::Float32)
+    return t * v
+end
+
+@inline function Base.:/(v::vec3, t::Float32)
+    return (1f0/t) * v
+end
+
+@inline function length_squared(v::vec3)
+    return v.x*v.x + v.y*v.y + v.z*v.z
+end
+
+@inline function len(v::vec3)
+    return sqrt(length_squared(v))
+end
+
+@inline function dot(v1::vec3, v2::vec3)
+    return v1.x*v2.x + v1.y*v2.y + v1.z*v2.z
+end
+
+@inline function cross(v1::vec3, v2::vec3)
+    return vec3(
+        v1.y * v2.z - v1.z * v2.y,
+        v1.z * v2.x - v1.x * v2.z,
+        v1.x * v2.y - v1.y * v2.x
+    )
+end
+
+@inline function unit_vector(v::vec3)
+    return v / len(v)
+end
+
+
+```
+
+Usamos Float32 para facilitar cálculos vetoriais na GPU. Se for de sua vontade não utilizar aceleração com CUDA (o que faremos no próximo tutorial!), podemos simplesmente trocar o tipo de x, y e z para Float64, que permite maior precisão numérica. Siga seu gosto!
+
+Vamos agora escrever uma função para escrever uma cor no nosso arquivo. Faremos isso para facilitar nossa linha de pensamento.
+
+```{julia}
+#| echo: true
+@inline function write_color(io::IO, pixel_color::color)
+    r = pixel_color.x
+    g = pixel_color.y
+    b = pixel_color.z
+    
+    rbyte = clamp(round(255f0 * r), 0f0, 255f0)
+    gbyte = clamp(round(255f0 * g), 0f0, 255f0)
+    bbyte = clamp(round(255f0 * b), 0f0, 255f0)
+    
+    println(io, "$(Int(rbyte)) $(Int(gbyte)) $(Int(bbyte))") 
+    return
+end
+
+function gen()
+
+io = open("image2.ppm", "w")
+image_width = 200
+image_height = 200
+write(io, "P3\n$image_width $image_height\n255\n")
+
+for i in 1:image_width
+    for j in 1:image_height
+        pixel_color = color(i / image_width, j / image_height, 0)
+        write_color(io, pixel_color)
+    end
+end
+
+close(io)
+end
+```
+```{julia}
+
+gen()
+img = load("image2.ppm")
+save("image2.png", img)
+
+img
+```
+
+
+Isso deve devolver exatamente a mesma imagem de antes.
+
+# Sobre raios
+
+Uma característica comum a todos os RTs é o raio e o cálculo da cor percebida ao longo de um raio. Vamos considerar um raio como uma função $P(t) = A + tb$. Aqui, $P$ é uma posição 3D ao longo de uma linha em 3D. $A$ é a origem do raio e $b$ é a direção do raio. O parâmetro $t$ do raio é um número real (Float32 no código). Ao inserir um valor diferente para $t$, $P(t)$ move o ponto ao longo do raio. Adicionando valores negativos para $t$, é possível ir a qualquer ponto da linha 3D. Para valores positivos de $t$, obtém-se apenas as partes à frente de $A$, o que é frequentemente chamado de meia-linha ou raio.
+
+Podemos representar a ideia de um raio como um struct e representar $P(t)$ como uma função que chamaremos de at(t):
+
+```{julia}
+#| echo: true
+
+Base.@kwdef struct ray
+    origin::vec3
+    direction::vec3
+end
+
+@inline function at(t::Float32, r::ray)
+    return r.origin + t * r.direction
+end
+
+```
+
+Essencialmente, um RT envia raios através de pixels e calcula a cor vista na direção desses raios. As etapas envolvidas são:
+
+- Calcular o raio do "olho" através do pixel,
+
+- Determinar quais objetos o raio intercepta e
+
+ - Calcular a cor do ponto de interseção mais próximo.
+
+Usaremos uma imagem não quadrada para não transpormos x e y. Uma imagem quadrada tem uma proporção de 1:1, pois sua largura é igual à sua altura. Como queremos uma imagem não quadrada, escolheremos 16:9, pois é uma proporção bastante comum. Uma proporção de 16:9 significa que a razão entre a largura e a altura da imagem é de 16:9. Em outras palavras, dada uma imagem com proporção de 16:9,
+
+$\text{largura/altura} = 16/9 = 1,7778$
+
+Para um exemplo prático, uma imagem com 800 pixels de largura por 400 pixels de altura tem uma proporção de 2:1.
+
+A proporção da imagem pode ser determinada pela razão entre sua largura e sua altura. No entanto, como já temos uma proporção definida, é mais fácil definir a largura e a proporção da imagem e, em seguida, usar esses valores para calcular sua altura. Dessa forma, podemos aumentar ou diminuir a escala da imagem alterando sua largura, sem comprometer a proporção desejada. Precisamos garantir que, ao calcular a altura da imagem, o resultado seja pelo menos 1.
+
+Além de definir as dimensões em pixels para a imagem renderizada, também precisamos configurar uma viewport virtual para a passagem dos raios da cena. A viewport é um retângulo virtual no mundo 3D que contém a grade de pixels da imagem. Se os pixels estiverem espaçados horizontalmente à mesma distância que verticalmente, a área de visualização que os delimita terá a mesma proporção da imagem renderizada. A distância entre dois pixels adjacentes é chamada de espaçamento entre pixels, e pixels quadrados são o padrão.
+
+Para começar, vamos escolher uma altura de área de visualização arbitrária de 2 e dimensionar a largura da área de visualização para obter a proporção desejada.
+
+Vamos definir também o centro da câmera: um ponto no espaço 3D de onde todos os raios da cena se originarão (também conhecido como ponto de visão). O vetor do centro da câmera para o centro da viewport será ortogonal à viewport. Inicialmente, definiremos a distância entre a viewport e o ponto central da câmera como uma unidade. Essa distância é frequentemente chamada de distância focal.
+
+Para simplificar, começaremos com o centro da câmera em (0,0,0). Também faremos com que o eixo y aponte para cima, o eixo x para a direita e o eixo z negativo aponte na direção da visualização. Isso é comumente chamado de coordenadas dextrógiras.
+
+
+Agora, a parte complicada. Embora nosso espaço 3D siga as convenções acima, isso entra em conflito com nossas coordenadas de imagem, onde queremos que o pixel zero esteja no canto superior esquerdo e desça até o último pixel no canto inferior direito. Isso significa que nosso eixo Y de coordenadas de imagem é invertido: Y aumenta de cima para baixo na imagem.
+
+Ao escanearmos nossa imagem, começaremos no pixel superior esquerdo (pixel 0,0), percorreremos cada linha da esquerda para a direita e, em seguida, percorreremos linha por linha, de cima para baixo. Para auxiliar na navegação pela grade de pixels, usaremos um vetor da borda esquerda à borda direita (Vu) e um vetor da borda superior à borda inferior (Vv).
+
+Nossa grade de pixels será recuada das bordas da viewport em metade da distância entre pixels. Dessa forma, nossa área de visualização é dividida uniformemente em regiões idênticas em largura × altura. 
+
+Com base em tudo isso, aqui está o código que implementa a câmera.
+
+```{julia}
+
+Base.@kwdef struct RayCamera
+    center::vec3
+    pixel00_loc::vec3
+    pixel_delta_u::vec3
+    pixel_delta_v::vec3
+    image_width::Int32
+    image_height::Int32
+    samples_per_pixel::Int32
+    image_name
+end
+
+function setup_camera(;
+    aspect_ratio::Float32 = 16.0f0/9.0f0,
+    image_width::Int32 = Int32(400),
+    focal_length::Float32 = 1.0f0,
+    viewport_height::Float32 = 2.0f0,
+    camera_center::vec3 = vec3(0.0f0, 0.0f0, 0.0f0),
+    samples_per_pixel::Int32 = Int32(10),
+    image_name ="image.ppm"
+)
+    image_height = Int32(round(image_width / aspect_ratio))
+    viewport_width = viewport_height * Float32(image_width) / Float32(image_height)
+    
+    viewport_u = vec3(viewport_width, 0.0f0, 0.0f0)
+    viewport_v = vec3(0.0f0, -viewport_height, 0.0f0)
+    
+    pixel_delta_u = viewport_u / Float32(image_width)
+    pixel_delta_v = viewport_v / Float32(image_height)
+    
+    viewport_upper_left = camera_center - 
+                         vec3(0.0f0, 0.0f0, focal_length) - 
+                         viewport_u/2.0f0 - 
+                         viewport_v/2.0f0
+    pixel00_loc = viewport_upper_left + 0.5f0 * (pixel_delta_u + pixel_delta_v)
+    
+    return RayCamera(
+        camera_center,
+        pixel00_loc,
+        pixel_delta_u,
+        pixel_delta_v,
+        image_width,
+        image_height,
+        samples_per_pixel,
+        image_name
+    )
+end
+
+@inline function get_pixel_center(camera::RayCamera, i::Int32, j::Int32)
+    return camera.pixel00_loc + 
+           (Float32(i-1) * camera.pixel_delta_u) + 
+           (Float32(j-1) * camera.pixel_delta_v)
+end
+
+```
+
+Vamos adicionar uma função ray_color(r) que retorna a cor para um determinado raio da cena. Por enquanto, vamos determinar um gradiente simples de branco para azul.
+
+```{julia}
+
+@inline function ray_color(r::ray)
+    unit_direction = unit_vector(r.direction)
+    a = 0.5f0 * (unit_direction.y + 1.0f0)
+    return (1.0f0 - a) *color(1.0f0, 1.0f0, 1.0f0) + a *color(0.5f0, 0.7f0, 1.0f0)
+end
+```
+
+E agora também reorganizamos nosso código de renderização:
+
+```{julia}
+function gen(camera::RayCamera)
+    io = open(camera.image_name, "w")
+
+    write(io, "P3\n$(camera.image_width) $(camera.image_height)\n255\n")
+
+    for j in 1:camera.image_height
+        for i in 1:camera.image_width
+            pixel_center = get_pixel_center(camera, Int32(i), Int32(j))
+            ray_direction = pixel_center - camera.center
+            r = ray(camera.center, ray_direction)
+
+            pixel_color = ray_color(r)
+            write_color(io, pixel_color)
+        end
+    end
+
+    close(io)
+end
+
+```
+
+```{julia}
+
+gen(setup_camera(image_name="image3.ppm"))
+img = load("image3.ppm")
+save("image3.png", img)
+
+img
+```
+
+Como visto acima, isso já é suficiente para construirmos um "céu" azul. Temos, agora, nossa tela para realizarmos nossa pintura.  
+
+# Conclusão
+
+Embora o resultado visual ainda seja simples, a infraestrutura criada aqui é exatamente o que precisamos para evoluir para cenas mais interessantes. Com esses componentes, já temos:
+
+uma forma de gerar e salvar imagens;
+uma estrutura para operar com vetores em 3D;
+uma representação de raios;
+um modelo básico de câmera e projeção;
+uma primeira função de cor baseada na direção do raio.
+
+Na próxima etapa, poderemos usar essa base para introduzir interseções com objetos da cena — em especial esferas — e finalmente começar a renderizar geometria real. A partir daí, o Raytracer deixará de produzir apenas fundos e passará a simular objetos iluminados no espaço tridimensional.
