@@ -1,0 +1,378 @@
+---
+title: "Árvores de Busca Binária em Julia"
+description: |
+  Uma árvore de busca binária (BST) é uma das estruturas de dados mais fundamentais em ciência da computação, usada para manter uma coleção ordenada com buscas, inserções e travessias eficientes. Nesse tutorial implementamos uma BST do zero em Julia, cobrindo inserção, busca, iteração, predecessor/sucessor e mínimo/máximo.
+categories:
+  - Estruturas de Dados
+  - Julia
+  - Árvores
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+execute:
+  echo: true
+  warning: false
+#jupyter: julia
+draft: false
+---
+
+# Introdução
+
+Uma árvore de busca binária (Binary Search Tree, ou BST) organiza seus elementos de forma que, para qualquer nó, todos os valores à esquerda são menores que ele e todos os valores à direita são maiores. Essa propriedade simples é o que torna buscas rápidas: a cada passo, descartamos metade da árvore restante, de forma parecida com uma busca binária em um vetor ordenado.
+
+Nesse tutorial vamos construir um módulo `BinaryTrees` em Julia que implementa:
+
+- Inserção e busca recursivas
+
+- Iteração em ordem (percorrendo os elementos do menor para o maior)
+
+- Cálculo de mínimo, máximo, predecessor e sucessor
+
+- Uma visualização em texto da árvore
+
+Vamos assumir familiaridade básica com recursão e com o sistema de tipos de Julia (structs, tipos abstratos e parametrização por tipo).
+
+# A estrutura de dados
+
+O primeiro passo é decidir como representar um nó e a árvore em si. Um nó guarda um elemento e referências para os filhos esquerdo e direito, que podem não existir. Em Julia, expressamos "pode não existir" com `Union{T, Nothing}`:
+
+```{julia}
+#| echo: true
+
+abstract type BinaryTreeNode{T} end
+abstract type BinaryTree{T} end
+
+mutable struct NodeBST{T} <: BinaryTreeNode{T}
+    elem::T
+    left::Union{NodeBST{T}, Nothing}
+    right::Union{NodeBST{T}, Nothing}
+end
+
+mutable struct BinarySearchTree{T} <: BinaryTree{T}
+    root::Union{NodeBST{T}, Nothing}
+    size::Int
+end
+```
+
+Usamos tipos abstratos (`BinaryTreeNode` e `BinaryTree`) para deixar a porta aberta para outras variantes de árvore no futuro (uma AVL ou uma rubro-negra, por exemplo, poderiam reaproveitar a mesma interface). A árvore guarda apenas a raiz e o tamanho, e cada nó guarda seus dois filhos e o elemento armazenado.
+
+Com os tipos definidos, criamos alguns construtores convenientes:
+
+```{julia}
+#| echo: true
+
+BinarySearchTree{T}() where T = BinarySearchTree{T}(nothing, 0)
+BinarySearchTree() = BinarySearchTree{Any}(nothing, 0)
+
+BinarySearchTree{T}(v::Vector{T}) where T = begin
+    bt = BinarySearchTree{T}()
+    for vElem in v
+        insert!(bt, vElem)
+    end
+    return bt
+end
+```
+
+O terceiro construtor permite criar uma árvore já populada a partir de um vetor, como em `BinarySearchTree{Int}([1, 2, 3])`. Ele só funciona depois que definirmos `insert!`, então vamos até lá.
+
+Antes disso, algumas funções básicas de consulta:
+
+```{julia}
+#| echo: true
+
+Base.isempty(bt::BinaryTree{T}) where T = bt.root === nothing
+
+Base.length(tree::BinaryTree{T}) where T = tree.size
+
+function Base.empty!(tree::BinaryTree{T}) where T
+    tree.root = nothing
+    tree.size = 0
+end
+```
+
+Estendemos funções do próprio Julia (`Base.isempty`, `Base.length`, `Base.empty!`) em vez de inventar novos nomes. Isso é uma convenção comum: se sua estrutura se comporta como uma coleção, vale a pena implementar a interface que o resto da linguagem já espera. Assim, `length(bt)` e `isempty(bt)` funcionam naturalmente em qualquer código que use sua árvore.
+
+# Inserção
+
+Inserir um elemento em uma BST segue a própria definição da estrutura: descemos pela árvore comparando o novo elemento com cada nó, indo para a esquerda se for menor e para a direita se for maior, até encontrar um espaço vazio.
+
+A forma mais natural de expressar isso é recursivamente, com uma função auxiliar que retorna a subárvore já atualizada:
+
+```{julia}
+#| echo: true
+
+function _insert!(tree::BinarySearchTree{T}, treeHead::Union{NodeBST{T},Nothing}, key::T) where T
+    if treeHead === nothing
+        tree.size += 1
+        return NodeBST{T}(key, nothing, nothing)
+    end
+
+    if key < treeHead.elem
+        treeHead.left = _insert!(tree, treeHead.left, key)
+    elseif key > treeHead.elem
+        treeHead.right = _insert!(tree, treeHead.right, key)
+    end
+    return treeHead
+end
+
+function Base.insert!(tree::BinarySearchTree{T}, key::T) where T
+    tree.root = _insert!(tree, tree.root, key)
+    return tree
+end
+```
+
+O truque da recursão aqui é que `_insert!` sempre devolve a raiz da subárvore que está processando, mesmo quando não muda nada. Isso permite reatribuir `treeHead.left` ou `treeHead.right` sem precisar de ponteiros especiais, algo que seria mais delicado em outras linguagens. Note também que, se a chave já existir na árvore, simplesmente não fazemos nada: essa implementação não permite duplicatas.
+
+O custo de uma inserção é proporcional à altura da árvore. Em uma árvore balanceada com $n$ elementos, isso é $O(\log n)$. No pior caso, se os elementos forem inseridos em ordem crescente ou decrescente, a árvore degenera em uma lista ligada e o custo sobe para $O(n)$.
+
+# Busca
+
+A busca segue exatamente a mesma lógica de navegação da inserção, mas sem modificar nada:
+
+```{julia}
+#| echo: true
+
+function _search(treeHead::Union{NodeBST{T}, Nothing}, key::T) where T
+    if treeHead === nothing
+        return false
+    end
+
+    if key < treeHead.elem
+        return _search(treeHead.left, key)
+    elseif key > treeHead.elem
+        return _search(treeHead.right, key)
+    else
+        return true
+    end
+end
+
+function search(tree::BinarySearchTree{T}, key::T) where T
+    return _search(tree.root, key)
+end
+
+Base.in(key, tree::BinarySearchTree) = search(tree, key)
+```
+
+Ao implementar `Base.in`, ganhamos de graça a sintaxe `x in tree`, que é bem mais natural de ler do que `search(tree, x)`. Vale reforçar: essa busca só é eficiente porque a árvore mantém a invariante de ordenação a cada inserção. Sem essa garantia, teríamos que percorrer a árvore inteira.
+
+# Mínimo e máximo
+
+Graças à propriedade de ordenação, o menor elemento da árvore está sempre na ponta mais à esquerda, e o maior está sempre na ponta mais à direita. Basta descer nessa direção até não haver mais filho:
+
+```{julia}
+#| echo: true
+
+function Base.minimum(tree::BinarySearchTree{T}) where T
+    if tree.root === nothing
+        return nothing
+    end
+    curr = tree.root
+    while curr.left !== nothing
+        curr = curr.left
+    end
+    return curr.elem
+end
+
+function Base.maximum(tree::BinarySearchTree{T}) where T
+    if tree.root === nothing
+        return nothing
+    end
+    curr = tree.root
+    while curr.right !== nothing
+        curr = curr.right
+    end
+    return curr.elem
+end
+```
+
+Aqui usamos um laço `while` em vez de recursão. As duas abordagens são igualmente válidas, mas quando a lógica é apenas "continue andando em uma direção", um laço costuma ser mais direto de ler do que uma recursão.
+
+# Predecessor e sucessor
+
+Dado um valor `target`, o sucessor é o menor elemento da árvore que é maior que `target`, e o predecessor é o maior elemento que é menor que `target`. Essas operações são úteis, por exemplo, para percorrer a árvore em ordem sem uma travessia completa, ou para implementar remoção de nós com dois filhos.
+
+A ideia para encontrar o sucessor é: descemos pela árvore guardando, a cada vez que viramos à esquerda, o nó atual como "melhor candidato até agora". Quando chegamos ao final, o último candidato guardado é o sucessor:
+
+```{julia}
+#| echo: true
+
+function _successor(node::Union{NodeBST{T}, Nothing}, target::T) where T
+    curr = node
+    succ = nothing
+
+    while curr !== nothing
+        if target < curr.elem
+            succ = curr
+            curr = curr.left
+        else
+            curr = curr.right
+        end
+    end
+    return succ
+end
+
+function successor(tree::Union{BinarySearchTree{T}, Nothing}, target::T) where T
+    node = _successor(tree.root, target)
+    return node === nothing ? nothing : node.elem
+end
+```
+
+O predecessor possui a mesma lógica espelhada, guardando candidatos toda vez que viramos à direita:
+
+```{julia}
+#| echo: true
+
+function _predecessor(root::Union{NodeBST{T}, Nothing}, key::T) where T
+    pred = nothing
+    curr = root
+
+    while curr !== nothing
+        if key > curr.elem
+            pred = curr
+            curr = curr.right
+        else
+            curr = curr.left
+        end
+    end
+
+    return pred
+end
+
+function predecessor(tree::Union{BinarySearchTree{T}, Nothing}, target::T) where T
+    node = _predecessor(tree.root, target)
+    return node === nothing ? nothing : node.elem
+end
+```
+
+Repare que nenhuma das duas funções exige que `target` esteja de fato na árvore: elas encontram o vizinho imediatamente acima ou abaixo de qualquer valor, presente ou não.
+
+# Percorrendo a árvore com um iterador
+
+Uma das operações mais úteis de uma BST é percorrer seus elementos em ordem crescente, o que é chamado de travessia in-order. A versão recursiva dessa travessia é curta, mas queremos algo melhor: fazer a `BinarySearchTree` funcionar com o protocolo de iteração nativo de Julia, para que `for x in tree` e `collect(tree)` simplesmente funcionem.
+
+Para isso sem recursão, usamos uma pilha explícita que guarda o "caminho mais à esquerda ainda não visitado". Essa pilha vem de um módulo auxiliar `Containers`, definido em `stack.jl`, que fornece um tipo `Stack` com as operações usuais `push!`, `pop!` e `isempty`:
+
+```{julia}
+#| echo: true
+#| eval: false
+
+include("stack.jl")
+using .Containers
+```
+
+A função auxiliar `_push_left` empilha um nó e todos os seus filhos à esquerda, que são justamente os próximos elementos a visitar em ordem:
+
+```{julia}
+#| echo: true
+#| eval: false
+
+function _push_left(stack::Stack{NodeBST{T}}, node::Union{NodeBST{T}, Nothing}) where T
+    while node !== nothing
+        push!(stack, node)
+        node = node.left
+    end
+end
+```
+
+Com isso, `Base.iterate` fica bem direto. O protocolo de iteração de Julia espera duas versões: uma sem estado, chamada no início do laço, e outra que recebe o estado da chamada anterior:
+
+```{julia}
+#| echo: true
+#| eval: false
+
+function Base.iterate(tree::BinarySearchTree{T}) where T
+    stack = Stack(NodeBST{T})
+    _push_left(stack, tree.root)
+
+    if isempty(stack)
+        return nothing
+    else
+        node = pop!(stack)
+        _push_left(stack, node.right)
+        return node.elem, stack
+    end
+end
+
+function Base.iterate(tree::BinarySearchTree{T}, stack::Stack{NodeBST{T}}) where T
+    if isempty(stack)
+        return nothing
+    else
+        node = pop!(stack)
+        _push_left(stack, node.right)
+        return node.elem, stack
+    end
+end
+```
+
+O estado do iterador é a própria pilha. A cada passo, tiramos o topo da pilha (o próximo elemento em ordem), e empilhamos o caminho mais à esquerda de sua subárvore direita, preparando o próximo passo. Quando `isempty(stack)`, todos os elementos já foram visitados e devolvemos `nothing`, que é o sinal de término do protocolo de iteração.
+
+Essa abordagem visita cada nó exatamente uma vez e usa memória proporcional à altura da árvore, em vez de à quantidade total de elementos, o que é bem mais econômico do que gerar a lista inteira de antemão.
+
+# Visualizando a árvore
+
+Para depurar a estrutura, é útil ter uma função que desenhe a árvore no terminal. A ideia é percorrer a árvore em ordem invertida (direita, nó, esquerda) construindo prefixos com base na profundidade, de forma que a árvore apareça "deitada" com a raiz à esquerda:
+
+```{julia}
+#| echo: true
+
+function print_tree_vertical(tree::BinarySearchTree{T}) where T
+    println("Binary Search Tree (vertical view):")
+
+    function print_node_vertical(node::Union{NodeBST{T}, Nothing}, prefix::String="", is_left::Bool=true)
+        if node !== nothing
+            print_node_vertical(node.right, prefix * (is_left ? "│   " : "    "), false)
+            println(prefix, is_left ? "└── " : "┌── ", node.elem)
+            print_node_vertical(node.left, prefix * (is_left ? "    " : "│   "), true)
+        end
+    end
+
+    if tree.root === nothing
+        println("(empty tree)")
+    else
+        print_node_vertical(tree.root)
+    end
+end
+```
+
+Esse tipo de função não é essencial para a estrutura de dados funcionar, mas economiza muito tempo de depuração quando algo dá errado em uma árvore maior.
+
+# Juntando tudo
+
+Com o módulo completo, podemos experimentar:
+
+```{julia}
+#| echo: true
+#| eval: false
+
+function main()
+    bt = BinarySearchTree{Int}([1, 2, 3, 4, 56, 7, 8, 9, 200, 123, 4])
+    print_tree_vertical(bt)
+
+    println(predecessor(bt, 56))
+    println(successor(bt, 56))
+    println(minimum(bt))
+    println(maximum(bt))
+end
+
+main()
+```
+
+Note que inserimos o valor `4` duas vezes no vetor de entrada. Como nossa `_insert!` ignora chaves já existentes, a segunda ocorrência simplesmente não altera a árvore, e `length(bt)` continua refletindo apenas elementos distintos.
+
+# Conclusão
+
+Com pouco mais de cem linhas de Julia, montamos uma BST funcional com:
+
+- inserção e busca recursivas que respeitam a propriedade de ordenação;
+
+- mínimo, máximo, predecessor e sucessor calculados em tempo proporcional à altura da árvore;
+
+- um iterador que percorre os elementos em ordem sem recursão, integrado ao protocolo nativo de Julia;
+
+- uma visualização simples para depuração.
+
+Vale notar que essa BST não se autobalanceia: sequências de inserção adversas podem degenerar sua altura e, com isso, o custo de todas as operações. Um próximo passo natural seria implementar rotações e transformar essa estrutura em uma árvore balanceada, como uma AVL ou uma rubro-negra, reaproveitando os mesmos tipos abstratos `BinaryTree` e `BinaryTreeNode` definidos aqui.
+
+E por hoje, é só! Até a próxima!
