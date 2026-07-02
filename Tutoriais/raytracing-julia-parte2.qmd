@@ -1,0 +1,628 @@
+---
+title: "Raytracing com Julia (Parte 2)"
+description: |
+  Na primeira parte, construímos a infraestrutura básica de um Raytracer: geração de imagens PPM, a classe vec3, raios e um modelo simples de câmera. Nessa segunda parte, daremos vida à cena introduzindo interseções raio-esfera, vetores normais, uma abstração genérica para objetos da cena e antialiasing por múltiplas amostras.
+categories:
+  -  Raytracing
+  -  Algebra Linear
+  -  Imagens
+  -  Projeção
+author:
+  - name: João Vitor Hartung Toppa
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/jvtoppa
+date: "2026-04-11"
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+execute:
+  echo: true
+  warning: false
+#jupyter: julia
+draft: false
+---
+```{julia}
+using Pkg
+Pkg.add("FileIO")
+Pkg.add("ImageMagick")
+Pkg.add("ImageIO")
+```
+
+# Introdução
+
+Na primeira parte desse tutorial, construímos toda a infraestrutura necessária para começar a renderizar: um formato de imagem (PPM), uma classe de vetores (`vec3`), a representação de um raio e um modelo de câmera capaz de disparar raios através de cada pixel. O resultado foi um simples gradiente de céu.
+
+Nessa segunda parte, vamos:
+
+- Deduzir e implementar a interseção entre um raio e uma esfera;
+
+- Calcular vetores normais na superfície e usá-los para colorir a esfera;
+
+- Generalizar nosso código para suportar múltiplos objetos na cena através de uma abstração `Hittable`;
+
+- Introduzir antialiasing através de múltiplas amostras por pixel.
+
+Para manter a continuidade, vamos reaproveitar o código de `vec3`, `ray` e `RayCamera` construído anteriormente.
+
+```{julia}
+#| echo: true
+#| code-fold: true
+#| code-summary: "Código da Parte 1 (vec3, ray, write_color)"
+
+struct vec3
+    x::Float32
+    y::Float32
+    z::Float32
+end
+
+vec3(x::Real, y::Real, z::Real) = vec3(Float32(x), Float32(y), Float32(z))
+
+const color = vec3
+const point3 = vec3
+
+@inline function Base.:+(v1::vec3, v2::vec3)
+    return vec3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z)
+end
+
+@inline function Base.:-(v1::vec3, v2::vec3)
+    return vec3(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z)
+end
+
+@inline function Base.:-(v::vec3)
+    return vec3(-v.x, -v.y, -v.z)
+end
+
+@inline function Base.:*(v1::vec3, v2::vec3)
+    return vec3(v1.x * v2.x, v1.y * v2.y, v1.z * v2.z)
+end
+
+@inline function Base.:*(t::Float32, v::vec3)
+    return vec3(t * v.x, t * v.y, t * v.z)
+end
+
+@inline function Base.:*(v::vec3, t::Float32)
+    return t * v
+end
+
+@inline function Base.:/(v::vec3, t::Float32)
+    return (1f0/t) * v
+end
+
+@inline function length_squared(v::vec3)
+    return v.x*v.x + v.y*v.y + v.z*v.z
+end
+
+@inline function len(v::vec3)
+    return sqrt(length_squared(v))
+end
+
+@inline function dot(v1::vec3, v2::vec3)
+    return v1.x*v2.x + v1.y*v2.y + v1.z*v2.z
+end
+
+@inline function cross(v1::vec3, v2::vec3)
+    return vec3(
+        v1.y * v2.z - v1.z * v2.y,
+        v1.z * v2.x - v1.x * v2.z,
+        v1.x * v2.y - v1.y * v2.x
+    )
+end
+
+@inline function unit_vector(v::vec3)
+    return v / len(v)
+end
+
+Base.@kwdef struct ray
+    origin::vec3
+    direction::vec3
+end
+
+@inline function at(t::Float32, r::ray)
+    return r.origin + t * r.direction
+end
+
+@inline function write_color(io::IO, pixel_color::color)
+    r = pixel_color.x
+    g = pixel_color.y
+    b = pixel_color.z
+
+    rbyte = clamp(round(255f0 * r), 0f0, 255f0)
+    gbyte = clamp(round(255f0 * g), 0f0, 255f0)
+    bbyte = clamp(round(255f0 * b), 0f0, 255f0)
+
+    println(io, "$(Int(rbyte)) $(Int(gbyte)) $(Int(bbyte))")
+    return
+end
+
+Base.@kwdef struct RayCamera
+    center::vec3
+    pixel00_loc::vec3
+    pixel_delta_u::vec3
+    pixel_delta_v::vec3
+    image_width::Int32
+    image_height::Int32
+    samples_per_pixel::Int32
+    image_name
+end
+
+function setup_camera(;
+    aspect_ratio::Float32 = 16.0f0/9.0f0,
+    image_width::Int32 = Int32(400),
+    focal_length::Float32 = 1.0f0,
+    viewport_height::Float32 = 2.0f0,
+    camera_center::vec3 = vec3(0.0f0, 0.0f0, 0.0f0),
+    samples_per_pixel::Int32 = Int32(10),
+    image_name ="image.ppm"
+)
+    image_height = Int32(round(image_width / aspect_ratio))
+    viewport_width = viewport_height * Float32(image_width) / Float32(image_height)
+
+    viewport_u = vec3(viewport_width, 0.0f0, 0.0f0)
+    viewport_v = vec3(0.0f0, -viewport_height, 0.0f0)
+
+    pixel_delta_u = viewport_u / Float32(image_width)
+    pixel_delta_v = viewport_v / Float32(image_height)
+
+    viewport_upper_left = camera_center -
+                         vec3(0.0f0, 0.0f0, focal_length) -
+                         viewport_u/2.0f0 -
+                         viewport_v/2.0f0
+    pixel00_loc = viewport_upper_left + 0.5f0 * (pixel_delta_u + pixel_delta_v)
+
+    return RayCamera(
+        camera_center,
+        pixel00_loc,
+        pixel_delta_u,
+        pixel_delta_v,
+        image_width,
+        image_height,
+        samples_per_pixel,
+        image_name
+    )
+end
+
+@inline function get_pixel_center(camera::RayCamera, i::Int32, j::Int32)
+    return camera.pixel00_loc +
+           (Float32(i-1) * camera.pixel_delta_u) +
+           (Float32(j-1) * camera.pixel_delta_v)
+end
+```
+
+# Interseção raio-esfera
+
+Esferas são o objeto favorito de quem escreve um raytracer: sua equação implícita é simples e sua interseção com um raio pode ser resolvida analiticamente, sem métodos numéricos. Vamos aproveitar isso.
+
+A equação de uma esfera de raio $r$ centrada na origem é
+
+$$x^2 + y^2 + z^2 = r^2.$$
+
+Dito de outra forma: se um ponto $(x,y,z)$ está sobre a esfera, essa equação é satisfeita. Se o centro da esfera está em $C = (C_x, C_y, C_z)$, a equação fica
+
+$$(x - C_x)^2 + (y - C_y)^2 + (z - C_z)^2 = r^2.$$
+
+Em notação vetorial, com $P = (x,y,z)$, isso pode ser reescrito como um produto interno:
+
+$$(P - C)\cdot(P - C) = r^2.$$
+
+Queremos saber se existe algum $t$ para o qual o ponto $P(t) = A + tb$ (nosso raio) satisfaz essa equação. Substituindo:
+
+$$(A + tb - C)\cdot(A + tb - C) = r^2.$$
+
+Expandindo os termos, chegamos a uma equação quadrática em $t$:
+
+$$t^2 (b\cdot b) + 2t\, b\cdot(A-C) + (A-C)\cdot(A-C) - r^2 = 0.$$
+
+Ou seja, temos $a t^2 + b t + c = 0$, com:
+
+- $a = b \cdot b$
+
+- $b = 2\, b \cdot (A - C)$
+
+- $c = (A-C)\cdot(A-C) - r^2$
+
+O discriminante $\Delta = b^2 - 4ac$ nos diz quantas soluções reais existem: se $\Delta < 0$, o raio não intercepta a esfera; se $\Delta = 0$, o raio é tangente; se $\Delta > 0$, há duas interseções (entrada e saída).
+
+Podemos simplificar a álgebra observando que $b\cdot(A-C) = 2h$, o que elimina alguns fatores de 2 nas contas. Usaremos essa forma simplificada na implementação.
+
+```{julia}
+#| echo: true
+
+Base.@kwdef struct sphere
+    center::point3
+    radius::Float32
+end
+
+@inline function hit_sphere(s::sphere, r::ray)
+    oc = s.center - r.origin
+    a = length_squared(r.direction)
+    h = dot(r.direction, oc)
+    c = length_squared(oc) - s.radius * s.radius
+    discriminant = h*h - a*c
+
+    if discriminant < 0f0
+        return -1.0f0
+    else
+        return (h - sqrt(discriminant)) / a
+    end
+end
+```
+
+A função retorna o menor valor de $t$ (a interseção mais próxima da câmera) caso o raio atinja a esfera, ou $-1$ caso contrário. Vamos usar isso para colorir de vermelho qualquer pixel cujo raio atinja uma esfera de teste posicionada em frente à câmera:
+
+```{julia}
+#| echo: true
+
+@inline function ray_color_v1(r::ray)
+    s = sphere(center=point3(0.0f0, 0.0f0, -1.0f0), radius=0.5f0)
+    t = hit_sphere(s, r)
+    if t > 0.0f0
+        return color(1.0f0, 0.0f0, 0.0f0)
+    end
+
+    unit_direction = unit_vector(r.direction)
+    a = 0.5f0 * (unit_direction.y + 1.0f0)
+    return (1.0f0 - a) * color(1.0f0, 1.0f0, 1.0f0) + a * color(0.5f0, 0.7f0, 1.0f0)
+end
+
+function gen_v1(camera::RayCamera)
+    io = open(camera.image_name, "w")
+    write(io, "P3\n$(camera.image_width) $(camera.image_height)\n255\n")
+
+    for j in 1:camera.image_height
+        for i in 1:camera.image_width
+            pixel_center = get_pixel_center(camera, Int32(i), Int32(j))
+            ray_direction = pixel_center - camera.center
+            r = ray(camera.center, ray_direction)
+
+            pixel_color = ray_color_v1(r)
+            write_color(io, pixel_color)
+        end
+    end
+
+    close(io)
+end
+```
+
+```{julia}
+gen_v1(setup_camera(image_name="image4.ppm"))
+img = load("image4.ppm")
+save("image4.png", img)
+
+img
+```
+
+Temos nosso primeiro objeto na cena! Ainda que essa esfera vermelha não seja muito empolgante visualmente, é a prova de que nossa matemática de interseção está correta.
+
+# Vetores normais
+
+Sombrear uma esfera vermelha uniforme não é muito interessante. Queremos que a superfície pareça tridimensional. Para isso, precisamos de vetores normais: vetores perpendiculares à superfície no ponto de interseção, que nos dizem "para onde a superfície está olhando" naquele ponto.
+
+Para uma esfera, a normal em um ponto $P$ da superfície é simplesmente o vetor que vai do centro até $P$, normalizado:
+
+$$\vec{n} = \frac{P - C}{r}.$$
+
+Uma forma comum e visualmente informativa de depurar normais é mapear cada componente $(x, y, z)$ do vetor normal (que está no intervalo $[-1, 1]$) para o intervalo de cor $[0, 1]$. Fazemos isso mapeando $\vec{n}$ para $\frac{1}{2}(\vec{n} + 1)$ em cada componente:
+
+```{julia}
+#| echo: true
+
+@inline function hit_sphere_t(s::sphere, r::ray)
+    oc = s.center - r.origin
+    a = length_squared(r.direction)
+    h = dot(r.direction, oc)
+    c = length_squared(oc) - s.radius * s.radius
+    discriminant = h*h - a*c
+
+    if discriminant < 0f0
+        return -1.0f0
+    else
+        return (h - sqrt(discriminant)) / a
+    end
+end
+
+@inline function ray_color_v2(r::ray)
+    s = sphere(center=point3(0.0f0, 0.0f0, -1.0f0), radius=0.5f0)
+    t = hit_sphere_t(s, r)
+
+    if t > 0.0f0
+        n = unit_vector(at(t, r) - point3(0.0f0, 0.0f0, -1.0f0))
+        return 0.5f0 * color(n.x + 1.0f0, n.y + 1.0f0, n.z + 1.0f0)
+    end
+
+    unit_direction = unit_vector(r.direction)
+    a = 0.5f0 * (unit_direction.y + 1.0f0)
+    return (1.0f0 - a) * color(1.0f0, 1.0f0, 1.0f0) + a * color(0.5f0, 0.7f0, 1.0f0)
+end
+
+function gen_v2(camera::RayCamera)
+    io = open(camera.image_name, "w")
+    write(io, "P3\n$(camera.image_width) $(camera.image_height)\n255\n")
+
+    for j in 1:camera.image_height
+        for i in 1:camera.image_width
+            pixel_center = get_pixel_center(camera, Int32(i), Int32(j))
+            ray_direction = pixel_center - camera.center
+            r = ray(camera.center, ray_direction)
+
+            pixel_color = ray_color_v2(r)
+            write_color(io, pixel_color)
+        end
+    end
+
+    close(io)
+end
+```
+
+```{julia}
+gen_v2(setup_camera(image_name="image5.ppm"))
+img = load("image5.ppm")
+save("image5.png", img)
+
+img
+```
+
+Agora nossa esfera revela sua curvatura através de um gradiente de cores, em que cada direção da normal vira uma cor diferente. Isso é exatamente o tipo de visualização que usaremos para depurar geometria mais complexa no futuro.
+
+# Generalizando
+
+Até aqui, `ray_color` conhece explicitamente uma única esfera. Isso não escala: queremos cenas com várias esferas (e, futuramente, outros tipos de geometria). A solução clássica é criar uma abstração comum que qualquer objeto "atingível" por um raio deve implementar.
+
+Também vamos introduzir dois conceitos auxiliares:
+
+- Um `hit_record`, struct que guarda as informações de uma interseção (ponto, normal, parâmetro $t$ e se a normal aponta para fora ou para dentro do objeto);
+
+- Um `interval`, que representa o intervalo válido de $t$ para considerarmos uma interseção (evitando, por exemplo, interseções "atrás" da câmera ou artefatos numéricos muito próximos de $t=0$).
+
+```{julia}
+#| echo: true
+
+Base.@kwdef struct interval
+    tmin::Float32 = -Inf32
+    tmax::Float32 = Inf32
+end
+
+@inline function surrounds(iv::interval, x::Float32)
+    return iv.tmin < x < iv.tmax
+end
+
+mutable struct hit_record
+    p::point3
+    normal::vec3
+    t::Float32
+    front_face::Bool
+end
+
+@inline function set_face_normal!(rec::hit_record, r::ray, outward_normal::vec3)
+    rec.front_face = dot(r.direction, outward_normal) < 0f0
+    rec.normal = rec.front_face ? outward_normal : -outward_normal
+end
+```
+
+O papel do `front_face` é registrar se o raio veio de fora do objeto (a normal aponta contra o raio) ou de dentro (a normal aponta a favor do raio). Isso será essencial quando, em partes futuras, adicionarmos materiais que precisam saber de qual lado da superfície o raio está vindo.
+
+Agora podemos reescrever a interseção da esfera para preencher um `hit_record`, respeitando um intervalo de $t$ válido:
+
+```{julia}
+#| echo: true
+
+@inline function hit(s::sphere, r::ray, ray_t::interval, rec::hit_record)
+    oc = s.center - r.origin
+    a = length_squared(r.direction)
+    h = dot(r.direction, oc)
+    c = length_squared(oc) - s.radius * s.radius
+    discriminant = h*h - a*c
+
+    if discriminant < 0f0
+        return false
+    end
+
+    sqrtd = sqrt(discriminant)
+
+    root = (h - sqrtd) / a
+    if !surrounds(ray_t, root)
+        root = (h + sqrtd) / a
+        if !surrounds(ray_t, root)
+            return false
+        end
+    end
+
+    rec.t = root
+    rec.p = at(rec.t, r)
+    outward_normal = (rec.p - s.center) / s.radius
+    set_face_normal!(rec, r, outward_normal)
+
+    return true
+end
+```
+
+Note que agora testamos as duas raízes da equação quadrática: primeiro a mais próxima (`h - sqrtd`); se ela cair fora do intervalo aceito, tentamos a mais distante (`h + sqrtd`).
+
+## Uma lista de objetos
+
+Com a interseção genérica pronta, falta um jeito de testar vários objetos ao mesmo tempo e ficar apenas com a interseção mais próxima da câmera. Como ainda não temos múltiplos tipos concretos de `Hittable` (só esferas por enquanto), vamos representar a cena como um vetor de esferas e percorrê-lo, guardando sempre o menor `t` encontrado:
+
+```{julia}
+#| echo: true
+
+@inline function hit_scene(spheres::Vector{sphere}, r::ray, ray_t::interval)
+    rec = hit_record(point3(0,0,0), vec3(0,0,0), 0.0f0, true)
+    hit_anything = false
+    closest_so_far = ray_t.tmax
+
+    for s in spheres
+        temp_rec = hit_record(point3(0,0,0), vec3(0,0,0), 0.0f0, true)
+        if hit(s, r, interval(tmin=ray_t.tmin, tmax=closest_so_far), temp_rec)
+            hit_anything = true
+            closest_so_far = temp_rec.t
+            rec = temp_rec
+        end
+    end
+
+    return hit_anything, rec
+end
+```
+
+Repare que, a cada objeto atingido, encolhemos o intervalo de busca (`tmax = closest_so_far`). Isso significa que objetos atrás de um já encontrado nunca serão considerados. Isso é exatamente o que precisamos para renderizar oclusão corretamente.
+
+Com isso, `ray_color` fica bem mais elegante e desacoplado de qualquer esfera específica:
+
+```{julia}
+#| echo: true
+
+@inline function ray_color_v3(r::ray, spheres::Vector{sphere})
+    hit_anything, rec = hit_scene(spheres, r, interval(tmin=0.0f0, tmax=Inf32))
+
+    if hit_anything
+        n = rec.normal
+        return 0.5f0 * color(n.x + 1.0f0, n.y + 1.0f0, n.z + 1.0f0)
+    end
+
+    unit_direction = unit_vector(r.direction)
+    a = 0.5f0 * (unit_direction.y + 1.0f0)
+    return (1.0f0 - a) * color(1.0f0, 1.0f0, 1.0f0) + a * color(0.5f0, 0.7f0, 1.0f0)
+end
+```
+
+Vamos testar com duas esferas: a esfera pequena de sempre e uma esfera enorme fazendo o papel de "chão":
+
+```{julia}
+#| echo: true
+
+function gen_v3(camera::RayCamera, spheres::Vector{sphere})
+    io = open(camera.image_name, "w")
+    write(io, "P3\n$(camera.image_width) $(camera.image_height)\n255\n")
+
+    for j in 1:camera.image_height
+        for i in 1:camera.image_width
+            pixel_center = get_pixel_center(camera, Int32(i), Int32(j))
+            ray_direction = pixel_center - camera.center
+            r = ray(camera.center, ray_direction)
+
+            pixel_color = ray_color_v3(r, spheres)
+            write_color(io, pixel_color)
+        end
+    end
+
+    close(io)
+end
+
+scene = [
+    sphere(center=point3(0.0f0, 0.0f0, -1.0f0), radius=0.5f0),
+    sphere(center=point3(0.0f0, -100.5f0, -1.0f0), radius=100.0f0)
+]
+
+gen_v3(setup_camera(image_name="image6.ppm"), scene)
+img = load("image6.ppm")
+save("image6.png", img)
+
+img
+```
+
+Agora temos uma cena de verdade: uma pequena esfera "flutuando" sobre um chão curvo (na escala em que estamos vendo, uma esfera de raio 100 parece praticamente plana).
+
+# Antialiasing
+
+Se você observar de perto as bordas da esfera na imagem acima, vai notar serrilhado (aliasing): cada pixel decide de forma binária se pertence ou não a um objeto, o que gera bordas "quebradas". Um raytracer real amostra múltiplos raios por pixel, com pequenos deslocamentos aleatórios, e faz a média das cores obtidas.
+
+Nosso `RayCamera` já guarda um campo `samples_per_pixel`, deixado pronto desde a Parte 1 exatamente para isso. Vamos usá-lo agora:
+
+```{julia}
+#| echo: true
+
+@inline function pixel_sample_square(camera::RayCamera)
+    px = -0.5f0 + rand(Float32)
+    py = -0.5f0 + rand(Float32)
+    return (px * camera.pixel_delta_u) + (py * camera.pixel_delta_v)
+end
+
+@inline function get_ray(camera::RayCamera, i::Int32, j::Int32)
+    pixel_center = get_pixel_center(camera, i, j)
+    pixel_sample = pixel_center + pixel_sample_square(camera)
+
+    ray_origin = camera.center
+    ray_direction = pixel_sample - ray_origin
+
+    return ray(ray_origin, ray_direction)
+end
+```
+
+A cada chamada, `get_ray` desloca o ponto de amostragem dentro do quadrado do pixel (entre `-0.5` e `0.5` de `pixel_delta_u/v`), gerando raios ligeiramente diferentes a cada amostra. Vamos também escrever uma função para escrever a cor média das amostras, aplicando correção gama simples (raiz quadrada) para deixar as cores mais próximas de como o olho humano as percebe:
+
+```{julia}
+#| echo: true
+
+@inline function linear_to_gamma(linear_component::Float32)
+    return linear_component > 0f0 ? sqrt(linear_component) : 0f0
+end
+
+@inline function write_color_avg(io::IO, pixel_color::color, samples_per_pixel::Int32)
+    scale = 1.0f0 / Float32(samples_per_pixel)
+
+    r = linear_to_gamma(pixel_color.x * scale)
+    g = linear_to_gamma(pixel_color.y * scale)
+    b = linear_to_gamma(pixel_color.z * scale)
+
+    rbyte = clamp(round(255f0 * r), 0f0, 255f0)
+    gbyte = clamp(round(255f0 * g), 0f0, 255f0)
+    bbyte = clamp(round(255f0 * b), 0f0, 255f0)
+
+    println(io, "$(Int(rbyte)) $(Int(gbyte)) $(Int(bbyte))")
+    return
+end
+```
+
+E finalmente, o laço de renderização com múltiplas amostras por pixel:
+
+```{julia}
+#| echo: true
+
+function gen_v4(camera::RayCamera, spheres::Vector{sphere})
+    io = open(camera.image_name, "w")
+    write(io, "P3\n$(camera.image_width) $(camera.image_height)\n255\n")
+
+    for j in 1:camera.image_height
+        for i in 1:camera.image_width
+            pixel_color = color(0.0f0, 0.0f0, 0.0f0)
+
+            for _ in 1:camera.samples_per_pixel
+                r = get_ray(camera, Int32(i), Int32(j))
+                pixel_color = pixel_color + ray_color_v3(r, spheres)
+            end
+
+            write_color_avg(io, pixel_color, camera.samples_per_pixel)
+        end
+    end
+
+    close(io)
+end
+```
+
+```{julia}
+gen_v4(setup_camera(image_name="image7.ppm", samples_per_pixel=Int32(100)), scene)
+img = load("image7.ppm")
+save("image7.png", img)
+
+img
+```
+
+Com 100 amostras por pixel, as bordas da esfera já ficam visivelmente mais suaves — o custo, claro, é que agora renderizamos 100 vezes mais raios. Esse é um trade-off recorrente em raytracing: qualidade visual em troca de tempo de computação, e é um dos motivos pelos quais aceleração em GPU (assunto do próximo tutorial) é tão relevante para essa técnica.
+
+# Conclusão
+
+Nessa segunda parte, evoluímos de um simples gradiente de céu para uma cena com geometria real. Resumindo o que foi construído:
+
+- Dedução e implementação da interseção analítica raio-esfera;
+
+- Cálculo de vetores normais e uso deles para visualizar a curvatura da superfície;
+
+- Uma abstração `Hittable`/`hit_record`/`interval` que desacopla `ray_color` de qualquer geometria específica;
+
+- Suporte a múltiplos objetos na cena, respeitando oclusão (o objeto mais próximo da câmera "ganha");
+
+- Antialiasing por múltiplas amostras por pixel, com correção gama.
+
+Finalmente, temos um Raytracer funcional! Se quiser aprofundar seus estudos, recomendamos o livro Raytracing in a Weekend, escrito em C++. É uma boa referência para aqueles que desejam aprender sobre técnicas e estudo de modelagem 3D com matemática e geometria analítica. 
+
+Até a próxima!

@@ -1,0 +1,268 @@
+---
+title: "Criando Pacotes em Julia"
+description: |
+  Um pacote em Julia raramente é um único arquivo isolado. Na prática, é uma coleção de módulos que se apoiam uns nos outros: tipos abstratos definindo uma interface comum, funções de Base estendidas para novos tipos, e módulos maiores que compõem módulos menores. Nesse tutorial usamos o módulo Containers como condutor para discutir como estruturar esse tipo de código.
+categories:
+  - Julia
+  - Pacotes
+  - Estruturas de Dados
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+execute:
+  echo: true
+  warning: false
+#jupyter: julia
+draft: false
+---
+
+# Introdução
+
+Em tutoriais anteriores, implementamos algumas estruturas de dados em Julia, entre elas uma árvore de busca binária que dependia de uma pilha auxiliar via `include("stack.jl")`. Chegou a hora de olhar com calma para esse `stack.jl`: o módulo `Containers`, que define `Stack` e `Queue` sobre uma interface comum. Vamos usá-lo como pretexto para falar de um assunto mais amplo, como organizar código Julia em módulos e pacotes que crescem sem virar bagunça.
+
+O código que vamos analisar tem duas partes. A primeira é o módulo `Containers`, com pilhas e filas. A segunda é o módulo `DataStructs`, que tenta juntar `Containers` e um futuro módulo de listas encadeadas (assunto de outro post) em um pacote só. Essa segunda parte, aliás, tem alguns problemas interessantes de se discutir, e vamos chegar lá.
+
+# Módulo != pacote
+
+Antes de mais nada, vale separar dois conceitos que costumam se confundir. Um módulo em Julia é apenas um namespace: um jeito de agrupar definições e controlar o que fica visível para quem usa o código. Um pacote é uma unidade de distribuição, uma pasta com `Project.toml`, `src/`, opcionalmente `test/`, que pode ser instalada com `Pkg.add` ou `] dev`.
+
+Um pacote quase sempre contém pelo menos um módulo com o mesmo nome do pacote, mas pode conter vários módulos internos. É exatamente esse o papel de `Containers`: não é o pacote inteiro, é uma peça que outro módulo maior (`DataStructs`, nesse caso) vai reunir com outras peças.
+
+A sintaxe básica de um módulo é simples:
+
+```{julia}
+#| echo: true
+#| eval: false
+
+module NomeDoModulo
+    # definições aqui
+end
+```
+
+Tudo que é definido dentro do bloco fica isolado nesse namespace por padrão. Para expor algo para quem faz `using NomeDoModulo`, é preciso declará-lo explicitamente na lista de `export`.
+
+# Containers: uma interface via tipo abstrato
+
+O primeiro passo do módulo é definir um tipo abstrato que servirá de interface comum para pilhas e filas:
+
+```{julia}
+#| echo: true
+
+abstract type Container{T} end
+
+mutable struct Stack{T} <: Container{T}
+    vec::Vector{T}
+    first::Int
+    size::Int
+end
+
+mutable struct Queue{T} <: Container{T}
+    vec::Vector{T}
+    first::Int
+    last::Int
+    size::Int
+end
+```
+
+Esse padrão (um tipo abstrato pai, com tipos concretos filhos) é o que permite escrever funções que operam sobre qualquer `Container`, sem precisar saber se por baixo há uma pilha ou uma fila:
+
+```{julia}
+#| echo: true
+
+TopIdx(cont::Container) = cont.first
+Base.size(cont::Container) = cont.size
+Base.isempty(cont::Container) = cont.first == 0
+
+function peek(cont::Container)
+    if isempty(cont)
+        error("Container is Empty.")
+    end
+    return cont.vec[TopIdx(cont)]
+end
+```
+
+Repare que `peek`, `TopIdx` e `isempty` são escritos uma única vez e funcionam tanto para `Stack` quanto para `Queue`. Esse é o ganho de projetar em torno de um tipo abstrato: a lógica compartilhada fica em um só lugar, e apenas o que realmente difere entre pilha e fila precisa de tratamento separado.
+
+# Construtores:
+
+Um detalhe que separa um módulo agradável de usar de um módulo apenas funcional é a quantidade de jeitos razoáveis que existem de construir um valor. `Containers` oferece vários:
+
+```{julia}
+#| echo: true
+
+Stack{T}() where T = Stack(T[], 0, 0)
+Stack(T::Type) = Stack(T[], 0, 0)
+Stack() = Stack(Any[], 0, 0)
+Stack(v::Vector{T}) where T = Stack(v, length(v), length(v))
+```
+
+Isso permite `Stack{Int}()`, `Stack(Int)`, `Stack()` e `Stack([1, 2, 3])`, cada um mais conveniente em um contexto diferente. Vale reparar que `Stack(v::Vector{T})` já inicializa `first` e `size` com `length(v)`, tratando o vetor recebido como se já tivesse sido empilhado elemento por elemento. É um detalhe fácil de esquecer ao escrever um construtor alternativo, e que quebraria a invariante da estrutura se fosse deixado de fora.
+
+# Estender Base ou criar sua própria função?
+
+`Containers` faz as duas coisas, e vale entender quando cada uma faz sentido. Para `isempty`, `size`, `push!` e `pop!`, o módulo estende funções que já existem em `Base`:
+
+```{julia}
+#| echo: true
+
+function Base.push!(cont::Container{T}, elem::T) where T
+    if cont isa Stack
+        push!(cont.vec, elem)
+        cont.first += 1
+        cont.size += 1
+    elseif cont isa Queue
+        pushfirst!(cont.vec, elem)
+        if isempty(cont)
+            cont.first = 0
+            cont.last = 0
+        end
+        cont.size += 1
+        cont.first += 1
+    else
+        error("Not pushable.\n")
+    end
+    return cont
+end
+```
+
+A vantagem de estender `Base.push!` em vez de inventar um `Push!` próprio é que qualquer código já escrito para trabalhar com `push!` (por exemplo um algoritmo genérico que recebe qualquer coleção "empurrável") passa a funcionar com `Stack` e `Queue` sem alteração nenhuma. Isso é o espírito de Julia: múltiplos tipos compartilhando a mesma interface de funções, com o comportamento certo escolhido por *dispatch*.
+
+Por outro lado, `peek` não existe de forma genérica em `Base` com esse significado, então faz sentido que `Containers` defina e exporte a sua própria versão.
+
+Um ponto de melhoria vale a pena mencionar aqui. A função acima usa `if cont isa Stack ... elseif cont isa Queue` para decidir o comportamento, mas isso é exatamente o problema que o *multiple dispatch* de Julia resolve. Em vez de uma função com ramificação manual por tipo, poderíamos escrever dois métodos:
+
+```{julia}
+#| echo: true
+#| eval: false
+
+function Base.push!(cont::Stack{T}, elem::T) where T
+    push!(cont.vec, elem)
+    cont.first += 1
+    cont.size += 1
+    return cont
+end
+
+function Base.push!(cont::Queue{T}, elem::T) where T
+    pushfirst!(cont.vec, elem)
+    if isempty(cont)
+        cont.first = 0
+        cont.last = 0
+    end
+    cont.size += 1
+    cont.first += 1
+    return cont
+end
+```
+
+O comportamento final é o mesmo, mas cada método fica menor, mais fácil de testar isoladamente, e o compilador consegue especializar cada versão sem precisar checar `isa` em tempo de execução. Se amanhã você adicionar um terceiro tipo de `Container` (uma deque, por exemplo), só precisa adicionar um novo método, sem tocar nos existentes nem no `else error(...)` que serve de rede de segurança hoje.
+
+# Como Stack e Queue reaproveitam o mesmo vetor
+
+Vale entender por que a mesma estrutura de campos (`vec`, `first`, `size`) produz comportamentos opostos (LIFO para pilha, FIFO para fila) dependendo de como `push!` e `pop!` manipulam o vetor.
+
+Na `Stack`, `push!` sempre insere no final do vetor, e `pop!` remove do final do vetor. O último elemento inserido é sempre o primeiro a sair, que é exatamente a definição de LIFO (*last in, first out*).
+
+Na `Queue`, `push!` insere no início do vetor (`pushfirst!`), mas `pop!` continua removendo do final. Isso significa que, conforme novos elementos entram pela frente, os elementos mais antigos vão sendo empurrados para o final do vetor, exatamente onde `pop!` vai buscar. O resultado é FIFO, mesmo reaproveitando o `Base.pop!` genérico de vetor.
+
+```{julia}
+#| echo: true
+
+q = Queue(Int)
+push!(q, 1)
+push!(q, 2)
+push!(q, 3)
+println(q.vec)     # [3, 2, 1]
+println(pop!(q))   # 1, o primeiro que entrou
+```
+
+
+# Compondo módulos maiores
+
+Com `Containers` pronto, o próximo passo natural é reaproveitá-lo em outro lugar. Foi o que fizemos no tutorial de árvore de busca binária, incluindo o arquivo e importando o módulo:
+
+```{julia}
+#| echo: true
+#| eval: false
+
+include("stack.jl")
+using .Containers
+```
+
+O ponto antes do nome do módulo (`.Containers`) indica que estamos importando um módulo definido localmente, via `include`, e não um pacote registrado. É uma diferença sutil, mas importante: `using Containers` (sem o ponto) procuraria por um pacote instalado chamado `Containers`, enquanto `using .Containers` procura por um módulo já carregado no escopo atual.
+
+O módulo `DataStructs` do código dado é um exemplo de módulo "agregador", que tenta juntar `Containers` (via `stack.jl`) e um módulo de lista encadeada (via `linkedlist.jl`) em um único pacote maior:
+
+```{julia}
+#| echo: true
+#| eval: false
+
+module DataStructs
+    include("stack.jl")
+    using .Containers
+    include("linkedlist.jl")
+    using .LinkedLists
+
+    export Container, Stack, Queue, push!, pop!, peek, TopIdx, BottomIdx,
+           NodeLL, LinkedList
+end
+```
+
+Também vale notar o `import Base: show` no final do módulo original. Importar `show` sem definir nenhum método `Base.show(io::IO, ...)` na sequência não causa erro, mas também não faz nada: é um sinal de que o autor pretendia adicionar uma representação textual customizada (por exemplo, para imprimir uma `Stack` ou uma `LinkedList` de forma legível) e esse passo ficou pendente. Ao revisar um módulo antes de publicá-lo como pacote, `import`s sem uso costumam ser justamente esses fios soltos.
+
+# Do módulo ao pacote de verdade
+
+Tudo que vimos até aqui roda como um script com `include`, o que é ótimo durante o desenvolvimento. Para distribuir `Containers` e `DataStructs` como um pacote de verdade, os passos são:
+
+```{julia}
+#| echo: true
+#| eval: false
+
+using Pkg
+Pkg.generate("DataStructs")
+```
+
+Isso cria uma pasta `DataStructs/` com um `Project.toml` (metadados e dependências) e `src/DataStructs.jl` (o módulo principal). A convenção é que o arquivo dentro de `src/` tenha o mesmo nome do pacote e defina um módulo de mesmo nome, com os demais arquivos (`stack.jl`, `linkedlist.jl`) incluídos a partir dele, como já fazíamos manualmente.
+
+
+Com essa estrutura, `] dev ./DataStructs` (no REPL, dentro do modo Pkg) deixa o pacote disponível para `using DataStructs` em qualquer projeto local, sem precisar copiar arquivos ou usar `include` diretamente.
+
+# Testando a interface
+
+Como `Stack` e `Queue` compartilham a mesma interface pública (`push!`, `pop!`, `peek`, `isempty`, `size`), um bom teste é justamente checar se as duas se comportam como uma pilha e uma fila deveriam, usando o módulo padrão `Test`:
+
+```{julia}
+#| echo: true
+#| eval: false
+
+using Test
+
+@testset "Stack" begin
+    s = Stack(Int)
+    push!(s, 1)
+    push!(s, 2)
+    @test pop!(s) == 2
+    @test pop!(s) == 1
+    @test isempty(s)
+end
+
+@testset "Queue" begin
+    q = Queue(Int)
+    push!(q, 1)
+    push!(q, 2)
+    @test pop!(q) == 1
+    @test pop!(q) == 2
+    @test isempty(q)
+end
+```
+
+Testes assim são baratos de escrever justamente porque a interface é uniforme: o mesmo roteiro de teste (`push!`, `push!`, `pop!`, `pop!`, `isempty`) serve para qualquer `Container`, só muda a ordem esperada de saída.
+
+# Conclusão
+
+O módulo `Containers` é pequeno, mas toca em quase todas as decisões que aparecem ao estruturar um pacote maior em Julia: um tipo abstrato definindo a interface, tipos concretos implementando essa interface, extensão de funções de `Base` em vez de nomes próprios, construtores convenientes, e por fim composição de módulos menores em um módulo agregador.
+
+O módulo `DataStructs`, por sua vez, mostra o outro lado da moeda: erros de composição (listas de `export` fora de sincronia com o que foi de fato definido) que só aparecem quando alguém tenta usar o pacote de fora, e não durante o desenvolvimento isolado de cada peça. Vale sempre testar `using` a partir de um módulo limpo, e não só rodar o arquivo que define o módulo, para pegar esse tipo de problema cedo.
+
+Por hoje é só, até a próxima!
