@@ -36,6 +36,7 @@ Primeiro, vamos instalar e carregar os pacotes necessários:
 :::
 
 ```{julia}
+#| output: false
 Pkg.add("MLJ")
 using MLJ
 Pkg.add("XGBoost") #apenas instalar
@@ -183,7 +184,7 @@ confusion_matrix(Y[teste], mode.(predict(machine_xgboost_classificacao, rows=tes
 ## Ajuste dos Hiperparâmetros
 
 ::: justify
-Ao trabalhar com modelos de aprendizado de máquina, é de interesse saber o valor ideal dos nossos hiperparâmetros em questão. No caso do XGBoost existem diversos parâmetros que podemos especificar. Felizmente, existe uma maneira mutio eficaz de comparar diversas combinações de hiperparâmetros e escolher a melhor por meio de validação cruzada.
+Ao trabalhar com modelos de aprendizado de máquina, é de interesse saber o valor ideal dos nossos hiperparâmetros em questão. No caso do XGBoost existem diversos parâmetros que podemos especificar. Felizmente, existe uma maneira muito eficaz de comparar diversas combinações de hiperparâmetros e escolher a melhor por meio de validação cruzada.
 
 Para realizar esse procedimento de escolher a melhor combinação de hiperparâmetros por meio de validação cruzada e grid search, é necessário utilizar a função `TunedModel`, que possui como argumentos:
 
@@ -192,7 +193,7 @@ Para realizar esse procedimento de escolher a melhor combinação de hiperparâm
 - `range`: valores para cada parâmetro a serem testados;
 - `measure`: métrica de erro a ser considerada para escolha do melhor valor.
 
-Com isso, para especificar os valores de cada hiperparâmetro a serem testados, é necessário utilizar a função `range`, determinando os valores mínimo e o máximo a serem considerados. Já para utilizar validação cruzada do tipo k-fold, é necessário utilizar a função `CV`, especificando por meio do argumento `nfolds` o número de dobras a serem consideradas. Para o exemplo, vou utilizar 5 folds e a acurácia por se tratar de classificações. 
+Com isso, para especificar os valores de cada hiperparâmetro a serem testados, é necessário utilizar a função `range`, determinando os valores mínimo e o máximo a serem considerados. Já para utilizar validação cruzada do tipo k-fold, é necessário utilizar a função `CV`, especificando por meio do argumento `nfolds` o número de dobras a serem consideradas. Para o exemplo, iremos utilizar 5 folds e a acurácia por se tratar de classificações. 
 :::
 ```{julia}
 Random.seed!(123)

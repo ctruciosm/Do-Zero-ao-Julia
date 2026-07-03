@@ -18,8 +18,8 @@ format:
     toc: true
     toc-depth: 3
     self-contained: false
-engine: knitr
-draft: true
+engine: julia
+draft: false
 ---
 
 ## Introdução
@@ -35,6 +35,7 @@ Neste tutorial, você aprenderá a aplicar o k-NN em Julia, incluindo a separaç
 Primeiro, vamos instalar e carregar os pacotes necessários:
 :::
 ```{julia}
+#| output: false
 Pkg.add("MLJ")
 using MLJ
 Pkg.add("NearestNeighborModels")
@@ -47,31 +48,37 @@ Pkg.add("DataFrames")
 using DataFrames
 ```
 ::: justify
-Para um k-KK do tipo regressão, a variável resposta deve ser numérica. Vamos criar o vetor `Y` com a variável resposta e o DataFrame `X` com as covariáveis:
+Para um k-NN do tipo regressão, a variável resposta deve ser numérica. Vamos criar o vetor `Y` com a variável resposta e o DataFrame `X` com as covariáveis:
 :::
 ```{julia}
+#| output: false
 Random.seed!(123)
 X1 = rand(Normal(25, 1), 100)
 X2 = rand(Normal(0, 1), 100)
 X3 = rand(Normal(5, 1), 100)
+```
+```{julia}
 Y = X1 .+ X2.*X3
+```
+```{julia}
 X = DataFrame(X1 = X1, X2 = X2, X3 = X3)
 ```
 ::: justify
-Agora, vamos seprar os dados em treino e teste utilizando a função `partition`. No caso, vamos deixar 80% dos dados para treino e os demais para teste.
+Agora, vamos separar os dados em treino e teste utilizando a função `partition`. No caso, vamos deixar 80% dos dados para treino e os demais para teste.
 :::
 ```{julia}
+#| output: false
 Random.seed!(123)
 treino, teste = partition(eachindex(Y), 0.8, shuffle=true)
 ```
 ::: justify
-Para regressão, utilizamos `KNNRegressor` e especificamos o número de vizinhos por meio do argumento `K`:
+Para regressão, utilizamos `KNNRegressor` e especificamos o número de vizinhos desejados por meio do argumento `K`:
 :::
 ```{julia}
 knn_regressao = KNNRegressor(K = 5)
 ```
 ::: justify
-Entretanto, não basta apenas ajustar o modelo. Como ele é baseado na norma euclidiana, é necessário padronizar as covariáveis, a fim de escala dos dados não influenciar na eficácia do modelo. Para isso, vamos utilizar a função `Pipeline` para espeficiar um pipeline que padroniza os dados utilizando `Standardizer` e após isso ajusta o modelo.  
+Entretanto, não basta apenas ajustar o modelo. Como ele é baseado na norma euclidiana, é necessário padronizar as covariáveis, a fim de a escala dos dados não influenciar na eficácia do modelo. Para isso, vamos utilizar a função `Pipeline` para especificar um pipeline que padroniza os dados utilizando `Standardizer` e após isso ajusta o modelo.  
 :::
 ```{julia}
 pipeline_knn_regressao = Pipeline(
@@ -82,6 +89,7 @@ pipeline_knn_regressao = Pipeline(
 Por fim, resta apenas utilizar as funções `machine` e `fit` a fim de ajustar o modelo em questão, no caso, um k-NN do tipo regressão com 5 vizinhos.
 :::
 ```{julia}
+#| output: false
 machine_knn_regressao = machine(pipeline_knn_regressao, X, Y)
 fit!(machine_knn_regressao, rows=treino)
 ```
@@ -90,6 +98,8 @@ Com o modelo ajustado, podemos fazer predições nos conjuntos de dados de trein
 :::
 ```{julia}
 predict(machine_knn_regressao, rows=treino)
+```
+```{julia}
 predict(machine_knn_regressao, rows=teste)
 ```
 ::: justify
@@ -97,6 +107,8 @@ Também é possível computar diretamente alguma métrica de erro do modelo. Por
 :::
 ```{julia}
 rms(Y[treino], predict(machine_knn_regressao, rows=treino))
+```
+```{julia}
 rms(Y[teste], predict(machine_knn_regressao, rows=teste))
 ```
 ## k-NN para Classificação
@@ -104,17 +116,23 @@ rms(Y[teste], predict(machine_knn_regressao, rows=teste))
 Também podemos utilizar o k-NN para classificação, isto é, quando nossa variável resposta é categórica. Para isso, vamos criar um vetor `Y` contendo as categorias e um DataFrame `X` contendo as covariáveis. É interessante ressaltar que a função `categorical` especifica o tipo do vetor da variável resposta como categórico, que é exigido para o ajuste do modelo.
 :::
 ```{julia}
+#| output: false
 Random.seed!(123)
 X1 = vcat([rand(Normal(mu, 1), 50) for mu in [2, 2, 17, 15]]...)
 X2 = vcat([rand(Normal(mu, 1), 50) for mu in [3, 4, 14, 16]]...)
 X3 = vcat([rand(Normal(mu, 1), 50) for mu in [3, 1, 13, 15]]...)
+```
+```{julia}
 Y = categorical(repeat(["A", "B", "C", "D"], inner=50))
+```
+```{julia}
 X = DataFrame(X1 = X1, X2 = X2, X3 = X3)
 ```
 ::: justify
 Assim como no caso anterior, podemos dividir em treino e teste utilizando a função `partition`.
 :::
 ```{julia}
+#| output: false
 Random.seed!(123)
 treino, teste = partition(eachindex(Y), 0.8, shuffle=true)
 ```
@@ -136,6 +154,7 @@ pipeline_knn_classificacao = Pipeline(
 Com isso, ajustamos o modelo utilizando as funções `machine` e `fit`.
 :::
 ```{julia}
+#| output: false
 machine_knn_classificacao = machine(pipeline_knn_classificacao, X, Y)
 fit!(machine_knn_classificacao, rows=treino)
 ```
@@ -158,6 +177,8 @@ Também podemos calcular métricas de erro para o nosso modelo, por exemplo, pod
 :::
 ```{julia}
 accuracy(mode.(predict(machine_knn_classificacao, rows=treino)), Y[treino])
+```
+```{julia}
 accuracy(mode.(predict(machine_knn_classificacao, rows=teste)), Y[teste])
 ```
 ::: justify
@@ -175,18 +196,19 @@ confusion_matrix(Y[teste], mode.(predict(machine_knn_classificacao, rows=teste))
 
 ## Ajuste do Número de Vizinhos
 ::: justify
-Ao trabalhar com modelos de aprendizado de máquina, é de interesse saber o valor ideal dos nossos hiperparâmetros em questão. No caso do k-NN, é necessário determinar qual o valor ideal de `K`. Felizmente, existe uma maneira mutio eficaz de comparar diversos valores de `K` e escolher o melhor por meio de validação cruzada.
+Ao trabalhar com modelos de aprendizado de máquina, é de interesse saber o valor ideal dos nossos hiperparâmetros em questão. No caso do k-NN, é necessário determinar qual o valor ideal de `K`. Felizmente, existe uma maneira muito eficaz de comparar diversos valores de `K` e escolher o melhor por meio de validação cruzada.
 
-Para realizar esse procedimento de escolher o melhor valor do `K` por meio de validação cruzada e grid search, é necessário utilizar a função `TunedModel`, que possui como argumentos:
+Para realizar esse procedimento de escolher automaticamente o melhor valor de `K` por meio de uma busca em grade (grid search) avaliada com validação cruzada, é necessário utilizar a função `TunedModel`, que possui como argumentos:
 
 - `model`: modelo a ser ajustado;
 - `resampling`: técnica de divisão dos dados;
 - `range`: valores de `K` a serem avaliados;
 - `measure`: métrica de erro a ser considerada para escolha do melhor valor.
 
-Com isso, para especificar os valores de `K` a serem testados, é necessário utilizar a função `range`, determinando os valores mínimo e o máximo a serem considerados. Já para utilizar validação cruzada do tipo k-fold, é necessário utilizar a função `CV`, especificando em `nfolds` o número de dobras a serem consideradas. Para o exemplo, vou utilizar 5 folds e a acurácia por se tratar de classificações. 
+Com isso, para especificar os valores de `K` a serem testados, é necessário utilizar a função `range`, determinando os valores mínimo e o máximo a serem considerados. Já para utilizar validação cruzada do tipo k-fold, é necessário utilizar a função `CV`, especificando em `nfolds` o número de dobras a serem consideradas. Para o exemplo, iremos utilizar 5 folds e a acurácia por se tratar de classificações. 
 :::
 ```{julia}
+#| output: false
 Random.seed!(123)
 valores_k = range(knn_classificacao, :K, lower=1, upper=10)
 knn_escolher_k = TunedModel(model=knn_classificacao,
@@ -196,10 +218,11 @@ knn_escolher_k = TunedModel(model=knn_classificacao,
 
 ```
 ::: justify
-Assim como no modelo anterior, é necessário padronizar as covariáveis, e criamos um pipeline da mesma forma.
+Assim como no modelo anterior, é necessário padronizar as covariáveis, para isso, criaremos um pipeline da mesma forma:
 :::
 
 ```{julia}
+#| output: false
 pipeline_melhor_k = Pipeline(
     standardizer = Standardizer(),
     modelo = knn_escolher_k)
@@ -209,22 +232,25 @@ pipeline_melhor_k = Pipeline(
 Para ajustar o modelo, novamente utilizamos as funções `machine` e `fit`.
 :::
 ```{julia}
+#| output: false
 machine_escolher_k = machine(pipeline_melhor_k, X, Y)
 fit!(machine_escolher_k)
 ```
 ::: justify
-Agora, para extrair o melhor modelo, utilizamos a função `fitted_params` e especificamos o melhor modelo com `.best_model`. No caso, o melhor modelo variando o número de vizinhos de 1 a 10 foi aquele com 4 vizinhos. 
+Como o modelo ajustado faz parte de um Pipeline, os parâmetros ajustados ficam organizados por etapa do pipeline. Assim, acessamos primeiro o componente modelo e, em seguida, o `best_model`. No caso, o melhor modelo variando o número de vizinhos de 1 a 10, foi: 
 :::
 ```{julia}
-melhor_knn = fitted_params(machine_escolher_k).best_model
+melhor_knn = fitted_params(machine_escolher_k).modelo.best_model
 ```
 
 ## Conclusão
 
 ::: justify
-O k-NN é um método intuitivo e flexível, adequado para diversas tarefas de aprendizado supervisionado. Ele não exige modelagem explícita da relação entre covariáveis e respostas, o que o torna ideal para situações em que a estrutura dos dados é complexa ou desconhecida.
+O k-NN é um algoritmo simples de compreender, mas bastante eficiente quando utilizado corretamente. Como seu desempenho depende diretamente da medida de distância entre as observações, etapas como a padronização das covariáveis e a escolha adequada do número de vizinhos são fundamentais.
 
-Neste tutorial, mostramos como implementar o k-NN em Julia para regressão e classificação, enfatizando etapas cruciais como padronização das covariáveis, avaliação de métricas de erro, interpretação de predições e escolha do número ideal de vizinhos por validação cruzada.
+Neste tutorial, vimos como utilizar o k-NN em Julia tanto para regressão quanto para classificação, desde a preparação dos dados até a avaliação do modelo. Também mostramos como empregar validação cruzada para selecionar automaticamente o melhor valor de `K`, tornando o processo de modelagem mais robusto e confiável.
+
+Apesar de sua simplicidade, o k-NN continua sendo uma excelente alternativa para diversos problemas de aprendizado supervisionado, servindo tanto como modelo inicial de comparação quanto como uma solução competitiva em aplicações práticas.
 :::
 
 ::: callout-note
