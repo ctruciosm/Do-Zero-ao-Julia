@@ -1,6 +1,6 @@
 ---
-title: "Simulação em Julia: SIm Julia"
-description: Como realizar simulações computacionais na linguagem Julia com o pacote SimJulia, ideal para modelar sistemas baseados em eventos discretos como filas, processos industriais e redes. Entenda por que Julia é uma das melhores escolhas para simulação científica, unindo velocidade, clareza e produtividade.
+title: "Simulação em Julia: SimJulia"
+description: Como realizar simulações computacionais na linguagem Julia com o pacote SimJulia, ideal para modelar sistemas baseados em eventos discretos como filas, processos industriais e redes. Entenda também por que Julia é uma das melhores escolhas para simulação científica, unindo velocidade, clareza e produtividade.
 
 categories:
   - Simulação Computacional
@@ -26,19 +26,19 @@ draft: false
 engine: knitrNet
 ---
 
-## **O que é Simulação em Julia**
+## **O que é simulação em Julia?**
 
 A simulação computacional consiste em criar modelos matemáticos para estudar sistemas reais ou imaginários, permitindo prever comportamentos ou testar hipóteses sem custos do mundo físico. Julia é excelente para esta tarefa graças à sua alta performance e sintaxe simples, bastante amigável para cientistas e engenheiros.
 
-## **Porque Escolher Julia para Simulação**
+## **Porque escolher Julia para simulação?**
 
 Julia combina a agilidade de linguagens interpretadas como Python com a velocidade de linguagens compiladas, tornando a execução de simulações extensas muito mais rápida. O ecossistema de Julia tem pacotes específicos para diferentes tipos de simulação, desde física, química, até finanças e engenharia.
 
-## **Pacote SimJulia: Simulando Eventos Discretos**
+## **Pacote SimJulia: Simulando eventos discretos**
 
 O **SimJulia** é um pacote robusto para simulação de eventos discretos, muito utilizado para modelar sistemas como filas, redes logísticas, fábricas e qualquer contexto em que eventos ocorram de forma assíncrona no tempo. Ele se inspira na biblioteca SimPy do Python e utiliza funções especiais e a poderosa abstração de processos.
 
-## **Principais Características**
+## **Principais características**
 
 -   Modelagem baseada em processos: cada componente ativo do sistema é um processo independente.
 
@@ -46,7 +46,7 @@ O **SimJulia** é um pacote robusto para simulação de eventos discretos, muito
 
 -   Sintaxe clara e concisa, aproveitando recursos do Julia como funções resumáveis e corrotinas.
 
-## **Como Instalar e Usar o SimJulia**
+## **Como instalar e usar o SimJulia**
 
 A instalação do SimJulia é fácil e segue o padrão dos pacotes Julia:
 
@@ -58,7 +58,7 @@ Pkg.add("ResumableFunctions")
 
 Depois da instalação, basta importar o pacote e começar a construir simulações com base nos exemplos da documentação oficial.
 
-## **Exemplo Prático: Dois Relógios Ticando**
+## **Exemplo prático: Dois relógios ticando**
 
 Veja abaixo um exemplo curto de uso do SimJulia, mostrando dois "relógios" que marcam tempo em diferentes intervalos:
 
@@ -82,11 +82,11 @@ run(sim, 2)
 
 Em resumo esse código cria dois processos paralelos e independentes que simulam relógios e exibe "ticks" em tempos diferentes, modelando concorrência e eventos discretos.
 
-Esse tipo de código é usado para **simular sistemas que evoluem ao longo do tempo de forma discreta**, ou seja, **eventos acontecem em momentos específicos**, não continuamente.\
+Esse tipo de código é usado para **simular sistemas que evoluem ao longo do tempo de forma discreta**, ou seja, **eventos que acontecem em momentos específicos**, não continuamente.\
 
 Em vez de resolver equações diferenciais (como na simulação contínua), você modela *quem faz o quê, quando*.
 
-## **Dicas para Modelar com SimJulia**
+## **Dicas para modelar com SimJulia**
 
 -   Planeje seu sistema identificando os processos ativos.
 
