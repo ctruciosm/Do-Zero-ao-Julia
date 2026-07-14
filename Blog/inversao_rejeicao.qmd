@@ -1,7 +1,7 @@
 ---
 title: "Amostra de Variáveis Aleatórias com métodos de Inversão e Rejeição em Julia"
 description: |
-     Veja a implementação dos Métodos de Rejeição e Inversão em Julia, ferramentas poderosas para amostras diversas distribuições de probabilidade. 
+     Veja a implementação dos Métodos de Rejeição e Inversão em Julia, ferramentas poderosas para amostras de diversas distribuições de probabilidade. 
 categories:
   - Ferramentas 
 author:
@@ -17,7 +17,8 @@ format:
     toc: true
     toc-depth: 3
     self-contained: false
-draft: true
+draft: false
+engine: julia
 ---
 
 ## Introdução
@@ -32,6 +33,7 @@ Apesar de sua importância, ainda não existe em Julia um pacote dedicado que fo
 Em primeiro lugar, vamos carregar os pacotes que serão utilizados:
 :::
 ```{julia}
+#| output: false
 Pkg.add("Distributions")
 using Distributions
 Pkg.add("StatsPlots")
@@ -95,7 +97,7 @@ function amostra_rejeicao(n, f, g, amostra_g, C)
 end
 ```
 ::: justify
-Para exemplificar, vamos obter uma amostra de tamanho 1000 da distribuição Beta(2,2) utilizando como distribuição auxiliar a Uniforme(0,1).Após fazer as contas, a constante C necessária é 3/2. 
+Para exemplificar, vamos obter uma amostra de tamanho 1000 da distribuição Beta(2,2) utilizando como distribuição auxiliar a Uniforme(0,1). Após realizar as contas, a constante C necessária para que o método seja aplicável é 3/2. 
 :::
 ```{julia}
 densidade_beta(x) = 6*(x - x^2)
