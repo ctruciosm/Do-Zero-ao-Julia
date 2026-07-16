@@ -23,10 +23,10 @@ format:
     toc: true
     self-contained: false
 draft: false
-engine: knitrNet
+engine: julia
 ---
 
-## **Blog: Entendendo Vetorização na Linguagem Julia**
+## **Entendendo Vetorização na Linguagem Julia**
 
 ### O que é Vetorização?
 
@@ -34,7 +34,7 @@ A vetorização é uma técnica que permite executar operações sobre vetores e
 
 Em Julia, a vetorização é extremamente natural, pois a linguagem foi projetada para combinar **simplicidade matemática com alta performance**, sem perder a velocidade de linguagens compiladas como C ou Fortran.
 
-### Por que Vetorizar Código?
+### Por que vetorizar código?
 
 Vetorizar é vantajoso porque:
 
@@ -44,7 +44,7 @@ Vetorizar é vantajoso porque:
 
 -   **Facilita cálculos científicos e estatísticos** com arrays e matrizes.
 
-### Vetorização em Julia na Prática
+### Vetorização em Julia na prática
 
 Vamos ver um exemplo simples.\
 
@@ -64,34 +64,34 @@ y_vectorized = x .^ 2
 
 println("Sem vetorização: ", y_loop)
 println("Com vetorização: ", y_vectorized)
-
 ```
-
-Saidas\
-Sem vetorização: \[1, 4, 9, 16, 25\]
-
-Com vetorização: \[1, 4, 9, 16, 25\]
 
 \
 Repare no operador `.^` — o **ponto (.)** antes do operador indica uma **operação element-wise**, ou seja, aplicada a cada elemento do vetor.
 
-### Operadores e Funções Vetorizadas
+### Operadores e funções vetorizadas
 
 Em Julia, quase todas as operações podem ser “pontuadas” para funcionar sobre arrays:
 
 ```{julia}
 A = [1, 2, 3]
 B = [4, 5, 6]
-
+```
+```{julia}
 # Operações element-wise
 A .+ B      # Soma elemento a elemento
+```
+```{julia}
 A .* B      # Multiplicação elemento a elemento
+```
+```{julia}
 sin.(A)     # Aplica seno a cada elemento
+```
+```{julia}
 exp.(A)     # Aplica exponencial a cada elemento
-
 ```
 
-### Funções Personalizadas Vetorizadas
+### Funções personalizadas vetorizadas
 
 Você também pode **vetorizar suas próprias funções** facilmente usando o mesmo ponto (`.`):
 
@@ -101,16 +101,12 @@ valores = [1, 2, 3, 4]
 
 resultado = f.(valores)
 println(resultado)
-
 ```
 
-Saida:
-
-\[6, 17, 34, 57\]\
 \
-Sem o ponto (`.`), Julia esperaria que `f` recebesse apenas um número — com o ponto, ela aplica a função a **cada elemento do vetor** automaticamente.
+Sem o ponto (`.`), Julia esperaria que `f` recebesse apenas um número, mas com o ponto, ela aplica a função a **cada elemento do vetor** automaticamente.
 
-### Benefícios de Performance
+### Benefícios de performance
 
 Em linguagens como Python, a vetorização é uma forma de “escapar” da lentidão dos loops.\
 
@@ -122,7 +118,7 @@ Já em **Julia**, loops são naturalmente rápidos, mas ainda assim a vetorizaç
 
 -   Menos erros e maior clareza matemática.
 
-### Dica Extra: Broadcasting com “.” Funciona em Tudo
+### Dica extra: broadcasting com “.” funciona em tudo
 
 O operador `.` não serve apenas para operações matemáticas — ele funciona com **qualquer função ou operador**, inclusive estruturas compostas:
 
@@ -131,12 +127,7 @@ O operador `.` não serve apenas para operações matemáticas — ele funciona 
 M = [1 2; 3 4]
 dobrado = (x -> 2x).(M)
 println(dobrado)
-
 ```
-
-Saida:
-
-\[2 4; 6 8\]
 
 **Conclusão**
 
