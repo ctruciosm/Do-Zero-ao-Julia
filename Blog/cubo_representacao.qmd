@@ -1,0 +1,211 @@
+---
+title: "Representando um Cubo de Rubik em Julia com CairoMakie"
+description: |
+  Aprenda como modelar um Cubo de Rubik utilizando matrizes em Julia e desenhá-lo em duas dimensões com CairoMakie.
+categories:
+  - Julia
+  - Visualização
+  - Estruturas de Dados
+  - CairoMakie
+author:
+  - name: Rafael Seixas
+    affiliation: Universidade Estadual de Campinas
+date: "2026-07-16"
+image: imagens/rubik2d.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+engine: julia
+draft: false
+---
+
+# Introdução
+
+Quando pensamos no Cubo de Rubik, geralmente imaginamos um quebra-cabeça tridimensional composto por pequenas peças coloridas. Entretanto, do ponto de vista computacional, ele nada mais é do que um conjunto de informações que precisam ser armazenadas e manipuladas.
+
+Antes de implementar algoritmos de resolução ou animações, precisamos responder a uma pergunta fundamental:
+
+> **Como representar um Cubo de Rubik dentro de um programa?**
+
+Existem diversas maneiras de fazer isso. Algumas implementações armazenam cada peça individualmente, enquanto outras utilizam grafos ou permutações. Neste post adotaremos uma abordagem bastante intuitiva: representar cada face do cubo como uma matriz `3×3`.
+
+Além de simples, essa representação facilita a visualização do estado do cubo e serve como base para futuras implementações de movimentos e algoritmos de busca.
+
+# Representando as faces
+
+Cada face do cubo possui nove adesivos organizados em uma grade `3×3`.
+
+Em Julia, podemos utilizar uma matriz para armazenar as cores de cada face.
+
+```julia
+fill(:green, 3, 3)
+```
+
+produz
+
+```text
+3×3 Matrix
+
+🟩 🟩 🟩
+🟩 🟩 🟩
+🟩 🟩 🟩
+```
+
+Cada posição da matriz corresponde exatamente a um adesivo do cubo.
+
+Essa escolha torna o código bastante intuitivo, já que a estrutura em memória é praticamente igual à representação visual da face.
+
+# Modelando o cubo
+
+Como o Cubo de Rubik possui seis faces, podemos criar uma estrutura que armazene seis matrizes.
+
+```julia
+struct Cube
+    up::Matrix{Symbol}
+    left::Matrix{Symbol}
+    front::Matrix{Symbol}
+    right::Matrix{Symbol}
+    back::Matrix{Symbol}
+    down::Matrix{Symbol}
+end
+```
+
+Em seguida, criamos um construtor para gerar um cubo resolvido.
+
+```julia
+function Cube()
+
+    Cube(
+        fill(:white, 3, 3),
+        fill(:orange, 3, 3),
+        fill(:green, 3, 3),
+        fill(:red, 3, 3),
+        fill(:blue, 3, 3),
+        fill(:yellow, 3, 3)
+    )
+
+end
+```
+
+Agora basta escrever
+
+```julia
+cube = Cube()
+```
+
+e teremos um cubo completamente montado.
+
+# Visualizando com CairoMakie
+
+Ter os dados armazenados é importante, mas enxergar o resultado torna o projeto muito mais interessante.
+
+Para isso utilizaremos o pacote `CairoMakie.jl`, uma das principais bibliotecas de visualização da linguagem Julia.
+
+```julia
+using CairoMakie
+```
+
+Nosso objetivo será desenhar pequenos quadrados coloridos, representando cada adesivo.
+
+Criamos uma função responsável por desenhar uma única face.
+
+```julia
+function draw_face!(ax, face, x0, y0)
+
+    for row in 1:3
+        for col in 1:3
+
+            poly!(
+                ax,
+                Rect(
+                    x0 + col - 1,
+                    y0 - row + 1,
+                    1,
+                    1
+                ),
+                color = face[row, col],
+                strokecolor = :black,
+                strokewidth = 2
+            )
+
+        end
+    end
+
+end
+```
+
+Observe que cada elemento da matriz é transformado em um pequeno quadrado colorido.
+
+# Organizando as faces
+
+Embora o Cubo de Rubik seja um objeto tridimensional, podemos representá-lo em duas dimensões utilizando o formato conhecido como **cruz** (cube net).
+
+```
+          U
+
+L    F    R    B
+
+          D
+```
+
+Essa representação é muito utilizada em livros, competições e simuladores online.
+
+Podemos desenhar cada face especificando apenas sua posição.
+
+```julia
+draw_face!(ax, cube.up,     3, 6)
+
+draw_face!(ax, cube.left,   0, 3)
+draw_face!(ax, cube.front,  3, 3)
+draw_face!(ax, cube.right,  6, 3)
+draw_face!(ax, cube.back,   9, 3)
+
+draw_face!(ax, cube.down,   3, 0)
+```
+
+Com poucas linhas de código obtemos uma representação completa do cubo.
+
+# Resultado
+
+O resultado final é semelhante ao esquema abaixo.
+
+```text
+        ⬜ ⬜ ⬜
+        ⬜ ⬜ ⬜
+        ⬜ ⬜ ⬜
+
+🟧 🟧 🟧 🟩 🟩 🟩 🟥 🟥 🟥 🟦 🟦 🟦
+🟧 🟧 🟧 🟩 🟩 🟩 🟥 🟥 🟥 🟦 🟦 🟦
+🟧 🟧 🟧 🟩 🟩 🟩 🟥 🟥 🟥 🟦 🟦 🟦
+
+        🟨 🟨 🟨
+        🟨 🟨 🟨
+        🟨 🟨 🟨
+```
+
+Apesar da simplicidade, essa visualização já é suficiente para representar qualquer estado do Cubo de Rubik.
+
+# Por que utilizar matrizes?
+
+Representar cada face como uma matriz apresenta diversas vantagens.
+
+- O código fica fácil de entender.
+- Cada adesivo pode ser acessado diretamente por índices.
+- A visualização é praticamente imediata.
+- Movimentos futuros podem ser implementados por rotações e trocas entre matrizes.
+- Essa estrutura é suficientemente simples para fins didáticos e experimentação.
+
+Embora solucionadores profissionais utilizem representações mais eficientes, essa abordagem é excelente para aprendizado.
+
+# Conclusão
+
+Modelar um Cubo de Rubik utilizando matrizes é uma solução simples, intuitiva e bastante elegante. Além de aproximar a representação computacional da forma como enxergamos o quebra-cabeça, essa abordagem permite explorar conceitos de estruturas de dados, visualização científica e programação em Julia de maneira acessível.
+
+Mais do que um quebra-cabeça, o Cubo de Rubik é um excelente laboratório para estudar algoritmos e modelagem computacional. E tudo começa com uma boa representação dos dados.
+
+# Referências
+
+1. Singmaster, D. *Notes on Rubik's Magic Cube*.

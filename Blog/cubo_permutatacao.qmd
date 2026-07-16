@@ -1,0 +1,266 @@
+---
+title: "Entendendo o Cubo de Rubik com Permutações em Julia"
+description: |
+  Descubra como os movimentos do Cubo de Rubik podem ser representados por permutações e explore conceitos de Álgebra e Teoria dos Grupos utilizando Julia.
+categories:
+  - Julia
+  - Matemática
+  - Álgebra
+  - Cubo de Rubik
+author:
+  - name: Rafael Seixas
+    affiliation: Universidade Estadual de Campinas
+date: "2026-07-10"
+image: imagens/rubik_permutacoes.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+engine: julia
+draft: false
+---
+
+# Introdução
+
+O Cubo de Rubik é um dos quebra-cabeças mais famosos do mundo. À primeira vista, ele parece apenas um brinquedo composto por peças coloridas que podem ser embaralhadas e reorganizadas. Entretanto, por trás de cada movimento existe uma rica estrutura matemática baseada em **permutações** e **Teoria dos Grupos**.
+
+Neste tutorial veremos como representar movimentos do cubo utilizando Julia e entenderemos por que conceitos como composição, inversos e ciclos aparecem naturalmente durante sua resolução.
+
+Nosso objetivo **não será construir um solucionador**, mas compreender a matemática que torna isso possível.
+
+# O que é uma permutação?
+
+Uma permutação é uma reorganização dos elementos de um conjunto.
+
+Por exemplo, considere quatro peças identificadas pelos números
+
+```text
+Estado inicial
+
+[1, 2, 3, 4]
+```
+
+Após uma rotação, podemos obter
+
+```text
+[2, 3, 4, 1]
+```
+
+Nenhuma peça foi criada ou removida.
+
+Elas apenas mudaram de posição.
+
+Esse é exatamente o conceito de permutação.
+
+# Representando uma permutação em Julia
+
+Podemos representar uma permutação por um vetor contendo a nova posição de cada elemento.
+
+```julia
+perm = [2, 3, 4, 1]
+
+state = ["A", "B", "C", "D"]
+
+state[perm]
+```
+
+Resultado
+
+```text
+4-element Vector{String}
+
+"B"
+"C"
+"D"
+"A"
+```
+
+Observe que Julia permite aplicar essa reorganização utilizando apenas indexação.
+
+# Criando uma função
+
+Podemos encapsular esse comportamento em uma função.
+
+```julia
+function apply_permutation(state, permutation)
+    return state[permutation]
+end
+```
+
+Agora basta escrever
+
+```julia
+apply_permutation(state, perm)
+```
+
+Essa mesma ideia será utilizada posteriormente para representar movimentos do Cubo de Rubik.
+
+# Como representar um movimento do cubo?
+
+Quando giramos uma face do cubo, algumas peças mudam de posição enquanto outras permanecem fixas.
+
+Matematicamente, esse movimento pode ser descrito por uma permutação.
+
+Por exemplo, uma rotação simplificada da face direita pode ser representada por
+
+```text
+R = (1 5 8 3)
+```
+
+Essa notação indica que
+
+- a peça 1 vai para a posição 5;
+- a peça 5 vai para a posição 8;
+- a peça 8 vai para a posição 3;
+- a peça 3 retorna para a posição 1.
+
+Embora um Cubo de Rubik real possua 54 adesivos (ou 20 peças móveis), a ideia matemática permanece exatamente a mesma.
+
+# Composição de movimentos
+
+Resolver um cubo consiste em executar vários movimentos consecutivos.
+
+Do ponto de vista matemático, isso corresponde à **composição de permutações**.
+
+Considere duas permutações
+
+```julia
+R = [2, 3, 4, 1]
+U = [1, 4, 2, 3]
+```
+
+Podemos criar uma função para compô-las.
+
+```julia
+function compose(p, q)
+    return p[q]
+end
+```
+
+Aplicando
+
+```julia
+compose(R, U)
+```
+
+obtemos uma nova permutação equivalente a executar primeiro `U` e depois `R`.
+
+# A ordem dos movimentos importa
+
+Uma propriedade importante do Cubo de Rubik é que, em geral,
+
+```text
+RU ≠ UR
+```
+
+Ou seja,
+
+girar primeiro a face direita e depois a face superior produz um resultado diferente de realizar esses mesmos movimentos na ordem inversa.
+
+Essa característica mostra que o grupo de movimentos do cubo **não é comutativo**, um conceito importante em Álgebra.
+
+# Calculando o inverso de um movimento
+
+Todo movimento possui um inverso.
+
+Se girarmos uma face no sentido horário, podemos desfazer esse movimento girando-a no sentido anti-horário.
+
+Podemos calcular o inverso de uma permutação em Julia.
+
+```julia
+function inverse_perm(p)
+
+    inv = similar(p)
+
+    for i in eachindex(p)
+        inv[p[i]] = i
+    end
+
+    return inv
+
+end
+```
+
+Agora podemos verificar
+
+```julia
+Rinv = inverse_perm(R)
+```
+
+Aplicando
+
+```julia
+apply_permutation(
+    apply_permutation(state, R),
+    Rinv
+)
+```
+
+recuperamos exatamente o estado inicial.
+
+# Construindo pequenos algoritmos
+
+Os algoritmos utilizados para resolver o cubo nada mais são do que sequências de permutações.
+
+Por exemplo,
+
+```text
+R U R' U'
+```
+
+é um dos algoritmos mais conhecidos da resolução em camadas.
+
+Do ponto de vista computacional, ele corresponde simplesmente à composição de quatro movimentos.
+
+Isso significa que qualquer algoritmo de resolução pode ser representado como uma única permutação resultante.
+
+# Ciclos
+
+Uma maneira interessante de visualizar uma permutação consiste em escrevê-la na forma de ciclos.
+
+Por exemplo,
+
+```text
+(1 5 8 3)
+```
+
+indica que quatro peças participam do movimento enquanto todas as demais permanecem fixas.
+
+Essa representação facilita muito a análise matemática do Cubo de Rubik.
+
+# Uma curiosidade
+
+O número total de configurações possíveis do Cubo de Rubik 3×3×3 é
+
+$$
+43\,252\,003\,274\,489\,856\,000
+$$
+
+ou aproximadamente
+
+$$
+4.3\times10^{19}.
+$$
+
+Apesar desse número gigantesco, todo estado pode ser alcançado por uma sequência de movimentos pertencente ao mesmo grupo de permutações.
+
+# Aplicações
+
+Representar o cubo como permutações permite estudar diversos tópicos importantes.
+
+- Álgebra;
+- Teoria dos Grupos;
+- Estruturas de dados;
+- Algoritmos de busca;
+- Inteligência Artificial;
+- Otimização;
+- Grafos.
+
+Essa é justamente a abordagem utilizada por diversos solucionadores automáticos do Cubo de Rubik.
+
+# Referências
+
+1. Joyner, D. *Adventures in Group Theory: Rubik's Cube, Merlin's Machine, and Other Mathematical Toys*.
+2. Singmaster, D. *Notes on Rubik's Magic Cube*.
