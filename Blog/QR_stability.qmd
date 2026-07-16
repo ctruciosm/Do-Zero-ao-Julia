@@ -1,5 +1,5 @@
 ---
-title: "Álgebra Linear em Julia (parte 1): Fatoração QR e Estabilidade Numérica"
+title: "Álgebra Linear em Julia (Parte 1): Fatoração QR e Estabilidade Numérica"
 description: |
   Um guia prático demonstrando por que a abordagem 'ingênua' de Mínimos Quadrados pode falhar e como utilizar a Fatoração QR e a mudança de base em Julia para garantir precisão numérica.
 categories:
@@ -20,7 +20,7 @@ format:
     self-contained: false
     code-fold: false
 engine: julia
-draft: true
+draft: false
 ---
 
 ## Introdução
@@ -58,7 +58,7 @@ using Plots
 theme(:wong)
 ```
 
-# O Problema: Dados "perigosos"
+# O problema: Dados "perigosos"
 
 ::: {.justify}
 Imagine que coletamos dados experimentais onde a variável independente $t$ varia muito pouco. Observe a precisão necessária nos valores abaixo:
