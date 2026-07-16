@@ -12,6 +12,9 @@ author:
     affiliation: "Universidade Estadual de Campinas"
     url: https://github.com/henriqueavelloso
     orcid: 0009-0002-8262-031X
+  - name: Rafael Seixas
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://www.linkedin.com/in/rafael-santos-seixas-figueiredo/
 date: "2025-12-04"
 image: imagens/inverse_iteration.png
 lang: pt
@@ -21,7 +24,7 @@ format:
     self-contained: false
     code-fold: false
 engine: julia
-draft: true
+draft: false
 ---
 
 # Introdução
@@ -31,8 +34,8 @@ O Método das Potências é excelente para encontrar o maior autovalor de uma ma
 
 Neste post, vamos resolver um exercício clássico de análise numérica para demonstrar:
 
-1.  Como implementar a Iteração Inversa em `Julia`.
-2.  Como usar o **Quociente de Rayleigh** para refinar a estimativa.
+1.  Como implementar a iteração inversa em `Julia`.
+2.  Como usar o **quociente de Rayleigh** para refinar a estimativa.
 3.  Como verificar se a taxa de convergência prática bate com a teoria.
 
 Vamos utilizar os pacotes `LinearAlgebra` e `Printf`.
@@ -58,7 +61,7 @@ using Printf
 # O Problema
 
 ::: {.justify}
-Temos a matriz $A$ e queremos encontrar o autovalor e autovetor mais próximos de um valor "chute" (o shift) $\rho = 8$.
+Temos a matriz $A$ e queremos encontrar o autovalor e o autovetor associados a um valor de referência (o shift) $\rho = 8$.
 
 $ A = \begin{bmatrix} 8 & 1 \ -2 & 1 \end{bmatrix}, \quad \rho = 8 $
 
@@ -85,7 +88,7 @@ B = inv(A - rho*I)
 ## Parte A: Executando a iteração
 
 ::: {.justify}
-Vamos rodar o algoritmo por 12 iterações. A cada passo, multiplicamos $B$ pelo vetor atual, normalizamos e calculamos o autovalor estimado.
+Vamos rodar o algoritmo por 12 iterações. A cada passo, multiplicamos $B$ pelo vetor atual, normalizamos e calculamos o autovalor estimado por meio do quociente de Rayleigh.
 :::
 
 ```{julia}
@@ -126,9 +129,9 @@ Observe como o valor de `lambda` converge rapidamente para um valor estável.
 ## Parte B: Análise de Convergência
 
 ::: {.justify}
-Agora vem a parte interessante. A teoria nos diz que a convergência deve ser linear e a taxa depende da distância entre o nosso shift $\rho$ e os autovalores reais.
+Agora vem a parte interessante. A teoria nos diz que a convergência é linear e que a taxa depende da distância entre o nosso shift $\rho$ e os autovalores da matriz.
 
-Vamos calcular a razão de convergência observada: $\text{Razão} = \frac{||q_{j+1} - v||}{||q_j - v||}$ Onde $v$ é a nossa melhor estimativa do autovetor (o resultado da última iteração).
+Vamos calcular uma razão de convergência observada: $\text{Razão} = \frac{\|q_{j+1} - v\|}{\|q_j - v\|}$, onde $v$ é a nossa melhor estimativa do autovetor (o resultado da última iteração).
 :::
 
 ```{julia}
@@ -151,7 +154,7 @@ end
 # Teoria vs. Prática
 
 ::: {.justify}
-Será que essa taxa observada faz sentido? Vamos calcular os autovalores exatos do Julia (`eigvals`) e aplicar a fórmula da taxa teórica:
+Será que essa taxa observada faz sentido? Vamos calcular os autovalores exatos com Julia (`eigvals`) e aplicar a fórmula da taxa teórica:
 
 $\text{Taxa Teórica} = \left| \frac{\lambda_1 - \rho}{\lambda_2 - \rho} \right|$
 
@@ -197,7 +200,7 @@ println("\nConclusão:")
 ::: {.justify}
 Ao comparar a **Taxa de Convergência Observada** (nos últimos passos do loop) com a **Taxa Teórica Calculada**, você deve notar que elas são extremamente próximas.
 
-Isso demonstra o poder de prever o comportamento de algoritmos numéricos. Se o `ratio` for pequeno (próximo de 0), a convergência é rápida. Se for próximo de 1, o algoritmo vai demorar uma eternidade. Na iteração inversa, nós controlamos essa velocidade escolhendo um shift $\rho$ inteligente!
+Isso demonstra o poder de prever o comportamento de algoritmos numéricos. Se a razão for pequena, a convergência é rápida; se estiver próxima de 1, o algoritmo converge mais lentamente. Na iteração inversa, controlamos essa velocidade escolhendo um shift $\rho$ adequado, de modo que o autovalor desejado fique próximo do valor de referência.
 :::
 
 # Referências

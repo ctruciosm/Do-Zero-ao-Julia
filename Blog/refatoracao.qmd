@@ -1,0 +1,239 @@
+---
+title: "Refatorando código em Julia: do código que funciona ao código que pode ser mantido"
+description: |
+  Os principais conceitos de refatoração de código em Julia por meio da evolução de um mesmo programa.
+categories:
+  - Julia
+  - Boas Práticas
+author:
+  - name: Rafael Seixas
+    affiliation: Universidade Estadual de Campinas
+    url: https://github.com/seixasr
+date: "2026-06-28"
+image: imagens/refatoracao_codigo.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+engine: julia
+draft: true
+---
+
+# Introdução
+
+Todo programador já escreveu um código que resolve o problema, mas que meses depois se torna difícil de entender, modificar ou reutilizar. Embora o programa continue funcionando corretamente, sua estrutura pode dificultar sua evolução.
+
+É nesse contexto que surge a **refatoração**. Refatorar significa reorganizar o código **sem alterar seu comportamento externo**, tornando-o mais legível, modular e fácil de manter.
+
+Neste tutorial veremos como transformar um programa funcional em uma implementação mais organizada utilizando recursos da linguagem Julia.
+
+# O que é refatoração?
+
+Refatoração consiste em melhorar a estrutura interna do código preservando exatamente os mesmos resultados.
+
+Não é o mesmo que:
+
+- adicionar funcionalidades;
+- corrigir bugs;
+- otimizar desempenho.
+
+Embora esses aspectos possam surgir durante o processo, o objetivo principal é melhorar a qualidade do código.
+
+# Quando devemos refatorar?
+
+Alguns sinais comuns são:
+
+- funções muito longas;
+- código duplicado;
+- nomes pouco descritivos;
+- muitos níveis de `if`;
+- números mágicos;
+- dificuldade de reutilização.
+
+# Exemplo inicial
+
+Considere a seguinte implementação para calcular a média de um vetor.
+
+```julia
+function average(v)
+    s = 0
+
+    for i in 1:length(v)
+        s += v[i]
+    end
+
+    println(s / length(v))
+end
+```
+
+Embora funcione, alguns problemas podem ser identificados:
+
+- mistura cálculo e saída;
+- utiliza nomes pouco descritivos;
+- não trata vetores vazios;
+- reimplementa funcionalidades já existentes.
+
+# Primeira refatoração
+
+```julia
+function average(v)
+    total = sum(v)
+    return total / length(v)
+end
+```
+
+Agora a função apenas calcula a média e retorna seu resultado.
+
+# Segunda refatoração
+
+```julia
+function average(v)
+    isempty(v) && error("O vetor não pode ser vazio.")
+
+    total = sum(v)
+    return total / length(v)
+end
+```
+
+Além de mais segura, a função agora fornece uma mensagem clara caso seja utilizada incorretamente.
+
+# Terceira refatoração
+
+```julia
+function average(v::AbstractVector{<:Real})
+    isempty(v) && error("O vetor não pode ser vazio.")
+    return sum(v) / length(v)
+end
+```
+
+O uso de `AbstractVector{<:Real}` torna a função mais genérica, permitindo trabalhar com diferentes tipos numéricos.
+
+# Eliminando código duplicado
+
+Uma boa prática consiste em identificar padrões repetidos e extrair funções reutilizáveis.
+
+Em vez de copiar trechos semelhantes em diferentes partes do programa, procure encapsular a lógica em funções menores.
+
+# Modularização
+
+Uma função muito longa geralmente realiza responsabilidades demais.
+
+Em vez de escrever:
+
+```text
+process()
+```
+
+prefira dividir o problema em funções menores.
+
+```text
+read_data()
+
+↓
+
+clean_data()
+
+↓
+
+compute_statistics()
+
+↓
+
+plot_results()
+```
+
+Cada função passa a possuir uma responsabilidade clara, facilitando testes e manutenção.
+
+# Escolhendo bons nomes
+
+Compare:
+
+```julia
+a = 10
+b = 20
+c = a + b
+```
+
+com
+
+```julia
+temperature = 10
+humidity = 20
+comfort_index = temperature + humidity
+```
+
+Um código costuma ser lido muito mais vezes do que escrito. Bons nomes reduzem significativamente o esforço de compreensão.
+
+# Evitando números mágicos
+
+Em vez de
+
+```julia
+if score >= 7
+```
+
+prefira
+
+```julia
+const PASSING_GRADE = 7
+
+if score >= PASSING_GRADE
+```
+
+Isso torna o código mais legível e facilita futuras alterações.
+
+# Aproveitando recursos da linguagem Julia
+
+Muitas vezes uma refatoração consiste apenas em utilizar construções já disponíveis na linguagem.
+
+Em vez de
+
+```julia
+total = 0
+for i in 1:length(v)
+    total += v[i]
+end
+```
+
+podemos escrever
+
+```julia
+total = sum(v)
+```
+
+Além de mais compacto, o código comunica melhor sua intenção.
+
+# Refatoração não significa otimização
+
+Nem toda refatoração torna o código mais rápido.
+
+Seu principal objetivo é melhorar a organização.
+
+Caso o desempenho seja importante, podemos utilizar `BenchmarkTools.jl`.
+
+```julia
+using BenchmarkTools
+
+@btime average(rand(1000))
+```
+
+Somente após medir devemos decidir se uma otimização realmente é necessária.
+
+# Boas práticas
+
+Durante uma refatoração procure:
+
+- criar funções pequenas;
+- utilizar nomes descritivos;
+- evitar repetição de código;
+- separar responsabilidades;
+- reaproveitar funções da biblioteca padrão;
+- documentar partes importantes;
+- escrever testes automatizados.
+
+# O que aprendemos?
+
+Neste blog vimos que refatorar não significa reescrever um programa do zero. Em vez disso, trata-se de melhorar continuamente sua estrutura, preservando seu comportamento.
+
+Pequenas melhorias, como utilizar funções da biblioteca padrão, escolher bons nomes, eliminar duplicações e modularizar o código, tornam projetos muito mais fáceis de entender, manter e evoluir ao longo do tempo.

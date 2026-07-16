@@ -12,6 +12,9 @@
      affiliation: "Universidade Estadual de Campinas"
      url: https://github.com/henriqueavelloso
      orcid: 0009-0002-8262-031X
+   - name: Rafael Seixas
+     affiliation: "Universidade Estadual de Campinas"
+     url: https://www.linkedin.com/in/rafael-santos-seixas-figueiredo/
  date: "2025-12-03"
  image: imagens/kmeans_julia.png
  lang: pt

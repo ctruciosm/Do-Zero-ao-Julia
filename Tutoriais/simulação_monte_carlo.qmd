@@ -1,0 +1,388 @@
+---
+title: "Simulação de Monte Carlo para uma infecção fictícia em Julia"
+description: |
+  Aprenda a criar uma simulação de Monte Carlo em Julia baseada em agentes para estudar a propagação de uma infecção fictícia em uma população.
+categories:
+  - Julia
+  - Estatística
+  - Simulação
+  - Probabilidade
+author:
+  - name: Rafael Seixas
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://www.linkedin.com/in/rafael-santos-seixas-figueiredo/
+date: "2026-07-16"
+image: imagens/monte_carlo.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+engine: julia
+draft: true
+---
+
+# Introdução
+
+Simulações de Monte Carlo são uma ferramenta poderosa para estudar sistemas em que a aleatoriedade desempenha um papel central. Em vez de tentar resolver um problema de forma analítica, repetimos muitos experimentos aleatórios e usamos estatísticas dessas repetições para estimar o comportamento do sistema.
+
+Neste tutorial, vamos construir uma simulação simples de uma infecção fictícia em uma população. O modelo é inspirado nos modelos epidemiológicos do tipo SIR, mas será implementado como um **modelo baseado em agentes**: cada indivíduo é representado explicitamente e interage aleatoriamente com outros indivíduos.
+
+Ao final, veremos como a média de muitas simulações produz um comportamento coletivo estável, mesmo quando cada execução individual é imprevisível.
+
+# O que é Monte Carlo?
+
+A ideia central de Monte Carlo é simples:
+
+1. definir um modelo probabilístico;
+2. gerar muitas amostras aleatórias desse modelo;
+3. calcular uma estatística de interesse;
+4. usar a média dessas amostras como estimativa.
+
+Por exemplo, imagine estimar a probabilidade de obter exatamente três caras em cinco lançamentos de moeda.
+
+Em vez de calcular a resposta diretamente pela distribuição binomial, podemos:
+
+* simular cinco lançamentos;
+* verificar se ocorreram três caras;
+* repetir o experimento milhares de vezes;
+* dividir o número de sucessos pelo total de experimentos.
+
+Quanto maior o número de repetições, mais estável tende a ser a estimativa.
+
+A simulação da epidemia segue exatamente essa filosofia: cada epidemia possível é uma realização aleatória do sistema, e a média de muitas realizações revela o comportamento típico da população.
+
+# Ideia do modelo
+
+Cada agente pode estar em um de três estados:
+
+* `S`: suscetível;
+* `I`: infectado;
+* `R`: recuperado.
+
+A dinâmica será:
+
+1. um agente infectado pode infectar um suscetível com probabilidade `p_infection`;
+2. um agente infectado pode se recuperar com probabilidade `p_recovery`;
+3. em cada interação escolhemos dois agentes ao acaso;
+4. repetimos muitas interações ao longo do tempo.
+
+É importante notar que este **não é o modelo SIR clássico baseado em equações diferenciais**. Aqui trabalhamos com indivíduos discretos e interações aleatórias entre agentes.
+
+# Pacotes utilizados
+
+```{julia}
+using Random
+using Statistics
+using Plots
+```
+
+# Definindo os estados da infecção
+
+Usaremos um `enum` para representar os três estados possíveis:
+
+```{julia}
+@enum InfectionStatus S I R
+```
+
+# Definindo um agente
+
+Cada agente armazenará:
+
+* seu estado atual;
+* quantos outros agentes ele infectou.
+
+```{julia}
+mutable struct Agent
+    status::InfectionStatus
+    num_infected::Int
+end
+
+Agent() = Agent(S, 0)
+```
+
+# Variáveis de Bernoulli
+
+Muitos eventos da simulação têm apenas dois resultados possíveis:
+
+* infecta ou não infecta;
+* recupera ou não recupera.
+
+Esse tipo de experimento é chamado de **variável de Bernoulli**.
+
+A função abaixo retorna `true` com probabilidade `p`:
+
+```{julia}
+function bernoulli(p::Real)
+    rand() < p
+end
+```
+
+Por exemplo, `bernoulli(0.05)` retorna `true` em aproximadamente 5% das chamadas.
+
+# Funções auxiliares
+
+```{julia}
+function set_status!(agent::Agent, new_status::InfectionStatus)
+    agent.status = new_status
+    return agent
+end
+
+function inc_num_infected!(agent::Agent)
+    agent.num_infected += 1
+    return agent
+end
+
+is_susceptible(agent::Agent) = agent.status == S
+is_infected(agent::Agent) = agent.status == I
+```
+
+# Criando a população inicial
+
+Começaremos com todos os agentes suscetíveis, exceto um infectado escolhido aleatoriamente.
+
+```{julia}
+function generate_agents(N::Integer)
+    agents = [Agent() for _ in 1:N]
+    idx = rand(1:N)
+    agents[idx].status = I
+    return agents
+end
+```
+
+# Definindo a dinâmica da infecção
+
+As probabilidades do modelo serão armazenadas em uma estrutura própria:
+
+```{julia}
+struct InfectionRecovery
+    p_infection::Float64
+    p_recovery::Float64
+end
+```
+
+A função `interact!` aplica as regras da epidemia:
+
+```{julia}
+function interact!(agent::Agent, source::Agent, infection::InfectionRecovery)
+    if is_susceptible(agent) && is_infected(source)
+        if bernoulli(infection.p_infection)
+            set_status!(agent, I)
+            inc_num_infected!(source)
+        end
+    elseif is_infected(agent)
+        if bernoulli(infection.p_recovery)
+            set_status!(agent, R)
+        end
+    end
+end
+```
+
+Observe que existem duas fontes de aleatoriedade:
+
+1. quais agentes interagem;
+2. se a infecção ou recuperação ocorre de fato.
+
+Por isso, duas simulações nunca serão exatamente iguais.
+
+# Uma interação da simulação
+
+```{julia}
+function step!(agents::Vector{Agent}, infection::InfectionRecovery)
+    i = rand(1:length(agents))
+    j = rand(1:length(agents))
+
+    while j == i
+        j = rand(1:length(agents))
+    end
+
+    interact!(agents[i], agents[j], infection)
+end
+```
+
+Aqui é importante a terminologia:
+
+* `step!` representa **uma única interação aleatória** entre dois agentes;
+* ainda não corresponde a um passo completo de tempo da epidemia.
+
+# Um passo temporal completo
+
+```{julia}
+function sweep!(agents::Vector{Agent}, infection::InfectionRecovery)
+    for _ in 1:length(agents)
+        step!(agents, infection)
+    end
+end
+```
+
+Agora sim temos um passo temporal aproximado. Em cada `sweep!` ocorrem `N` interações aleatórias, onde `N` é o tamanho da população.
+
+Podemos interpretar isso como um intervalo de tempo em que, em média, cada agente teve a chance de participar de uma interação.
+
+# Simulação completa
+
+```{julia}
+function simulation(N::Integer, T::Integer, infection::InfectionRecovery)
+    agents = generate_agents(N)
+
+    S_counts = Int[]
+    I_counts = Int[]
+    R_counts = Int[]
+
+    for _ in 1:T
+        sweep!(agents, infection)
+
+        push!(S_counts, count(a -> a.status == S, agents))
+        push!(I_counts, count(a -> a.status == I, agents))
+        push!(R_counts, count(a -> a.status == R, agents))
+    end
+
+    return (S = S_counts, I = I_counts, R = R_counts)
+end
+```
+
+A função `simulation` executa uma epidemia completa durante `T` passos temporais. A cada `sweep!`, contabilizamos quantos agentes estão em cada um dos estados (`S`, `I` e `R`) e armazenamos essas quantidades em três vetores.
+
+Observe que não estamos interessados apenas no estado final da epidemia. Em vez disso, registramos toda a sua evolução ao longo do tempo. Assim, ao final da simulação, obtemos três séries temporais que descrevem como o número de suscetíveis, infectados e recuperados varia durante toda a propagação da doença.
+
+Essas trajetórias serão fundamentais na próxima etapa, quando repetiremos a simulação diversas vezes e calcularemos a média do comportamento observado.
+
+# Por que repetir muitas vezes?
+
+Uma única execução pode produzir resultados muito diferentes:
+
+* o primeiro infectado pode se recuperar rapidamente;
+* a doença pode desaparecer cedo;
+* ou pode se espalhar por grande parte da população.
+
+Essas flutuações são o chamado **ruído estatístico**.
+
+A estratégia de Monte Carlo é repetir o experimento muitas vezes e calcular médias para reduzir esse ruído.
+
+# Repetindo a simulação
+
+```{julia}
+function repeat_simulations(
+    N::Integer,
+    T::Integer,
+    infection::InfectionRecovery,
+    nsim::Integer
+)
+    [simulation(N, T, infection) for _ in 1:nsim]
+end
+```
+
+# Calculando a trajetória média
+
+```{julia}
+function mean_trajectory(simulations::Vector{<:NamedTuple})
+    times = 1:length(simulations[1].I)
+
+    S_matrix = reduce(hcat, [s.S for s in simulations])
+    I_matrix = reduce(hcat, [s.I for s in simulations])
+    R_matrix = reduce(hcat, [s.R for s in simulations])
+
+    S_mean = vec(mean(S_matrix, dims = 2))
+    I_mean = vec(mean(I_matrix, dims = 2))
+    R_mean = vec(mean(R_matrix, dims = 2))
+
+    plot(times, S_mean,
+         label = "Suscetíveis",
+         lw = 2,
+         xlabel = "Tempo",
+         ylabel = "Número de agentes")
+
+    plot!(times, I_mean, label = "Infectados", lw = 2)
+    plot!(times, R_mean, label = "Recuperados", lw = 2)
+end
+```
+
+A média é calculada ponto a ponto no tempo. Assim obtemos uma estimativa do comportamento esperado da epidemia.
+
+# Executando a simulação
+
+```{julia}
+infection = InfectionRecovery(0.05, 0.02)
+
+simulations = repeat_simulations(100, 200, infection, 100)
+
+mean_trajectory(simulations)
+```
+
+```{julia}
+p1 = plot()
+
+p2 = mean_trajectory(simulations)
+
+plot(p1, p2, layout=(1,2), size=(900,400))
+```
+
+A figura da esquerda mostra uma única realização da epidemia. Como a evolução depende de sorteios aleatórios, essa trajetória apresenta flutuações que podem variar significativamente entre execuções. Já a figura da direita mostra a média de 100 simulações independentes. Observe que, apesar da variabilidade individual, o comportamento médio torna-se muito mais suave e representativo da dinâmica do sistema. Esse é um dos princípios fundamentais das simulações de Monte Carlo: reduzir o efeito da aleatoriedade individual por meio da repetição de experimentos.
+
+
+# Convergência de Monte Carlo
+
+Um aspecto fundamental do método é a convergência da média.
+
+Se executarmos:
+
+* 10 simulações;
+* 50 simulações;
+* 100 simulações;
+* 1000 simulações,
+
+as curvas médias tendem a ficar cada vez mais estáveis.
+
+Em geral, o erro estatístico de Monte Carlo diminui aproximadamente como:
+
+$$
+\text{erro} \propto \frac{1}{\sqrt{N_{\text{sim}}}}
+$$
+
+Isso significa que dobrar a precisão exige aproximadamente quatro vezes mais simulações.
+
+# Comparação com modelos determinísticos
+
+Em um modelo determinístico, os mesmos parâmetros sempre produzem exatamente a mesma curva.
+
+Na abordagem de Monte Carlo:
+
+* cada execução individual é diferente;
+* existe variabilidade entre trajetórias;
+* a média das trajetórias converge para um comportamento coletivo estável.
+
+Essa é uma das principais vantagens da simulação: ela permite estudar tanto o valor médio quanto as flutuações do sistema.
+
+# Limitações do modelo
+
+Nosso modelo faz várias simplificações importantes:
+
+* qualquer agente pode interagir com qualquer outro;
+* a probabilidade de infecção é constante;
+* a recuperação independe do tempo já infectado;
+* não há mortes;
+* não há reinfecção;
+* não existe estrutura espacial ou rede de contatos.
+
+Em epidemias reais, essas hipóteses raramente são válidas. Mesmo assim, o modelo é suficiente para ilustrar os conceitos fundamentais de Monte Carlo e de simulações baseadas em agentes.
+
+# O que aprendemos?
+
+Neste tutorial vimos como:
+
+1. representar agentes com estados bem definidos;
+2. modelar eventos aleatórios usando variáveis de Bernoulli;
+3. distinguir interações individuais (`step!`) de passos temporais (`sweep!`);
+4. repetir muitas simulações independentes;
+5. calcular médias para reduzir o ruído estatístico;
+6. visualizar a evolução coletiva da epidemia.
+
+A principal lição é que a aleatoriedade individual não precisa ser previsível para que o comportamento coletivo possa ser compreendido. Esse é justamente o poder das simulações de Monte Carlo: extrair padrões robustos a partir de muitas realizações aleatórias.
+
+# Referências
+
+1. Documentação da linguagem Julia: https://docs.julialang.org/
+2. Documentação do pacote Plots.jl: https://docs.juliaplots.org/stable/
+3. Robert, C. P.; Casella, G. *Monte Carlo Statistical Methods*. Springer, 2004.
+4. Newman, M. *Networks: An Introduction*. Oxford University Press, 2010.
