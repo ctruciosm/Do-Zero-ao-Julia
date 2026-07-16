@@ -1,0 +1,227 @@
+---
+title: "Programação Dinâmica com Julia"
+description: |
+  A programação dinâmica é, ao mesmo tempo, um método de otimização matemática e um paradigma algorítmico. O método foi desenvolvido por Richard Bellman na década de 1950 e encontrou aplicações em diversas áreas, como a engenharia aeroespacial e a economia. Nesse tutorial, apresentamos a metodologia por trás da programação dinâmica através de dois exemplos: o cálculo dos números de Fibonacci e o problema do troco mínimo.
+categories:
+  -  Programação Dinâmica
+  -  Algoritmos
+  -  Estruturas de Dados
+author:
+  - name: João Vitor Hartung Toppa
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/jvtoppa
+date: "2026-04-11"
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+execute:
+  echo: true
+  warning: false
+#jupyter: julia
+draft: false
+---
+
+# Introdução
+
+Programação dinâmica é um nome estranho para uma ideia simples: resolver um problema resolvendo seus subproblemas menores, guardando o resultado de cada um para nunca precisar recalculá-lo. O nome vem de Richard Bellman, que o cunhou na década de 1950 trabalhando em problemas de controle e otimização, e hoje o método aparece em áreas tão distintas quanto engenharia aeroespacial, economia e bioinformática.
+
+Nesse tutorial vamos construir a ideia a partir de um exemplo clássico, os números de Fibonacci, e depois estendê-la para um problema de otimização de verdade, o troco mínimo.
+
+# Os números de Fibonacci
+
+Considere a sequência $0, 1, 1, 2, 3, 5, 8, \ldots$ de números de Fibonacci, definida pela recorrência
+
+$$F(n) = F(n-1) + F(n-2),$$
+
+a partir dos valores iniciais $F(0) = 0$ e $F(1) = 1$. Nosso problema é calcular $F(n)$ dado $n$.
+
+## Solução recursiva ingênua
+
+A forma mais direta de implementar essa recorrência é traduzi-la quase literalmente para código, resolvendo o problema "de cima para baixo". Para calcular $F(n)$, primeiro calculamos $F(n-1)$ e $F(n-2)$, e depois somamos.
+
+```{julia}
+#| echo: true
+
+function fib_naive(n::Int)
+    if n <= 1
+        return n
+    end
+    return fib_naive(n - 1) + fib_naive(n - 2)
+end
+
+fib_naive(10)
+```
+
+O resultado está correto, mas o custo desse algoritmo é bastante alto. Seja $T(n)$ o número de chamadas recursivas para calcular $F(n)$. Da própria estrutura do algoritmo temos $T(n) = T(n-1) + T(n-2) + O(1)$, a mesma recorrência dos números de Fibonacci. Isso significa que $T(n)$ cresce como $F(n)$.
+
+
+O motivo do custo exponencial fica claro se desenharmos a árvore de chamadas de fib_naive(5), por exemplo. fib(3) é calculado duas vezes, fib(2) três vezes, fib(1) cinco vezes. Para valores maiores de $n$, essa repetição explode: fib_naive(40) já faz mais de duzentos milhões de chamadas para um resultado que cabe em um único inteiro de 32 bits. Isso possivelmente nos indica que este problema é candidato à programação dinâmica: ele se decompõe em subproblemas, mas esses subproblemas se repetem, em vez de formarem uma árvore de problemas todos distintos. Chamamos essa propriedade de subproblemas sobrepostos.
+
+## Memoização
+
+Se o problema é recalcular o mesmo subproblema várias vezes, a solução é guardar cada resultado na primeira vez que ele é calculado, e simplesmente consultá-lo nas vezes seguintes. Essa técnica se chama memoização, e mantém a estrutura recursiva original quase intacta:
+
+```{julia}
+#| echo: true
+
+function fib_memo(n::Int, cache::Dict{Int,Int} = Dict{Int,Int}())
+    if n <= 1
+        return n
+    end
+    if haskey(cache, n)
+        return cache[n]
+    end
+    resultado = fib_memo(n - 1, cache) + fib_memo(n - 2, cache)
+    cache[n] = resultado
+    return resultado
+end
+
+fib_memo(50)
+```
+
+Agora cada valor de $F(i)$ é calculado uma única vez, então o custo total cai de exponencial para $\Theta(n)$. Ganhamos essa velocidade em troca de memória extra para o cache, o que é quase sempre um bom negócio.
+
+## Tabulação
+
+Uma alternativa à memoização é inverter a ordem de cálculo: em vez de partir de $F(n)$ e descobrir de quais subproblemas ele precisa, calculamos os subproblemas menores primeiro e vamos subindo até chegar em $F(n)$. Como cada subproblema já está pronto quando é necessário, nunca há recomputação, e nem é preciso recursão:
+
+```
+Fib-PD(n)
+1  f[0] := 0
+2  f[1] := 1
+3  para i := 2 até n
+4    f[i] := f[i − 1] + f[i − 2]
+5  devolva f[n]
+```
+
+```{julia}
+#| echo: true
+
+function fib_tab(n::Int)
+    if n == 0
+        return 0
+    end
+    f = zeros(Int, n + 1)
+    f[2] = 1
+    for i in 2:n
+        f[i+1] = f[i] + f[i-1]
+    end
+    return f[n+1]
+end
+
+fib_tab(50)
+```
+
+Esse algoritmo também consome $\Theta(n)$ de tempo, mas evita completamente a pilha de chamadas recursivas, o que importa para $n$ grande: a versão memoizada de fib_memo(100_000) estouraria a pilha de recursão, enquanto fib_tab(100_000) roda tranquilamente.
+
+Repare ainda que, para calcular $F(i)$, só precisamos dos dois valores anteriores, nunca da tabela inteira. Isso permite reduzir o espaço de $\Theta(n)$ para $O(1)$:
+
+```{julia}
+#| echo: true
+
+function fib_iter(n::Int)
+    if n <= 1
+        return n
+    end
+    a, b = 0, 1
+    for _ in 2:n
+        a, b = b, a + b
+    end
+    return b
+end
+
+fib_iter(50)
+```
+
+## Comparando as três versões
+
+```{julia}
+#| echo: true
+
+@time fib_naive(30)
+@time fib_memo(30)
+@time fib_tab(30)
+@time fib_iter(30);
+```
+
+# Subestrutura ótima
+
+Fibonacci ilustra bem subproblemas sobrepostos, mas não envolve nenhuma decisão: a recorrência é fixa, não há escolhas a fazer. Boa parte dos problemas de programação dinâmica que aparecem na prática são problemas de otimização, em que a cada subproblema é preciso escolher, entre várias opções, aquela que leva ao melhor resultado. Para esses problemas, precisamos de uma segunda propriedade, além dos subproblemas sobrepostos: a subestrutura ótima.
+
+Um problema tem subestrutura ótima quando a solução ótima do problema inteiro pode ser construída a partir das soluções ótimas de seus subproblemas. Isso parte do princípio da otimalidade de Bellman: qualquer parte de uma solução ótima é, ela mesma, uma solução ótima do subproblema correspondente. É essa garantia que nos permite combinar soluções de subproblemas sem precisar reconsiderar todas as alternativas descartadas ao longo do caminho.
+
+## O problema do troco mínimo
+
+Considere um conjunto de moedas de valores fixos, digamos $\{1, 5, 10, 25\}$, disponíveis em quantidade ilimitada, e um valor alvo $n$. Queremos o menor número de moedas cuja soma seja exatamente $n$.
+
+O subproblema natural aqui é: qual o menor número de moedas para compor o valor $v$, para cada $v$ de $0$ até $n$? Para compor $v$, a última moeda usada tem algum valor $c$, e o restante, $v - c$, precisa ser composto da melhor forma possível. Como não sabemos de antemão qual $c$ é o melhor, testamos todas as moedas disponíveis e ficamos com a que gera o menor total:
+
+$$dp[v] = \min_{c \,\in\, \text{moedas},\; c \le v} \big(dp[v - c] + 1\big), \qquad dp[0] = 0.$$
+
+O princípio da otimalidade garante que essa recorrência está correta: se $dp[v-c]$ já é o menor número de moedas para compor $v - c$, então a melhor forma de compor $v$ usando $c$ como última moeda é somar uma moeda a essa solução ótima de $v - c$, nunca a uma solução pior.
+
+```{julia}
+#| echo: true
+
+function troco_minimo(moedas::Vector{Int}, alvo::Int)
+    dp = fill(typemax(Int) - 1, alvo + 1)   
+    dp[1] = 0                               
+
+    escolha = zeros(Int, alvo + 1)          
+
+    for v in 1:alvo
+        for c in moedas
+            if c <= v && dp[v - c + 1] + 1 < dp[v + 1]
+                dp[v + 1] = dp[v - c + 1] + 1
+                escolha[v + 1] = c
+            end
+        end
+    end
+
+    return dp[alvo + 1], escolha
+end
+
+custo, escolha = troco_minimo([1, 5, 10, 25], 63)
+custo
+```
+
+Guardar apenas o custo ótimo em `dp` nos diz quantas moedas são necessárias, mas não quais. Para recuperar a lista de moedas, guardamos também, em `escolha[v]`, qual moeda foi usada para atingir o valor `v` da forma ótima. Essa é exatamente a ideia por trás de guardar não só o custo, mas também a direção do melhor caminho: com o vetor `escolha` em mãos, basta caminhar de trás para frente, subtraindo a moeda usada em cada passo, para reconstruir a solução completa:
+
+```{julia}
+#| echo: true
+
+function reconstruir_troco(escolha::Vector{Int}, alvo::Int)
+    moedas_usadas = Int[]
+    v = alvo
+    while v > 0
+        c = escolha[v + 1]
+        push!(moedas_usadas, c)
+        v -= c
+    end
+    return moedas_usadas
+end
+
+reconstruir_troco(escolha, 63)
+```
+
+Para o valor 63 com moedas $\{1, 5, 10, 25\}$, o resultado é $25 + 25 + 10 + 1 + 1 + 1$, seis moedas ao todo, que é de fato o mínimo possível para esse conjunto de moedas.
+
+# Conclusão
+
+Os dois exemplos desse tutorial seguem o mesmo roteiro, que vale a pena deixar explícito para aplicar em outros problemas:
+
+1. Definir o subproblema. O que exatamente representa um estado da tabela? Em Fibonacci, é o índice $n$. No troco, é o valor $v$ ainda a compor.
+
+2. Escrever a recorrência. Como o subproblema se relaciona com subproblemas menores? Aqui é onde verificamos se o problema tem subproblemas sobrepostos (a mesma recorrência é chamada várias vezes com os mesmos argumentos) e, quando há escolhas envolvidas, se vale o princípio da otimalidade.
+
+3. Definir casos base. Toda recorrência precisa de um ponto de parada, como $F(0)$, $F(1)$ ou $dp[0] = 0$.
+
+4. Escolher a ordem de cálculo. Memoização (de cima para baixo, com cache) é mais simples de implementar a partir da recorrência recursiva. Tabulação (de baixo para cima) evita o custo de recursão e costuma ser mais fácil de otimizar em espaço, mas exige calcular manualmente uma ordem válida para preencher a tabela.
+
+5. Reconstruir a solução, se necessário. Quando o problema pede não só o valor ótimo mas a solução em si (quais moedas, qual caminho, qual sequência de decisões), guarde também as escolhas feitas em cada estado, não apenas o custo.
+
+Em conclusão, programação dinâmica é uma forma de organizar uma recursão para nunca refazer trabalho já feito. Fibonacci mostra como subproblemas sobrepostos, e como memoização e tabulação resolvem um problema que, inicialmente mostra-se exponencial, apresenta tempo linear.
+
+O problema do troco, por outro lado, nos mostrou como o princípio da otimalidade justifica combinar soluções ótimas de subproblemas para problemas de decisão, e como guardar as escolhas feitas permite reconstruir não só o valor ótimo, mas a solução completa.

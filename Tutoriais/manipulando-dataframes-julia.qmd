@@ -1,0 +1,277 @@
+---
+title: "Ciência de Dados em Julia (Parte 1) - Dataframes"
+description: |
+  DataFrames são estruturas capazes de armazenar e manipular dados tabulados, bastante comuns no mundo da ciência de dados. Nesse tutorial, apresentamos o pacote DataFrames.jl e as operações mais comuns sobre esse tipo de estrutura: criação, inspeção, seleção, filtragem, transformação, ordenação e agregação. 
+categories:
+  -  Dataframes
+  -  Ciência de Dados
+author:
+  - name: João Vitor Hartung Toppa
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/jvtoppa
+date: "2026-04-18"
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+execute:
+  echo: true
+  warning: false
+#jupyter: julia
+draft: false
+---
+
+```{julia}
+using Pkg
+Pkg.add("DataFrames")
+Pkg.add("CSV")
+Pkg.add("Statistics")
+```
+
+# Introdução
+
+Uma das formas mais simples de pensar em um DataFrame é como uma tabela: linhas representando observações, colunas representando variáveis, e um rótulo para cada coluna. É a estrutura padrão para trabalhar com dados tabulares em Julia, equivalente ao `data.frame` do R ou ao `DataFrame` do pandas em Python, e é fornecida pelo pacote `DataFrames.jl`.
+
+Nesse tutorial vamos criar DataFrames de diferentes formas e passar pelas operações mais comuns do dia a dia: olhar os dados, selecionar colunas e linhas, filtrar, transformar, ordenar e agregar.
+
+```{julia}
+#| echo: true
+
+using DataFrames
+using Statistics
+```
+
+# Criando um DataFrame
+
+### A partir de vetores:
+
+A forma mais direta de montar um DataFrame é passar um vetor para cada coluna. Vamos usar como exemplo uma conversão de temperaturas de Fahrenheit para Celsius:
+
+```{julia}
+#| echo: true
+
+n = 10
+x = sort(rand(-10:100, n))    
+y = 5/9 .* (x .- 32)  
+
+data = DataFrame("°F" => x, "°C" => y)
+```
+
+
+
+### A partir de uma matriz:
+
+Também é possível montar um DataFrame a partir de uma matriz $m \times n$, rotulando as colunas depois:
+
+```{julia}
+#| echo: true
+
+data2 = DataFrame([x y], :auto)     # converte a matriz [x y] em DataFrame
+rename!(data2, ["°F", "°C"])        # atribui os rótulos das colunas
+data2
+```
+
+Repare em um detalhe de tipos: em Julia, uma matriz é sempre homogênea, todos os elementos compartilham o mesmo tipo. Ao concatenar x (inteiros) e y (reais) em [x y], a linguagem precisa promover ambos para um tipo comum (nesse caso Float64). Já em um DataFrame, cada coluna pode ter seu próprio tipo. Perceba que no primeiro exemplo, em que o DataFrame foi construído coluna por coluna, a coluna de Fahrenheit permaneceu inteira:
+
+```{julia}
+#| echo: true
+
+eltype.(eachcol(data))
+```
+
+```{julia}
+#| echo: true
+
+eltype.(eachcol(data2))
+```
+
+Essa é uma das vantagens de trabalhar com DataFrames em vez de matrizes puras. Há a liberdade para ter colunas de tipos diferentes (inteiros, reais, texto, booleanos, categorias) dentro da mesma tabela.
+
+# Inspecionando os dados
+
+Antes de qualquer operação, vale conhecer a tabela com a qual estamos trabalhando:
+
+```{julia}
+#| echo: true
+
+first(data, 3)      #primeiras 3 linhas
+```
+
+```{julia}
+#| echo: true
+
+names(data)          #nomes das colunas
+```
+
+```{julia}
+#| echo: true
+
+size(data)           #(número de linhas, número de colunas)
+```
+
+```{julia}
+#| echo: true
+
+describe(data)       #estatísticas resumidas por coluna
+```
+
+describe() já mostra média, mínimo, máximo e contagem de valores ausentes por coluna, um bom primeiro passo para conhecer qualquer conjunto de dados novo.
+
+# Selecionando colunas e linhas
+
+Colunas podem ser acessadas de várias formas equivalentes:
+
+```{julia}
+#| echo: true
+
+data[:, "°F"]     # cópia da coluna
+```
+
+```{julia}
+#| echo: true
+
+data[!, "°F"]     # referência direta à coluna, sem copiar
+```
+
+A diferença entre ":" e "!" no primeiro índice é sutil. data[:, "°F"] devolve uma cópia do vetor, então modificá-la não afeta o DataFrame original, enquanto data[!, "°F"] devolve o próprio vetor armazenado internamente, então modificá-lo modifica data também. Para leitura, a diferença raramente importa, mas para escrever em uma coluna sem realocar memória, data[!, "°F"] é a forma eficiente.
+
+Selecionar múltiplas colunas funciona de forma parecida:
+
+```{julia}
+#| echo: true
+
+data[:, ["°F", "°C"]]
+```
+
+E linhas específicas são indexadas pela posição, como em um vetor comum:
+
+```{julia}
+#| echo: true
+
+data[1:3, :]     # três primeiras linhas, todas as colunas
+```
+
+# Filtrando linhas
+
+Para manter apenas as linhas que satisfazem uma condição, a forma mais direta é indexação booleana, como em vetores:
+
+```{julia}
+#| echo: true
+
+data[data."°C" .> 0, :]
+```
+
+`DataFrames.jl` também oferece a função filter, que recebe uma função aplicada a cada linha:
+
+```{julia}
+#| echo: true
+
+filter(row -> row."°C" > 0, data)
+```
+
+As duas formas chegam ao mesmo resultado. A indexação booleana costuma ser mais rápida de escrever para condições simples sobre uma coluna, enquanto filter fica mais legível quando a condição combina várias colunas ou é mais elaborada.
+
+# Transformando colunas
+
+Adicionar uma nova coluna pode ser feito atribuindo diretamente a uma propriedade nova do DataFrame:
+
+```{julia}
+#| echo: true
+
+data.sinal = ifelse.(data."°C" .>= 0, "positivo", "negativo")
+data
+```
+
+Para transformações mais estruturadas, especialmente quando o resultado deve virar uma nova coluna com nome explícito, transform e transform! são a ferramenta indicada:
+
+```{julia}
+#| echo: true
+
+transform!(data, "°F" => (f -> f .+ 10) => "°F_mais_10")
+data
+```
+
+A sintaxe "coluna_origem => função => nome_novo" é o padrão usado por boa parte do ecossistema de DataFrames.jl (a mesma aparece em combine(), que veremos a seguir). O "!" no final do nome da função indica que a modificação acontece no DataFrame original, em vez de devolver uma cópia.
+
+# Ordenando
+
+```{julia}
+#| echo: true
+
+sort(data, "°C")               # ordem crescente, devolve uma cópia
+```
+
+```{julia}
+#| echo: true
+
+sort!(data, "°C", rev = true)  # ordem decrescente, modifica data no lugar
+data
+```
+
+# Agrupando e agregando
+
+Um dos usos mais comuns de um DataFrame é resumir dados por grupo, no estilo "para cada categoria, calcule tal estatística". Em DataFrames.jl, isso é feito em duas etapas: groupby() separa as linhas em grupos, e combine() aplica uma função de agregação a cada grupo:
+
+```{julia}
+#| echo: true
+
+resumo = combine(
+    groupby(data, :sinal),
+    "°C" => mean => :media_celsius,
+    nrow => :contagem
+)
+```
+
+groupby(data, :sinal) particiona data em um grupo para cada valor distinto da coluna sinal ("positivo" e "negativo"), e combine() aplica "mean" à coluna °C de cada grupo, além de contar quantas linhas cada grupo tem (com nrow). Esse par groupby mais combine é o equivalente, em Julia, ao group by mais aggregate de SQL, ou ao groupby().agg() do pandas.
+
+# Dados ausentes
+
+Em dados reais é comum haver valores faltando, representados em Julia pelo tipo especial missing. DataFrames.jl trata missing de forma nativa:
+
+```{julia}
+#| echo: true
+
+data.observacao = [i == 3 ? missing : "ok" for i in 1:nrow(data)]
+data
+```
+
+```{julia}
+#| echo: true
+
+dropmissing(data, :observacao)   # remove linhas com valor ausente na coluna indicada
+```
+
+```{julia}
+#| echo: true
+
+mean(skipmissing(coalesce.(data."°C", 0)))   # ignora `missing` ao calcular a média, quando aplicável
+```
+
+Funções como mean() costumam propagar missing em vez de simplesmente ignorá-lo. O padrão ao lidar com colunas que podem ter valores ausentes é envolver o cálculo em skipmissing(), que remove os missing de um iterador antes de repassá-lo à função de agregação.
+
+# Lendo e salvando CSV
+
+Na prática, poucas vezes um DataFrame nasce de vetores digitados à mão. O caminho mais comum é ler de um arquivo CSV, usando o pacote CSV.jl em conjunto com DataFrames.jl:
+
+```{julia}
+#| echo: true
+#| eval: false
+
+using CSV
+
+dados_lidos = CSV.read("temperaturas.csv", DataFrame)
+CSV.write("temperaturas_processadas.csv", data)
+```
+
+CSV.read() recebe o caminho do arquivo e o tipo de destino. CSV.write() faz o caminho inverso, salvando um DataFrame em disco.
+
+# Conclusão
+
+Com um punhado de funções (DataFrame(), select(), filter(), transform(), sort(), groupby(), combine()) já é possível cobrir a maior parte do trabalho do dia a dia com dados tabulares em Julia. O padrão que aparece repetidamente é o de compor essas operações em sequência: criar o DataFrame, inspecionar, filtrar o que interessa, transformar ou agregar, e por fim salvar ou visualizar o resultado.
+
+Como mencionado, Dataframes.jl trata dados do tipo missing naturalmente. Porém, nem sempre nossos dados são somente missing, mas às vezes possuem algum tipo de ruído. No próximo tutorial, veremos diferentes maneiras de tratar dados desse tipo.
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::
