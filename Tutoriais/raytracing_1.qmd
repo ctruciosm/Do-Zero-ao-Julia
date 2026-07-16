@@ -383,4 +383,8 @@ uma representação de raios;
 um modelo básico de câmera e projeção;
 uma primeira função de cor baseada na direção do raio.
 
-Na próxima etapa, poderemos usar essa base para introduzir interseções com objetos da cena — em especial esferas — e finalmente começar a renderizar geometria real. A partir daí, o Raytracer deixará de produzir apenas fundos e passará a simular objetos iluminados no espaço tridimensional.
+Na próxima etapa, poderemos usar essa base para introduzir interseções com objetos da cena, em especial esferas, e finalmente começar a renderizar geometria real. A partir daí, o Raytracer deixará de produzir apenas fundos e passará a simular objetos iluminados no espaço tridimensional.
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::
