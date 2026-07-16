@@ -625,4 +625,6 @@ Nessa segunda parte, evoluímos de um simples gradiente de céu para uma cena co
 
 Finalmente, temos um Raytracer funcional! Se quiser aprofundar seus estudos, recomendamos o livro Raytracing in a Weekend, escrito em C++. É uma boa referência para aqueles que desejam aprender sobre técnicas e estudo de modelagem 3D com matemática e geometria analítica. 
 
-Até a próxima!
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::
