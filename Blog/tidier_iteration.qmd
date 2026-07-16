@@ -1,7 +1,7 @@
 ---
 title: "Pacote TidierIteration.jl"
 description: |
-  Saudades do pacote purrr do R? Conheça o TidierIteration.jl, a implementação 100% Julia que traz map, walk, flatten e outras ferramentas funcionais para seus pipelines de dados.
+  Saudades do pacote purrr do R? Conheça o TidierIteration.jl, uma implementação em Julia que traz map, walk, flatten e outras ferramentas funcionais para seus pipelines de dados.
 categories:
   - Julia
   - Data Science
@@ -11,6 +11,9 @@ author:
     affiliation: "Universidade Estadual de Campinas"
     url: https://github.com/henriqueavelloso
     orcid: 0009-0002-8262-031X
+  - name: Rafael Seixas
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://www.linkedin.com/in/rafael-santos-seixas-figueiredo/
 date: "2025-12-05"
 image: imagens/tidier_iteration.png
 lang: pt
@@ -28,7 +31,7 @@ draft: false
 ::: {.justify}
 Se você veio do universo `R`, provavelmente tem um lugar especial no coração para o pacote `purrr`. A capacidade de mapear funções, iterar sobre listas complexas e limpar dados de forma funcional é viciante.
 
-Embora Julia tenha ferramentas nativas poderosas (como o *broadcasting* `f.(x)` e compreensões de lista), às vezes sentimos falta daquela sintaxe fluida orientada a *pipelines* (`|>`).
+Embora Julia já possua ferramentas nativas poderosas, como *broadcasting* (`f.(x)`) e compreensões de lista, às vezes sentimos falta de uma sintaxe fluida orientada a *pipelines* (`|>`).
 
 É aqui que entra o **TidierIteration.jl**.
 :::
@@ -36,7 +39,7 @@ Embora Julia tenha ferramentas nativas poderosas (como o *broadcasting* `f.(x)` 
 ## O que é?
 
 ::: {.justify}
-O **TidierIteration.jl** é uma implementação em `Julia` do `purrr`. Ele visa simplificar o mapeamento de funções para *Arrays*, *Dicionários* e outras estruturas, além de fornecer advérbios (`possibly`, `quietly`) e funções de "achatamento" (`flatten`) essenciais para lidar com dados aninhados (como *JSON*).
+O **TidierIteration.jl** é uma implementação em `Julia` inspirada no `purrr`. Ele visa simplificar a aplicação de funções a *arrays*, *dicionários* e outras estruturas, além de oferecer helpers como `possibly`, `quietly` e funções de achatamento (`flatten`) úteis para lidar com dados aninhados, como *JSON*.
 :::
 
 ## Instalação
@@ -63,7 +66,7 @@ using TidierIteration, Plots
 # Por que usar TidierIteration.jl se já existe `map`?
 
 ::: {.justify}
-`Julia` já possui `map(f, x)`. O TidierIteration introduz o `map_tidy`, que coloca os dados como primeiro argumento. Isso padroniza a leitura do código.
+`Julia` já possui `map(f, x)`. O TidierIteration introduz o `map_tidy`, que recebe os dados como primeiro argumento. Isso torna a leitura do código mais consistente em pipelines.
 
 Imagine que queremos elevar números ao quadrado e subtrair 1.
 :::
@@ -160,7 +163,7 @@ meus_plots |>
 ::: {.justify}
 > Cuidado! Por que não usar `map` aqui?
 
-Se tentássemos usar `imap` no lugar de `iwalk`, perderíamos nossos dados. A função `display` retorna `nothing`. O `map` captura esse retorno e substitui nossos gráficos por ele.
+Se tentássemos usar `imap` no lugar de `iwalk`, perderíamos nossos dados. A função `display` retorna `nothing`, e o `map` passaria esse retorno adiante, substituindo os gráficos por uma sequência de valores nulos.
 
 Veja a demonstração do erro:
 :::
@@ -181,13 +184,13 @@ println("Conteúdo final: ", resultado_quebrado)
 ```
 
 ::: {.justify}
-Como resultado, `resultado_quebrado` vira um vetor de `nothing`'s, e o pipeline morre ali. Com `walk`, os dados originais (`meus_plots`) são preservados e passados adiante.
+Como resultado, `resultado_quebrado` vira um vetor de `nothing` e o pipeline perde os gráficos originais. Com `walk`, os dados originais (`meus_plots`) são preservados e passam adiante.
 :::
 
 # Domando JSONs com `flatten`
 
 ::: {.justify}
-Quem trabalha com APIs sabe o pesadelo que é lidar com listas de listas de dicionários. O `flatten_*` resolve isso.
+Quem trabalha com APIs sabe o desafio de lidar com listas de listas de dicionários. As funções `flatten_*` ajudam a resolver esse problema.
 :::
 
 ```{julia}
