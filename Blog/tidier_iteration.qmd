@@ -84,11 +84,11 @@ map(x -> x^2 - 1, dados)
 
 ```{julia}
 # A função map_tidy recebe os dados primeiro, depois a função
-dados |> d ->
-    map_tidy(d, x -> x^2 - 1)
+dados |> 
+    d -> map_tidy(d, x -> x^2 - 1)
 ```
 
-# Lidando com Dicionários
+# Lidando com dicionários
 
 ::: {.justify}
 Iterar sobre dicionários em `Julia` nativo pode ser um pouco verboso. O pacote facilita isso com `map_keys` e `map_values`.

@@ -21,10 +21,10 @@ format:
     toc-depth: 3
     self-contained: false
 engine: knitr
-draft: true
+draft: false
 ---
 
-## introdução
+## Introdução
 
 ::: justify
 Nas partes anteriores desta série, exploramos como o OnlineStats.jl permite calcular estatísticas de forma incremental, sem precisar manter todos os dados em memória. Isso se torna essencial quando lidamos com streams, logs ou qualquer fluxo contínuo de dados.
@@ -40,13 +40,14 @@ Isso é útil para:
 -   Visualizar deriva de dados (data drift)
 :::
 
-## Estatísticas Online + Visualização Incremental
+## Estatísticas online + visualização incremental
 
 ::: justify
 Vamos acompanhar a evolução da média de uma sequência de valores aleatórios recebidos de forma contínua. A cada n observações, vamos salvar um quadro de gráfico e, ao final, juntar tudo em uma animação.
 :::
 
 ```{julia}
+#| output: false
 using OnlineStats
 using CairoMakie
 using Random
@@ -79,9 +80,9 @@ for (i, x) in enumerate(randn(300))
         save("frame_$(lpad(i,3,'0')).png", fig)
     end
 end
-
+```
+```{julia}
 println("✅ Frames gerados no diretório atual: ", pwd())
-
 ```
 
 ::: justify
@@ -89,21 +90,21 @@ Você obterá arquivos como:
 
 frame_030.png frame_060.png frame_090.png ... frame_300.png
 
-Que quando juntamos tudo obtemos o seguinte GIF:
+Podemos unir todos eles para obtermos o seguinte GIF:
 :::
 
-![gif grafico da média](imagens/gif_estat_incremental.gif)
+![GIF - Gráfico da Média](imagens/gif_estat_incremental.gif)
 
 ::: justify
 Nele é possível observarmos a convergência da média dessa distribuição.
 :::
 
-## Estatísticas com Janelas Deslizantes
+## Estatísticas com janelas deslizantes
 
 ::: justify
 Em muitos cenários, não queremos calcular estatísticas considerando *todos* os dados históricos, mas apenas os valores mais recentes. Isso é comum em monitoramento, finanças e controle de processos.
 
-O `OnlineStats.jl` oferece o `MovingWindow` para esse propósito: Ele mantém um buffer circular que guarda apenas as últimas `b` observações.
+O `OnlineStats.jl` oferece o `MovingWindow` para esse propósito. Ele mantém um buffer circular que guarda apenas as últimas `b` observações.
 :::
 
 ```{julia}
@@ -184,11 +185,15 @@ o item mais antigo é descartado, o novo valor entra no final e a janela sempre 
 ::: justify
 O `MovingWindow` funciona como um "buffer móvel". Ele não acumula o histórico inteiro, apenas armazena os valores mais recentes. Esse tipo de estrutura é essencial em:
 
--   monitoramento de séries temporais,
--   detecção de anomalias,
--   análise de sinais,
--   streaming de dados,
--   cálculos de métricas móveis (média móvel, volatilidade, etc.).
+-   Monitoramento de séries temporais;
+
+-   Detecção de anomalias;
+
+-   Análise de sinais;
+
+-   Streaming de dados;
+
+-   Cálculos de métricas móveis (média móvel, volatilidade, etc.).
 :::
 
 ## Conclusão
@@ -196,11 +201,11 @@ O `MovingWindow` funciona como um "buffer móvel". Ele não acumula o histórico
 ::: justify
 Nas três partes deste blog, exploramos diversos recursos e conceitos do `OnlineStats.jl`. Ainda assim, tudo isso representa apenas a superfície do que esse pacote é realmente capaz de fazer.
 
-O OnlineStats se torna ainda mais poderoso quando utilizado em conjunto com outros pacotes do ecossistema Julia — seja para modelagem, visualização, análise de séries temporais ou processamento avançado de dados em fluxo contínuo.
+O OnlineStats se torna ainda mais poderoso quando utilizado em conjunto com outros pacotes do ecossistema Julia, sejam para modelagem, visualização, análise de séries temporais ou processamento avançado de dados em fluxo contínuo.
 
 Explorem seus limites, combinem ferramentas e experimentem diferentes abordagens para alcançar resultados cada vez melhores.
 
-Obrigado por ler — e boa programação!
+Obrigado por ler e boa programação!
 :::
 
 ::: callout-note
