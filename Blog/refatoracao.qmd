@@ -9,7 +9,7 @@ author:
   - name: Rafael Seixas
     affiliation: Universidade Estadual de Campinas
     url: https://github.com/seixasr
-date: "2026-07-16"
+date: "2026-06-28"
 image: imagens/refatoracao_codigo.png
 lang: pt
 format:

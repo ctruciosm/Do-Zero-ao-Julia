@@ -1,0 +1,264 @@
+---
+title: "Uma função, uma tarefa: escrevendo código mais limpo em Julia"
+description: |
+  Aprenda por que cada função deve possuir uma única responsabilidade e como esse princípio torna seus programas mais legíveis, reutilizáveis e fáceis de manter.
+categories:
+  - Julia
+  - Boas Práticas
+author:
+  - name: Rafael Seixas
+    affiliation: Universidade Estadual de Campinas
+    url: https://github.com/seixasr
+date: "2026-07-01"
+image: imagens/uma_funcao_uma_tarefa.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+engine: julia
+draft: true
+---
+
+# Introdução
+
+Ao aprender programação, é comum escrever funções que fazem "um pouco de tudo": recebem dados, realizam cálculos, imprimem resultados, salvam arquivos e ainda geram gráficos.
+
+Embora esse tipo de implementação normalmente funcione, ela tende a dificultar a manutenção do código à medida que o projeto cresce.
+
+Uma das práticas mais importantes para escrever programas organizados consiste em atribuir **uma única responsabilidade para cada função**.
+
+Neste tutorial veremos como aplicar esse princípio em Julia por meio de exemplos práticos.
+
+# O que significa "uma função, uma tarefa"?
+
+Uma função deve possuir um único objetivo bem definido.
+
+Por exemplo,
+
+- calcular uma média;
+- ordenar um vetor;
+- carregar um arquivo;
+- gerar um gráfico.
+
+Quando uma função realiza diversas tarefas simultaneamente, ela se torna mais difícil de compreender, reutilizar e testar.
+
+# Um primeiro exemplo
+
+Considere a função abaixo.
+
+```julia
+function average(v)
+    total = sum(v)
+    println("A média é ", total / length(v))
+end
+```
+
+Ela parece simples, mas possui duas responsabilidades:
+
+1. calcular a média;
+2. exibir o resultado.
+
+Essas tarefas são independentes.
+
+# Separando responsabilidades
+
+Uma alternativa melhor seria:
+
+```julia
+function average(v)
+    return sum(v) / length(v)
+end
+
+function print_average(v)
+    println("A média é ", average(v))
+end
+```
+
+Agora cada função possui apenas uma responsabilidade.
+
+Isso traz diversas vantagens.
+
+# Por que essa abordagem é melhor?
+
+Separar responsabilidades torna o código:
+
+- mais legível;
+- mais reutilizável;
+- mais fácil de testar;
+- mais fácil de modificar.
+
+Por exemplo, caso desejemos salvar a média em um arquivo, não será necessário alterar a função `average`.
+
+```julia
+function save_average(filename, v)
+    open(filename, "w") do io
+        println(io, average(v))
+    end
+end
+```
+
+Observe que reutilizamos exatamente a mesma função de cálculo.
+
+# Outro exemplo
+
+Imagine uma função que realiza diversas tarefas.
+
+```julia
+function process_data(data)
+
+    clean = filter(!ismissing, data)
+
+    mean_value = mean(clean)
+
+    println(mean_value)
+
+    histogram(clean)
+
+    savefig("hist.png")
+
+end
+```
+
+Ela:
+
+- limpa os dados;
+- calcula a média;
+- imprime;
+- gera gráfico;
+- salva arquivo.
+
+São cinco responsabilidades diferentes.
+
+# Refatorando
+
+Uma implementação mais organizada seria
+
+```julia
+clean_data(data)
+
+↓
+
+compute_mean(data)
+
+↓
+
+plot_histogram(data)
+
+↓
+
+save_histogram(plot)
+```
+
+Cada função passa a resolver apenas um problema.
+
+# Funções pequenas são mais fáceis de testar
+
+Considere a função
+
+```julia
+function area_circle(radius)
+    return π * radius^2
+end
+```
+
+Testá-la é simples.
+
+```julia
+area_circle(1)
+```
+
+Resultado esperado:
+
+```text
+3.141592653589793
+```
+
+Agora imagine uma função que calcula áreas, imprime mensagens, salva arquivos e gera gráficos.
+
+Testar cada comportamento individual torna-se muito mais complicado.
+
+# Reutilização
+
+Outro benefício importante é a reutilização.
+
+A função
+
+```julia
+function fahrenheit_to_celsius(temp)
+    return (temp - 32) * 5 / 9
+end
+```
+
+pode ser utilizada em diversos contextos.
+
+```julia
+fahrenheit_to_celsius(68)
+```
+
+```julia
+temperatures = [32, 50, 68, 86]
+
+fahrenheit_to_celsius.(temperatures)
+```
+
+Como ela possui apenas uma responsabilidade, pode ser facilmente reutilizada.
+
+# Um sinal de alerta
+
+Durante o desenvolvimento, pergunte-se:
+
+> Minha função realiza apenas uma tarefa?
+
+Se a resposta for "não", provavelmente ela pode ser dividida em funções menores.
+
+Alguns sinais comuns são:
+
+- muitas linhas de código;
+- muitos comentários internos;
+- vários blocos `if`;
+- repetição de código;
+- necessidade de explicar o que cada parte faz.
+
+Esses sintomas costumam indicar que a função possui responsabilidades demais.
+
+# Existe um tamanho ideal?
+
+Não existe um número exato de linhas.
+
+Entretanto, funções pequenas costumam apresentar vantagens:
+
+- são mais fáceis de compreender;
+- possuem menos dependências;
+- facilitam testes;
+- favorecem reutilização.
+
+O mais importante não é a quantidade de linhas, mas sim a quantidade de responsabilidades.
+
+# Relação com o princípio da responsabilidade única
+
+Esse conceito está diretamente relacionado ao **Princípio da Responsabilidade Única (Single Responsibility Principle - SRP)**, um dos princípios SOLID da Engenharia de Software.
+
+Segundo esse princípio, uma função, classe ou módulo deve possuir apenas um motivo para ser alterado.
+
+Embora o SOLID seja frequentemente associado à programação orientada a objetos, essa ideia também é extremamente útil em Julia e em programação científica.
+
+# Boas práticas
+
+Ao escrever uma nova função, procure responder às seguintes perguntas:
+
+- ela resolve apenas um problema?
+- seu nome descreve claramente sua responsabilidade?
+- ela pode ser reutilizada em outros programas?
+- ela retorna informações em vez de imprimi-las?
+- ela depende do mínimo possível de variáveis externas?
+
+Se a maioria das respostas for "sim", provavelmente sua função está bem estruturada.
+
+# O que aprendemos?
+
+Neste tutorial vimos que escrever funções pequenas e com responsabilidades bem definidas torna o código mais organizado, reutilizável e fácil de manter.
+
+Em Julia, essa prática também favorece a composição de funções, permitindo construir programas complexos a partir de componentes simples e independentes.
+
+Mais do que reduzir a quantidade de linhas de código, o objetivo é escrever funções que expressem claramente sua intenção e possam ser reutilizadas sempre que necessário.
