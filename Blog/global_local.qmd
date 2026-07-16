@@ -1,0 +1,144 @@
+---
+title: "Global vs Local: Entendendo o Escopo de Variáveis em Julia"
+description: |
+    Compreenda a diferença entre variáveis globais e locais em Julia, como elas afetam o desempenho do seu código e as melhores práticas para utilizá-las de forma eficiente.
+categories:
+  - Julia
+  - Escopo
+  - Desempenho
+author:
+  - name: Rafael Seixas
+    affiliation: Universidade Estadual de Campinas
+date: "2026-07-16"
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+engine: julia
+draft: false
+---
+
+# Introdução
+
+Em Julia, o escopo de uma variável define onde ela pode ser acessada e modificada. Entender essa diferença é essencial para escrever código mais claro, mais seguro e mais eficiente.
+
+Em geral, variáveis locais são preferíveis dentro de funções e blocos, enquanto variáveis globais costumam ser evitadas em código que precisa de desempenho ou que deve ser mais previsível.
+
+# O que são variáveis locais?
+
+Uma variável local é aquela definida dentro de uma função, loop ou bloco. Ela existe apenas no contexto em que foi criada e não interfere com o restante do programa.
+
+```{julia}
+function soma_quadrados(x)
+    s = 0
+    for i in eachindex(x)
+        s += x[i]^2
+    end
+    return s
+end
+
+vetor = [1, 2, 3, 4]
+println(soma_quadrados(vetor))
+```
+
+Neste exemplo, `s` e `i` são variáveis locais. Elas existem apenas durante a execução da função.
+
+# O que são variáveis globais?
+
+Uma variável global é definida no escopo mais alto do programa, fora de funções ou blocos internos. Ela pode ser acessada em diferentes partes do código, mas isso pode gerar confusão e reduzir a performance, especialmente em funções que rodam muitas vezes.
+
+```{julia}
+valor = 10
+
+function multiplica_por_valor(x)
+    return x * valor
+end
+
+println(multiplica_por_valor(3))
+```
+
+Aqui, `valor` é uma variável global. A função `multiplica_por_valor` a utiliza, mas isso torna a função menos autônoma.
+
+# Diferença prática entre os dois tipos
+
+## Exemplo 1: variável local dentro de função
+
+```{julia}
+function exemplo_local()
+    x = 5
+    x += 1
+    return x
+end
+
+println(exemplo_local())
+```
+
+A variável `x` é local e não afeta o resto do programa.
+
+## Exemplo 2: variável global alterando o comportamento
+
+```{julia}
+contador = 0
+
+function aumenta_contador()
+    global contador
+    contador += 1
+    return contador
+end
+
+println(aumenta_contador())
+println(contador)
+```
+
+Neste caso, a palavra-chave `global` é necessária para indicar que queremos modificar a variável global `contador`, e não criar uma nova variável local.
+
+# O papel do `global`
+
+Em Julia, se você tentar alterar uma variável global dentro de uma função sem declarar `global`, o interpretador vai tratar a variável como local, o que pode gerar erro ou comportamento inesperado.
+
+```{julia}
+valor_global = 2
+
+function muda_valor()
+    valor_global = 5
+    return valor_global
+end
+
+println(muda_valor())
+println(valor_global)
+```
+
+Nesse caso, `valor_global` dentro da função é uma variável local nova. O valor global original permanece intacto.
+
+# Por que isso importa?
+
+Variáveis globais podem tornar o código mais difícil de raciocinar, porque qualquer parte do programa pode alterá-las. Isso aumenta o risco de bugs e reduz a previsibilidade do programa.
+
+Além disso, Julia otimiza melhor funções que usam variáveis locais, o que costuma resultar em melhor desempenho.
+
+# Boas práticas
+
+Em geral, prefira:
+
+- passar valores como argumentos para funções;
+- usar variáveis locais dentro de funções;
+- usar `global` apenas quando for realmente necessário;
+- evitar depender de estado externo em funções curtas e reutilizáveis.
+
+```{julia}
+function calcula(x, y)
+    return x + y
+end
+
+println(calcula(2, 3))
+```
+
+Essa abordagem deixa o código mais limpo e mais fácil de testar.
+
+# Conclusão
+
+Entender a diferença entre variáveis locais e globais em Julia é um passo importante para escrever código mais claro, mais robusto e mais rápido.
+
+Enquanto variáveis locais ajudam a encapsular comportamento e melhorar a performance, variáveis globais podem tornar o programa mais difícil de manter. O ideal é usar variáveis locais sempre que possível e reservar o uso de `global` para casos específicos.
