@@ -21,14 +21,13 @@ format:
     toc-depth: 3
     self-contained: false
 engine: knitr
-draft: true
+draft: false
 ---
 
 ## Introdução
 
 ::: justify
-Na Parte 1
- deste blog, conhecemos as bases do pacote `OnlineStats.jl`, uma poderosa ferramenta da linguagem Julia voltada ao cálculo de estatísticas de forma incremental — isto é, sem precisar carregar todo o conjunto de dados na memória.
+Na Parte 1 deste blog, conhecemos as bases do pacote `OnlineStats.jl`, uma poderosa ferramenta da linguagem Julia voltada ao cálculo de estatísticas de forma incremental — isto é, sem precisar carregar todo o conjunto de dados na memória.
 
 Agora, nesta Parte 2, vamos explorar funcionalidades mais avançadas do pacote, ideais para aplicações em grandes volumes de dados, análises de logs contínuos e fluxos de dados em tempo real.
 Além disso, veremos como o `OnlineStats.jl` pode ser aplicado em tarefas de regressão linear em larga escala, análise incremental de arquivos CSV gigantes e até mesmo integração com streams ao vivo usando Channels e Tasks.
@@ -36,7 +35,7 @@ Além disso, veremos como o `OnlineStats.jl` pode ser aplicado em tarefas de reg
 Se você já trabalha com dados dinâmicos, esta é uma oportunidade de entender como a linguagem Julia lida com estatísticas de forma eficiente, escalável e elegante.
 :::
 
-## Regressão em Grandes Datasets
+## Regressão em grandes datasets
 
 :::justify
 Um dos recursos mais interessantes do OnlineStats.jl é a capacidade de realizar ajustes de regressão linear de forma incremental — processando milhões de observações sem precisar armazená-las em memória.
@@ -46,10 +45,12 @@ O exemplo abaixo mostra como atualizar um modelo de regressão linha a linha:
 :::
 
 ```{julia}
-using OnlineStats, Random
+#| output: false
+using OnlineStats, CSV, Downloads, Plots, Random, LinearAlgebra
 
 Random.seed!(123)
-
+```
+```{julia}
 # Simula dados (5 preditores)
 for n in (1000, 10000)
     X = randn(n, 5)
@@ -67,33 +68,33 @@ Já o LinRegBuilder é mais conveniente quando se deseja ajustar o modelo direta
 :::
 
 ```{julia}
-
+#| output: false
 # Gerando dados simulados
 n = 100_000
 p = 10
+```
+```{julia}
 X = [randn(p) for _ in 1:n]              # Lista de vetores de features
 β = range(-1, 1, length=p)               # Coeficientes reais
 y = [dot(x, β) + 0.1*randn() for x in X] # Resposta linear + ruído
-
+```
+```{julia}
 # Criando o modelo de regressão
 o = LinRegBuilder(p)
-
 # Alimentando incrementalmente com [x; y]
 for (xi, yi) in zip(X, y)
     fit!(o, [xi; yi])   # concatenamos o vetor de features com o target
 end
 
 # Resultados
-println("Coeficientes estimados:")
-println(coef(o))
-
+println("Coeficientes estimados: ", coef(o))
 ```
 
 :::justify
 Essas abordagens são ideais para contextos de big data e permitem que os coeficientes sejam atualizados em tempo real, sem depender de frameworks externos.
 :::
 
-## Análise Incremental de Logs e Arquivos CSV
+## Análise incremental de logs e arquivos CSV
 
 :::justify
 Outra aplicação prática do OnlineStats.jl é a análise de logs ou bases tabulares muito grandes, como arquivos CSV de gigabytes.
@@ -103,15 +104,19 @@ O exemplo a seguir mostra como gerar histogramas de forma incremental a partir d
 :::
 
 ```{julia}
+#| output: false
 using CSV, Downloads, Plots
 
 # Baixando o dataset Iris
 url = "https://gist.githubusercontent.com/netj/8836201/raw/6f9306ad21398ea43cba4f7d537619d0e07d5ae3/iris.csv"
 file_path = Downloads.download(url)
-
+```
+```{julia}
 # Leitura com normalizenames=true para padronizarmos o nome das colunas
 rows = CSV.Rows(file_path; reusebuffer=true, normalizenames=true)
-
+```
+```{julia}
+#|output: false
 # GroupBy: chave String -> Hist
 o = GroupBy(String, Hist(0:0.5:8))
 
@@ -161,6 +166,8 @@ end
 
 # Acessa o histograma da espécie "setosa"
 hist_setosa = o["setosa"]
+```
+```{julia}
 println("Histograma (raw): ", hist_setosa)
 
 # Obtém arestas e contagens de forma compatível e plota
@@ -174,18 +181,21 @@ bar(edges[1:end-1], counts,
 Aqui, cada variedade de flor (setosa, versicolor, virginica) mantém seu próprio histograma, atualizado linha a linha — uma técnica extremamente útil para lidar com logs de usuários, eventos de rede ou métricas de sistemas.
 :::
 
-## Processamento de Fluxos de Dados ao Vivo
+## Processamento de fluxos de dados ao vivo
 
 :::justify
 Uma das forças da linguagem Julia está na sua concorrência leve via Tasks e Channels.
-Isso permite integrar o OnlineStats.jl a fluxos de dados contínuos — simulando, por exemplo, sensores, filas de mensagens ou requisições de API em tempo real.
+Isso permite integrar o OnlineStats.jl a fluxos de dados contínuos, e com isso simular, por exemplo, sensores, filas de mensagens ou requisições de API em tempo real.
 
 Veja como isso pode ser feito com um simples padrão produtor-consumidor:
 :::
 
 ```{julia}
-
+#| output: false
 Random.seed!(42)
+```
+```{julia}
+#| output: false
 ch = Channel{Tuple{Vector{Float64}, Float64}}(32)
 
 model = LinReg()
@@ -206,10 +216,10 @@ consumer = @async begin
         fit!(model, (x, y))
     end
 end
-
+```
+```{julia}
 wait(consumer)
 println("Coeficientes finais: ", coef(model))
-
 ```
 
 :::justify
@@ -217,7 +227,7 @@ Com isso, o modelo é treinado continuamente conforme os dados chegam, sem preci
 Esse padrão é útil para aplicações como monitoramento de desempenho, análise em tempo real de sensores IoT ou atualização de métricas de plataformas online.
 :::
 
-## Combinação e Paralelização
+## Combinação e paralelização
 
 :::justify
 O OnlineStats também permite mesclar estatísticas calculadas em diferentes partes do sistema — ideal para pipelines distribuídos.
@@ -234,7 +244,7 @@ println("Média combinada: ", value(a))
 ```
 
 :::justify
-Essa capacidade de agregação faz com que o pacote seja facilmente integrável com fluxos paralelos, sistemas distribuídos e arquiteturas baseadas em sharding.
+Essa capacidade de agregação faz com que o pacote seja facilmente integrável com fluxos paralelos, sistemas distribuídos e arquiteturas baseadas em sharding (particionamento de dados entre diferentes nós).
 :::
 
 ## Conclusão
@@ -245,13 +255,13 @@ Ele é uma infraestrutura completa para análise incremental e em tempo real, id
 
 Nesta segunda parte, vimos como aplicar o pacote para:
 
-Ajustar regressões lineares em grandes datasets;
+- Ajustar regressões lineares em grandes datasets;
 
-Processar arquivos CSV e logs gigantes sem sobrecarregar o sistema;
+- Processar arquivos CSV e logs gigantes sem sobrecarregar o sistema;
 
-Integrar modelos e métricas a fluxos de dados contínuos;
+- Integrar modelos e métricas a fluxos de dados contínuos;
 
-Combinar resultados parciais com merge! em pipelines distribuídos.
+- Combinar resultados parciais com merge! em pipelines distribuídos.
 
 Se na Parte 1 exploramos a base do pensamento online, nesta Parte 2 você conheceu o poder de escalar essa lógica para aplicações do mundo real — de análise de logs a sistemas de aprendizado incremental.
 
