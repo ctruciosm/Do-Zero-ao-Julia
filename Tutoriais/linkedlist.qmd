@@ -525,3 +525,7 @@ Para avaliar a performance das três linguagens, comparamos o uso de mémoria de
 # Conclusão
 
 Listas encadeadas são estruturas fundamentais no estudo de teoria da computação, algoritmos e estruturas de dados. ``Julia``, em particular, possibilita a implementação de estruturas complexas como listas encadeadas de forma concisa. Conforme evidenciado pelos resultados apresentados, a linguagem demonstra capacidade de gerar código de alta performance capaz de rivalizar com gigantes da indústria, como ``C++``, enquanto mantém a simplicidade sintática característica de linguagens como Python. Em alguns casos, como na performance de ``find_element()``, ``Julia`` demonstrou performance quase 9.000x superior à de Python - feito impressionante para uma linguagem com sintaxe tão similar.
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica, aprimoramento do texto e criação de imagens.
+:::
