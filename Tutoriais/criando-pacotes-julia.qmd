@@ -266,3 +266,7 @@ O módulo `Containers` é pequeno, mas toca em quase todas as decisões que apar
 O módulo `DataStructs`, por sua vez, mostra o outro lado da moeda: erros de composição (listas de `export` fora de sincronia com o que foi de fato definido) que só aparecem quando alguém tenta usar o pacote de fora, e não durante o desenvolvimento isolado de cada peça. Vale sempre testar `using` a partir de um módulo limpo, e não só rodar o arquivo que define o módulo, para pegar esse tipo de problema cedo.
 
 Por hoje é só, até a próxima!
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica, aprimoramento do texto e criação de imagens.
+:::
