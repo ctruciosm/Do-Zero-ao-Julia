@@ -1,0 +1,267 @@
+---
+title: "Funções especiais para EDOs em Julia"
+description: |
+  Apresentação de funções especiais para resolver equações diferenciais ordinárias (EDOs) em Julia, incluindo exemplos práticos e dicas de implementação.
+categories:
+  - Julia
+  - Equações Diferenciais
+  - Análise Numérica
+author:
+  - name: Rafael Seixas
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://www.linkedin.com/in/rafael-santos-seixas-figueiredo/
+date: "2026-07-16"
+image: imagens/funcoes_especiais.png
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+engine: julia
+draft: true
+---
+
+# Introdução
+
+Ao estudar Equações Diferenciais Ordinárias (EDOs), aprendemos inicialmente que muitas equações podem ser resolvidas utilizando funções elementares, como exponenciais, polinômios, funções trigonométricas e logaritmos. Entretanto, diversos problemas importantes conduzem a equações cuja solução não pode ser expressa apenas por essas funções.
+
+Nesses casos surgem as **funções especiais**. Elas aparecem naturalmente como soluções de determinadas classes de equações diferenciais e desempenham papel fundamental em Física, Engenharia e Matemática Aplicada.
+
+Neste tutorial exploraremos algumas das principais funções especiais disponíveis em Julia por meio do pacote `SpecialFunctions.jl`. Veremos sua definição matemática, onde elas aparecem na resolução de EDOs, como utilizá-las em Julia e como visualizar seu comportamento.
+
+# O que são funções especiais?
+
+As funções especiais surgiram da necessidade de resolver EDOs que não admitem soluções em termos de funções elementares.
+
+Por exemplo,
+
+$$
+y''-y=0
+$$
+
+possui solução
+
+$$
+y(x)=Ae^x+Be^{-x},
+$$
+
+enquanto
+
+$$
+x^2y''+xy'+(x^2-\nu^2)y=0
+$$
+
+possui soluções dadas pelas funções de Bessel.
+
+Da mesma forma, o método de Frobenius conduz frequentemente às funções Gama e Beta, enquanto problemas de difusão e a equação do calor levam naturalmente à função erro.
+
+# Pacotes utilizados
+
+```julia
+using SpecialFunctions
+using Plots
+```
+
+::: {.justify}
+As funções especiais que vamos mostrar já existem no pacote `SpecialFunctions.jl`. Neste tutorial, importamos o pacote e criamos wrappers simples apenas para demonstrar como chamar cada função com parâmetros e obter resultados legíveis.
+:::
+
+# Função Gama
+
+## Motivação
+
+A função Gama estende o conceito de fatorial para números reais e complexos.
+
+## Definição
+
+$$
+\Gamma(z)=\int_0^\infty t^{z-1}e^{-t}\,dt,\qquad \Re(z)>0.
+$$
+
+Para inteiros positivos,
+
+$$
+\Gamma(n)=(n-1)!.
+$$
+
+## Implementando em Julia
+
+A função `gamma` já existe no pacote `SpecialFunctions`. Aqui usamos um wrapper simples para mostrar sua chamada de forma explícita e didática.
+
+```julia
+function gamma_function(x::Real)
+    return gamma(x)
+end
+
+println("gamma_function(5) = ", gamma_function(5))
+println("gamma_function(1/2) = ", gamma_function(1/2))
+```
+
+## Visualização
+
+```julia
+x = range(0.1, 6, length=500)
+plot(x, gamma_function.(x), label="Γ(x)", lw=2, xlabel="x", ylabel="Γ(x)")
+```
+
+## Onde aparece em EDOs?
+
+Ao resolver a equação de Bessel pelo método de Frobenius surgem coeficientes envolvendo
+
+$$
+\frac{1}{\Gamma(k+\nu+1)}.
+$$
+
+# Função Beta
+
+## Motivação
+
+A função Beta aparece em integrais especiais e em soluções relacionadas às funções hipergeométricas.
+
+## Definição
+
+$$
+B(x,y)=\int_0^1t^{x-1}(1-t)^{y-1}\,dt.
+$$
+
+Ela satisfaz
+
+$$
+B(x,y)=\frac{\Gamma(x)\Gamma(y)}{\Gamma(x+y)}.
+$$
+
+## Implementando em Julia
+
+A função `beta` também já está disponível em `SpecialFunctions`. O wrapper abaixo é apenas um exemplo didático de como chamar `beta` com parâmetros.
+
+```julia
+function beta_function(x::Real, y::Real)
+    return beta(x, y)
+end
+
+println("beta_function(2, 3) = ", beta_function(2, 3))
+println("beta_function(1.5, 2.5) = ", beta_function(1.5, 2.5))
+```
+
+# Função Erro
+
+## Motivação
+
+A função erro surge naturalmente ao integrar a função Gaussiana.
+
+## Definição
+
+$$
+\operatorname{erf}(x)=\frac{2}{\sqrt{\pi}}\int_0^x e^{-t^2}\,dt.
+$$
+
+## Implementando em Julia
+
+A função `erf` já está pronta no pacote `SpecialFunctions`. O wrapper abaixo mostra como chamá-la em um contexto de tutorial.
+
+```julia
+function erf_function(x::Real)
+    return erf(x)
+end
+
+println("erf_function(0) = ", erf_function(0))
+println("erf_function(1) = ", erf_function(1))
+```
+
+## Visualização
+
+```julia
+x = range(-3, 3, length=500)
+plot(x, erf_function.(x), label="erf(x)", lw=2, xlabel="x", ylabel="erf(x)")
+```
+
+## Onde aparece?
+
+A função erro aparece em problemas de equação do calor, difusão e processos estocásticos.
+
+# Funções de Bessel
+
+As funções de Bessel aparecem em problemas com simetria cilíndrica.
+
+## Equação de Bessel
+
+$$
+x^2y''+xy'+(x^2-\nu^2)y=0.
+$$
+
+## Implementando em Julia
+
+As funções de Bessel já existem em `SpecialFunctions`. Os wrappers abaixo apenas ilustram como chamá-las com diferentes ordens e argumentos.
+
+```julia
+function besselj_function(v::Real, x::Real)
+    return besselj(v, x)
+end
+
+function bessely_function(v::Real, x::Real)
+    return bessely(v, x)
+end
+
+function besseli_function(v::Real, x::Real)
+    return besseli(v, x)
+end
+
+function besselk_function(v::Real, x::Real)
+    return besselk(v, x)
+end
+
+println("besselj_function(0, 1.0) = ", besselj_function(0, 1.0))
+println("bessely_function(0, 1.0) = ", bessely_function(0, 1.0))
+println("besseli_function(0, 1.0) = ", besseli_function(0, 1.0))
+println("besselk_function(0, 1.0) = ", besselk_function(0, 1.0))
+```
+
+## Visualização das funções de Bessel
+
+```julia
+x = range(0.1, 20, length=600)
+plot(x, besselj_function.(0, x), label="J₀(x)", lw=2, xlabel="x", ylabel="f(x)")
+plot!(x, besselj_function.(1, x), label="J₁(x)", lw=2)
+```
+
+## Bessel de segunda espécie
+
+```julia
+plot(x, bessely_function.(0, x), label="Y₀(x)", lw=2, xlabel="x", ylabel="f(x)")
+```
+
+## Bessel modificadas
+
+```julia
+plot(x, besseli_function.(0, x), label="I₀(x)", lw=2, xlabel="x", ylabel="f(x)")
+plot!(x, besselk_function.(0, x), label="K₀(x)", lw=2)
+```
+
+# Resumo
+
+| Função | Julia | Aplicações |
+|---------|-------|------------|
+| Γ(x) | `gamma` | Frobenius, Bessel |
+| B(x,y) | `beta` | Integrais especiais |
+| erf(x) | `erf` | Equação do calor |
+| Jν(x) | `besselj` | Equação de Bessel |
+| Yν(x) | `bessely` | Segunda solução |
+| Iν(x) | `besseli` | Bessel modificada |
+| Kν(x) | `besselk` | Bessel modificada |
+
+# Quando devo utilizar cada função?
+
+| Se durante a resolução aparecer... | Função associada |
+|-----------------------------------|------------------|
+| Método de Frobenius com fatoriais generalizados | Função Gama |
+| Integrais envolvendo potências | Função Beta |
+| Integrais da Gaussiana | Função Erro |
+| Simetria cilíndrica | Bessel |
+| Simetria cilíndrica com crescimento/decaimento exponencial | Bessel modificadas |
+
+# Referências
+
+1. Jayme Vaz Jr. *Métodos Matemáticos*.
+2. Documentação do pacote SpecialFunctions.jl.
+3. Documentação da linguagem Julia.

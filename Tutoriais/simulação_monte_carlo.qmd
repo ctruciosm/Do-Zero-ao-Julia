@@ -12,7 +12,7 @@ author:
     affiliation: "Universidade Estadual de Campinas"
     url: https://www.linkedin.com/in/rafael-santos-seixas-figueiredo/
 date: "2026-07-16"
-image: imagens/simulacao_monte_carlo.png
+image: imagens/monte_carlo.png
 lang: pt
 format:
   html:
