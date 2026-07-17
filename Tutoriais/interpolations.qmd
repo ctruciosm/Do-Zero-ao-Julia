@@ -1,0 +1,340 @@
+---
+title: "Interpolando Dados com Interpolations.jl"
+description: "Aprenda a interpolar utilizando o pacote Interpolations.jl para estimar valores intermediários em conjuntos de dados."
+author: 
+    - name: "Mateus Ismael dos Santos Toledo"
+      affiliation: "Universidade Estadual de Campinas"
+categories:
+  - Julia
+  - Computação Científica
+  - Matemática
+  - Interpolations.jl
+date: "2026-07-16"
+image: "imagens/"
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+engine: knitr
+draft: false
+---
+
+## Introdução
+
+Ao analisar um conjunto de dados, é bastante comum encontrarmos situações em que determinadas informações simplesmente não estão disponíveis. Um sensor pode deixar de registrar uma medição, um equipamento pode apresentar falhas temporárias ou, em alguns casos, os dados podem ser coletados em intervalos muito espaçados para representar adequadamente um fenômeno contínuo.
+
+Imagine, por exemplo, uma estação meteorológica que registra a temperatura apenas uma vez por hora. Se desejarmos conhecer a temperatura às 10h30, perceberemos que esse valor não foi medido diretamente. Ainda assim, sabemos que ele provavelmente está entre as medições realizadas às 10h e às 11h.
+
+Esse tipo de problema aparece com frequência em diversas áreas da Computação, da Engenharia e da Ciência de Dados. Em todas elas surge a mesma pergunta: como podemos estimar um valor que não foi observado utilizando apenas as informações que já possuímos?
+
+Uma das principais ferramentas para responder essa pergunta é a **interpolação**. Em termos gerais, interpolar significa construir uma função capaz de aproximar os dados conhecidos e, a partir dela, estimar valores intermediários. Em vez de simplesmente escolher um número qualquer, utilizamos um modelo matemático que preserva, na medida do possível, o comportamento observado nos dados originais.
+
+Na linguagem Julia, uma das bibliotecas mais utilizadas para esse tipo de tarefa é o pacote **Interpolations.jl**. Ele fornece implementações eficientes de diversos métodos de interpolação, permitindo que problemas relativamente complexos sejam resolvidos com poucas linhas de código.
+
+Ao longo deste tutorial conheceremos os principais conceitos envolvidos nesse processo, entenderemos quando a interpolação pode ser utilizada e aprenderemos como aplicar o pacote em situações semelhantes às encontradas em aplicações reais.
+
+## O que é interpolação?
+
+Antes de utilizarmos qualquer biblioteca, é importante compreender a ideia por trás da interpolação.
+
+Considere que conhecemos os seguintes valores de uma determinada variável.
+
+| Tempo | Valor |
+|-------|------|
+| 0 | 10 |
+| 1 | 15 |
+| 2 | 21 |
+| 3 | 28 |
+
+Esses são os únicos pontos observados. Entretanto, nada impede que desejemos conhecer o valor correspondente ao instante **1,5**, como esse ponto não foi medido, precisamos estimá-lo de alguma maneira.
+
+A estratégia mais simples consiste em assumir que o comportamento entre duas observações conhecidas pode ser aproximado por uma reta. Nesse caso, o valor procurado seria obtido justamente sobre essa reta, preservando a continuidade entre as observações.
+
+Esse procedimento recebe o nome de **interpolação linear** e representa apenas uma das diversas técnicas disponíveis.
+
+Em problemas mais complexos, uma reta pode não representar adequadamente o comportamento dos dados. Nesses casos, utilizamos funções mais sofisticadas, capazes de produzir curvas suaves e aproximar melhor fenômenos contínuos. É justamente essa variedade de métodos que torna a interpolação uma ferramenta tão importante na Computação Científica.
+
+## Interpolação e extrapolação
+
+Embora os nomes sejam semelhantes, interpolação e extrapolação representam problemas bastante diferentes. Na interpolação, estimamos valores que estão dentro do intervalo **entre** observações conhecidas.
+
+Já a extrapolação ocorre quando tentamos estimar valores localizados fora da região observada. Por exemplo, suponha que a última medição disponível foi realizada às 18h. Caso desejemos prever a temperatura às 22h utilizando apenas esses dados, estaremos extrapolando.
+
+Essa diferença é importante porque, em geral, a interpolação tende a produzir estimativas muito mais confiáveis, pois durante a extrapolação, fazemos hipóteses sobre um comportamento que nunca foi observado, aumentando significativamente a possibilidade de erro.
+
+Por esse motivo, a maior parte das bibliotecas de interpolação, incluindo **Interpolations.jl**, oferece mecanismos para controlar o comportamento das estimativas quando tentamos consultar pontos localizados fora do domínio original.
+
+## Instalando o pacote
+
+A instalação pode ser realizada utilizando o gerenciador de pacotes da própria linguagem Julia.
+
+```{julia}
+using Pkg
+
+Pkg.add("Interpolations")
+```
+
+Após a instalação, basta carregar a biblioteca normalmente.
+
+```{julia}
+using Interpolations
+```
+
+Todo o restante deste tutorial utilizará apenas esse pacote e funcionalidades presentes na biblioteca padrão da linguagem.
+
+## Nosso primeiro problema
+
+Para compreender como a biblioteca funciona, vamos imaginar uma situação bastante simples.
+
+Considere que um sensor registrou a temperatura de uma sala ao longo de cinco instantes consecutivos:
+
+```{julia}
+#| output: false
+temperaturas = [20.0, 22.0, 25.0, 24.0, 23.0]
+```
+
+Entretanto, gostaríamos de estimar também os valores intermediários, como aqueles correspondentes à metade do intervalo entre duas medições consecutivas. Em vez de construir manualmente todas as equações necessárias para realizar esse cálculo, podemos utilizar o **Interpolations.jl**, que fornece implementações eficientes para diversos métodos de interpolação.
+
+Na próxima seção iremos aprender a escolher o método de interpolação, construiremos nossa primeira interpolação utilizando os dados acima e veremos como consultar valores que originalmente não estavam presentes no conjunto de observações.
+
+
+## Escolhendo o método de interpolação
+
+O pacote oferece diversas formas de interpolar os dados. A escolha depende principalmente das características do problema. Quando os dados são igualmente espaçados e se deseja apenas uma aproximação simples, a interpolação linear costuma ser suficiente. 
+
+Em situações em que se deseja uma curva mais suave, as splines cúbicas normalmente produzem resultados muito mais agradáveis visualmente e apresentam derivadas contínuas, característica importante em diversas aplicações científicas.
+
+A biblioteca permite alterar apenas uma linha do código para trocar completamente o método utilizado.
+
+```{julia}
+#| output: false
+using Interpolations
+
+x = 0:5
+y = [2.0, 3.5, 2.8, 5.2, 4.7, 6.1]
+
+linear = linear_interpolation(x, y) # Armazena o modelo de interpolação linear
+
+spline = cubic_spline_interpolation(x, y) # Armazena o modelo de interpolação utilizando splines cúbicas
+```
+
+Agora podemos comparar os dois modelos avaliando alguns pontos intermediários.
+
+```{julia}
+#| output: false
+xs = 0:0.25:5
+```
+```{julia}
+linear_vals = linear.(xs)
+```
+```{julia}
+spline_vals = spline.(xs)
+```
+
+Embora ambos reproduzam exatamente os valores originais, a forma como conectam esses pontos é diferente. A interpolação linear gera segmentos retos entre observações consecutivas, enquanto a spline cria uma curva suave que acompanha a tendência dos dados.
+
+```{julia}
+using Plots
+
+plot(xs, linear_vals,
+    label="Linear",
+    linewidth=2)
+plot!(xs, spline_vals,
+    label="Spline cúbica",
+    linewidth=2)
+scatter!(x, y,
+    label="Dados observados")
+```
+
+Na maioria das aplicações científicas, econômicas e de engenharia, as splines costumam produzir resultados visualmente mais naturais quando a variável observada varia de maneira contínua.
+
+## Exemplo aplicado
+
+Imagine que uma estação meteorológica registre a temperatura apenas uma vez por hora.
+
+```{julia}
+#| output: false
+horas = 0:5
+
+temperaturas = [
+    18.0,
+    19.3,
+    21.5,
+    24.1,
+    25.0,
+    23.7
+]
+```
+
+Entretanto, queremos estimar qual seria a temperatura a cada quinze minutos. Logo, o primeiro passo seria construírmos o modelo de interpolação.
+
+```{julia}
+#| output: false
+temperatura = cubic_spline_interpolation(
+    horas,
+    temperaturas
+)
+```
+
+Depois criamos um vetor contendo todos os horários desejados.
+
+```{julia}
+#| output: false
+novos_horarios = 0:0.25:5
+```
+
+Agora basta avaliar a função interpolada.
+
+```{julia}
+#| output: false
+estimativas = temperatura.(novos_horarios)
+```
+```{julia}
+plot(
+    novos_horarios,
+    estimativas,
+    label="Temperatura estimada",
+    linewidth=2
+)
+scatter!(
+    horas,
+    temperaturas,
+    label="Medições"
+)
+```
+
+Naturalmente, a interpolação utiliza as medições disponíveis para construir uma aproximação consistente entre elas, e é importante ter em mente que caso existam mudanças bruscas que não tenham sido observadas pelos sensores, nenhum método de interpolação conseguirá recuperá-las. Ainda assim, essa técnica costuma produzir estimativas bastante úteis quando os dados representam fenômenos naturalmente contínuos.
+
+## Interpolando matrizes
+
+Até agora trabalhamos apenas com vetores unidimensionais. Entretanto, uma das grandes vantagens do pacote é oferecer suporte direto para dados em múltiplas dimensões.
+
+Considere, por exemplo, uma pequena imagem representada por níveis de intensidade.
+
+```{julia}
+#| output: false
+imagem = [
+    10.0 20.0 30.0;
+    25.0 40.0 55.0;
+    40.0 60.0 80.0
+]
+
+# Criamos a interpolação normalmente.
+itp = interpolate(
+    imagem,
+    BSpline(Linear())
+)
+```
+```{julia}
+# Agora podemos consultar posições fracionárias.
+itp(1.5, 2.2)
+itp(2.3, 1.7)
+itp(2.8, 2.5)
+```
+
+Esse recurso é extremamente importante em processamento de imagens. Sempre que uma fotografia é ampliada, reduzida ou rotacionada, surgem novos pixels cujos valores precisam ser estimados. A interpolação fornece exatamente esse mecanismo, permitindo produzir imagens suaves sem simplesmente repetir os valores existentes.
+
+## Trabalhando com extrapolação
+
+Agora, imagine que nossos dados estejam definidos apenas entre 0 e 5.
+
+```{julia}
+#| output: false
+x = 0:5
+
+y = x .^ 2
+
+modelo = linear_interpolation(x, y)
+```
+
+Se tentarmos consultar um valor fora desse intervalo como `modelo(7)`, ocorrerá um erro e isso acontece porque a interpolação foi construída apenas utilizando as observações disponíveis, de 0 a 5. Fora desse domínio não existe informação suficiente para produzir uma estimativa confiável.
+
+Em alguns problemas, porém, pode ser interessante definir um comportamento específico para esses casos. O pacote permite fazer isso utilizando funções de extrapolação.
+
+```{julia}
+#| output: false
+modelo_seguro = extrapolate(
+    interpolate(y, BSpline(Linear())),
+    Flat()
+)
+```
+
+Agora, quando consultarmos valores além das extremidades, o último valor conhecido será mantido.
+
+```{julia}
+modelo_seguro(7)
+modelo_seguro(-2)
+```
+
+Existem outras estratégias disponíveis além de `Flat()`, permitindo definir diferentes formas de trabalhar para valores fora do intervalo observado.
+
+
+## Trabalhando com escalas diferentes
+
+Nos exemplos anteriores utilizamos vetores igualmente espaçados, como `0:5` ou `1:10`. Entretanto, em aplicações reais é comum que os dados estejam associados a outras escalas. Podemos ter medições realizadas em quilômetros, segundos, graus Celsius ou qualquer outra unidade.
+
+O pacote permite informar explicitamente quais são as coordenadas correspondentes aos dados utilizando a função `scale`. Considere novamente um conjunto simples de observações:
+
+```{julia}
+#| output: false
+using Interpolations
+
+valores = [12.0, 15.0, 18.5, 21.0, 25.0]
+```
+
+Internamente, esses valores estão associados aos índices `1`, `2`, `3`, `4` e `5`. Porém, suponha que eles correspondam às distâncias de 0, 10, 20, 30 e 40 quilômetros.
+
+```{julia}
+#| output: false
+distancias = 0:10:40
+
+# Primeiro criamos a interpolação normalmente.
+itp = interpolate(valores, BSpline(Linear()))
+
+# Em seguida associamos a escala correta.
+modelo = scale(itp, distancias)
+```
+
+Agora podemos consultar posições intermediárias utilizando a unidade original.
+
+```{julia}
+modelo(15)
+modelo(27.5)
+modelo(38)
+```
+
+Esse recurso torna o código muito mais intuitivo, pois elimina a necessidade de converter manualmente cada consulta para índices do vetor.
+
+## Interpolação em aplicações científicas
+
+Embora a interpolação seja frequentemente apresentada como uma técnica de aproximação matemática, sua utilização vai muito além desse contexto. Diversas áreas da computação científica dependem diretamente desse tipo de ferramenta para realizar simulações, reconstruir sinais ou produzir estimativas consistentes entre observações.
+
+Na meteorologia, por exemplo, sensores registram temperatura, umidade e pressão atmosférica apenas em locais específicos. Para produzir mapas contínuos, é necessário estimar valores entre essas posições utilizando diferentes métodos de interpolação.
+
+Em processamento de imagens, praticamente toda operação de redimensionamento utiliza interpolação para calcular os novos pixels da imagem. Sem esse procedimento, ampliações produziriam imagens serrilhadas e com perda significativa de qualidade.
+
+Na engenharia, modelos numéricos frequentemente utilizam tabelas discretas contendo propriedades físicas de materiais. Durante uma simulação, valores intermediários são obtidos por interpolação em vez de recalcular toda a propriedade física.
+
+Em aprendizado de máquina, a interpolação também aparece em diversas etapas de pré-processamento, principalmente quando existem dados ausentes ou quando diferentes fontes de dados precisam ser alinhadas sobre uma mesma escala temporal.
+
+Essa diversidade de aplicações explica por que bibliotecas especializadas, como o Interpolations.jl, são tão importantes dentro do ecossistema científico da linguagem Julia.
+
+## Desempenho
+
+Uma característica bastante interessante do Interpolations.jl é seu foco em desempenho. A biblioteca foi desenvolvida explorando as capacidades do compilador JIT da linguagem Julia, permitindo que grande parte das operações seja otimizada durante a compilação.
+
+Na prática, isso significa que podemos avaliar milhares ou até milhões de pontos interpolados com excelente desempenho. Além disso, como o pacote trabalha diretamente com arrays da linguagem Julia, ele se integra naturalmente com outras bibliotecas do ecossistema científico, como DataFrames.jl, DifferentialEquations.jl, Images.jl e Flux.jl.
+
+Essa integração permite construir fluxos completos de análise sem necessidade de conversões intermediárias ou perda de desempenho.
+
+## Conclusão
+
+O Interpolations.jl fornece uma interface simples e consistente para um problema extremamente comum em computação científica: estimar valores entre observações conhecidas, ou até mesmo fora da zona de observação quando extrapolados. Apesar da facilidade de uso, o pacote implementa algoritmos eficientes e suficientemente flexíveis para atender desde exemplos didáticos até aplicações profissionais.
+
+Ao longo deste tutorial conhecemos os principais conceitos envolvidos na interpolação, aprendemos a construir modelos lineares e utilizando splines cúbicas, realizamos consultas em posições intermediárias, trabalhamos com dados bidimensionais, utilizamos escalas personalizadas e discutimos o comportamento fora do intervalo observado. Também vimos como essas técnicas aparecem naturalmente em diversas áreas do conhecimento.
+
+Dominar esse tipo de ferramenta amplia significativamente as possibilidades de análise de dados na linguagem Julia, permitindo transformar conjuntos discretos de observações em modelos contínuos que podem ser explorados de maneira muito mais flexível.
+
+Para aprofundar os estudos, vale a pena consultar a documentação oficial do pacote, que apresenta métodos adicionais, opções avançadas de extrapolação e implementações específicas para diferentes tipos de dados. À medida que surgem problemas mais complexos, compreender esses recursos torna possível construir soluções cada vez mais eficientes utilizando o ecossistema científico da linguagem Julia.
