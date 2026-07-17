@@ -1,0 +1,346 @@
+---
+title: "Medindo Similaridade com Distances.jl"
+description: Aprenda a utilizar o pacote Distances.jl para calcular diversas métricas de distância distintas em Julia.
+categories:
+  - Julia
+  - Ciência de Dados
+  - Matemática
+  - Distances.jl
+author: 
+    - name: "Mateus Ismael dos Santos Toledo"
+      affiliation: "Universidade Estadual de Campinas"
+date: "2026-07-16"
+image: "imagens/"
+lang: pt
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    self-contained: false
+engine: julia
+draft: true
+---
+
+## Introdução
+
+Em diversas áreas da Computação precisamos responder uma pergunta bastante simples: o quão parecidos são dois objetos?
+
+Essa pergunta aparece em problemas muito diferentes entre si: encontrar usuários com gostos semelhantes, identificar elementos que compartilham características parecidas, comparar novas observações com exemplos já conhecidos, até mesmo mecanismos de busca utilizam diferentes formas de medir similaridade entre informações.
+
+Embora esses problemas possuam objetivos distintos, todos eles dependem de uma ideia em comum: a definição de uma medida de distância.
+
+Nesse contexto, a linguagem Julia oferece o pacote **Distances.jl**, desenvolvido para calcular uma grande variedade de métricas de distância de maneira simples, eficiente e altamente otimizada.
+
+Neste tutorial, conheceremos os principais recursos dessa biblioteca, entenderemos quando utilizar cada medida de distância e veremos exemplos práticos que aparecem frequentemente em Ciência de Dados e Aprendizado de Máquina.
+
+## Instalando o pacote
+
+Caso o pacote ainda não esteja instalado, basta executar:
+
+```{julia}
+#| output: false
+using Pkg
+
+Pkg.add("Distances")
+```
+
+Depois da instalação, podemos carregar a biblioteca normalmente.
+
+```{julia}
+#| output: false
+using Distances
+using Statistics # Pois também utilizaremos funções estatísticas para alguns exemplos
+```
+
+## O que é uma distância?
+
+Antes de explorarmos a biblioteca, vale a pena entender o conceito matemático por trás dela: uma distância é uma função que mede o grau de separação entre dois elementos. De maneira intuitiva, quanto menor o valor obtido, mais semelhantes são os objetos comparados.
+
+Considere dois vetores.
+
+```{julia}
+#| output: false
+x = [1, 2, 3]
+
+y = [2, 3, 4]
+```
+
+Embora eles não sejam iguais, podemos perceber visualmente que possuem valores bastante próximos.
+
+Agora considere outro vetor.
+
+```{julia}
+#| output: false
+z = [2, 4, 5]
+```
+
+Intuitivamente percebemos que `z` é mais "distante" de `x` do que `y`.
+
+O objetivo das métricas implementadas em **Distances.jl** é justamente transformar essa percepção em um valor numérico. Cada métrica faz isso de uma maneira diferente, enfatizando determinadas características dos dados. 
+
+Por esse motivo, escolher a métrica correta costuma ser tão importante quanto escolher o próprio algoritmo de aprendizado.
+
+## A primeira distância
+
+A distância mais conhecida é a distância Euclidiana, a qual representa exatamente a menor distância entre dois pontos em um espaço geométrico, na biblioteca podemos calculá-la facilmente utilizando a função `evaluate`, que calcula a distância entre dois vetores informados.
+
+```{julia}
+x = [1.0, 2.0, 3.0]
+
+y = [2.0, 4.0, 5.0]
+
+evaluate(Euclidean(), x, y)
+```
+
+O objeto `Euclidean()` representa a métrica que desejamos utilizar e esse é o padrão utilizado praticamente em toda a biblioteca, primeiro escolhemos a métrica e depois informamos os dados que serão comparados.
+
+## Entendendo o resultado
+
+Imagine que cada vetor representa um ponto no espaço. É perceptível que os vetores abaixo ocupam posivões diferentes.
+
+```text
+x = (1, 2, 3)
+```
+
+```text
+y = (2, 4, 5)
+```
+
+A distância Euclidiana corresponde ao comprimento do segmento de reta que liga esses dois pontos.
+
+Quanto maior esse valor, mais afastados eles estão. Logo, caso os vetores sejam exatamente iguais, a distância será zero:
+
+```{julia}
+evaluate(Euclidean(), x, x)
+```
+
+E esse comportamento é esperado para qualquer métrica de distância válida, pois todo elemento possui distância zero em relação a ele mesmo.
+
+## Trabalhando com diferentes vetores
+
+Vamos construir um pequeno exemplo para observar como a distância varia.
+
+```{julia}
+a = [1.0, 2.0]
+
+b = [1.2, 2.1]
+
+c = [5.0, 8.0]
+
+println(evaluate(Euclidean(), a, b))
+
+println(evaluate(Euclidean(), a, c))
+```
+
+Observe que a distância entre `a` e `b` é menor do que entre `a` e `c`.
+
+Esse tipo de comparação aparece constantemente em algoritmos de classificação, agrupamento e recuperação de informações, mas felizmente, **Distances.jl** disponibiliza diversas métricas além da distância Euclidiana, permitindo adaptar a comparação às características do problema que estamos resolvendo.
+
+## Distância de Manhattan
+
+Outra métrica bastante utilizada é a distância de Manhattan, também conhecida como distância de City Block.
+
+Seu nome vem da famosa ilha de Manhattan, em Nova York. Em vez de atravessar os quarteirões em linha reta, uma pessoa precisa caminhar pelas ruas, realizando curvas em cada esquina.
+
+Enquanto a distância Euclidiana mede o caminho em linha reta, a distância de Manhattan mede o deslocamento total realizado apenas ao longo dos eixos. Para calcular essa métrica, basta utilizar o objeto `Cityblock()`:
+
+```{julia}
+evaluate(Cityblock(), x, y)
+```
+
+Podemos comparar diretamente as duas medidas utilizando os mesmos vetores.
+
+```{julia}
+x = [1.0, 2.0]
+
+y = [4.0, 6.0]
+
+println("Euclidiana: ", evaluate(Euclidean(), x, y))
+println("Manhattan: ", evaluate(Cityblock(), x, y))
+```
+
+Essa métrica aparece frequentemente em problemas envolvendo grades, mapas, otimização e algumas aplicações de aprendizado de máquina.
+
+## Distância de Chebyshev
+
+A distância de Chebyshev é uma métrica que mede a maior diferença absoluta entre as coordenadas correspondentes de dois vetores. Em outras palavras, ela considera apenas a coordenada em que os vetores diferem mais.
+
+Dando um exemplo:
+
+```{julia}
+x = [3.0, 8.0, 1.0]
+
+y = [5.0, 4.0, 6.0]
+
+evaluate(Chebyshev(), x, y)
+```
+
+Observe que essa distância depende apenas da coordenada cuja diferença absoluta é máxima.
+
+Esse comportamento é útil em aplicações nas quais o maior erro é mais importante do que o erro acumulado.
+
+Problemas de controle, logística e alguns algoritmos geométricos utilizam essa métrica com frequência.
+
+## Distância do Cosseno
+
+Até agora todas as métricas comparavam a magnitude das diferenças entre os vetores. Entretanto, nem sempre queremos comparar tamanhos, em muitos problemas, o que realmente importa é a direção dos vetores.
+
+Esse é exatamente o objetivo da distância do cosseno, ela é extremamente utilizada em Processamento de Linguagem Natural, recuperação de documentos e sistemas de recomendação.
+
+Considere os vetores abaixo:
+
+```{julia}
+#| output: false
+a = [1.0, 2.0, 3.0]
+
+b = [2.0, 4.0, 6.0]
+```
+
+Embora `b` seja exatamente o dobro de `a`, ambos apontam para a mesma direção.
+
+Vamos calcular a distância entre eles.
+
+```{julia}
+evaluate(CosineDist(), a, b)
+```
+
+O resultado é zero e isso acontece porque a distância do cosseno não compara os comprimentos dos vetores, ela compara apenas o ângulo formado entre eles.
+
+Agora considere outro vetor.
+
+```{julia}
+c = [-3.0, 1.0, 2.0]
+
+evaluate(CosineDist(), a, c)
+```
+
+Nesse caso, a distância é significativamente maior, indicando que os vetores possuem orientações diferentes.
+
+Essa propriedade faz da distância do cosseno uma excelente escolha quando trabalhamos com vetores de características, embeddings e representações numéricas de textos.
+
+## Calculando várias distâncias simultaneamente
+
+Nos exemplos anteriores sempre calculamos a distância entre apenas dois vetores.
+
+Entretanto, em aplicações reais normalmente precisamos comparar um elemento com diversos outros ao mesmo tempo. Fazer isso utilizando diversos laços pode tornar o código menos legível e menos eficiente.
+
+Para esse tipo de situação, **Distances.jl** disponibiliza a função `pairwise`.
+
+Considere a seguinte matriz, em que cada coluna representa uma observação.
+
+```{julia}
+#| output: false
+dados = [
+    1.0 2.0 5.0 8.0;
+    1.0 3.0 4.0 8.0
+]
+```
+
+Podemos calcular a distância entre todas as observações utilizando apenas uma linha.
+
+```{julia}
+pairwise(Euclidean(), dados, dims = 2)
+```
+
+O resultado é uma matriz em que cada posição representa a distância entre dois elementos do conjunto.
+
+A diagonal principal contém apenas zeros, pois a distância de um elemento para ele mesmo é sempre igual a zero.
+
+Esse tipo de matriz aparece frequentemente em algoritmos de agrupamento, redução de dimensionalidade e análise exploratória de dados.
+
+## Comparando duas coleções diferentes
+
+Também é possível comparar duas coleções distintas.
+
+```{julia}
+A = [
+    1.0 2.0 3.0;
+    2.0 3.0 4.0
+]
+
+B = [
+    4.0 5.0;
+    5.0 6.0
+]
+
+pairwise(Euclidean(), A, B, dims = 2)
+```
+
+Nesse caso, cada elemento de `A` é comparado com cada elemento de `B`.
+
+Essa operação é muito utilizada quando queremos comparar um conjunto de treinamento com um conjunto de novos dados.
+
+## Calculando distâncias coluna a coluna
+
+Enquanto `pairwise` calcula todas as combinações possíveis, `colwise` compara apenas as colunas correspondentes de duas matrizes.
+
+```{julia}
+A = [
+    1.0 3.0 5.0;
+    2.0 4.0 6.0
+]
+
+B = [
+    2.0 4.0 6.0;
+    3.0 5.0 7.0
+]
+
+colwise(Euclidean(), A, B)
+```
+
+O resultado é um vetor contendo uma distância para cada par de colunas.
+
+Essa função é especialmente útil quando já sabemos exatamente quais observações devem ser comparadas.
+
+## Uma pequena aplicação
+
+Imagine que uma loja deseja identificar quais clientes possuem hábitos de compra semelhantes.
+
+Cada cliente pode ser representado por um vetor contendo informações como quantidade de compras, valor gasto e número de produtos adquiridos.
+
+```{julia}
+#| output: false
+cliente1 = [15.0, 1200.0, 40.0]
+
+cliente2 = [16.0, 1180.0, 42.0]
+
+cliente3 = [3.0, 150.0, 8.0]
+```
+
+Vamos calcular as distâncias entre eles.
+
+```{julia}
+println(evaluate(Euclidean(), cliente1, cliente2))
+
+println(evaluate(Euclidean(), cliente1, cliente3))
+
+println(evaluate(Euclidean(), cliente2, cliente3))
+```
+
+Observe que a distância entre os dois primeiros clientes é significativamente menor.
+
+Isso indica que seus perfis de consumo são bastante semelhantes.
+
+Em aplicações reais, essa mesma ideia é utilizada em sistemas de recomendação, segmentação de clientes, detecção de fraudes e algoritmos de aprendizado supervisionado.
+
+Naturalmente, conjuntos reais podem conter milhares ou até milhões de observações. Nesses cenários, utilizar uma biblioteca otimizada como **Distances.jl** faz uma grande diferença tanto em desempenho quanto em simplicidade de implementação.
+
+## Conclusão
+
+Ao longo deste tutorial, conhecemos os principais recursos oferecidos pelo pacote **Distances.jl**.
+
+Vimos que diferentes métricas representam diferentes formas de interpretar a similaridade entre objetos e que não existe uma única medida adequada para todos os problemas.
+
+Também aprendemos como calcular distâncias individuais utilizando `evaluate`, como comparar grandes conjuntos de dados com `pairwise` e como realizar comparações correspondentes utilizando `colwise`.
+
+Embora os exemplos apresentados sejam simples, essas mesmas funções são utilizadas em aplicações de Ciência de Dados, Aprendizado de Máquina, Processamento de Linguagem Natural, Visão Computacional, Bioinformática e diversas outras áreas da Computação.
+
+Por oferecer uma interface intuitiva, excelente desempenho e suporte a um grande conjunto de métricas, **Distances.jl** tornou-se uma das bibliotecas mais utilizadas para cálculos de similaridade dentro do ecossistema Julia, utilize você também.
+
+## Referências
+
+- JuliaStats. *Distances.jl Documentation*. Disponível em: <https://github.com/JuliaStats/Distances.jl>.
+
+- JuliaStats. *Distances.jl*. Disponível em: <https://juliapackages.com/p/distances>.
+
+- JuliaLang. *Julia Documentation*. Disponível em: <https://docs.julialang.org>.
