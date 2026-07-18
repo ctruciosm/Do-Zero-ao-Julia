@@ -1,5 +1,6 @@
 ---
-title: "Regressão Linear com Julia"
+title: "Ciências de Dados (parte 2) - Lidando com Dados Ruidosos
+"
 description: |
   No tutorial anterior, manipulamos um DataFrame com temperaturas em Fahrenheit e Celsius. Nesse tutorial adicionamos ruído a esses dados e usamos o resultado para falar de regressão linear: o que é um modelo, como ajustá-lo por mínimos quadrados e como interpretar a tabela de coeficientes que sai desse tipo de ajuste.
 categories:
