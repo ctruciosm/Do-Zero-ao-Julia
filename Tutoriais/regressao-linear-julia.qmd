@@ -1,0 +1,209 @@
+---
+title: "Regressão Linear com Julia"
+description: |
+  No tutorial anterior, manipulamos um DataFrame com temperaturas em Fahrenheit e Celsius. Nesse tutorial adicionamos ruído a esses dados e usamos o resultado para falar de regressão linear: o que é um modelo, como ajustá-lo por mínimos quadrados e como interpretar a tabela de coeficientes que sai desse tipo de ajuste.
+categories:
+  -  Estatística
+  -  Regressão
+  -  Ciência de Dados
+author:
+  - name: João Vitor Hartung Toppa
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/jvtoppa
+date: "2026-04-25"
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+execute:
+  echo: true
+  warning: false
+#jupyter: julia
+draft: false
+---
+
+```{julia}
+using Pkg
+Pkg.add("DataFrames")
+Pkg.add("Plots")
+Pkg.add("GLM")
+Pkg.add("StatsBase")
+Pkg.add("Statistics")
+```
+
+# Introdução
+
+No tutorial sobre DataFrames, construímos uma tabela pequena convertendo temperaturas de Fahrenheit para Celsius, usando a fórmula exata $C = \frac{5}{9}(F - 32)$. Dados de instrumentos reais, porém, nunca são exatos: toda medição carrega algum ruído. Vamos recuperar aquele dado, adicionar ruído artificial, e usar isso como ponto de partida para falar de regressão linear, o problema de recuperar a reta original a partir de observações imperfeitas. (Nota: este tutorial é baseado em https://github.com/mitmath/computational-thinking/blob/Spring21/notebooks/week9/linearmodel_datascience.jl).
+
+```{julia}
+#| echo: true
+
+using DataFrames
+using Plots
+using GLM
+using StatsBase
+using Statistics
+
+n = 10
+x = sort(rand(-10:100, n))
+y = 5/9 .* (x .- 32)
+data = DataFrame("°F" => x, "°C" => y)
+```
+
+# Adicionando ruído aos dados
+
+O modelo que temos em mente é $C = mF + b + \sigma \cdot \varepsilon$, onde $\varepsilon$ é uma variável aleatória com distribuição normal padrão (média 0, desvio padrão 1), e $\sigma$ controla o quanto essa variável aleatória afeta a medida. Em Julia, randn(n) gera exatamente isso, um vetor de $n$ valores independentes com distribuição normal padrão.
+
+```{julia}
+#| echo: true
+
+noise = 3.0    # desvio padrão do ruído adicionado
+
+noisy_data = copy(data)
+noisy_data[:, "°C"] .+= noise * randn(n)
+yy = noisy_data[:, "°C"]
+noisy_data
+```
+
+
+# Visualizando os dados ruidosos
+
+Um gráfico de dispersão dos dados ruidosos, junto com a reta teórica original e as distâncias verticais de cada ponto até a reta de ajuste, ajuda a enxergar o que a regressão está tentando fazer: encontrar a reta que passa "o mais perto possível" de todos os pontos ao mesmo tempo.
+
+```{julia}
+#| echo: true
+#| eval: false
+
+# m e b vêm do ajuste, calculado nas seções seguintes
+scatter(x, yy, marker = :c, markercolor = :red, label = "dados com ruído", ylims = (-40, 60))
+for i in 1:length(x)
+    plot!([x[i], x[i]], [m * x[i] + b, yy[i]], color = :gray, ls = :dash, label = false)
+end
+xlabel!("°F")
+ylabel!("°C")
+title!("Conversão de temperatura")
+plot!(x, m .* x .+ b, color = :blue, label = "reta ajustada")
+plot!(x, y, alpha = 0.5, color = :red, label = "reta teórica")
+plot!(legend = :top)
+```
+
+As linhas cinzas tracejadas são os resíduos: a diferença entre o valor observado yy[i] e o valor previsto pela reta ajustada, m * x[i] + b, para cada ponto. É justamente a soma dos quadrados desses resíduos que a regressão por mínimos quadrados minimiza. Falta descobrir de onde saem m e b, e é isso que fazemos nas próximas duas seções, primeiro na mão e depois com uma biblioteca dedicada.
+
+# Ajuste por mínimos quadrados
+
+A forma mais direta de encontrar a melhor reta é resolver um sistema linear via álgebra linear. Queremos encontrar $m$ e $b$ tais que $mx_i + b \approx yy_i$ para todo $i$. Isso pode ser escrito como um sistema $A \begin{pmatrix} b \\ m \end{pmatrix} = yy$, onde cada linha de $A$ é $(1, x_i)$:
+
+```{julia}
+#| echo: true
+
+b, m = [one.(x) x] \ yy
+b, m
+```
+
+O sistema tem mais linhas do que colunas (10 equações para apenas 2 incógnitas), então em geral não existe solução exata. O operador `\` de Julia, quando aplicado a um sistema desse tipo, não resolve o sistema exatamente (o que seria impossível), mas devolve a solução de mínimos quadrados: o par $(b, m)$ que minimiza a soma dos quadrados dos resíduos $\sum_i (mx_i + b - yy_i)^2$. Esse é o mesmo `\` usado para resolver sistemas quadrados comuns, o que muda é o formato de `A` e o que ele faz por baixo dos panos ao perceber que o sistema é sobredeterminado.
+
+# Ajuste por mínimos quadrados, com GLM.jl
+
+Resolver o sistema na mão é instrutivo, mas na prática costumamos usar uma biblioteca de modelos estatísticos, que além do ajuste também calcula medidas da qualidade desse ajuste. Em Julia, essa biblioteca é o GLM.jl (de *Generalized Linear Models*):
+
+```{julia}
+#| echo: true
+
+ols = lm(@formula(°C ~ 1 + °F), noisy_data)
+```
+
+A macro @formula descreve o modelo em notação de fórmula estatística: °C ~ 1 + °F significa "explique °C por um intercepto (1) mais um termo proporcional a °F", exatamente o modelo $C = b + mF$. lm ajusta esse modelo por mínimos quadrados, o mesmo método usado na seção anterior, só que agora ols guarda muito mais informação do que apenas m e b.
+
+## Lendo a tabela de coeficientes
+
+A parte da saída que mais importa no dia a dia é a tabela de coeficientes:
+
+```{julia}
+#| echo: true
+#| eval: false
+
+coef(ols)
+```
+
+```{julia}
+#| echo: true
+#| eval: false
+
+stderror(ols)
+```
+
+```{julia}
+#| echo: true
+#| eval: false
+
+coef(ols) ./ stderror(ols)
+```
+
+Cada linha da tabela corresponde a um parâmetro do modelo (Intercept é $b$, °F é $m$), e cada coluna responde uma pergunta diferente:
+
+- *Coef.* é a estimativa do parâmetro, obtida pelo mesmo ajuste por mínimos quadrados de antes. Aqui deve bater com os valores de b e m calculados na mão, a menos do ruído aleatório sorteado de novo a cada execução.
+
+- *Std. Error* mede a incerteza dessa estimativa: o quanto ela tenderia a variar se repetíssemos o experimento (nova amostra de ruído) várias vezes.
+
+- *t* é a razão entre o coeficiente e seu erro padrão. Valores de $|t|$ grandes indicam que o coeficiente é grande em relação à sua própria incerteza, ou seja, é improvável que o valor verdadeiro seja zero.
+
+- *Pr(>|t|)* é o p-valor associado a esse teste t, a probabilidade de observar uma estatística tão extrema quanto essa se o parâmetro verdadeiro fosse exatamente zero. P-valores pequenos sugerem que o coeficiente é estatisticamente significativo.
+
+- *Lower 95% / Upper 95%* delimitam o intervalo de confiança de 95% para o parâmetro: a faixa de valores plausíveis para o parâmetro verdadeiro, dado o nível de ruído observado nos dados.
+
+# Implementando a regressão do zero
+
+Vale abrir a fórmula fechada da regressão linear simples, tanto para entender de onde vêm m e b quanto para calcular o desvio padrão do ruído estimado, $\sigma^e$, algo que o operador \ sozinho não devolve diretamente.
+
+Centrando os dados em torno de suas médias ($x_0 = x - \bar{x}$, $y_0 = y - \bar{y}$), a inclinação que minimiza a soma dos quadrados dos resíduos tem forma fechada:
+
+$$m^e = \frac{\sum_i x_{0,i} \, y_{0,i}}{\sum_i x_{0,i}^2}, \qquad b^e = \bar{y} - m^e \bar{x}.$$
+
+E, uma vez conhecidos $m^e$ e $b^e$, uma estimativa do desvio padrão do ruído é dada pela raiz do erro quadrático médio dos resíduos, corrigido por dois graus de liberdade (um para cada parâmetro estimado):
+
+$$(\sigma^e)^2 = \frac{\sum_i (m^e x_i + b^e - y_i)^2}{n - 2}.$$
+
+```{julia}
+#| echo: true
+
+function linear_regression(x, y)
+    n = length(x)
+    x0 = x .- mean(x)
+    y0 = y .- mean(y)
+
+    mᵉ = sum(x0 .* y0) / sum(x0 .^ 2)     
+    bᵉ = mean(y) - mᵉ * mean(x)           
+
+    σ²ᵉ = sum((mᵉ * x .+ bᵉ .- y) .^ 2) / (n - 2)    
+    bᵉ, mᵉ, sqrt(σ²ᵉ)
+end
+
+linear_regression(x, yy)
+```
+
+Os valores de bᵉ e mᵉ devem coincidir com os obtidos por \ e por lm, já que os três resolvem exatamente o mesmo problema de minimização, apenas por caminhos diferentes. A vantagem de ter essa versão explícita é enxergar de onde vem cada número da tabela do GLM, em vez de tratá-la como uma caixa preta.
+
+# O que é um modelo
+
+Vale parar um momento no vocabulário. Um modelo é uma lei que tenta explicar um fenômeno observado. Tipicamente um modelo depende de parâmetros desconhecidos, e uma das tarefas centrais da estatística é identificar esses parâmetros de forma que o modelo represente bem um conjunto específico de dados, processo chamado de ajuste.
+
+No nosso exemplo, o modelo é $C = mF + b + \sigma \cdot \varepsilon$. Isso significa que acreditamos que os valores medidos obedecem a essa lei, e que existem valores verdadeiros $m$, $b$ e $\sigma$ que explicam o fenômeno, ainda que não os conheçamos diretamente. O que temos são dados observados, que nos permitem calcular estimativas $m^e$, $b^e$ e $\sigma^e$. Se repetíssemos o experimento, o ruído aleatório seria outro, e as estimativas sairiam ligeiramente diferentes a cada vez. É justamente essa variabilidade entre repetições que o erro padrão de cada coeficiente, na tabela do GLM, tenta quantificar.
+
+Um modelo estatístico costuma distinguir três tipos de variável:
+
+- *Parâmetros*, como $m$, $b$ e $\sigma$ no exemplo acima, considerados desconhecidos e que queremos estimar.
+
+- *Variáveis preditivas*, como °F aqui, consideradas conhecidas e sem ruído.
+
+- *Variáveis de resposta*, como °C, que carregam o ruído do fenômeno observado.
+
+# Conclusão
+
+Partindo de um DataFrame simples de conversão de temperatura, adicionamos ruído artificial e usamos isso para percorrer três caminhos que levam ao mesmo lugar: o operador \ resolvendo um sistema sobredeterminado, a biblioteca GLM.jl ajustando um modelo linear e devolvendo uma tabela completa de diagnóstico, e a fórmula fechada da regressão linear simples implementada à mão. Os três concordam nos valores de $m$ e $b$, o que é uma boa forma de checar que o ajuste está correto e de entender de onde vem cada número que uma biblioteca estatística devolve pronto.
+
+Por enquanto, é só isso! Até a próxima! :D
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::
