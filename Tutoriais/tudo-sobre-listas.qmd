@@ -1,0 +1,345 @@
+---
+title: "Tudo sobre Listas"
+description: |
+  Array, Tuple e Dict são as três estruturas de coleção que aparecem em praticamente todo programa Julia, mas cada uma foi feita para um trabalho diferente. Nesse tutorial cobrimos como criar, indexar e manipular cada uma, e como decidir qual delas usar em cada situação.
+categories:
+  -  Julia
+  -  Estruturas de Dados
+  -  Programação
+author:
+  - name: João Vitor Hartung Toppa
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/jvtoppa
+date: "2026-05-16"
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+execute:
+  echo: true
+  warning: false
+#jupyter: julia
+draft: false
+---
+
+# Introdução
+
+Quase todo programa precisa guardar mais de um valor de cada vez, e Julia oferece três estruturas embutidas que cobrem a grande maioria dos casos: Array, Tuple e Dict. Elas se parecem à primeira vista, todas guardam vários valores e permitem recuperá-los depois, mas diferem em pontos que importam bastante na prática: se são mutáveis, se têm tamanho fixo, e se são acessadas por posição ou por chave.
+
+Esse tutorial passa pelas três, com foco no que cada uma faz de melhor, e termina com um guia de decisão para escolher a estrutura certa para cada problema.
+
+# Arrays
+
+Um Array é uma coleção ordenada, mutável e (na maioria dos casos) homogênea, no sentido de que todos os elementos compartilham um tipo comum, ainda que esse tipo possa ser tão genérico quanto Any. Vector{T} é apenas um apelido para Array{T,1}, e Matrix{T} para Array{T,2}.
+
+## Criando arrays
+
+```{julia}
+#| echo: true
+
+v1 = [1, 2, 3, 4, 5]            
+v2 = Float64[1, 2, 3]           
+v3 = zeros(5)                   
+v4 = ones(Int, 3)               
+v5 = fill(3.14, 4)               
+v6 = collect(1:2:10)             
+v7 = [x^2 for x in 1:5]          
+v1, v3, v6, v7
+```
+
+Compreensões de lista ([expr for var in coleção]) são a forma mais idiomática de construir um vetor a partir de uma transformação, e aceitam filtros:
+
+```{julia}
+#| echo: true
+
+[x^2 for x in 1:10 if iseven(x)]
+```
+
+## Indexação e slicing
+
+Julia indexa a partir de 1, não de 0, e a indexação por intervalo (a:b) devolve uma cópia por padrão:
+
+```{julia}
+#| echo: true
+
+v = [10, 20, 30, 40, 50]
+v[1]          
+```
+
+```{julia}
+#| echo: true
+
+v[end]
+```
+
+```{julia}
+#| echo: true
+
+v[2:4]
+```
+
+```{julia}
+#| echo: true
+
+v[[1, 3, 5]]
+```
+
+```{julia}
+#| echo: true
+
+v[v .> 25]
+```
+
+## Mutabilidade
+
+Diferente de tuplas, arrays podem crescer, encolher e ter seus elementos alterados depois de criados:
+
+```{julia}
+#| echo: true
+
+pilha = [1, 2, 3]
+push!(pilha, 4)
+pop!(pilha)
+pushfirst!(pilha, 0)
+deleteat!(pilha, 2)
+pilha
+```
+
+```{julia}
+#| echo: true
+
+v = [1, 2, 3]
+v[2] = 99                
+v
+```
+
+Perceba que a convenção é nomear com ! funções que modificam seus argumentos (como em push!, pop!, sort!).
+
+## Arrays multidimensionais
+
+Matrix{T} é só um Array{T,2}, indexado por linha e coluna:
+
+```{julia}
+#| echo: true
+
+M = [1 2 3; 4 5 6; 7 8 9]
+M[2, 3]
+```
+
+```{julia}
+#| echo: true
+
+M[:, 1]
+```
+
+```{julia}
+#| echo: true
+
+M[2, :]
+```
+
+Julia armazena arrays multidimensionais em ordem column-major, ou seja, elementos da mesma coluna ficam contíguos na memória. Isso significa que percorrer uma matriz coluna por coluna é mais rápido do que linha por linha, porque acessa a memória de forma sequencial:
+
+```{julia}
+#| echo: true
+
+function soma_por_coluna(M)
+    total = 0.0
+    for j in axes(M, 2), i in axes(M, 1)
+        total += M[i, j]
+    end
+    return total
+end
+```
+
+Esse padrão (laço externo sobre colunas, laço interno sobre linhas) é o oposto do que se costuma escrever em linguagens como C ou Python/NumPy por padrão, então vale prestar atenção ao portar código numérico de outra linguagem para Julia.
+
+# Tuplas
+
+Uma Tuple também é ordenada, mas é imutável e tem tamanho fixo desde a criação. Diferente de arrays, tuplas aceitam elementos de tipos diferentes sem sair de um tipo homogêneo, já que o tipo de uma tupla registra o tipo de cada posição individualmente:
+
+```{julia}
+#| echo: true
+
+t = (1, "dois", 3.0)
+typeof(t)
+```
+
+```{julia}
+#| echo: true
+
+t[1], t[2], t[3]
+```
+
+## Imutabilidade
+
+Uma vez criada, uma tupla não pode ser alterada. Não existe push! nem atribuição a um índice.
+
+Se você precisa de algo parecido mas mutável, um Vector é a ferramenta certa. A imutabilidade de tuplas não é uma limitação arbitrária, ela é o que permite ao compilador de Julia, quando o tamanho e os tipos são conhecidos em tempo de compilação, alocar a tupla inteira na pilha de execução em vez do heap, evitando o custo de alocação dinâmica e de coleta de lixo. É por isso que tuplas pequenas costumam ser mais rápidas que vetores equivalentes em código que roda muitas vezes, como o corpo de um laço quente.
+
+## Desestruturação e retorno múltiplo
+
+Tuplas são a forma natural de uma função devolver mais de um valor:
+
+```{julia}
+#| echo: true
+
+function minmax_manual(v)
+    return minimum(v), maximum(v)
+end
+
+lo, hi = minmax_manual([3, 1, 4, 1, 5, 9, 2, 6])
+lo, hi
+```
+
+A atribuição lo, hi = minmax_manual é chamada de desestruturação: Julia desempacota a tupla devolvida, atribuindo cada posição a uma variável. Isso também funciona para trocar o valor de duas variáveis sem uma variável auxiliar, um idioma bastante comum:
+
+```{julia}
+#| echo: true
+
+a, b = 1, 2
+a, b = b, a
+a, b
+```
+
+## NamedTuple
+
+Quando os campos de uma tupla merecem nomes, em vez de só posições, NamedTuple é a ferramenta certa, com a vantagem de ainda ser imutável e leve como uma tupla comum:
+
+```{julia}
+#| echo: true
+
+pessoa = (nome = "Ana", idade = 30)
+pessoa.nome, pessoa.idade
+```
+
+```{julia}
+#| echo: true
+
+pessoa[1], pessoa[:nome]
+```
+
+NamedTuple é frequentemente a escolha certa para devolver vários valores relacionados de uma função de forma autoexplicativa, sem precisar declarar um struct só para isso:
+
+```{julia}
+#| echo: true
+
+function estatisticas(v)
+    return (media = sum(v) / length(v), minimo = minimum(v), maximo = maximum(v))
+end
+
+r = estatisticas([3, 1, 4, 1, 5, 9, 2, 6])
+r.media, r.maximo
+```
+
+# Dicionários
+
+Um Dict guarda pares chave-valor, e é acessado por chave, não por posição. Por baixo dos panos, Dict é implementado com uma tabela hash, o que dá acesso, inserção e remoção em tempo médio $O(1)$, independente de quantos elementos o dicionário já tem.
+
+## Criando e acessando
+
+```{julia}
+#| echo: true
+
+idades = Dict("Ana" => 30, "Bruno" => 25, "Carla" => 35)
+idades["Ana"]
+```
+
+```{julia}
+#| echo: true
+
+idades["Daniel"] = 40
+idades
+```
+
+Acessar uma chave que não existe lança um erro, então, quando a ausência da chave é uma possibilidade esperada (e não um bug), get é mais seguro, aceitando um valor padrão:
+
+```{julia}
+#| echo: true
+#| error: true
+
+idades["Eduardo"]
+```
+
+```{julia}
+#| echo: true
+
+get(idades, "Eduardo", 0)
+```
+
+```{julia}
+#| echo: true
+
+haskey(idades, "Ana")
+```
+
+## Removendo e iterando
+
+```{julia}
+#| echo: true
+
+delete!(idades, "Bruno")
+idades
+```
+
+```{julia}
+#| echo: true
+
+for (nome, idade) in idades
+    println("$nome tem $idade anos")
+end
+```
+
+```{julia}
+#| echo: true
+
+collect(keys(idades)), collect(values(idades))
+```
+
+Diferente de Array e Tuple, um Dict não garante nenhuma ordem específica de iteração. A ordem em que for (k, v) in dict percorre os pares depende da função de hashing interna, não da ordem de inserção. Se a ordem importa (por exemplo, para exibir resultados de forma reprodutível), vale ordenar explicitamente antes de usar, geralmente convertendo para um vetor de pares:
+
+```{julia}
+#| echo: true
+
+sort(collect(idades), by = par -> par[2])
+```
+
+## Contando frequências
+
+Um uso clássico de Dicté contar ocorrências, como a frequência de cada palavra em um texto:
+
+```{julia}
+#| echo: true
+
+texto = "o rato roeu a roupa do rei de roma o rato roeu a roupa"
+palavras = split(texto)
+
+contagem = Dict{SubString, Int}()
+for palavra in palavras
+    contagem[palavra] = get(contagem, palavra, 0) + 1
+end
+
+contagem
+```
+
+A linha contagem[palavra] = get(contagem, palavra, 0) + 1 é um idioma comum: get devolve a contagem atual (ou 0, se a palavra ainda não apareceu), e somamos 1 antes de guardar de volta. Para transformar isso em uma lista ordenada por frequência, combinamos Dict com Tuple e Array, exatamente as três estruturas desse tutorial trabalhando juntas:
+
+```{julia}
+#| echo: true
+
+mais_frequentes = sort(collect(contagem), by = par -> -par[2])
+mais_frequentes[1:3]
+```
+
+collect(contagem) transforma o dicionário em um Vector de tuplas (chave, valor), sort ordena esse vetor por uma chave de ordenação personalizada, e cada elemento resultante é uma tupla que pode ser desestruturada em um laço, como for (palavra, n) in mais_frequentes.
+
+# Conclusão
+
+Array, Tuple e Dict cobrem a maior parte das necessidades de armazenar múltiplos valores em Julia, e a escolha entre elas raramente é uma questão de gosto: depende de mutabilidade (o tamanho ou o conteúdo vão mudar depois de criados?), de como os elementos vão ser acessados (por posição sequencial ou por chave arbitrária?), e de desempenho (o código roda uma vez ou milhões de vezes dentro de um laço quente?). Entender essas diferenças de antemão evita tanto código lento (usar Dict onde um Array bastaria) quanto código propenso a erro (usar Array onde a imutabilidade de uma Tuple evitaria uma modificação acidental).
+
+Por hoje é só! Até a próxima! :D
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica e aprimoramento do texto.
+:::
