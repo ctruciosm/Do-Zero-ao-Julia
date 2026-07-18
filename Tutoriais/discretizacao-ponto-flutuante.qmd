@@ -1,0 +1,295 @@
+---
+title: "Discretização (ou, Como Lidar com Ponto Flutuante)"
+description: |
+  Números reais precisam ser representados por um conjunto finito e discreto de valores. Discutimos como essa discretização funciona (IEEE 754), os problemas práticos que ela causa, e como programar de forma consciente desses problemas.
+categories:
+  -  Computação Científica
+  -  Análise Numérica
+  -  Julia
+author:
+  - name: João Vitor Hartung Toppa
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/jvtoppa
+date: "2026-05-09"
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+execute:
+  echo: true
+  warning: false
+#jupyter: julia
+draft: false
+---
+
+```{julia}
+using Pkg
+Pkg.add("Printf")
+Pkg.add("Plots")
+```
+
+```{julia}
+#| echo: true
+
+using Printf
+using Plots
+```
+
+# Introdução
+
+A reta real $\mathbb{R}$ é contínua: entre quaisquer dois reais distintos sempre existe outro real, e nenhuma lista, por mais longa que seja, consegue enumerá-los todos. Um computador, por outro lado, guarda cada número em uma quantidade fixa de bits, tipicamente 64 para o tipo Float64 que usamos por padrão em Julia. Com 64 bits só existem $2^{64}$ padrões possíveis: um número enorme, mas finito. Ou seja, Float64 não representa os números reais, representa um subconjunto discreto e finito deles, escolhido para aproximar bem o contínuo dentro das limitações de espaço disponíveis.
+
+
+# Como um Float64 é montado
+
+O padrão IEEE 754, seguido por praticamente todo hardware e linguagem modernos, representa um número de ponto flutuante como
+
+$$x = (-1)^s \times 1{,}m \times 2^{e},$$
+
+onde $s$ é um único bit de sinal, $m$ (a mantissa) guarda os dígitos significativos, e $e$ (o expoente) guarda a escala. No caso de Float64, os 64 bits se dividem em 1 bit de sinal, 11 bits de expoente e 52 bits de mantissa. Podemos ver esses bits diretamente:
+
+```{julia}
+#| echo: true
+
+bitstring(1.0)
+```
+
+```{julia}
+#| echo: true
+
+bitstring(-1.0)
+```
+
+```{julia}
+#| echo: true
+
+bitstring(2.0)
+```
+
+Repare que 1.0 e 2.0 têm exatamente a mesma mantissa (todos os 52 bits em zero), e diferem apenas no expoente; É essa separação entre "dígitos significativos" e "escala" que dá ao ponto flutuante sua característica mais importante: ele representa bem números de magnitudes muito diferentes (de $10^{-300}$ a $10^{300}$, aproximadamente), à custa de nunca ter mais do que cerca de 15 a 17 dígitos decimais significativos, não importa a magnitude do número.
+
+# Densidade não uniforme
+
+Como a quantidade de bits da mantissa é fixa, mas o expoente desloca a "janela" de precisão, os floats não estão espaçados uniformemente ao longo da reta real. Eles ficam mais densos perto de zero e mais espaçados conforme os números crescem em magnitude:
+
+```{julia}
+#| echo: true
+
+eps(1.0)
+```
+
+```{julia}
+#| echo: true
+
+eps(1e10)
+```
+
+```{julia}
+#| echo: true
+
+eps(1e-10)
+```
+
+eps(x) devolve a distância entre x e o próximo Float64 representável logo acima dele. Podemos visualizar essa lacuna diretamente com nextfloat:
+
+```{julia}
+#| echo: true
+
+x = 1.0
+for _ in 1:5
+    println(@sprintf("%.20f", x))
+    global x = nextfloat(x)
+end
+```
+
+Não existe nenhum Float64 entre dois valores consecutivos dessa lista, mesmo sabendo que, na reta real de verdade, existem infinitos números ali dentro. Essa lacuna é a própria definição de discretização: o computador só "enxerga" os pontos dessa malha, nunca o espaço entre eles.
+
+# Erro relativo, não absoluto
+
+A consequência prática mais importante dessa densidade não uniforme é que Float64 mantém um erro relativo aproximadamente constante, e não um erro absoluto constante. eps(1.0) é cerca de $2{,}22 \times 10^{-16}$, e eps(1e10) é cerca de $1{,}9 \times 10^{-6}$, uma diferença de dez ordens de grandeza em termos absolutos, mas a razão entre o espaçamento e a magnitude do número é praticamente a mesma nos dois casos:
+
+```{julia}
+#| echo: true
+
+eps(1.0) / 1.0, eps(1e10) / 1e10, eps(1e-10) / 1e-10
+```
+
+Essa constante, cerca de $2{,}22 \times 10^{-16}$ para Float64, é o chamado épsilon de máquina, acessível diretamente com eps(Float64). É o limite prático de quantos dígitos decimais significativos qualquer conta em Float64 consegue confiavelmente carregar: cerca de 15 a 16 dígitos, sempre, seja o número $0{,}001$ ou $10^{20}$.
+
+# Erros de arredondamento
+
+O exemplo mais famoso, que praticamente todo mundo que programa encontra em algum momento:
+
+```{julia}
+#| echo: true
+
+0.1 + 0.2
+```
+
+```{julia}
+#| echo: true
+
+0.1 + 0.2 == 0.3
+```
+
+Isso não é um bug de Julia, nem de nenhuma linguagem específica. Nem $0{,}1$ nem $0{,}2$ nem $0{,}3$ têm representação exata em base binária com um número finito de bits, da mesma forma que $1/3$ não tem representação decimal exata e finita. O computador guarda a aproximação binária mais próxima de cada um, e a soma dessas aproximações não coincide, bit a bit, com a aproximação de $0{,}3$:
+
+```{julia}
+#| echo: true
+
+@sprintf("%.20f", 0.1 + 0.2)
+```
+
+```{julia}
+#| echo: true
+
+@sprintf("%.20f", 0.3)
+```
+
+A diferença é da ordem de $10^{-17}$, mas é sistemática, não é ruído aleatório: aparece sempre que a aritmética de ponto flutuante tenta representar um valor que a base 2 não consegue expressar de forma exata em bits finitos.
+
+# Cancelamento
+
+Erros de arredondamento isolados, como o de 0.1 + 0.2, costumam ser inofensivos. A diferença é minúscula e raramente se acumula o suficiente para importar. O problema é maior quando subtraímos dois números de magnitude parecida, porque os dígitos significativos que sobrariam para representar a diferença são exatamente os dígitos que os dois números tinham em comum, e que se cancelam.
+
+O exemplo clássico é a fórmula de Bhaskara para raízes de $ax^2 + bx + c = 0$:
+
+$$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}.$$
+
+Quando $b^2 \gg 4ac$, temos $\sqrt{b^2 - 4ac} \approx |b|$, e uma das duas raízes envolve subtrair dois números quase iguais:
+
+```{julia}
+#| echo: true
+
+function raizes_ingenuo(a, b, c)
+    disc = sqrt(b^2 - 4a*c)
+    x1 = (-b + disc) / 2a
+    x2 = (-b - disc) / 2a
+    return x1, x2
+end
+
+a, b, c = 1.0, 1e8, 1.0
+raizes_ingenuo(a, b, c)
+```
+
+A raiz exata mais próxima de zero é aproximadamente $-1 \times 10^{-8}$, mas o resultado calculado por essa fórmula perde quase toda a precisão nesse valor, porque -b + disc subtrai dois números muito próximos de $10^8$, e os 15 a 16 dígitos significativos disponíveis já foram consumidos representando a parte que os dois números têm em comum.
+
+A correção clássica é reescrever a fórmula para nunca subtrair números de sinal igual e magnitude parecida. Calculamos primeiro a raiz "segura" (a que soma, em vez de subtrair), e obtemos a outra raiz por meio do produto das raízes, $x_1 x_2 = c/a$, que não sofre cancelamento:
+
+```{julia}
+#| echo: true
+
+function raizes_estavel(a, b, c)
+    disc = sqrt(b^2 - 4a*c)
+    x1 = (-b - sign(b) * disc) / 2a
+    x2 = c / (a * x1)
+    return x1, x2
+end
+
+raizes_estavel(a, b, c)
+```
+
+As duas versões devolvem a mesma resposta para a raiz "fácil" (perto de $-10^8$), mas divergem bastante na raiz pequena, e é a versão estável que está correta. Esse é um exemplo pequeno de um princípio geral: fórmulas matematicamente equivalentes podem ter comportamento numérico completamente diferente, e vale a pena conhecer as reformulações estáveis das contas mais comuns da sua área.
+
+# A ordem das somas importa
+
+Outra fonte sutil de erro é a ordem em que somamos muitos números. Cada soma parcial é arredondada para o Float64 representável mais próximo, então somar os mesmos números em ordens diferentes pode dar resultados ligeiramente diferentes, e a diferença tende a crescer quando misturamos magnitudes muito distintas:
+
+```{julia}
+#| echo: true
+
+vals = [1e16; fill(1.0, 10^4); -1e16]
+
+sum(vals)
+```
+
+```{julia}
+#| echo: true
+
+sum(sort(vals))
+```
+
+O resultado exato dessa soma é $10^4 = 10000$, já que os termos $10^{16}$ e $-10^{16}$ se cancelam exatamente e sobram os $10^4$ uns. Somar na ordem dada faz cada 1.0 ser adicionado a um acumulador já da ordem de $10^{16}$, onde eps(1e16) é maior que 1, então a soma simplesmente não muda a cada passo, e o resultado final está completamente errado. Somar os valores pequenos primeiro, e só depois os grandes, evita o problema.
+
+Quando a ordem de grandeza dos termos não é conhecida de antemão, uma solução mais geral é o algoritmo de soma compensada de Kahan, que mantém um segundo acumulador rastreando o erro de arredondamento perdido a cada passo, e o reincorpora na soma seguinte:
+
+```{julia}
+#| echo: true
+
+function soma_kahan(vals)
+    total = 0.0
+    compensacao = 0.0
+    for v in vals
+        y = v - compensacao
+        t = total + y
+        compensacao = (t - total) - y
+        total = t
+    end
+    return total
+end
+
+soma_kahan(vals)
+```
+
+soma_kahan recupera o valor correto, $10000{,}0$, mesmo somando na ordem original "ruim", ao custo de aproximadamente o dobro de operações por passo. sum do próprio Julia, aliás, já usa uma variante de somação compensada internamente para vetores, o que explica por que sum(vals) acima ainda não é tão ruim quanto uma soma ingênua em um laço simples seria.
+
+# Comparando floats com segurança
+
+A lição prática mais direta de tudo isso é nunca comparar dois floats com == quando eles vêm de contas diferentes, mesmo que "deveriam" ser matematicamente iguais. O padrão correto é comparar com uma tolerância, usando isapprox (ou o operador ≈):
+
+```{julia}
+#| echo: true
+
+isapprox(0.1 + 0.2, 0.3)
+```
+
+```{julia}
+#| echo: true
+
+0.1 + 0.2 ≈ 0.3
+```
+
+isapprox aceita dois parâmetros de tolerância, atol (tolerância absoluta) e rtol (tolerância relativa), e por padrão usa uma combinação razoável dos dois. Vale escolher a tolerância em função da magnitude esperada dos números envolvidos: comparar valores próximos de zero pede atol, enquanto comparar valores grandes pede rtol, exatamente o mesmo raciocínio de erro relativo constante que vimos antes.
+
+```{julia}
+#| echo: true
+
+isapprox(1e-20, 2e-20, atol = 1e-15)
+```
+
+```{julia}
+#| echo: true
+
+isapprox(1e20, 1.0000001e20, rtol = 1e-6) 
+```
+
+# Quando a precisão de Float64 não é suficiente
+
+Para a maioria dos problemas, os 15 a 16 dígitos significativos de Float64 são de sobra. Mas em cálculos muito longos, muito mal condicionados, ou que exigem verificar se um erro é genuíno ou apenas artefato de arredondamento, Julia oferece BigFloat, com precisão arbitrária (por padrão, 256 bits, ajustável com setprecision):
+
+```{julia}
+#| echo: true
+
+eps(Float32), eps(Float64), eps(BigFloat)
+```
+
+```{julia}
+#| echo: true
+
+setprecision(BigFloat, 1000) do
+    sqrt(BigFloat(2))
+end
+```
+
+Operações com BigFloat são de dez a cem vezes mais lentas que com Float64, dependendo da precisão escolhida, então não é uma solução para usar por padrão em todo o código, mas sim uma ferramenta pontual, útil sobretudo para verificar se um resultado suspeito de Float64 é de fato um erro numérico (recalculando com mais precisão e comparando) ou reflete o próprio problema matemático.
+
+# Conclusão
+
+Nenhuma das técnicas discutidas aqui elimina a discretização. Isso não é possível com hardware finito, mas todas ajudam a evitar que os efeitos dela apareçam como bugs silenciosos no meio de um cálculo que, de resto, está logicamente correto.
+
+Por hoje é só! Até a próxima :D
+
+::: callout-note
+Ferramentas de IA foram utilizadas para correção ortográfica, aprimoramento do texto e criação de imagens.
+:::
