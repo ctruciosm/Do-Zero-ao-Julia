@@ -1,0 +1,41 @@
+---
+title: "Manipulando Dataframes"
+description: |
+  Dataframes são estruturas capazes de manipular e armazenar dados, bastante comuns no mundo da ciência de dados. Nesse tutorial, apresentaremos diferentes maneiras de realizar operações neste tipo de estrutura de dados. 
+categories:
+  -  Programação Dinâmica
+  -  Algoritmos
+  -  Estruturas de Dados
+author:
+  - name: João Vitor Hartung Toppa
+    affiliation: "Universidade Estadual de Campinas"
+    url: https://github.com/jvtoppa
+date: "2026-04-11"
+lang: "pt"
+format:
+  html:
+    toc: true
+    self-contained: false
+execute:
+  echo: true
+  warning: false
+#jupyter: julia
+draft: false
+---
+
+Uma das maneiras de se pensar em um dataframe é basicamente uma tabela, com rótulos para as colunas. Podemos definir uma dataframe a partir de $n$ vetores:
+
+x = sort(rand(-10:100, n)) #em Fahreneit inteiros
+y = 5 / 9 .* (x .- 32) #em Celsius reais
+data = DataFrame(°F = x, °C = y) # Label = data
+
+ou a partir de uma matriz $m\timesn$:
+
+begin
+    data2 = DataFrame([x y], :auto) # convert Matrix to DataFrame
+    rename!(data2, ["°F", "°C"]) # add column labels
+end
+
+Em Julia, matrizes são sempre do mesmo tipo. Então, ao criar uma matriz por concatenação, por exemplo por [x y], a linguagem irá converter todos os valores para um tipo comum entre as duas colunas, se possível. Nesse caso seria para Float64. Já em Data Frames, as colunas podem ter tipos diferentes, como no primeiro exemplo onde o Data Frame foi construido por colunas e não diretamente udanso a matriz [x y].
+
+O principal pacote para trabalhar com dataframes é Dataframes.jl. Agregar dados é combine. filtrar é filter.
